@@ -1,2 +1,2 @@
-# Devpath
+# CodinLab
 Devpath software development laboratory
