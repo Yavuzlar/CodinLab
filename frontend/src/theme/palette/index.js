@@ -1,68 +1,63 @@
 import { hexToRGBA } from "@/utils/hex-to-rgba";
 
 const text = {
-    primary: "#F0F3F6",
+    primary: "#FFFFFF",
+    secondary: "#9DB1CA",
 };
 
 const border = {
-    main: "#7A828E",
-    light: "#525964",
-    secondary: "#BDC4CC"
+    main: "#0A3B7A",
+    light: "#40C7FF",
+    secondary: "#0a3b7a"
 }
 
 const palette = {
     action: {
-        active: hexToRGBA(border.main, 0.12),
-        disabled: border.dark,
+        active: "#FFFFFF",
+        disabled: "#9DB1CA", 
         disabledBackground: border.light,
-        focus: border.light,
-        hover: hexToRGBA(border.main, 0.24),
-        selected: border.light,
+        focus: "#FFFFFF",
+        hover: hexToRGBA(text.primary, 0.24), // if dont like this color, change it for better readability
+        selected: text.primary, 
     },
     common: {
-        black: "#0F0F0F",
+        black: "#000000",
         white: text.primary,
     },
-    divider: border.main,
+    divider: "#FFFFFF",
     primary: {
-        main: "#409EFF",
-        light: "#91CBFF",
-        dark: "#318BF8",
+        main: "#3894D0",
+        light: "#8FDDFD",
+        dark: "#0A3B7A",
         contrastText: text.primary,
     },
-    secondary: {
-        main: "#8997AC",
-        light: "#9AA8BC",
-        dark: "#647185",
+    success: { 
+        main: "#39CE19",
+        light: "#BDEEAF",
+        dark: "#20AC02",
         contrastText: text.primary,
     },
-    success: {
-        main: "#72F088",
-        light: "#ACF7B6",
-        dark: "#007728",
-        contrastText: text.primary,
-    },
-    warning: {
-        main: "#F0B72F",
-        light: "#F7C843",
-        dark: "#E09B13",
+    warning: { 
+        main: "#FFCA00",
+        light: "#FDEDAE",
+        dark: "#C0A600",
         contrastText: text.primary,
     },
     info: {
-        main: "#CB9CFF",
-        light: "#DBB7FF",
-        dark: "#6921D7",
+        main: "#40C7FF",
+        light: "#8FDDFD",
+        dark: "#1851B2",
         contrastText: text.primary,
     },
-    error: {
-        main: "#FF4445",
-        light: "#FF9492",
-        dark: "#CC1421",
+    error: { 
+        main: "#DC0101",
+        light: "#F3B3B3",
+        dark: "#BA0000",
         contrastText: text.primary,
     },
     background: {
-        default: "#0A0C10",
-        paper: "#272B33",
+        default: "#DAF0FE",
+        paper: "#3894d0",
     },
     border: {
         main: border.main,
@@ -71,8 +66,8 @@ const palette = {
     },
     text: {
         primary: text.primary,
-        secondary: text.primary,
-        disabled: border.dark,
+        secondary: text.secondary,
+        disabled: "#f00", // if we use this color in code , change it for better readability
     },
 };
 
