@@ -4,7 +4,6 @@ import { theme as defaultTheme } from "@/configs/theme";
 import { trTR } from "@mui/material/locale";
 import overrides from "@/theme/overrides";
 import typography from "@/theme/typography";
-import custombutton from "@/theme/customButton";
 
 const ThemeComponent = ({ children }) => {
   const theme = createTheme(
@@ -12,7 +11,6 @@ const ThemeComponent = ({ children }) => {
     {
       components: { ...overrides(defaultTheme) },
       typography: { ...typography(defaultTheme) },
-      custombutton: { ...custombutton(defaultTheme) }
     },
     trTR
   );
