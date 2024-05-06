@@ -1,0 +1,63 @@
+basePath: /api/v1
+definitions:
+  public.LoginDTO:
+    properties:
+      password:
+        description: Password is required and must be at least 8 characters
+        minLength: 8
+        type: string
+      username:
+        description: Username is required, must be alphanumeric and between 3-30 characters
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  response.BaseResponse:
+    properties:
+      data: {}
+      data_count:
+        type: integer
+      errors: {}
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Service for CodinLab
+  title: API Service
+  version: v1
+paths:
+  /public/login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: Login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/public.LoginDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Login
+      tags:
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: cookie
+    name: session_id
+    type: apiKey
+swagger: "2.0"
