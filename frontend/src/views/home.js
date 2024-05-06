@@ -1,7 +1,8 @@
+import { Button } from '@mui/material';
 
 const Home = () => {
     return (
-        <div>Home</div>
+        <div><Button> TEST </Button></div>
     )
 }
 
