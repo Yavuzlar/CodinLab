@@ -5,9 +5,8 @@ const container = theme => {
       styleOverrides: {
         root: ({ ownerState }) => ({
           borderRadius: "1.25rem",
-          backgroundColor: `${theme.palette[ownerState.color].main} !important`,
-          ...(ownerState.variant == "outlined" &&
-            ownerState.color == "black" && { color: "#06122F" }),
+          backgroundColor: ownerState.color === theme.palette.text.primary ? theme.palette.primary.main : theme.palette.common.white,
+
         }),
       },
     }
