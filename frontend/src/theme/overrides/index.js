@@ -9,6 +9,7 @@ import MuiGrid from './grid'
 import MuiDivider from './divider'
 import MuiListItem from './listitem'
 import MuiTypography from './typography'
+import MuiCheckbox from './checkbox'
 
 const Overrides = (theme) => {
   const chip = MuiChip(theme)
@@ -21,6 +22,7 @@ const Overrides = (theme) => {
   const divider = MuiDivider(theme)
   const listitem = MuiListItem(theme)
   const typography = MuiTypography(theme)
+  const checkbox = MuiCheckbox(theme)
 
   return Object.assign(
     chip,
@@ -32,7 +34,8 @@ const Overrides = (theme) => {
     grid,
     divider,
     listitem,
-    typography
+    typography,
+    checkbox
   )
 }
 
