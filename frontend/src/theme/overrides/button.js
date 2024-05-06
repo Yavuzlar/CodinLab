@@ -1,12 +1,13 @@
+import { Opacity } from "@mui/icons-material"
 
 const container = theme => {
   return {
     MuiButton: {
       styleOverrides: {
         root: ({ ownerState }) => ({
-          borderRadius: "1.25rem",
-          backgroundColor: ownerState.color === theme.palette.text.primary ? theme.palette.primary.main : theme.palette.common.white,
-
+          borderRadius: "0.938rem",
+          fontSize: "1.125rem",
+          Opacity: "1"
         }),
       },
     }
