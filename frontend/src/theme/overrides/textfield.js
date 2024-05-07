@@ -6,19 +6,19 @@ const textfield = (theme) => {
           "& fieldset": {
             border: "none",
             borderRadius: "15px",
-            backgroundColor: "#FCFCFC",
+            backgroundColor: "#FFF",
           },
-          // yazı rengi
+          // text color
           "& .MuiInputBase-input": {
-            color: "#000",
+            color: theme.palette.common.black,
             zIndex: 9,
           },
-
+          // variant={filled}
           ...(ownerState.variant === "filled" && {
             "& input, & textarea": {
               border: "unset !important",
             },
-
+            // when input focused
             "&:focus-within": {
               backgroundColor: theme.palette.primary.light,
               borderRadius: "15px",
@@ -36,6 +36,7 @@ const textfield = (theme) => {
               border: "unset !important",
             },
           }),
+          // variant={outlined}
           ...(ownerState.variant === "outlined" && {
             "& .MuiInputBase-root": {
               "&.Mui-focused fieldset": {
