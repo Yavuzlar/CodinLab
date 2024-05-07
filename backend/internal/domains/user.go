@@ -11,14 +11,15 @@ import (
 // IUserRepository is the interface that provides the methods for the user repository.
 type IUserRepository interface {
 	Filter(ctx context.Context, filter UserFilter, limit, page int64) (users []User, dataCount int64, err error)
+	Add(ctx context.Context, user *User) (err error)
 	// Devamı gelecek...
 }
 
 // IUserService is the interface that provides the methods for the user service.
 type IUserService interface {
 	Login(ctx context.Context, username, password string) (user *User, err error)
+	Register(ctx context.Context, username, name, surname, password, githubProfile string) (err error)
 	// Devamı gelecek...
-
 }
 
 // UserFilter is the struct that represents the user filter.
@@ -43,8 +44,7 @@ type User struct {
 }
 
 // NewUser creates a new user.
-func NewUser(username, password, name, surname, role, githubProfile string, createdAt time.Time) (*User, error) {
-
+func NewUser(username, password, name, surname, role, githubProfile string) (*User, error) {
 	if username == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "username is required")
 	}
@@ -73,7 +73,6 @@ func NewUser(username, password, name, surname, role, githubProfile string, crea
 		surname:       surname,
 		role:          role,
 		githubProfile: githubProfile,
-		createdAt:     createdAt,
 	}, nil
 }
 
@@ -94,7 +93,6 @@ func (u *User) Unmarshal(
 }
 
 func (u *User) ID() uuid.UUID {
-
 	return u.id
 }
 

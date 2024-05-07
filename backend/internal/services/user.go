@@ -42,3 +42,25 @@ func (s *userService) Login(ctx context.Context, username, password string) (use
 	}
 	return user, nil
 }
+
+func (s *userService) Register(ctx context.Context, username, name, surname, password, githubProfile string) (err error) {
+	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Username: username}, 1, 1)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+	}
+	if len(users) != 0 {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "nickname already being used", err)
+	}
+	hashedPassword, err := s.utils.Hasher().HashPassword(password)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while hashing the password", err)
+	}
+	newUser, err := domains.NewUser(username, hashedPassword, name, surname, "", githubProfile)
+	if err != nil {
+		return err
+	}
+	if err = s.userRepositories.Add(ctx, newUser); err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while adding the user", err)
+	}
+	return
+}

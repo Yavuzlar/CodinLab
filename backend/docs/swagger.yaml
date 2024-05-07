@@ -15,6 +15,28 @@ definitions:
     - password
     - username
     type: object
+  public.RegisterDTO:
+    properties:
+      githubProfile:
+        maxLength: 30
+        minLength: 4
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      surname:
+        type: string
+      username:
+        type: string
+    required:
+    - githubProfile
+    - name
+    - password
+    - surname
+    - username
+    type: object
   response.BaseResponse:
     properties:
       data: {}
@@ -53,6 +75,28 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: Login
+      tags:
+      - Auth
+  /public/register:
+    post:
+      consumes:
+      - application/json
+      description: Register
+      parameters:
+      - description: Register
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/public.RegisterDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Register
       tags:
       - Auth
 securityDefinitions:
