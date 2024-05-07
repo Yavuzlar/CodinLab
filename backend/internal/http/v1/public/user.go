@@ -14,11 +14,11 @@ type LoginDTO struct {
 }
 
 type RegisterDTO struct {
-	Username      string `json:"username" validate:"required"`
-	Name          string `json:"name" validate:"required"`
-	Surname       string `json:"surname" validate:"required"`
-	Password      string `json:"password" validate:"required,min=8"`
-	GithubProfile string `json:"githubProfile" validate:"required,min=4,max=30"`
+	Username      string `json:"username" validate:"required,alphanum,min=3,max=30"` // Username is required, must be alphanumeric and between 3-30 characters
+	Name          string `json:"name" validate:"required"`                           // Name is required
+	Surname       string `json:"surname" validate:"required"`                        // Surname is required
+	Password      string `json:"password" validate:"required,min=8"`                 // Password is required and must be at least 8 characters
+	GithubProfile string `json:"githubProfile" validate:"max=30"`                    // Github Profile is must be max 30 characters long.
 }
 
 func (h *PublicHandler) initUserRoutes(root fiber.Router) {
