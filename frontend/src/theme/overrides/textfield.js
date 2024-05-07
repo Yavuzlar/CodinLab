@@ -1,41 +1,53 @@
-
-const textfield = theme => {
+const textfield = (theme) => {
   return {
     MuiTextField: {
       styleOverrides: {
         root: ({ ownerState }) => ({
-          // "& fieldset": {
-          //     border: "1px solid #5C5C5C",
-          //     borderRadius: "0.75rem",
-          //     backgroundColor: "#FCFCFC",
-          // },
-          // // yazı rengi
-          // "& .MuiInputBase-input": {
-          //     color: "#000",
-          //     zIndex: 9,
-          // },
-
-          // ...(ownerState.variant === "filled" && {
-          //     borderRadius: "0.75rem",
-          //     "& input, & textarea": {
-          //         border: "unset !important",
-          //     },
-          //     "& .MuiInputBase-root": {
-          //         backgroundColor: "#FCFCFC",
-          //     },
-          //     "& .MuiInputBase-root::before": {
-          //         display: "none",
-          //         border: "unset !important",
-          //     },
-          //     "& .MuiInputBase-root::after": {
-          //         display: "none",
-          //         border: "unset !important",
-          //     },
-          // }),
+          "& fieldset": {
+            border: "none",
+            borderRadius: "15px",
+            backgroundColor: "#FFF",
+          },
+          // text color
+          "& .MuiInputBase-input": {
+            color: theme.palette.common.black,
+            zIndex: 9,
+          },
+          // variant={filled}
+          ...(ownerState.variant === "filled" && {
+            "& input, & textarea": {
+              border: "unset !important",
+            },
+            // when input focused
+            "&:focus-within": {
+              backgroundColor: theme.palette.primary.light,
+              borderRadius: "15px",
+            },
+            "& .MuiInputBase-root": {
+              backgroundColor: theme.palette.primary.main,
+              borderRadius: "15px",
+            },
+            "& .MuiInputBase-root::before": {
+              display: "none",
+              border: "unset !important",
+            },
+            "& .MuiInputBase-root::after": {
+              display: "none",
+              border: "unset !important",
+            },
+          }),
+          // variant={outlined}
+          ...(ownerState.variant === "outlined" && {
+            "& .MuiInputBase-root": {
+              "&.Mui-focused fieldset": {
+                border: "2px solid #0A3B7A",
+              },
+            },
+          }),
         }),
       },
     },
-  }
-}
+  };
+};
 
-export default textfield
+export default textfield;
