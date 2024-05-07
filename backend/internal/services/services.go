@@ -45,15 +45,22 @@ type IUtilService interface {
 	Validator() IValidatorService
 }
 
+// ------------------ HASH SERVICE ------------------
+// HashService interface'i password hashleme ve hash ile password karşılaştırma işlemlerini yapar.
 type IHashService interface {
 	HashPassword(password string) (hashedPassword string, err error)
 	CompareHashAndPassword(hashedPassword string, password string) (ok bool, err error)
 }
 
+// ------------------ VALIDATOR SERVICE ------------------
+// ValidatorService interface'i struct'ın içindeki alanların doğruluğunu kontrol eder.
+
 type IValidatorService interface {
 	ValidateStruct(s any) error
 }
 
+// ------------------ UTIL SERVICE ------------------
+// UtilService struct'ı HashService ve ValidatorService'yi içerir.
 type utilService struct {
 	hasherService    IHashService
 	validatorService IValidatorService
