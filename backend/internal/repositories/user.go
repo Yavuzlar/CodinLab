@@ -134,6 +134,7 @@ func (r *UserRepository) Filter(ctx context.Context, filter domains.UserFilter, 
 }
 
 func (r *UserRepository) Add(ctx context.Context, user *domains.User) (err error) {
+	// Converting User model to dbModel
 	dbModel := r.dbModelFromAppModel(*user)
 	query := `
 		INSERT INTO 
