@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "export PORT=8080 && next dev",
+    "dev": "set PORT=8080 && next dev",
     "build": "next build",
-    "start": "export PORT=8080 && next start",
+    "start": "set PORT=8080 && next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -13,6 +13,7 @@
     "@casl/react": "^3.1.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@monaco-editor/react": "^4.6.0",
     "@mui/icons-material": "^5.15.3",
     "@mui/lab": "^5.0.0-alpha.158",
     "@mui/material": "^5.15.2",
