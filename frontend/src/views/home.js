@@ -10,10 +10,18 @@ const Home = () => {
     <div>
       <Card>
         <CardContent>
-          <Translations text={"home.title"} />
-          <Translations text={"active_locale"} />
-          <Translations text={"home.title"} />
-          <Translations text={"home.content"} />
+          <Typography>
+            <Translations text={"home.title"} />
+          </Typography>
+          <Typography>
+            <Translations text={"active_locale"} />
+          </Typography>
+          <Typography>
+            <Translations text={"home.title"} />
+          </Typography>
+          <Typography>
+            <Translations text={"home.content"} />
+          </Typography>
           {/* <Image src={yavuzlarLogo} /> */}
         </CardContent>
       </Card>
