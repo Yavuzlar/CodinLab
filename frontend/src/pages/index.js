@@ -1,46 +1,46 @@
 // ** React Imports
-import { useEffect } from 'react'
+import { useEffect } from "react";
 
 // ** Layout Import
-import BlankLayout from '@/layout/BlankLayout'
+import BlankLayout from "src/layout/BlankLayout";
 
 // ** Next Imports
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 // ** Spinner Import
-import Spinner from '@/components/spinner'
+import Spinner from "src/components/spinner";
 
 // ** Hook Imports
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from "src/hooks/useAuth";
 
-export const getHomeRoute = role => {
-  return '/home'
-}
+export const getHomeRoute = (role) => {
+  return "/home";
+};
 
 const Home = () => {
   // ** Hooks
-  const auth = useAuth()
-  const router = useRouter()
+  const auth = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (!router.isReady) {
-      return
+      return;
     }
 
     if (auth.user && auth.user.role) {
-      const homeRoute = getHomeRoute(auth.user.role)
+      const homeRoute = getHomeRoute(auth.user.role);
 
       // Redirect user to Home URL
-      router.replace(homeRoute)
+      router.replace(homeRoute);
     } else {
       // Redirect user to Login URL
-      router.replace('/login')
+      router.replace("/login");
     }
-  }, [])
+  }, []);
 
-  return <Spinner />
-}
+  return <Spinner />;
+};
 
-Home.getLayout = page => <BlankLayout>{page}</BlankLayout>
+Home.getLayout = (page) => <BlankLayout>{page}</BlankLayout>;
 
-export default Home
+export default Home;

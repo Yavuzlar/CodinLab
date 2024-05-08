@@ -1,18 +1,18 @@
 // ** MUI Imports
-import MuiChip from '@mui/material/Chip'
+import MuiChip from "@mui/material/Chip";
 
 // ** Third Party Imports
-import clsx from 'clsx'
+import clsx from "clsx";
 
 // ** Hooks Imports
-import useBgColor from '@/hooks/useBgColor'
+import useBgColor from "src/hooks/useBgColor";
 
-const CustomChip = props => {
+const CustomChip = (props) => {
   // ** Props
-  const { sx, skin, color, rounded } = props
+  const { sx, skin, color, rounded } = props;
 
   // ** Hook
-  const bgColors = useBgColor()
+  const bgColors = useBgColor();
 
   const colors = {
     primary: { ...bgColors.primaryLight },
@@ -20,22 +20,22 @@ const CustomChip = props => {
     success: { ...bgColors.successLight },
     error: { ...bgColors.errorLight },
     warning: { ...bgColors.warningLight },
-    info: { ...bgColors.infoLight }
-  }
-  const propsToPass = { ...props }
-  propsToPass.rounded = undefined
+    info: { ...bgColors.infoLight },
+  };
+  const propsToPass = { ...props };
+  propsToPass.rounded = undefined;
 
   return (
     <MuiChip
       {...propsToPass}
-      variant='filled'
+      variant="filled"
       className={clsx({
-        'MuiChip-rounded': rounded,
-        'MuiChip-light': skin === 'light'
+        "MuiChip-rounded": rounded,
+        "MuiChip-light": skin === "light",
       })}
-      sx={skin === 'light' && color ? Object.assign(colors[color], sx) : sx}
+      sx={skin === "light" && color ? Object.assign(colors[color], sx) : sx}
     />
-  )
-}
+  );
+};
 
-export default CustomChip
+export default CustomChip;

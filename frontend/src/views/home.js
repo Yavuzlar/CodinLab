@@ -1,18 +1,26 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import yavuzlarLogo from "../../../frontend/public/images/yavuzlar-logo-black.png";
 import Image from "next/image";
-import { Button } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+
+import Link from "next/link";
+import Translations from "src/components/Translations";
 
 const Home = () => {
-  const theme = useTheme();
   return (
     <div>
       <Card>
         <CardContent>
-          <Typography>CodeInLab</Typography>
-          <Image src={yavuzlarLogo} />
-          <Button variant="dark"> TEST </Button>
+          <Translations text={"home.title"} />
+          <Translations text={"active_locale"} />
+          <Translations text={"home.title"} />
+          <Translations text={"home.content"} />
+          {/* <Image src={yavuzlarLogo} /> */}
+        </CardContent>
+      </Card>
+      <Card sx={{ mt: "10px" }}>
+        <CardContent>
+          <Translations text={"roads.title"} />
+          <Translations text={"roads.content"} />
         </CardContent>
       </Card>
     </div>

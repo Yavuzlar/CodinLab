@@ -21,7 +21,7 @@ const card = (theme) => {
 
 export default card;
 
-// import { hexToRGBA } from "@/utils/hex-to-rgba"
+// import { hexToRGBA } from "src/utils/hex-to-rgba"
 
 // const card = theme => {
 //   return {
