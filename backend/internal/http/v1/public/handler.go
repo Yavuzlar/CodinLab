@@ -29,5 +29,6 @@ func (h *PublicHandler) Init(router fiber.Router) {
 	root.Get("/", func(c *fiber.Ctx) error {
 		return response.Response(200, "Welcome to CodinLab API (Public Zone)", nil)
 	})
+	// initialize routes
 	h.initUserRoutes(root)
 }

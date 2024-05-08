@@ -28,7 +28,6 @@ func (r *BaseResponse) Error() string {
 
 func ResponseHandler(c *fiber.Ctx, err error) error {
 	base := &BaseResponse{}
-
 	//BaseResponse
 	if errors.As(err, &base) {
 		return c.Status(err.(*BaseResponse).StatusCode).JSON(err)
@@ -65,10 +64,14 @@ func ResponseHandler(c *fiber.Ctx, err error) error {
 	//service errors
 	serviceErr := &service_errors.ServiceError{}
 	if errors.As(err, &serviceErr) {
-		return c.Status(serviceErr.Code).JSON(&BaseResponse{
+		resp := &BaseResponse{
 			StatusCode: serviceErr.Code,
 			Message:    serviceErr.Message,
-		})
+		}
+		if serviceErr.Error() != "" {
+			resp.Errors = serviceErr.Error()
+		}
+		return c.Status(serviceErr.Code).JSON(resp)
 	}
 
 	//unknown errors

@@ -15,6 +15,8 @@ type LoginDTO struct {
 
 func (h *PublicHandler) initUserRoutes(root fiber.Router) {
 	root.Post("/login", h.Login)
+	// initialize routes
+	// Buraya yeni route'lar eklenecek lütfen Swagger'da belirtmeyi unutmayın
 }
 
 // @Tags Auth
