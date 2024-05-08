@@ -1,29 +1,19 @@
 import { Editor } from "@monaco-editor/react";
-import { Box, Divider, useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { useRef, useState } from "react";
 import StopIcon from "@mui/icons-material/Stop";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
-import Brightness5Icon from "@mui/icons-material/Brightness5";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import LightModeIcon from '@mui/icons-material/LightMode';
 
-const CodeEditor = ({ params, onRun, onStop }) => {
+const CodeEditor = ({ params, onRun, onStop, leng, defValue }) => {
   const [value, setValue] = useState("");
   const [theme, setTheme] = useState("vs-dark");
-  const [language, setLanguage] = useState("javascript");
-  const [output, setOutput] = useState("");
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const editorRef = useRef(null);
-  const blackTheme = {
-    base: "vs-dark",
-    inherit: true,
-    rules: [{ background: "#000000" }],
-    colors: {
-      "editor.background": "#000000",
-    },
-  };
 
   // here we will add the onMount function
   const onMount = (editor) => {
@@ -35,10 +25,8 @@ const CodeEditor = ({ params, onRun, onStop }) => {
   const handleRun = () => {
     // in the future, we will add the run api call here
 
-    setOutput("Running...");
     setTimeout(() => {
       const response = "Output from backend";
-      setOutput(response);
       onRun(response);
     }, 2000);
   };
@@ -47,10 +35,8 @@ const CodeEditor = ({ params, onRun, onStop }) => {
   const handleStop = () => {
     // in the future, we will ad the stop api call here
 
-    setOutput("Stopped");
     setTimeout(() => {
       const response = "Stopped from backend";
-      setOutput(response);
       onStop(response);
     }, 2000);
   };
@@ -64,19 +50,21 @@ const CodeEditor = ({ params, onRun, onStop }) => {
     setMobileMenuAnchor(null);
   };
 
+
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         gap: "10px",
-        width: "50%",
         padding: "10px",
         border: theme === "vs-dark" ? "2px solid #1E1E1E" : "2px solid #3894D0",
         borderRadius: "30px",
         opacity: "1",
         backgroundColor: theme === "vs-dark" ? "#1E1E1E" : "white",
         color: theme === "vs-dark" ? "white" : "black",
+        height: params.height || "auto",
+        width: params.width || "auto",
       }}
     >
       <Box
@@ -84,30 +72,33 @@ const CodeEditor = ({ params, onRun, onStop }) => {
           display: "flex",
           justifyContent: "space-between",
           color: theme === "vs-dark" ? "white" : "black",
-          fontSize: "15px",
           fontWeight: "bold",
           alignItems: "center",
-          paddingLeft: "10px",
-          paddingRight: "10px",
+          borderBottom: theme === "vs-dark" ? "2px solid #ffff" : "2px solid #3894D0",
+          marginTop: "10px",
+          paddingBottom: "10px",
+          paddingLeft: "16px",
+          fontSize: "18px",
+          fontWeight: "bold",
         }}
       >
         <div
-          sx={{
-            display: "flex",
+          style={{
+            display:"-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 1,
+            gap: "10px",
+            maxWidth: "220px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            lineHeight: "20px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-            }}
-          >
-            Project Name
-          </div>
+          hüseyin_selim_sürmelihhindi.js
         </div>
         {isMobile ? (
           <div>
-            <MoreVertIcon onClick={openMobileMenu} />
+            <MoreVertIcon sx={{ cursor: "pointer" }} onClick={openMobileMenu} />
             <Menu
               anchorEl={mobileMenuAnchor}
               open={Boolean(mobileMenuAnchor)}
@@ -119,7 +110,7 @@ const CodeEditor = ({ params, onRun, onStop }) => {
                   closeMobileMenu();
                 }}
               >
-                <PlayArrowIcon /> Run
+                <PlayArrowIcon sx={{ cursor: "pointer" }} /> Run
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -127,7 +118,7 @@ const CodeEditor = ({ params, onRun, onStop }) => {
                   closeMobileMenu();
                 }}
               >
-                <StopIcon /> Stop
+                <StopIcon sx={{ cursor: "pointer" }} /> Stop
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -136,9 +127,9 @@ const CodeEditor = ({ params, onRun, onStop }) => {
                 }}
               >
                 {theme === "vs-dark" ? (
-                  <NightsStayIcon />
+                  <NightsStayIcon sx={{ cursor: "pointer" }} />
                 ) : (
-                  <Brightness5Icon />
+                  <LightModeIcon sx={{ cursor: "pointer" }} />
                 )}
                 Change Theme
               </MenuItem>
@@ -154,10 +145,10 @@ const CodeEditor = ({ params, onRun, onStop }) => {
             }}
           >
             <div>
-              <PlayArrowIcon onClick={handleRun} fontSize="medium" />
+              <PlayArrowIcon onClick={handleRun} sx={{ cursor: "pointer" }} fontSize="medium" />
             </div>
             <div>
-              <StopIcon fontSize="medium" onClick={handleStop} />
+              <StopIcon fontSize="medium" onClick={handleStop} sx={{ cursor: "pointer" }} />
             </div>
             <div>
               {theme === "vs-dark" ? (
@@ -166,44 +157,41 @@ const CodeEditor = ({ params, onRun, onStop }) => {
                     setTheme("light");
                   }}
                   fontSize="medium"
+                  sx={{ cursor: "pointer" }}
                 />
               ) : (
-                <Brightness5Icon
+                <LightModeIcon
                   onClick={() => {
                     setTheme("vs-dark");
                   }}
                   fontSize="medium"
+                  sx={{ cursor: "pointer" }}
                 />
               )}
             </div>
           </div>
         )}
       </Box>
-      <Divider
-        sx={{
-          width: "103%",
-          height: "2px",
-          backgroundColor: theme === "vs-dark" ? "#1E1E1E" : "#3894D0",
-          marginLeft: "-10px",
-        }}
-      />
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
+          width: "100%",
+          height: "100%",
+          overflow: "hidden",
         }}
       >
         <Editor
-          height={params.height || "80vh"} // By default, it fully fits with its parent
-          width={params.width || "100%"} // By default, it fully fits with its parent
-          defaultLanguage={language} // The language of the editor we will take from the backend
-          defaultValue="// Write your code here"
-          value={value} // The value of the editor
-          onChange={(newValue) => setValue(newValue)} // The change event of the editor
-          onMount={onMount} // The mount event of the editor
-          theme={theme === "vs-dark" ? theme : blackTheme} // The theme of the editor
-          loading={<div>Loading...</div>} // The loading component+
+          language={leng || "javascript"}
+          defaultValue={defValue || "// Write your code here"}
+          value={value}
+          onChange={(newValue) => setValue(newValue)}
+          onMount={onMount}
+          theme={theme}
+          loading={<div>Loading...</div>}
+          options={{
+            minimap: {
+              enabled: false,
+            },
+          }}
         />
       </div>
     </Box>

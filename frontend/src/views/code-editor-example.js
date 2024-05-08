@@ -15,21 +15,19 @@ const CodeEditorExample = () => {
   
   const params = { // these are the parameters for the component settings.
     height: "50vh",
+    width: "50vw",
   };
+
+  
 
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "row",
-        gap: "20px",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "20px",
+        display : "flex",
       }}
     >
-      <CodeEditor params={params} onRun={handleRun} onStop={handleStop} /> // CodeEditor component
-      <Output value={output} params={params} /> // Output component
+      <CodeEditor params={params} onRun={handleRun} onStop={handleStop} leng={"javascript"} defValue={"//deneme"} /> 
+      <Output value={output} params={params} /> 
     </div>
   );
 };
