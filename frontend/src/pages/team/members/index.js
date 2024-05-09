@@ -1,9 +1,9 @@
-import TeamMembers from "@/views/team-members"
+import TeamMembers from "src/views/team-members";
 
-const TeamMembersPage = () => <TeamMembers />
+const TeamMembersPage = () => <TeamMembers />;
 
 TeamMembersPage.acl = {
-    action: 'read',
-    permission: 'team-members'
-}
-export default TeamMembersPage
+  action: "read",
+  permission: "team-members",
+};
+export default TeamMembersPage;

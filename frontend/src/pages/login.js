@@ -1,13 +1,10 @@
-const { default: BlankLayout } = require("@/layout/BlankLayout")
+const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Login = () => {
-    return (
-        <div>login</div>
-    )
-}
+  return <div>login</div>;
+};
 
+Login.guestGuard = true;
+Login.getLayout = (page) => <BlankLayout>{page}</BlankLayout>;
 
-Login.guestGuard = true
-Login.getLayout = page => <BlankLayout>{page}</BlankLayout>
-
-export default Login
+export default Login;
