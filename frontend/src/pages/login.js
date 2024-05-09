@@ -1,8 +1,8 @@
 import { FormControl, Button, TextField } from "@mui/material";
-import { loginValidation } from "@/configs/validation/loginScheme";
 import { useState, useEffect } from "react";
+import { loginValidation } from "src/configs/validation/loginScheme";
 
-const { default: BlankLayout } = require("@/layout/BlankLayout");
+const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Login = () => {
   const [formData, setFormData] = useState(null);

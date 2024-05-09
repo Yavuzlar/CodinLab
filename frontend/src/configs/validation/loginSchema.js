@@ -1,5 +1,5 @@
+import { validation } from "src/utils/validation";
 import * as yup from "yup";
-import { validation } from "@/utils/validation";
 
 export const loginValidation = async (values) => {
     const schema = yup.object().shape({
