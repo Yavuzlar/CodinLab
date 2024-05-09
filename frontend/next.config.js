@@ -4,7 +4,7 @@ const i18n = {
   defaultLocale: "en",
 };
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   webpack: (config) => {
     config.module.rules.push({

@@ -67,7 +67,8 @@ const App = (props) => {
       <Head>
         <title>{`${themeConfig.templateName}`}</title>
         <meta name="description" content={`${themeConfig.templateName}`} />
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="viewport" content="initial-scale=1, width=device-width" />  
+        <link href="https://fonts.cdnfonts.com/css/outfit" rel="stylesheet"></link>
       </Head>
 
       <AuthProvider>
@@ -93,3 +94,4 @@ const App = (props) => {
 };
 
 export default appWithTranslation(App);
+

@@ -1,5 +1,5 @@
-import CodeEditor from "@/components/code-editor";
-import Output from "@/components/output";
+import CodeEditor from "src/components/code-editor";
+import Output from "src/components/output";
 import { useState } from "react";
 
 const CodeEditorExample = () => {
@@ -23,10 +23,10 @@ const CodeEditorExample = () => {
   return (
     <div
       style={{
-        display : "flex",
+        // display : "flex",
       }}
     >
-      <CodeEditor params={params} onRun={handleRun} onStop={handleStop} leng={"javascript"} defValue={"//deneme"} /> 
+      <CodeEditor params={params} onRun={handleRun} onStop={handleStop} leng={"javascript"} defValue={"//deneme"} title={"fibasdsadasdasdasdsadasdasdasdsasdaonacci_kareal.js"}  /> 
       <Output value={output} params={params} /> 
     </div>
   );

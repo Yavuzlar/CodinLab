@@ -1,4 +1,4 @@
-import CodeEditorExample from '@/views/code-editor-example'
+import CodeEditorExample from 'src/views/code-editor-example'
 
 const CodeEditorExamplePage = () => <CodeEditorExample />
 
