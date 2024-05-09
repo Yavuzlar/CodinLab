@@ -125,11 +125,28 @@ func (r *UserRepository) Filter(ctx context.Context, filter domains.UserFilter, 
 	`
 	err = r.db.Select(&dbResult, query, dbFilter.Id, dbFilter.Id, dbFilter.Username, dbFilter.Username, dbFilter.Name, dbFilter.Name, dbFilter.Surname, dbFilter.Surname, dbFilter.Role, dbFilter.Role, limit, (page-1)*limit)
 	if err != nil {
-
 		return
 	}
 	for _, dbModel := range dbResult {
 		users = append(users, r.dbModelToAppModel(dbModel))
+	}
+	return
+}
+
+func (r *UserRepository) Add(ctx context.Context, user *domains.User) (err error) {
+	// Converting User model to dbModel
+	dbModel := r.dbModelFromAppModel(*user)
+	query := `
+		INSERT INTO 
+			t_users
+		(id, username, password, name, surname, role, github_profile)
+			VALUES
+		(:id, :username, :password, :name, :surname, :role, :github_profile)
+	`
+
+	_, err = r.db.NamedExecContext(ctx, query, dbModel)
+	if err != nil {
+		return
 	}
 	return
 }

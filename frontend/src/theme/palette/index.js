@@ -1,4 +1,4 @@
-import { hexToRGBA } from "@/utils/hex-to-rgba";
+import { hexToRGBA } from "src/utils/hex-to-rgba";
 
 const text = {
   primary: "#FFFFFF",

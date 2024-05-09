@@ -1,9 +1,9 @@
 // ** React Imports
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from "react";
 // ** Next Import
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 // ** Axios
-import authConfig from '@/configs/auth'
+import authConfig from "src/configs/auth";
 
 // ** Defaults
 const defaultProvider = {
@@ -16,52 +16,53 @@ const defaultProvider = {
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
   initAuth: () => Promise.resolve(),
-}
+};
 
-const AuthContext = createContext(defaultProvider)
+const AuthContext = createContext(defaultProvider);
 
 const AuthProvider = ({ children }) => {
   // ** States
-  const [user, setUser] = useState(defaultProvider.user)
-  const [loading, setLoading] = useState(defaultProvider.loading)
-  const [isInitialized, setIsInitialized] = useState(defaultProvider.isInitialized)
+  const [user, setUser] = useState(defaultProvider.user);
+  const [loading, setLoading] = useState(defaultProvider.loading);
+  const [isInitialized, setIsInitialized] = useState(
+    defaultProvider.isInitialized
+  );
 
   // ** Hooks
-  const router = useRouter()
+  const router = useRouter();
 
   const deleteStorage = () => {
-    setUser(null)
-    setLoading(false)
-    setIsInitialized(false)
+    setUser(null);
+    setLoading(false);
+    setIsInitialized(false);
 
     // const firstPath = router.pathname.split('/')[1]
     // if (firstPath != 'login') window.location.href = '/login'
-  }
+  };
 
   const handleLogout = () => {
-    deleteStorage()
-  }
+    deleteStorage();
+  };
 
   const initAuth = async () => {
-    setIsInitialized(true)
-    const userData = window.localStorage.getItem(authConfig.userDataName)
+    setIsInitialized(true);
+    const userData = window.localStorage.getItem(authConfig.userDataName);
 
     if (userData) {
-      setUser(userData)
+      setUser(userData);
     } else {
-      const user = { id: 1, name: "John Doe", role: "user" }
-      setUser(user)
+      const user = { id: 1, name: "John Doe", role: "user" };
+      setUser(user);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
-  const handleRegister = async ({ params }) => {
-  }
+  const handleRegister = async ({ params }) => {};
 
   useEffect(() => {
-    initAuth()
-  }, [])
+    initAuth();
+  }, []);
 
   const values = {
     user,
@@ -73,9 +74,9 @@ const AuthProvider = ({ children }) => {
     logout: handleLogout,
     register: handleRegister,
     initAuth,
-  }
+  };
 
-  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
-}
+  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
+};
 
-export { AuthContext, AuthProvider }
+export { AuthContext, AuthProvider };

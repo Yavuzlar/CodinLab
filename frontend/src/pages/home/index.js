@@ -1,9 +1,9 @@
-import Home from "@/views/home"
+import Home from "src/views/home";
 
-const HomePage = () => <Home />
+const HomePage = () => <Home />;
 
 HomePage.acl = {
-    action: 'read',
-    permission: 'home'
-}
-export default HomePage
+  action: "read",
+  permission: "home",
+};
+export default HomePage;

@@ -42,6 +42,40 @@
                     }
                 }
             }
+        },
+        "/public/register": {
+            "post": {
+                "description": "Register",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register",
+                "parameters": [
+                    {
+                        "description": "Register",
+                        "name": "register",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/public.RegisterDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -62,6 +96,36 @@
                     "type": "string",
                     "maxLength": 30,
                     "minLength": 3
+                }
+            }
+        },
+        "public.RegisterDTO": {
+            "type": "object",
+            "required": [
+                "githubProfile",
+                "name",
+                "password",
+                "surname",
+                "username"
+            ],
+            "properties": {
+                "githubProfile": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 4
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },
