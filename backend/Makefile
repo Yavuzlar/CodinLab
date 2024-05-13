@@ -14,7 +14,7 @@ dev.swagger.init:
 
 dev.docker.start:
 	@echo "Starting docker..."
-	@docker compose -f ../deployments/dev.docker-compose.yaml up --build
+	@docker compose -f ../docker/dev.docker-compose.yaml up --build
 
 help:
 	@echo "Usage: make <target>"
