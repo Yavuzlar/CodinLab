@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "export PORT=8080 && next dev",
+    "dev": "next dev",
     "build": "next build",
-    "start": "export PORT=8080 && next start",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
