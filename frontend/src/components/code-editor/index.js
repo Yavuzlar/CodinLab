@@ -1,16 +1,18 @@
 import { Editor } from "@monaco-editor/react";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import StopIcon from "@mui/icons-material/Stop";
-import NightsStayIcon from "@mui/icons-material/NightsStay";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import LightModeIcon from "@mui/icons-material/LightMode";
 import Tooltip from "@mui/material/Tooltip";
-// import PlayIcon from "src/assets/icons/play.svg";
-
+import Image from "next/image";
+import PlayIconBlack from "src/assets/icons/play-black.png";
+import PlayIconWhite from "src/assets/icons/play-white.png";
+import StopIconWhite from "src/assets/icons/stop-white.png";
+import StopIconBlack from "src/assets/icons/stop-black.png";
+import SunIcon from "src/assets/icons/sun.png";
+import MoonIcon from "src/assets/icons/moon.png";
+import MenuIconBlack from "src/assets/icons/menu-black.png";
+import MenuIconWhite from "src/assets/icons/menu-white.png";
 
 const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
   const [value, setValue] = useState("");
@@ -80,21 +82,23 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           color: theme === "vs-dark" ? "white" : "black",
-          borderBottom: theme === "vs-dark" ? "2px solid #DAF0FE" : "2px solid #3894D0",
-          marginTop: "10px",
+          borderBottom:
+            theme === "vs-dark" ? "2px solid #DAF0FE" : "2px solid #3894D0",
+          marginTop: "12px",
           paddingBottom: "10px",
-          paddingLeft: "16px",
           fontSize: "18px",
           px: "26px",
-          alignItems: "end",
+          fontWeight: "bold",
+          letterSpacing: "0px",
+          marginBottom: "0",
         }}
       >
         <div
           style={{
             display: "flex",
             gap: "10px",
-            lineHeight: "20px",
             width: `calc(100% - ${editorActionsWidth}px - 16px)`,
           }}
         >
@@ -121,12 +125,25 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
         </div>
         <Box ref={editorActions}>
           {isMobile ? (
-            <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "10px",
+                color: theme === "vs-dark" ? "white" : "black",
+                alignItems: "center",
+                position: "relative",
+              }}
+            >
               <Tooltip title="More Options" placement="top" followCursor>
-                <MoreVertIcon
-                  sx={{ cursor: "pointer" }}
+                <Image
+                  src={theme === "vs-dark" ? MenuIconWhite : MenuIconBlack}
+                  alt="My SVG"
+                  width={30}
+                  height={30}
                   onClick={openMobileMenu}
                 />
+              </Tooltip>
                 <Menu
                   anchorEl={mobileMenuAnchor}
                   open={Boolean(mobileMenuAnchor)}
@@ -138,7 +155,15 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                       closeMobileMenu();
                     }}
                   >
-                    <PlayArrowIcon sx={{ cursor: "pointer" }} /> Run
+                    <Image
+                      src={theme === "vs-dark" ? PlayIconWhite : PlayIconBlack}
+                      alt="My SVG"
+                      width={30}
+                      height={30}
+                      sx={{ cursor: "pointer",
+                      }}
+                    />
+                    Run
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -146,7 +171,14 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                       closeMobileMenu();
                     }}
                   >
-                    <StopIcon sx={{ cursor: "pointer" }} /> Stop
+                    <Image
+                      src={theme === "vs-dark" ? StopIconWhite : StopIconBlack}
+                      alt="My SVG"
+                      width={30}
+                      height={30}
+                      sx={{ cursor: "pointer" }}
+                    />
+                    Stop
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -154,15 +186,17 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                       closeMobileMenu();
                     }}
                   >
-                    {theme === "vs-dark" ? (
-                      <NightsStayIcon sx={{ cursor: "pointer" }} />
-                    ) : (
-                      <LightModeIcon sx={{ cursor: "pointer" }} />
-                    )}
+                      <Image
+                        src={theme === "vs-dark" ? SunIcon : MoonIcon}
+                        alt="My SVG"
+                        width={30}
+                        height={30}
+                        sx={{ cursor: "pointer" }}
+                      />
+                    
                     Change Theme
                   </MenuItem>
                 </Menu>
-              </Tooltip>
             </div>
           ) : (
             <div
@@ -171,43 +205,52 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                 justifyContent: "space-between",
                 gap: "10px",
                 color: theme === "vs-dark" ? "white" : "black",
+                alignItems: "center",
+                position: "relative",
               }}
             >
               <Tooltip title="Run" placement="top" followCursor>
-                <Box>
-                  <PlayArrowIcon
-                    onClick={handleRun}
-                    sx={{
-                      cursor: "pointer",
-                      width: "30px",
-                      height: "30px",
-                    }}
-                  />
-                </Box>
+                <Image
+                  src={theme === "vs-dark" ? PlayIconWhite : PlayIconBlack}
+                  alt="My SVG"
+                  width={30}
+                  height={30}
+                  style={{ cursor: "pointer" }}
+                />
               </Tooltip>
               <Tooltip title="Stop" placement="top" followCursor>
-                <StopIcon
-                  onClick={handleStop}
-                  sx={{ cursor: "pointer", width: "30px", height: "30px" }}
+                <Image
+                  src={theme === "vs-dark" ? StopIconWhite : StopIconBlack}
+                  alt="My SVG"
+                  width={30}
+                  height={30}
+                  style={{ cursor: "pointer" }}
                 />
               </Tooltip>
               {theme === "vs-dark" ? (
                 <Tooltip title="Change Light Mode" placement="top" followCursor>
-                  <NightsStayIcon
+                  <Image
+                    src={SunIcon}
+                    alt="My SVG"
+                    width={30}
+                    height={30}
                     onClick={() => {
                       setTheme("light");
                     }}
-                    sx={{ cursor: "pointer", width: "30px", height: "30px" }}
+                    sx={{ cursor: "pointer" }}
                   />
                 </Tooltip>
               ) : (
                 <Tooltip title="Change Dark Mode" placement="top" followCursor>
-                  <LightModeIcon
+                  <Image
+                    src={MoonIcon}
+                    alt="My SVG"
+                    width={30}
+                    height={30}
                     onClick={() => {
                       setTheme("vs-dark");
                     }}
-                    fontSize="medium"
-                    sx={{ cursor: "pointer", width: "30px", height: "30px" }}
+                    sx={{ cursor: "pointer" }}
                   />
                 </Tooltip>
               )}
@@ -221,7 +264,8 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
           height: "100%",
           overflow: "hidden",
           borderRadius: "0px 0px 30px 30px",
-          // paddingBottom: "24px",
+          paddingTop: "10px",
+          paddingBottom: "24px",
         }}
       >
         <Editor

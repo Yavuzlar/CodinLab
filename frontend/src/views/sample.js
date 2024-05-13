@@ -1,7 +1,4 @@
-
 const Sample = () => {
-
-
     return (
         <div>
             Sample Page
