@@ -216,6 +216,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                   width={30}
                   height={30}
                   style={{ cursor: "pointer" }}
+                  onClick={handleRun}
                 />
               </Tooltip>
               <Tooltip title="Stop" placement="top" followCursor>
@@ -225,6 +226,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                   width={30}
                   height={30}
                   style={{ cursor: "pointer" }}
+                  onClick={handleStop}
                 />
               </Tooltip>
               {theme === "vs-dark" ? (
