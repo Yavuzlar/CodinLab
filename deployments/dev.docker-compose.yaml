@@ -2,16 +2,42 @@ version: '3.3'
 
 services:
   api:
+    container_name: codinlab-api
     build:
       context: ../backend/.
-      dockerfile: ../deployments/dev.Dockerfile
+      dockerfile: ../deployments/backend/dev.Dockerfile
     ports:
       - 8080:8080
     volumes:
       - ../backend:/app
     networks:
-      - codeinlab
+      - codinlab
+
+  frontend:
+    container_name: codinlab-frontend
+    build:
+      context: ../frontend/.
+      dockerfile: ../deployments/frontend/dev.Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ../frontend:/app
+    networks:
+      - codinlab
+
+  nginx:
+    image: nginx:latest
+    container_name: codinlab-nginx
+    restart: always
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - codinlab
+
 
 networks:
-  codeinlab:
+  codinlab:
     driver: bridge
