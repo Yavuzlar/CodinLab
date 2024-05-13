@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 const Output = ({ value, params }) => {
   value =
     value ||
-    "Output will be displayed here "; // if there is no output, we will display this message
+    "Output will be displayed here ";
 
   const width = params.width ? params.width : "50%";
   const height = params.height ? params.height : "50%";

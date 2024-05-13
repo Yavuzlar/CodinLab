@@ -99,7 +99,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
           style={{
             display: "flex",
             gap: "10px",
-            width: `calc(100% - ${editorActionsWidth}px - 16px)`,
+            width: `calc(100% - ${editorActionsWidth}px - 4px)`,
           }}
         >
           {/* hüseyin_selim_sürmelihhindi.js */}
@@ -163,7 +163,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                       sx={{ cursor: "pointer",
                       }}
                     />
-                    Run
+                    <Typography variant="span" sx={{ ml: 1 }}>Run</Typography>
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -178,7 +178,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                       height={30}
                       sx={{ cursor: "pointer" }}
                     />
-                    Stop
+                    <Typography variant="span" sx={{ ml: 1 }}>Stop</Typography>
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -194,8 +194,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                         sx={{ cursor: "pointer" }}
                       />
                     
-                    Change Theme
-                  </MenuItem>
+                    <Typography variant="span" sx={{ ml: 1 }}>Change Theme</Typography>                  </MenuItem>
                 </Menu>
             </div>
           ) : (
