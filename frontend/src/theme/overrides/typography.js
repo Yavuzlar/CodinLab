@@ -4,7 +4,6 @@ const typography = theme => {
     MuiTypography: {
       styleOverrides: {
         root: ({ ownerState }) => ({
-          fontFamily: 'Roboto, sans-serif',
           color: theme.palette.text.primary,
         }),
       }

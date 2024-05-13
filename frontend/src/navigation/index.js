@@ -28,6 +28,13 @@ const navigation = [
         permission: "sample",
         icon: <HelpCenter />
     },
+    { // single item
+        type: "item",
+        path: "/editor",
+        title: "Code Editor Example",
+        permission: "sample",
+        icon: <HelpCenter />
+    },
     { // item with children
         type: "item",
         title: "Team",
