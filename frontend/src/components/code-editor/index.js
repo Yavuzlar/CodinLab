@@ -102,7 +102,6 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
             width: `calc(100% - ${editorActionsWidth}px - 4px)`,
           }}
         >
-          {/* hüseyin_selim_sürmelihhindi.js */}
           <Tooltip title={title || "Untitled"} placement="top" followCursor>
             <Typography
               variant="span"
@@ -194,7 +193,8 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
                         sx={{ cursor: "pointer" }}
                       />
                     
-                    <Typography variant="span" sx={{ ml: 1 }}>Change Theme</Typography>                  </MenuItem>
+                    <Typography variant="span" sx={{ ml: 1 }}>Change Theme</Typography>                 
+                  </MenuItem>
                 </Menu>
             </div>
           ) : (
