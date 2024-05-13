@@ -5,7 +5,7 @@ services:
     container_name: codinlab-api
     build:
       context: ../backend/.
-      dockerfile: ../deployments/backend/dev.Dockerfile
+      dockerfile: ../docker/backend/dev.Dockerfile
     ports:
       - 8080:8080
     volumes:
@@ -17,7 +17,7 @@ services:
     container_name: codinlab-frontend
     build:
       context: ../frontend/.
-      dockerfile: ../deployments/frontend/dev.Dockerfile
+      dockerfile: ../docker/frontend/dev.Dockerfile
     ports:
       - 3000:3000
     volumes:
@@ -36,7 +36,6 @@ services:
       - 443:443
     networks:
       - codinlab
-
 
 networks:
   codinlab:
