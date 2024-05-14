@@ -15,7 +15,7 @@ const Welcome = ({ title = "", description = "", image = null }) => {
 
   return (
     <Box sx={{ display: "flex", position: "relative", width: "100%" }}>
-      <Card sx={{ height: "319px", width: "100%" }}>
+      <Card sx={{ height: "20rem", width: "100%" }}>
         <CardContent sx={{ height: "calc(100% - 3rem)" }}>
           <Box
             sx={{
@@ -34,7 +34,7 @@ const Welcome = ({ title = "", description = "", image = null }) => {
             <Typography
               sx={{
                 textAlign: "left",
-                paddingTop: "30px",
+                paddingTop: "1.8rem",
                 ...(_mdlg
                   ? { maxWidth: "40ch" }
                   : _lgPlus && { maxWidth: "60ch" }),
@@ -49,7 +49,7 @@ const Welcome = ({ title = "", description = "", image = null }) => {
         <Image
           style={{
             position: "absolute",
-            right: _lg ? "1rem" : "129px",
+            right: _lg ? "1rem" : "8rem",
             opacity: _smd ? "0.25" : "1",
             bottom: "0",
           }}

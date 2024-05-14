@@ -1,6 +1,4 @@
 import React from "react";
-import roadsImage from "../../assets/3d/3d-casual-life-young-women-working-with-computer.png";
-import { roads } from "src/data/home";
 import {
   Box,
   Card,
@@ -25,7 +23,7 @@ const Info = ({ title = "", description = "", image = null }) => {
       <Card
         sx={{
           width: "100%",
-          minHeight: "200px",
+          minHeight: "12.5rem",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -45,9 +43,9 @@ const Info = ({ title = "", description = "", image = null }) => {
             </Typography>
             <Typography
               sx={{
-                maxWidth: "calc(100% - 154px)",
+                maxWidth: "calc(100% - 9.625rem)",
 
-                paddingTop: "13px",
+                paddingTop: "0.8rem",
                 ...(_smd && { maxWidth: "60ch" }),
               }}
             >

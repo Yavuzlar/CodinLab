@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
+import roadsIcon from "../../assets/icons/icons8-path-100.png";
+import labsIcon from "../../assets/icons/icons8-test-tube-100.png";
 
 const Languages = ({ language }) => {
   const [hovered, setHovered] = useState(false);
@@ -26,12 +28,9 @@ const Languages = ({ language }) => {
         alignItems: "center",
         gap: "1.5rem",
         width: "100%",
-        height: "104px",
-        position: "relative",
-        ...(_md && {justifyContent:"center"}),
-
-        ...(_xl && {justifyContent:"center"})
-
+        height: "6.5rem",
+        ...(_md && { justifyContent: "center" }),
+        ...(_xl && { justifyContent: "center" }),
       }}
     >
       {!hovered ? (
@@ -42,8 +41,7 @@ const Languages = ({ language }) => {
             justifyContent: "start",
             alignItems: "center",
             gap: "1.5rem",
-            ...(_md && {gap:"0.5rem"}),
-
+            ...(_md && { gap: "0.5rem" }),
           }}
         >
           <Image
@@ -52,7 +50,14 @@ const Languages = ({ language }) => {
             width={60}
             height={60}
           />
-          <Typography>{language.name}</Typography>
+          <Typography
+            variant="title"
+            sx={{
+              fontWeight: "bold",
+            }}
+          >
+            {language.name}
+          </Typography>
         </CardContent>
       ) : (
         <Box
@@ -62,10 +67,6 @@ const Languages = ({ language }) => {
             alignItems: "center",
             width: "100%",
             height: "100%",
-            // position: "absolute",
-            // top: 0,
-            // left: 0,
-            // backgroundColor: "white",
           }}
         >
           <Button
@@ -74,14 +75,16 @@ const Languages = ({ language }) => {
             sx={{
               height: "100%",
               width: "100%",
-              backgroundColor: "#3894d0",
+              backgroundColor: "primary.main",
               ":hover": {
                 zIndex: 1,
                 width: "70vh",
+                ...(_md && { width: "100vh" }),
+                transition: "width 0.3s",
               },
             }}
           >
-            Button 1
+            <Image src={roadsIcon} alt={"roadsIcon"} width={60} height={60} />
           </Button>
 
           <Button
@@ -89,15 +92,16 @@ const Languages = ({ language }) => {
             sx={{
               height: "100%",
               width: "100%",
-              backgroundColor: "#3894d0",
-
+              backgroundColor: "primary.main",
               ":hover": {
                 zIndex: 1,
                 width: "70vh",
+                ...(_md && { width: "100vh" }),
+                transition: "width 0.3s",
               },
             }}
           >
-            Button 2
+            <Image src={labsIcon} alt={"labsIcon"} width={60} height={60} />
           </Button>
         </Box>
       )}
