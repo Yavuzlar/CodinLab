@@ -2,6 +2,8 @@
   "home.title": "CodinLab'a Hoşgeldiniz",
   "active_locale": "Türkçe",
   "home.content": "Farklı kodlama dillerinde ustalaşın, fikirlerinizi hayata geçirin ve geleneksel yöntemleri aşan eğlenceli ve etkileşimli bir öğrenme yolculuğunu deneyimleyin.",
-  "roads.title": "Yollar",
-  "roads.content": "Yazılım dillerinin temelini sağlam bir şekilde atın ve Roads ile kodlama evreninde adım adım ilerleyin!"
+  "home.roads.title": "Yollar",
+  "home.roads.content": "Yazılım dillerinin temelini sağlam bir şekilde atın ve Roads ile kodlama evreninde adım adım ilerleyin!",
+  "home.labs.title": "Laboratuvarlar",
+  "home.labs.content": "Labs ile algoritma ve programlama becerilerinizi geliştirin, pratik deneyim kazanın ve kodlama bilginizi uygulamaya geçirin!"
 }

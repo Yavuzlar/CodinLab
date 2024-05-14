@@ -1,12 +1,8 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  CircularProgress,
-  Typography,
-} from "@mui/material";
-import { CircularProgressStatistics } from "src/components/circular-progress/CircularProgressStatistics";
-import Translations from "src/components/Translations";
+import { Grid } from "@mui/material";
+import Welcome from "src/components/cards/Welcome";
+import Languages from "src/components/cards/Languages";
+import InfoCard from "src/components/cards/Info";
+import { welcomeCard, languages, roads, labs } from "src/data/home";
 
 const Home = () => {
   const progresses = [
@@ -27,38 +23,28 @@ const Home = () => {
     },
   ];
   return (
-    <div>
-      <Card>
-        <CardContent>
-          <Typography>
-            <Translations text={"home.title"} />
-          </Typography>
-          <Typography>
-            <Translations text={"active_locale"} />
-          </Typography>
-          <Typography>
-            <Translations text={"home.title"} />
-          </Typography>
-          <Typography>
-            <Translations text={"home.content"} />
-          </Typography>
-          {/* <Image src={yavuzlarLogo} /> */}
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: "10px" }}>
-        <CardContent>
-          <Translations text={"roads.title"} />
-          <Translations text={"roads.content"} />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardContent>
-          <Typography>B</Typography>
-          <CircularProgressStatistics progresses={progresses} />
-        </CardContent>
-      </Card>
-    </div>
+    <>
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Welcome {...welcomeCard} />
+        </Grid>
+        <Grid item xs={12} container spacing={4}   sx={{
+              display: "flex", justifyContent: "center", alignItems: "center" , flexDirection: "row"
+            }}>
+          {languages.map((language, index) => (
+            <Grid item xs={12} md={4} xl={2.4} key={index}>
+              <Languages language={language} />
+            </Grid>
+          ))}
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <InfoCard {...roads} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <InfoCard {...labs} />
+        </Grid>
+      </Grid>
+    </>
   );
 };
 

@@ -1,3 +1,6 @@
+import { Padding } from "@mui/icons-material"
+
+//padding 0 eklendi 
 
 const container = theme => {
   return {
@@ -5,6 +8,7 @@ const container = theme => {
       styleOverrides: {
         root: {
           background: "transparent !important",
+          padding: "0 !important",
         },
       },
     }
