@@ -30,6 +30,7 @@ const SingleItem = (props) => {
         sx={{
           textTransform: "capitalize",
           opacity: router.pathname === path ? 1 : 0.6,
+          fontFamily: "Outfit",
         }}>
         {" "}
         {title}{" "}

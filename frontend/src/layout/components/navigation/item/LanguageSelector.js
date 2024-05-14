@@ -1,6 +1,7 @@
 import { Image } from "@mui/icons-material";
 import { Button, Menu, MenuItem, Typography } from "@mui/material";
 import { useState } from "react";
+import LanguageIcon from "@mui/icons-material/Language";
 
 const LanguageSelector = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -21,9 +22,14 @@ const LanguageSelector = () => {
         aria-expanded={open ? "true" : undefined}
         sx={{ backgroundColor: "transparent" }}
         onClick={handleClick}>
-        <Image src="src/assets/icons/turkish.png" />
-        <Typography sx={{ textTransform: "capitalize", opacity: 0.6 }}>
-          {language}{" "}
+        <LanguageIcon sx={{ mr: 1 }} />
+        <Typography
+          sx={{
+            textTransform: "capitalize",
+            opacity: 0.6,
+            fontFamily: "Outfit",
+          }}>
+          {language}
         </Typography>
       </Button>
       <Menu

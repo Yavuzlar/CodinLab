@@ -43,23 +43,23 @@ function ResponsiveAppBar() {
   return (
     <AppBar position="static" sx={{ backgroundColor: "#0A3B7A" }}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters variant="dense" sx={{ mx: 5 }}>
+        <Toolbar disableGutters variant="dense" sx={{ mx: 7 }}>
           <CircleIcon
             sx={{
-              display: { xs: "none", md: "flex" },
+              display: { xs: "none", mdlg: "flex" },
               height: 40,
               width: 40,
               mr: 1,
             }}
           />
           <Typography
-            variant="h6"
+            variant="h3"
             noWrap
             component="a"
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
-              display: { xs: "none", md: "flex" },
+              display: { xs: "none", mdlg: "flex" },
               fontWeight: 700,
               color: "inherit",
               textDecoration: "none",
@@ -67,7 +67,7 @@ function ResponsiveAppBar() {
             {themeConfig.templateName}
           </Typography>
 
-          <CircleIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <CircleIcon sx={{ display: { xs: "flex", mdlg: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -75,7 +75,7 @@ function ResponsiveAppBar() {
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
-              display: { xs: "flex", md: "none" },
+              display: { xs: "flex", mdlg: "none" },
               flexGrow: 1,
               fontWeight: 700,
               color: "inherit",
@@ -84,12 +84,13 @@ function ResponsiveAppBar() {
             {themeConfig.templateName}
           </Typography>
 
-          <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ flexGrow: 0, display: { xs: "flex", mdlg: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
+              s
               onClick={handleOpenNavMenu}
               color="inherit">
               <MenuIcon />
@@ -109,7 +110,7 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: "block", md: "none" },
+                display: { xs: "block", mdlg: "none" },
               }}>
               {navigation.map((item, index) => (
                 <NavItem key={index} {...item} />
@@ -121,9 +122,9 @@ function ResponsiveAppBar() {
           <Box
             sx={{
               flexGrow: 0,
-              display: { xs: "none", md: "flex" },
+              display: { xs: "none", mdlg: "flex" },
               ml: "auto",
-              gap: 10,
+              gap: 11,
             }}>
             {navigation.map((item, index) => (
               <NavItem key={index} {...item} />
