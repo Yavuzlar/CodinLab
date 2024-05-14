@@ -34,6 +34,7 @@ func (h *PrivateHandler) Init(router fiber.Router) {
 		data := session_store.GetSessionData(c)
 		return response.Response(200, fmt.Sprintf("Dear %s %s Welcome to CodinLab API (Private Zone)", data.Name, data.Surname), nil)
 	})
+	h.initRoadRoutes(root)
 	// initialize routes
 	// Buraya yeni route'lar eklenecek
 

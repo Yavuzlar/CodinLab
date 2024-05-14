@@ -5,9 +5,10 @@ import "github.com/Yavuzlar/CodinLab/internal/domains"
 // Tüm servisler tek bir yapıda toplayarark tek endpoint üzerinden erişim sağlamak için oluşturulmuştur.
 
 type Services struct {
-	UtilService IUtilService
-	UserService domains.IUserService
-	LogService  domains.ILogService
+	UtilService   IUtilService
+	UserService   domains.IUserService
+	LogService    domains.ILogService
+	DockerService domains.IDockerService
 	// diğer servisler buraya eklenecek
 }
 
@@ -22,12 +23,14 @@ func CreateNewServices(
 	utilsService := newUtilService(hasherService, validatorService)
 	logService := newLogService(logRepositories, utilsService)
 	userService := newUserService(userRepositories, logService, utilsService)
+	dockerService := newDockerService(utilsService)
 	// diğer servisler buraya eklenecek
 
 	return &Services{
-		UtilService: utilsService,
-		UserService: userService,
-		LogService:  logService,
+		UtilService:   utilsService,
+		DockerService: dockerService,
+		UserService:   userService,
+		LogService:    logService,
 		// diğer servisler buraya eklenecek
 
 	}

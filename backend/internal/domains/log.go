@@ -107,16 +107,15 @@ func (l *Log) CreatedAt() time.Time {
 
 // Log Types
 var (
-	TRoad = "Road"
-	TPath = "Path"
-	TLab  = "Lab"
-	TUser = "User"
+	TypeRoad = "Road"
+	TypePath = "Path"
+	TypeLab  = "Lab"
+	TypeUser = "User"
 )
 
 // Log Content
 var (
 	Started   = "Started"
 	Completed = "Completed"
-
-	Profile = "Profile Updated"
+	Profile   = "Profile Updated"
 )
