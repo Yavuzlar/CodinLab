@@ -3,8 +3,14 @@ import navigation from "src/navigation";
 import NavItem from "./item/NavItem";
 import { Stack } from "@mui/material";
 import LanguageSelector from "./item/LanguageSelector";
+import { useState } from "react";
 
 const NavigationList = () => {
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  
   return (
     <Stack
       direction={"row"}
