@@ -28,14 +28,13 @@ func newDockerService(
 	}
 }
 
+// Checks if a Docker image exists on Docker Hub by its reference
 func (d *dockerService) IsImageExists(ctx context.Context, imageReference string) (isExsits bool, err error) {
-	// Tüm mevcut imajları listele
 	images, err := d.cli.ImageList(ctx, image.ListOptions{})
 	if err != nil {
 		return false, err
 	}
 
-	// İmaj bulundu mu kontrol et
 	for _, img := range images {
 		for _, tag := range img.RepoTags {
 			if tag == imageReference {
@@ -44,10 +43,10 @@ func (d *dockerService) IsImageExists(ctx context.Context, imageReference string
 		}
 	}
 
-	// İmaj bulunamadı
 	return false, nil
 }
 
+// Pulls Docker images from Docker Hub
 func (d *dockerService) Pull(ctx context.Context, imageReference string) (err error) {
 	doneChan := make(chan error, 1)
 
