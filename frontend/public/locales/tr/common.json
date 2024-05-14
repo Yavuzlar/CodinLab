@@ -17,5 +17,10 @@
   "register.or": "ya da",
   "register.signup": "Kayıt Ol",
   "register.already": "Zaten hesabın var mı?",
-  "register.login": "Giriş yap"
+  "register.login": "Giriş yap",
+  "login.forget.password": "Şifreni mi Unuttun?",
+  "login.login.button": "Giriş",
+  "login.divider.or": "ya da",
+  "login.new.on.platform": "Platformumuzda yeni misiniz?",
+  "login.create.new.account": "Hesap Oluştur"
 }
