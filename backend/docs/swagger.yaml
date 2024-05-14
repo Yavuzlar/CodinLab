@@ -18,20 +18,25 @@ definitions:
   public.RegisterDTO:
     properties:
       githubProfile:
+        description: Github Profile is must be max 30 characters long.
         maxLength: 30
-        minLength: 4
         type: string
       name:
+        description: Name is required
         type: string
       password:
+        description: Password is required and must be at least 8 characters
         minLength: 8
         type: string
       surname:
+        description: Surname is required
         type: string
       username:
+        description: Username is required, must be alphanumeric and between 3-30 characters
+        maxLength: 30
+        minLength: 3
         type: string
     required:
-    - githubProfile
     - name
     - password
     - surname

@@ -108,7 +108,6 @@ const docTemplate = `{
         "public.RegisterDTO": {
             "type": "object",
             "required": [
-                "githubProfile",
                 "name",
                 "password",
                 "surname",
@@ -116,22 +115,28 @@ const docTemplate = `{
             ],
             "properties": {
                 "githubProfile": {
+                    "description": "Github Profile is must be max 30 characters long.",
                     "type": "string",
-                    "maxLength": 30,
-                    "minLength": 4
+                    "maxLength": 30
                 },
                 "name": {
+                    "description": "Name is required",
                     "type": "string"
                 },
                 "password": {
+                    "description": "Password is required and must be at least 8 characters",
                     "type": "string",
                     "minLength": 8
                 },
                 "surname": {
+                    "description": "Surname is required",
                     "type": "string"
                 },
                 "username": {
-                    "type": "string"
+                    "description": "Username is required, must be alphanumeric and between 3-30 characters",
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 3
                 }
             }
         },

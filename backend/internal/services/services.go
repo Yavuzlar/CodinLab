@@ -7,23 +7,27 @@ import "github.com/Yavuzlar/CodinLab/internal/domains"
 type Services struct {
 	UtilService IUtilService
 	UserService domains.IUserService
+	LogService  domains.ILogService
 	// diğer servisler buraya eklenecek
 }
 
 func CreateNewServices(
 	userRepositories domains.IUserRepository,
+	logRepositories domains.ILogRepository,
 	hasherService IHashService,
 	validatorService IValidatorService,
 	// diğer servisler buraya eklenecek
 
 ) *Services {
 	utilsService := newUtilService(hasherService, validatorService)
-	userService := newUserService(userRepositories, utilsService)
+	logService := newLogService(logRepositories, utilsService)
+	userService := newUserService(userRepositories, logService, utilsService)
 	// diğer servisler buraya eklenecek
 
 	return &Services{
 		UtilService: utilsService,
 		UserService: userService,
+		LogService:  logService,
 		// diğer servisler buraya eklenecek
 
 	}

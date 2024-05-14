@@ -36,6 +36,7 @@ func Run(cfg *config.Config) {
 	}
 	// repository initialize
 	userRepo := repositories.NewUserRepository(conn)
+	logRepo := repositories.NewLogRepository(conn)
 
 	// utilities initialize
 	hasher := hasher_service.NewHasherService()
@@ -43,7 +44,7 @@ func Run(cfg *config.Config) {
 
 	// service initialize
 
-	allService := services.CreateNewServices(userRepo, hasher, validator)
+	allService := services.CreateNewServices(userRepo, logRepo, hasher, validator)
 
 	//---------------first run -----------------
 	hashedPass, err := hasher.HashPassword(cfg.Application.Managment.ManagmentPassword)

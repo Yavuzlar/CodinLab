@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
@@ -9,15 +10,18 @@ import (
 
 type userService struct {
 	userRepositories domains.IUserRepository
+	logService       domains.ILogService
 	utils            IUtilService
 }
 
 func newUserService(
 	userRepositories domains.IUserRepository,
+	logService domains.ILogService,
 	utils IUtilService,
 ) domains.IUserService {
 	return &userService{
 		userRepositories: userRepositories,
+		logService:       logService,
 		utils:            utils,
 	}
 }
@@ -50,7 +54,7 @@ func (s *userService) Register(ctx context.Context, username, name, surname, pas
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}
 	if len(users) != 0 {
-		return service_errors.NewServiceErrorWithMessageAndError(400, "nickname already being used", err)
+		return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 	}
 
 	// Hashing password for db
@@ -69,5 +73,17 @@ func (s *userService) Register(ctx context.Context, username, name, surname, pas
 	if err = s.userRepositories.Add(ctx, newUser); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while adding the user", err)
 	}
+
+	if err = s.logService.Add(ctx, newUser.ID().String(), "Fibonnacii", domains.TLab, domains.Completed); err != nil {
+		return
+	}
+
+	logs, err := s.logService.GetByUserID(ctx, newUser.ID().String())
+	if err != nil {
+		return
+	}
+
+	fmt.Println(logs)
+
 	return
 }
