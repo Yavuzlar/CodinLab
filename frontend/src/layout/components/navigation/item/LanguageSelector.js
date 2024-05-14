@@ -28,6 +28,7 @@ const LanguageSelector = () => {
             textTransform: "capitalize",
             opacity: 0.6,
             fontFamily: "Outfit",
+            textAlign: "center",
           }}>
           {language}
         </Typography>
@@ -39,7 +40,8 @@ const LanguageSelector = () => {
         onClose={handleClose}
         MenuListProps={{
           "aria-labelledby": "basic-button",
-        }}>
+        }}
+        sx={{ mt: 1, "& .MuiMenu-paper": { backgroundColor: "#0A3B7A" } }}>
         <MenuItem
           onClick={(e) => {
             setLanguage("turkish");

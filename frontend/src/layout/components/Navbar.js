@@ -7,29 +7,18 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import CircleIcon from "@mui/icons-material/Circle";
 import themeConfig from "src/configs/themeConfig";
 import navigation from "src/navigation";
 import NavItem from "./navigation/item/NavItem";
 import LanguageSelector from "./navigation/item/LanguageSelector";
-
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { MenuItem } from "@mui/material";
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -67,7 +56,14 @@ function ResponsiveAppBar() {
             {themeConfig.templateName}
           </Typography>
 
-          <CircleIcon sx={{ display: { xs: "flex", mdlg: "none" }, mr: 1 }} />
+          <CircleIcon
+            sx={{
+              display: { xs: "flex", mdlg: "none" },
+              height: 40,
+              width: 40,
+              mr: 1,
+            }}
+          />
           <Typography
             variant="h5"
             noWrap
@@ -111,11 +107,15 @@ function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", mdlg: "none" },
+                mt: "1px",
+                "& .MuiMenu-paper": { backgroundColor: "#0A3B7A" },
               }}>
               {navigation.map((item, index) => (
-                <NavItem key={index} {...item} />
+                <MenuItem>
+                  <NavItem key={index} {...item} />
+                </MenuItem>
               ))}
-              <LanguageSelector />
+              <LanguageSelector isMenu={true} />
             </Menu>
           </Box>
 
@@ -124,7 +124,7 @@ function ResponsiveAppBar() {
               flexGrow: 0,
               display: { xs: "none", mdlg: "flex" },
               ml: "auto",
-              gap: 11,
+              gap: 13,
             }}>
             {navigation.map((item, index) => (
               <NavItem key={index} {...item} />
