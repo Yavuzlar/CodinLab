@@ -27,7 +27,6 @@ func NewPrivateHandler(
 
 func (h *PrivateHandler) Init(router fiber.Router) {
 	root := router.Group("/private")
-
 	root.Use(h.authMiddleware)
 
 	root.Get("/", func(c *fiber.Ctx) error {

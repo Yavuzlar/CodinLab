@@ -19,7 +19,8 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/road/start [post]
 func (h *PrivateHandler) Start(c *fiber.Ctx) error {
-	userSession := c.Locals("user").(session_store.SessionData)
+	// Recive user session from session_store
+	userSession := session_store.GetSessionData(c)
 
 	// Need Spesific imageReference for this. If it's wrong it wont work
 	isExsits, err := h.services.DockerService.IsImageExists(c.Context(), "golang:latest")
