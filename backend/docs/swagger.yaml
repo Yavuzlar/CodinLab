@@ -60,6 +60,21 @@ info:
   title: API Service
   version: v1
 paths:
+  /private/road/start:
+    post:
+      consumes:
+      - application/json
+      description: Start
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Start
+      tags:
+      - Road
   /public/login:
     post:
       consumes:

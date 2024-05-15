@@ -27,13 +27,13 @@ func NewPrivateHandler(
 
 func (h *PrivateHandler) Init(router fiber.Router) {
 	root := router.Group("/private")
-
 	root.Use(h.authMiddleware)
 
 	root.Get("/", func(c *fiber.Ctx) error {
 		data := session_store.GetSessionData(c)
 		return response.Response(200, fmt.Sprintf("Dear %s %s Welcome to CodinLab API (Private Zone)", data.Name, data.Surname), nil)
 	})
+	h.initRoadRoutes(root)
 	// initialize routes
 	// Buraya yeni route'lar eklenecek
 
