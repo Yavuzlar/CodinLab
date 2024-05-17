@@ -11,19 +11,19 @@ import Translations from "src/components/Translations";
 const Home = () => {
   const progresses = [
     {
-      name: "In progress",
-      value: "30",
-      color: "#8FDDFD",
+      name: "Easy",
+      value: 50,
+      color: "#39CE19",
     },
     {
-      name: "Completed",
-      value: "60",
-      color: "#0A3B7A",
+      name: "Medium",
+      value: 25,
+      color: "#EE7A19",
     },
     {
-      name: "Completed",
-      value: "90",
-      color: "#0A3B7A",
+      name: "Hard",
+      value: 45,
+      color: "#DC0101",
     },
   ];
   return (
@@ -52,7 +52,12 @@ const Home = () => {
         </CardContent>
       </Card>
 
-      <CircularProgressStatistics progresses={progresses} />
+      <Card>
+        <CardContent>
+          <Typography>B</Typography>
+          <CircularProgressStatistics progresses={progresses} />
+        </CardContent>
+      </Card>
     </div>
   );
 };
