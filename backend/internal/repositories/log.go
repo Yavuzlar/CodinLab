@@ -68,12 +68,12 @@ func (r *LogRepository) dbModelFromAppModel(domModel domains.Log) (dbModel dbMod
 
 // dbModelFromAppModel converts domains.LogFilter to dbModelLogs for database operations (e.g. insert, update)
 func (r *LogRepository) dbModelFromAppFilter(filter domains.LogFilter) (dbFilter dbModelLogs) {
-	if filter.Id != uuid.Nil {
-		dbFilter.Id.String = filter.Id.String()
+	if filter.ID != uuid.Nil {
+		dbFilter.Id.String = filter.ID.String()
 		dbFilter.Id.Valid = true
 	}
-	if filter.UserId != uuid.Nil {
-		dbFilter.UserId.String = filter.UserId.String()
+	if filter.UserID != uuid.Nil {
+		dbFilter.UserId.String = filter.UserID.String()
 		dbFilter.UserId.Valid = true
 	}
 	if filter.Title != "" {
@@ -140,4 +140,21 @@ func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 		return
 	}
 	return
+}
+
+func (r *LogRepository) IsExists(ctx context.Context, log *domains.LogFilter) (exists bool, err error) {
+	query := `
+		SELECT
+			EXISTS (
+				SELECT 1
+				FROM t_logs
+				WHERE id = :id
+			)
+	`
+
+	err = r.db.GetContext(ctx, &exists, query, log.ID)
+	if err != nil {
+		return false, err
+	}
+	return exists, nil
 }
