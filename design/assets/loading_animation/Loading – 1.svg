@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000" viewBox="0 0 1000 1000">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_14" data-name="Rectangle 14" width="360" height="704" rx="30" transform="translate(1801 1363)" fill="#fff"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect id="Rectangle_12" data-name="Rectangle 12" width="824" height="810.415" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-Loading_1">
+      <rect width="1000" height="1000"/>
+    </clipPath>
+  </defs>
+  <g id="Loading_1" data-name="Loading – 1" clip-path="url(#clip-Loading_1)">
+    <rect width="1000" height="1000" fill="#fff"/>
+    <g id="codin-logo-main" transform="translate(76.995 52.005)">
+      <path id="Path_1" data-name="Path 1" d="M595.03,32.04s-2-32,29-32h60s75.99-5.08,77,93V350.46s5,62.58,57,63.58c0,0,29-1,28,33,0,34-27,33-27,33s-39,1-48,26-9,40-9,62v212l-1,34s-2,77-74,82H618.15s-22.28-.02-22.2-33.02c.08-32.98,23.08-32.98,23.08-32.98h45s29-2,31-31v-255s0-77,59-97c0,0-53-9-59-97v-244s0-40-32-41h-46S595.03,62.04,595.03,32.04Z" fill="#0a3b7a"/>
+      <path id="Path_2" data-name="Path 2" d="M251.03,32.04s2-32-29-32h-60s-75.99-5.08-77,93V350.46s-5,62.58-57,63.58c0,0-29-1-28,33,0,34,27,33,27,33s39,1,48,26,9,40,9,62v212l1,34s2,77,74,82h68.88s22.28-.02,22.2-33.02c-.08-32.98-23.08-32.98-23.08-32.98h-45s-29-2-31-31v-255s0-77-59-97c0,0,53-9,59-97v-244s0-40,32-41h46S251.03,62.04,251.03,32.04Z" fill="#0a3b7a"/>
+    </g>
+    <g id="Mask_Group_1" data-name="Mask Group 1" transform="translate(-1481 -1215)" clip-path="url(#clip-path)">
+      <g id="Group_15" data-name="Group 15" transform="translate(1801 1275)">
+        <g id="Group_14" data-name="Group 14" clip-path="url(#clip-path-2)">
+          <path id="Path_9" data-name="Path 9" d="M824,84.074C741.6,84.074,741.6,0,659.2,0s-82.4,84.074-164.8,84.074S411.993,0,329.594,0,247.2,84.074,164.8,84.074,82.4,0,0,0V810.415H824Z" fill="#daf0fe"/>
+        </g>
+      </g>
+      <g id="Group_17" data-name="Group 17" transform="translate(1350 1275)">
+        <g id="Group_16" data-name="Group 16" clip-path="url(#clip-path-2)">
+          <path id="Path_10" data-name="Path 10" d="M824,84.074C741.6,84.074,741.6,0,659.2,0s-82.4,84.074-164.8,84.074S411.993,0,329.594,0,247.2,84.074,164.8,84.074,82.4,0,0,0V810.415H824Z" fill="#8fddfd"/>
+        </g>
+      </g>
+    </g>
+    <circle id="Ellipse_2" data-name="Ellipse 2" cx="19" cy="19" r="19" transform="translate(511 89)" fill="#8fddfd" opacity="0"/>
+    <circle id="Ellipse_3" data-name="Ellipse 3" cx="12" cy="12" r="12" transform="translate(488 28)" fill="#8fddfd" opacity="0"/>
+    <circle id="Ellipse_1" data-name="Ellipse 1" cx="38" cy="38" r="38" transform="translate(374 28)" fill="#8fddfd" opacity="0"/>
+  </g>
+</svg>
