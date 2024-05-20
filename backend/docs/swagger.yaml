@@ -112,34 +112,6 @@ paths:
       summary: Get all logs
       tags:
       - Log
-  /private/log/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves a single log by its ID.
-      parameters:
-      - description: Log ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.BaseResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/private.LogDTO'
-                  type: array
-              type: object
-      summary: Get log by ID
-      tags:
-      - Log
   /private/road/start:
     post:
       consumes:

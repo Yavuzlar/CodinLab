@@ -73,53 +73,6 @@
                 }
             }
         },
-        "/private/log/{id}": {
-            "get": {
-                "description": "Retrieves a single log by its ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Log"
-                ],
-                "summary": "Get log by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Log ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.BaseResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/private.LogDTO"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/private/road/start": {
             "post": {
                 "description": "Start",
