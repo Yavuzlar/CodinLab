@@ -8,7 +8,6 @@ import (
 
 func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 	root.Get("/log", h.GetAllLogs)
-	root.Get("/log/:id", h.GetLogByID)
 }
 
 type LogDTO struct {
@@ -54,38 +53,4 @@ func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "Status OK", logDTOs)
-}
-
-// @Tags Log
-// @Summary Get log by ID
-// @Description Retrieves a single log by its ID.
-// @Accept json
-// @Produce json
-// @Param id path string true "Log ID"
-// @Success 200 {object} response.BaseResponse{data=[]LogDTO}
-// @Router /private/log/{id} [get]
-func (h *PrivateHandler) GetLogByID(c *fiber.Ctx) error {
-	id := c.Params("id")
-
-	isExists, err := h.services.LogService.IsExists(c.Context(), id)
-	if err != nil {
-		return response.Response(500, "error while checking log", err)
-	}
-	if !isExists {
-		return response.Response(400, "log not found", nil)
-	}
-
-	log, err := h.services.LogService.GetByID(c.Context(), id)
-	if err != nil {
-		return err
-	}
-
-	logDTO := LogDTO{
-		ID:      log.ID(),
-		UserID:  log.UserID(),
-		Title:   log.Title(),
-		Content: log.Content(),
-	}
-
-	return response.Response(200, "Status OK", logDTO)
 }
