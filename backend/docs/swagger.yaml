@@ -1,5 +1,18 @@
 basePath: /api/v1
 definitions:
+  private.LogDTO:
+    properties:
+      content:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      userId:
+        type: string
+    type: object
   public.LoginDTO:
     properties:
       password:
@@ -60,6 +73,45 @@ info:
   title: API Service
   version: v1
 paths:
+  /private/log:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all logs based on the provided query parameters.
+      parameters:
+      - description: User ID
+        in: query
+        name: userID
+        type: string
+      - description: Log Title
+        in: query
+        name: title
+        type: string
+      - description: Log Content
+        in: query
+        name: content
+        type: string
+      - description: Log Type
+        in: query
+        name: type
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/private.LogDTO'
+                  type: array
+              type: object
+      summary: Get all logs
+      tags:
+      - Log
   /private/road/start:
     post:
       consumes:

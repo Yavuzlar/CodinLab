@@ -12,21 +12,25 @@ import (
 type ILogRepository interface {
 	Filter(ctx context.Context, filter LogFilter) (logs []Log, dataCount int64, err error)
 	Add(ctx context.Context, log *Log) (err error)
+	IsExists(ctx context.Context, log *LogFilter) (exists bool, err error)
 }
 
 // ILogService is the interface that provides the methods for the log service.
 type ILogService interface {
 	Add(ctx context.Context, userId, title, ltype, content string) (err error)
+	GetAllLogs(ctx context.Context, userID, title, content, logType string) (logs []Log, err error)
+	GetByID(ctx context.Context, logID string) (log *Log, err error)
 	GetByUserID(ctx context.Context, userID string) (logs []Log, err error)
 	GetByType(ctx context.Context, logType string) (logs []Log, err error)
 	GetByContent(ctx context.Context, content string) (logs []Log, err error)
 	GetByTitle(ctx context.Context, title string) (logs []Log, err error)
+	IsExists(ctx context.Context, logID string) (isExists bool, err error)
 }
 
 // LogFilter is the struct that represents the log filter.
 type LogFilter struct {
-	Id      uuid.UUID
-	UserId  uuid.UUID
+	ID      uuid.UUID
+	UserID  uuid.UUID
 	Title   string // Lab - Road title
 	LType   string
 	Content string // Success etc.
@@ -115,7 +119,7 @@ var (
 
 // Log Content
 var (
-	Started   = "Started"
-	Completed = "Completed"
-	Profile   = "Profile Updated"
+	ContentStarted   = "Started"
+	ContentCompleted = "Completed"
+	ContentProfile   = "Profile Updated"
 )

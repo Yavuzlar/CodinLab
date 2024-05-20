@@ -23,13 +23,52 @@ func newLogService(
 	}
 }
 
+func (l *logService) GetAllLogs(ctx context.Context, userID, title, content, logType string) (logs []domains.Log, err error) {
+	var userIDU uuid.UUID
+	if userID != "" {
+		userIDU, err = uuid.Parse(userID)
+		if err != nil {
+			return nil, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+		}
+	}
+
+	logFilter := domains.LogFilter{
+		UserID:  userIDU,
+		LType:   logType,
+		Title:   title,
+		Content: content,
+	}
+
+	logs, _, err = l.logRepositories.Filter(ctx, logFilter)
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
+	}
+
+	return
+}
+
+func (l *logService) GetByID(ctx context.Context, logID string) (log *domains.Log, err error) {
+	logIDU, err := uuid.Parse(logID)
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessageAndError(400, "invalid log id", err)
+	}
+
+	logs, _, err := l.logRepositories.Filter(ctx, domains.LogFilter{ID: logIDU})
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
+	}
+	log = &logs[0]
+
+	return
+}
+
 func (l *logService) GetByUserID(ctx context.Context, userID string) (logs []domains.Log, err error) {
 	userIDU, err := uuid.Parse(userID)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
 	}
 
-	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{UserId: userIDU})
+	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{UserID: userIDU})
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
 	}
@@ -78,6 +117,20 @@ func (l *logService) Add(ctx context.Context, userID, title, ltype, content stri
 	// We save the new log to the database
 	if err = l.logRepositories.Add(ctx, newLog); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while adding the log", err)
+	}
+
+	return
+}
+
+func (l *logService) IsExists(ctx context.Context, logID string) (isExists bool, err error) {
+	logIDU, err := uuid.Parse(logID)
+	if err != nil {
+		return false, service_errors.NewServiceErrorWithMessageAndError(400, "invalid log id", err)
+	}
+
+	isExists, err = l.logRepositories.IsExists(ctx, &domains.LogFilter{ID: logIDU})
+	if err != nil {
+		return
 	}
 
 	return
