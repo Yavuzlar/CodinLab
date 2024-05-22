@@ -25,12 +25,10 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#0A3B7A" }}>
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters variant="dense" sx={{ mx: 7 }}>
           <CircleIcon

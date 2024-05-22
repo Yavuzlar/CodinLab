@@ -29,6 +29,7 @@ const SingleItem = (props) => {
       <Typography
         sx={{
           textTransform: "capitalize",
+          fontWeight: router.pathname === path ? 400 : 300,
           opacity: router.pathname === path ? 1 : 0.6,
           fontFamily: "Outfit",
         }}>

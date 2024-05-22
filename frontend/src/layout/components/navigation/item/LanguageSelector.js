@@ -1,7 +1,9 @@
-import { Image } from "@mui/icons-material";
-import { Button, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import { useState } from "react";
 import LanguageIcon from "@mui/icons-material/Language";
+import Image from "next/image";
+import Turkish from "src/assets/flags/turkish.png";
+import English from "src/assets/flags/english.png";
 
 const LanguageSelector = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -22,13 +24,23 @@ const LanguageSelector = () => {
         aria-expanded={open ? "true" : undefined}
         sx={{ backgroundColor: "transparent" }}
         onClick={handleClick}>
-        <LanguageIcon sx={{ mr: 1 }} />
+        {language === "turkish" && (
+          <Image src={Turkish} width={25} height={17} />
+        )}
+
+        {language === "english" && (
+          <Image src={English} width={25} height={17} />
+        )}
+
         <Typography
           sx={{
+            fontWeight: 300,
             textTransform: "capitalize",
             opacity: 0.6,
             fontFamily: "Outfit",
             textAlign: "center",
+            ml: 0.5,
+            mb: 0.5,
           }}>
           {language}
         </Typography>
