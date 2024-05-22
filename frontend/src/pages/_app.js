@@ -70,6 +70,7 @@ const App = (props) => {
         <meta name="viewport" content="initial-scale=1, width=device-width" />  
         <link href="https://fonts.cdnfonts.com/css/outfit" rel="stylesheet"></link>
         <link href="https://fonts.cdnfonts.com/css/cascadia-code" rel="stylesheet"></link>
+        <link href="https://fonts.cdnfonts.com/css/nunito" rel="stylesheet"></link>
       </Head>
 
       <AuthProvider>
