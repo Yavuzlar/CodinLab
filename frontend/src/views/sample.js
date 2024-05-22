@@ -1,7 +1,9 @@
+import LevelStatistic from "src/components/statistics/LevelStatistic"
+
 const Sample = () => {
     return (
         <div>
-            Sample Page
+            <LevelStatistic levels={"10"} progress={"50"}/>
         </div>
     )
 }
