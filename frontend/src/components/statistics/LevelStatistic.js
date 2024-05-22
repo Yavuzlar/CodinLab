@@ -3,6 +3,9 @@ import { Box, Card, CardActions, CardContent, Typography } from "@mui/material";
 const LevelStatistic = ({ levels, progress }) => {
   const height = progress + "%";
 
+  // levels for the level of the user
+  // progress for the progress of the user
+
   return (
     <Card
       style={{
@@ -130,7 +133,7 @@ const LevelStatistic = ({ levels, progress }) => {
                       maxHeight: "100% !important",
                     }}
                   >
-                    {/* Mavi kutu */}
+                    {/* Blue Box */}
                   </Box>
                 </Box>
                 <Typography
