@@ -126,8 +126,34 @@ func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (l
 
 // Adds Log
 func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
-	dbModel := r.dbModelFromAppModel(*log)
+	// Checks the logs already in the db. If the log exists then we will not insert a new one.
 	query := `
+		SELECT
+			EXISTS (
+				SELECT 1
+				FROM t_logs
+				WHERE id = :id AND user_id = :user_id AND type = :type AND content = :content AND title = :title
+			)
+	`
+	params := map[string]interface{}{
+		"id":      log.ID,
+		"user_id": log.UserID,
+		"type":    log.Type,
+		"content": log.Content,
+		"title":   log.Title,
+	}
+
+	var exists bool
+	err = r.db.GetContext(ctx, &exists, query, params)
+	if err != nil {
+		return err
+	}
+	if exists {
+		return
+	}
+
+	dbModel := r.dbModelFromAppModel(*log)
+	query = `
 		INSERT INTO
 			t_logs
 		(id, user_id, title, type, content)

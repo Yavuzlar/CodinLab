@@ -1,0 +1,43 @@
+{
+	"id": 1,
+	"language": [
+		{
+			"lang": "en",
+			"title": "Palindrome Checker",
+			"description": "Checks if a given string is a palindrome",
+			"note": "Questions Note",
+			"hint": "Compare characters from the beginning and end of the string moving towards the center."
+		},
+		{
+			"lang": "tr",
+			"title": "Palindrom Kontrolü",
+			"description": "Verilen kelimenin palindrom olup olmadığına bak.",
+			"note": "Sorunun Notu",
+			"hint": "Karakterleri dizinin başından ve sonundan merkeze doğru karşılaştır."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "palindrome",
+		"tests": [
+			{
+				"input": ["madam"],
+				"output": ["true"]
+			},
+			{
+				"input": ["hello"],
+				"output": ["false"]
+			},
+			{
+				"input": ["racecar"],
+				"output": ["true"]
+			}
+		],
+		"params": [
+			{
+				"name": "s",
+				"type": "string"
+			}
+		]
+	}
+}
