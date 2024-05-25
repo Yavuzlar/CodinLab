@@ -1,0 +1,43 @@
+{
+	"id": 4,
+	"language": [
+		{
+			"lang": "en",
+			"title": "Sum of Digits",
+			"description": "Calculates the sum of the digits of a given number",
+			"note": "Questions Note",
+			"hint": "Use a loop to extract each digit and sum them."
+		},
+		{
+			"lang": "tr",
+			"title": "Basamakların Toplamı",
+			"description": "Verilen bir sayının basamaklarının toplamını hesaplar",
+			"note": "Sorunun Notu",
+			"hint": "Her bir basamağı çıkarmak ve toplamak için bir döngü kullan."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "sumOfDigits",
+		"tests": [
+			{
+				"input": ["123"],
+				"output": ["6"]
+			},
+			{
+				"input": ["456"],
+				"output": ["15"]
+			},
+			{
+				"input": ["789"],
+				"output": ["24"]
+			}
+		],
+		"params": [
+			{
+				"name": "n",
+				"type": "int"
+			}
+		]
+	}
+}

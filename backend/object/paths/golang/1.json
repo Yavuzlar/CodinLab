@@ -1,0 +1,30 @@
+{
+	"id": 1,
+	"language": [
+		{
+			"lang": "en",
+			"title": "Basic Syntax",
+			"description": "Understanding the basic syntax of Go",
+			"content": "Learn about the basic structure of a Go program, including package declaration, imports, and the main function.",
+			"note": "Quest Note"
+		},
+		{
+			"lang": "tr",
+			"title": "Basit yazılış",
+			"description": "Go'nun temellerini öğrenin.",
+			"content": "Go programının temel yapısını öğrenin, paket bildirimi, ithalatlar ve ana fonksiyon dahil.",
+			"note": "Sorunun Notu"
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "helloWorld",
+		"tests": [
+			{
+				"input": [""],
+				"output": ["Hello, World!"]
+			}
+		],
+		"params": []
+	}
+}

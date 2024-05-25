@@ -1,0 +1,43 @@
+[
+    {
+        "id": 1,
+        "name": "c++",
+        "dockerImage": "gcc:latest",
+        "labDir": "object/labs/c++",
+        "pathDir": "object/paths/c++",
+        "iconPath": "object/icons/c++.png",
+        "language": [
+            {
+                "lang": "en",
+                "title": "What is C++",
+                "description": "Learn the basics of C++ programming"
+            },
+            {
+                "lang": "tr",
+                "title": "C++ nedir?",
+                "description": "c++ 'In temellerini öğrenin."
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "go",
+        "dockerImage": "golang:latest",
+        "labDir": "object/labs/golang",
+        "pathDir": "object/paths/golang",
+        "iconPath": "object/icons/go.png",
+        "language": [
+            {
+                "lang": "en",
+                "title": "What is Go",
+                "description": "Learn the basics of Go programming"
+            },
+            {
+                "lang": "tr",
+                "title": "Go nedir?",
+                "description": "Go programlama dilinin temellerini öğrenin."
+            }
+        ]
+    }
+    
+]
