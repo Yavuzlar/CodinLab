@@ -17,38 +17,40 @@ type ILogRepository interface {
 
 // ILogService is the interface that provides the methods for the log service.
 type ILogService interface {
-	Add(ctx context.Context, userId, title, ltype, content string) (err error)
-	GetAllLogs(ctx context.Context, userID, title, content, logType string) (logs []Log, err error)
+	Add(ctx context.Context, userID, ltype, content string, languageID, labRoadID int32) (err error)
+	GetAllLogs(ctx context.Context, userID, languageID, labRoadID, logType, content string) (logs []Log, err error)
 	GetByID(ctx context.Context, logID string) (log *Log, err error)
 	GetByUserID(ctx context.Context, userID string) (logs []Log, err error)
 	GetByType(ctx context.Context, logType string) (logs []Log, err error)
 	GetByContent(ctx context.Context, content string) (logs []Log, err error)
-	GetByTitle(ctx context.Context, title string) (logs []Log, err error)
+	GetByLabRoadID(ctx context.Context, labRoadID string) (logs []Log, err error)
 	IsExists(ctx context.Context, logID string) (isExists bool, err error)
 }
 
 // LogFilter is the struct that represents the log filter.
 type LogFilter struct {
-	ID      uuid.UUID
-	UserID  uuid.UUID
-	Title   string // Lab - Road title
-	LType   string
-	Content string // Success etc.
+	ID         uuid.UUID
+	UserID     uuid.UUID
+	LanguageID int32
+	LabRoadID  int32 // Lab - Road title
+	LType      string
+	Content    string // Success etc.
 }
 
 // Log is the struct that represents the log.
 type Log struct {
-	id        uuid.UUID
-	userId    uuid.UUID
-	title     string
-	lType     string
-	content   string
-	createdAt time.Time
+	id         uuid.UUID
+	userId     uuid.UUID
+	languageID int32
+	labRoadID  int32
+	lType      string
+	content    string
+	createdAt  time.Time
 }
 
 // NewLog creates a new log
-func NewLog(userId, title, lType, content string) (*Log, error) {
-	if userId == "" {
+func NewLog(userID, lType, content string, languageID, labRoadID int32) (*Log, error) {
+	if userID == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "user id is required")
 	}
 	if content == "" {
@@ -57,29 +59,35 @@ func NewLog(userId, title, lType, content string) (*Log, error) {
 	if lType == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "log type is required")
 	}
-	userUUID, err := uuid.Parse(userId)
+	if languageID == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "log language is required")
+	}
+	userUUID, err := uuid.Parse(userID)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid user id")
 	}
 
 	return &Log{
-		id:      uuid.New(),
-		userId:  userUUID,
-		title:   title,
-		lType:   lType,
-		content: content,
+		id:         uuid.New(),
+		userId:     userUUID,
+		languageID: languageID,
+		labRoadID:  labRoadID,
+		lType:      lType,
+		content:    content,
 	}, nil
 }
 
 // Unmarshal unmarshals the log for database operations. It is used in the repository.
 func (l *Log) Unmarshal(
 	id, userId uuid.UUID,
-	title, lType, content string,
+	lType, content string,
+	languageID, labRoadID int32,
 	createdAt time.Time,
 ) {
 	l.id = id
 	l.userId = userId
-	l.title = title
+	l.languageID = languageID
+	l.labRoadID = labRoadID
 	l.lType = lType
 	l.content = content
 	l.createdAt = createdAt
@@ -93,8 +101,12 @@ func (l *Log) UserID() uuid.UUID {
 	return l.userId
 }
 
-func (l *Log) Title() string {
-	return l.title
+func (l *Log) LanguageID() int32 {
+	return l.languageID
+}
+
+func (l *Log) LabRoadID() int32 {
+	return l.labRoadID
 }
 
 func (l *Log) Type() string {

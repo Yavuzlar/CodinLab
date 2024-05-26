@@ -7,6 +7,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type StartDTO struct {
+	LanguageID int32 `json:"languageID" validate:"required"`
+}
+
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	root.Post("/road/start", h.Start)
 }
@@ -16,10 +20,22 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 // @Description Start
 // @Accept json
 // @Produce json
+// @Param start body StartDTO true "Start"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/road/start [post]
 func (h *PrivateHandler) Start(c *fiber.Ctx) error {
+	var start StartDTO
+	if err := c.BodyParser(&start); err != nil {
+		return err
+	}
+
+	// NEED ROAD SERVICE FOR BOTTOM
+	// We have to get the road that will start according to the name
+	// In that road struct we will change isStarted to true.
+	// And we need road's docker image for DocerService
+
 	// Need Road Service For -> Road title & Docker Image For Log
+	// With road service we will get road by road name and recive docker image.
 
 	// Recive user session from session_store
 	userSession := session_store.GetSessionData(c)
@@ -40,7 +56,7 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 
 	// if the road has started. Log will not be created
 	// Log a road start event for the user
-	if err := h.services.LogService.Add(c.Context(), userSession.UserID, "", domains.TypeRoad, domains.ContentStarted); err != nil {
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.LanguageID, 0); err != nil {
 		return err
 	}
 

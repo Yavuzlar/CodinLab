@@ -36,9 +36,15 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "Log Title",
-                        "name": "title",
+                        "type": "integer",
+                        "description": "Language ID",
+                        "name": "languageID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Log Lab or Road ID",
+                        "name": "labRoadID",
                         "in": "query"
                     },
                     {
@@ -92,6 +98,17 @@ const docTemplate = `{
                     "Road"
                 ],
                 "summary": "Start",
+                "parameters": [
+                    {
+                        "description": "Start",
+                        "name": "start",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/private.StartDTO"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -181,14 +198,28 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "title": {
-                    "type": "string"
+                "labRoadID": {
+                    "type": "integer"
+                },
+                "languageID": {
+                    "type": "integer"
                 },
                 "type": {
                     "type": "string"
                 },
                 "userId": {
                     "type": "string"
+                }
+            }
+        },
+        "private.StartDTO": {
+            "type": "object",
+            "required": [
+                "languageID"
+            ],
+            "properties": {
+                "languageID": {
+                    "type": "integer"
                 }
             }
         },

@@ -15,22 +15,24 @@ type LogRepository struct {
 
 // dbModelLogs is the struct that represents the log in the database.
 type dbModelLogs struct {
-	Id        sql.NullString `db:"id"`
-	UserId    sql.NullString `db:"user_id"`
-	Title     sql.NullString `db:"title"`
-	Type      sql.NullString `db:"type"`
-	Content   sql.NullString `db:"content"`
-	CreatedAt sql.NullTime   `db:"created_at"`
+	ID         sql.NullString `db:"id"`
+	UserID     sql.NullString `db:"user_id"`
+	LanguageID sql.NullInt32  `db:"language_id"`
+	LabRoadID  sql.NullInt32  `db:"lab_road_id"`
+	Type       sql.NullString `db:"type"`
+	Content    sql.NullString `db:"content"`
+	CreatedAt  sql.NullTime   `db:"created_at"`
 }
 
 // dbModelToAppModel converts dbModelLogs to domains.Log for application operations (e.g. return to client)
 func (r *LogRepository) dbModelToAppModel(dbModel dbModelLogs) (log domains.Log) {
 	log.Unmarshal(
-		uuid.MustParse(dbModel.Id.String),
-		uuid.MustParse(dbModel.UserId.String),
-		dbModel.Title.String,
+		uuid.MustParse(dbModel.ID.String),
+		uuid.MustParse(dbModel.UserID.String),
 		dbModel.Type.String,
 		dbModel.Content.String,
+		dbModel.LanguageID.Int32,
+		dbModel.LabRoadID.Int32,
 		dbModel.CreatedAt.Time,
 	)
 	return
@@ -39,16 +41,20 @@ func (r *LogRepository) dbModelToAppModel(dbModel dbModelLogs) (log domains.Log)
 // dbModelFromAppModel converts domains.Log to dbModelLogs for database operations (e.g. insert, update)
 func (r *LogRepository) dbModelFromAppModel(domModel domains.Log) (dbModel dbModelLogs) {
 	if domModel.ID() != uuid.Nil {
-		dbModel.Id.String = domModel.ID().String()
-		dbModel.Id.Valid = true
+		dbModel.ID.String = domModel.ID().String()
+		dbModel.ID.Valid = true
 	}
 	if domModel.UserID() != uuid.Nil {
-		dbModel.UserId.String = domModel.UserID().String()
-		dbModel.UserId.Valid = true
+		dbModel.UserID.String = domModel.UserID().String()
+		dbModel.UserID.Valid = true
 	}
-	if domModel.Title() != "" {
-		dbModel.Title.String = domModel.Title()
-		dbModel.Title.Valid = true
+	if domModel.LanguageID() != 0 {
+		dbModel.LanguageID.Int32 = domModel.LanguageID()
+		dbModel.LanguageID.Valid = true
+	}
+	if domModel.LabRoadID() != 0 {
+		dbModel.LabRoadID.Int32 = domModel.LabRoadID()
+		dbModel.LabRoadID.Valid = true
 	}
 	if domModel.Type() != "" {
 		dbModel.Type.String = domModel.Type()
@@ -69,16 +75,20 @@ func (r *LogRepository) dbModelFromAppModel(domModel domains.Log) (dbModel dbMod
 // dbModelFromAppModel converts domains.LogFilter to dbModelLogs for database operations (e.g. insert, update)
 func (r *LogRepository) dbModelFromAppFilter(filter domains.LogFilter) (dbFilter dbModelLogs) {
 	if filter.ID != uuid.Nil {
-		dbFilter.Id.String = filter.ID.String()
-		dbFilter.Id.Valid = true
+		dbFilter.ID.String = filter.ID.String()
+		dbFilter.ID.Valid = true
 	}
 	if filter.UserID != uuid.Nil {
-		dbFilter.UserId.String = filter.UserID.String()
-		dbFilter.UserId.Valid = true
+		dbFilter.UserID.String = filter.UserID.String()
+		dbFilter.UserID.Valid = true
 	}
-	if filter.Title != "" {
-		dbFilter.Title.String = filter.Title
-		dbFilter.Title.Valid = true
+	if filter.LanguageID != 0 {
+		dbFilter.LanguageID.Int32 = filter.LanguageID
+		dbFilter.LanguageID.Valid = true
+	}
+	if filter.LabRoadID != 0 {
+		dbFilter.LabRoadID.Int32 = filter.LabRoadID
+		dbFilter.LabRoadID.Valid = true
 	}
 	if filter.LType != "" {
 		dbFilter.Type.String = filter.LType
@@ -108,12 +118,13 @@ func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (l
 	WHERE
 		(? IS NULL OR id = ?) AND
 		(? IS NULL OR user_id = ?) AND
-		(? IS NULL OR title LIKE CONCAT('%', ?, '%')) AND
+		(? IS NULL OR language_id = ?) AND
+		(? IS NULL OR lab_road_id LIKE CONCAT('%', ?, '%')) AND
 		(? IS NULL OR type LIKE CONCAT('%', ?, '%')) AND
 		(? IS NULL OR content LIKE CONCAT('%', ?, '%'))
 	`
 
-	err = r.db.Select(&dbResult, query, dbFilter.Id, dbFilter.Id, dbFilter.UserId, dbFilter.UserId, dbFilter.Title, dbFilter.Title, dbFilter.Type, dbFilter.Type, dbFilter.Content, dbFilter.Content)
+	err = r.db.Select(&dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.UserID, dbFilter.UserID, dbFilter.LanguageID, dbFilter.LanguageID, dbFilter.LabRoadID, dbFilter.LabRoadID, dbFilter.Type, dbFilter.Type, dbFilter.Content, dbFilter.Content)
 	if err != nil {
 		return
 	}
@@ -132,19 +143,19 @@ func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 			EXISTS (
 				SELECT 1
 				FROM t_logs
-				WHERE id = :id AND user_id = :user_id AND type = :type AND content = :content AND title = :title
+				WHERE 
+					user_id = :user_id AND 
+					language_id = :language_id AND
+					type = :type AND 
+					content = :content AND 
+					(lab_road_id IS NULL OR lab_road_id = :lab_road_id)
 			)
 	`
-	params := map[string]interface{}{
-		"id":      log.ID,
-		"user_id": log.UserID,
-		"type":    log.Type,
-		"content": log.Content,
-		"title":   log.Title,
-	}
+
+	params := r.dbModelFromAppModel(*log)
 
 	var exists bool
-	err = r.db.GetContext(ctx, &exists, query, params)
+	err = r.db.GetContext(ctx, &exists, query, params.UserID, params.LanguageID, params.Type, params.Content, params.LabRoadID)
 	if err != nil {
 		return err
 	}
@@ -156,9 +167,9 @@ func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 	query = `
 		INSERT INTO
 			t_logs
-		(id, user_id, title, type, content)
+		(id, user_id, language_id, lab_road_id, type, content)
 			VALUES
-		(:id, :user_id, :title, :type, :content)
+		(:id, :user_id, :language_id, :lab_road_id, :type, :content)
 	`
 
 	_, err = r.db.NamedExecContext(ctx, query, dbModel)
