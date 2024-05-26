@@ -1,27 +1,43 @@
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import { useRouter } from 'next/router';
+import {
+  Button,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/router";
 
 const SingleItem = (props) => {
+  const { title = "", path = null } = props;
 
-    const {
-        title = "",
-        icon = null,
-        path = null,
-        inside = false
-    } = props;
+  const router = useRouter();
+  const handleLocate = (p) => {
+    if (p) return () => router.replace(p);
+  };
 
-    const router = useRouter()
-    const handleLocate = (p) => { if (p) return () => router.replace(p) }
+  const style = {
+    borderRadius: 0,
+    backgroundColor: "transparent",
+  };
 
-    return (
-        <ListItemButton onClick={handleLocate(path)} active={router.pathname == path} sx={{ ml: inside * 2 }}>
-            <ListItemIcon>
-                {icon}
-            </ListItemIcon>
+  return (
+    <Button
+      sx={style}
+      variant="text"
+      onClick={handleLocate(path)}
+      active={router.pathname == path}>
+      <Typography
+        sx={{
+          textTransform: "capitalize",
+          fontWeight: router.pathname === path ? 400 : 300,
+          opacity: router.pathname === path ? 1 : 0.6,
+          fontFamily: "Outfit",
+        }}>
+        {" "}
+        {title}{" "}
+      </Typography>
+    </Button>
+  );
+};
 
-            <ListItemText primary={title} />
-        </ListItemButton>
-    )
-}
-
-export default SingleItem
+export default SingleItem;

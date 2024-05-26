@@ -44,6 +44,7 @@ const Layout = ({ children }) => {
                 options={{ easing: "ease-in-out", speed: 500 }}
             /> */}
       {/* <Navbar /> */}
+      <Navbar />
 
       <Box
         sx={{
@@ -52,10 +53,7 @@ const Layout = ({ children }) => {
           py: "40px",
           minHeight: `calc(100vh - 80px)`,
           gap: "40px",
-        }}
-      >
-        <Navbar />
-
+        }}>
         <Container maxWidth="xl">
           <Box
             sx={{
@@ -65,8 +63,7 @@ const Layout = ({ children }) => {
               maxWidth: "100%",
               width: "100%",
               // ml: '200px'
-            }}
-          >
+            }}>
             <CustomBreadcrumbs titles={titles} />
 
             <Box sx={{ mt: "1rem" }}>{children}</Box>
