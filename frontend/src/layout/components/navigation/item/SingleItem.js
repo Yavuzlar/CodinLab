@@ -25,16 +25,17 @@ const SingleItem = (props) => {
       sx={style}
       variant="text"
       onClick={handleLocate(path)}
-      active={router.pathname == path}>
+      active={router.pathname == path}
+    >
       <Typography
         sx={{
           textTransform: "capitalize",
           fontWeight: router.pathname === path ? 400 : 300,
           opacity: router.pathname === path ? 1 : 0.6,
           fontFamily: "Outfit",
-        }}>
-        {" "}
-        {title}{" "}
+        }}
+      >
+        {title}
       </Typography>
     </Button>
   );
