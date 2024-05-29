@@ -2,6 +2,7 @@ import {
   Box,
   Card,
   CardContent,
+  Grid,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -64,3 +65,5 @@ const Welcome = ({ title = "", description = "", image = null }) => {
 };
 
 export default Welcome;
+
+
