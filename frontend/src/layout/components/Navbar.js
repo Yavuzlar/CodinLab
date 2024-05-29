@@ -27,7 +27,7 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar
-      position="static"
+      // position="static" // removed due to incorrect appreance
       sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters variant="dense" sx={{ mx: 7 }}>
