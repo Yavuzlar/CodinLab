@@ -1,6 +1,5 @@
-import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
+import { Button, Menu, MenuItem, Typography } from "@mui/material";
 import { useState } from "react";
-import LanguageIcon from "@mui/icons-material/Language";
 import Image from "next/image";
 import Turkish from "src/assets/flags/turkish.png";
 import English from "src/assets/flags/english.png";
@@ -25,11 +24,11 @@ const LanguageSelector = () => {
         sx={{ backgroundColor: "transparent" }}
         onClick={handleClick}>
         {language === "turkish" && (
-          <Image src={Turkish} width={25} height={17} />
+          <Image src={Turkish} width={30} height={30} />
         )}
 
         {language === "english" && (
-          <Image src={English} width={25} height={17} />
+          <Image src={English} width={30} height={30} />
         )}
 
         <Typography
