@@ -5,5 +5,17 @@
   "home.roads.title": "Roads",
   "home.roads.content": "Lay the basis of software languages firmly and move step by step through the coding universe with Roads!",
   "home.labs.title": "Labs",
-  "home.labs.content": "Improve your algorithm and programming skills, get practical experience and put your coding knowledge into practice with Labs!"
+  "home.labs.content": "Improve your algorithm and programming skills, get practical experience and put your coding knowledge into practice with Labs!",
+  "roads.title": "Roads",
+  "roads.content": "Lay the basis of software languages firmly and move step by step through the coding universe with Roads!",
+  "register.fullname": "Full Name",
+  "register.username": "Username",
+  "register.email": "E-mail",
+  "register.password": "Password",
+  "register.accept": "I accept the ",
+  "register.terms": "privacy policy & terms ",
+  "register.or": "or",
+  "register.signup": "Sign Up",
+  "register.already": "Already have an account?",
+  "register.login": "Login"
 }
