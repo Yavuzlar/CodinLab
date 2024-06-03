@@ -3,5 +3,15 @@
   "active_locale": "Türkçe",
   "home.content": "Farklı kodlama dillerinde ustalaşın, fikirlerinizi hayata geçirin ve geleneksel yöntemleri aşan eğlenceli ve etkileşimli bir öğrenme yolculuğunu deneyimleyin.",
   "roads.title": "Yollar",
-  "roads.content": "Yazılım dillerinin temelini sağlam bir şekilde atın ve Roads ile kodlama evreninde adım adım ilerleyin!"
+  "roads.content": "Yazılım dillerinin temelini sağlam bir şekilde atın ve Roads ile kodlama evreninde adım adım ilerleyin!",
+  "register.fullname": "Ad Soyad",
+  "register.username": "Kullanıcı adı",
+  "register.email": "E-posta",
+  "register.password": "Şifre",
+  "register.accept": "Gizlilik politakasını & şartları",
+  "register.terms": " kabul ediyorum ",
+  "register.or": "ya da",
+  "register.signup": "Kayıt Ol",
+  "register.already": "Zaten hesabın var mı?",
+  "register.login": "Giriş yap"
 }
