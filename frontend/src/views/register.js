@@ -41,6 +41,7 @@ const Register = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(formData);
   };
 
   const handleSubmit = async () => {
@@ -200,9 +201,18 @@ const Register = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          sx={{ color: "#fff" }}
+                          name="checkbox"
+                          sx={{
+                            color: "#FFF",
+                            "&.Mui-checked": {
+                              color: "#0A3B7A",
+                            },
+                            "& .MuiSvgIcon-root": {
+                              color: errors.checkbox ? "red" : "#FFF", // Highlight when error exists
+                            },
+                          }}
                           onChange={handleChange}
-                          error={errors.Checkbox ? true : false}
+                          error={errors.checkbox ? true : false}
                         />
                       }
                       label={
