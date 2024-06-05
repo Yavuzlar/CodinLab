@@ -1,3 +1,4 @@
+import { Padding } from "@mui/icons-material"
 
 const container = theme => {
   return {
@@ -5,6 +6,7 @@ const container = theme => {
       styleOverrides: {
         root: {
           background: "transparent !important",
+          padding: "0 !important",
         },
       },
     }

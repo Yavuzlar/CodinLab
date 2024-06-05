@@ -11,8 +11,7 @@ const card = (theme) => {
     MuiCardContent: {
       styleOverrides: {
         root: {
-          padding: "1rem",
-          paddingBottom: "1rem !important",
+          padding: "1.5rem",
         },
       },
     },

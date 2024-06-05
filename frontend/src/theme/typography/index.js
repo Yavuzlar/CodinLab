@@ -20,24 +20,16 @@ const typography = (theme) => {
     h6: {
       fontSize: "1.25rem",
     },
+    title: {
+      fontSize: "2rem",
+      letterSpacing: "0",
+    },
+
     body1: {
-      fontSize: "1rem",
+      fontSize: "1.125rem",
+      letterSpacing: "0",
     },
-    body2: {
-      fontSize: "1.25rem",
-    },
-    body3: {
-      fontSize: "1.563rem",
-    },
-    button1: {
-      fontSize: "1rem",
-    },
-    button2: {
-      fontSize: "1.25rem",
-    },
-    button3: {
-      fontSize: "1.563rem",
-    },
+
     caption: {
       fontSize: "1rem",
       color: `${theme.palette.border.secondary} !important`,

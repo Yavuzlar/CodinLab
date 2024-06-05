@@ -11,6 +11,8 @@ import navigation from "src/navigation";
 import findParent from "src/utils/findParent";
 
 const Layout = ({ children }) => {
+  
+  
   const router = useRouter();
 
   const [mounted, setMounted] = useState(false);
@@ -44,19 +46,19 @@ const Layout = ({ children }) => {
                 options={{ easing: "ease-in-out", speed: 500 }}
             /> */}
       {/* <Navbar /> */}
+      <Navbar />
 
       <Box
         sx={{
           width: "100%",
           display: "flex",
-          py: "40px",
+          py: "25px",
           minHeight: `calc(100vh - 80px)`,
-          gap: "40px",
+          // gap: "40px",
         }}
       >
         <Navbar />
-
-        <Container maxWidth="xl">
+        <Container maxWidth="xxl"> 
           <Box
             sx={{
               // minHeight: `calc(100vh - ${(navbarHeight || 0) + (footerHeight || 0)}px)`
@@ -65,6 +67,7 @@ const Layout = ({ children }) => {
               maxWidth: "100%",
               width: "100%",
               // ml: '200px'
+              // px: "140px"
             }}
           >
             <CustomBreadcrumbs titles={titles} />
