@@ -30,12 +30,12 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 	}
 
 	// NEED ROAD SERVICE FOR BOTTOM
-	// We have to get the road that will start according to the name
+	// We have to get the road that will start according to the id
 	// In that road struct we will change isStarted to true.
 	// And we need road's docker image for DocerService
 
 	// Need Road Service For -> Road title & Docker Image For Log
-	// With road service we will get road by road name and recive docker image.
+	// With road service we will get road by road id and recive docker image.
 
 	// Recive user session from session_store
 	userSession := session_store.GetSessionData(c)
