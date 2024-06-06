@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
@@ -23,7 +24,8 @@ func newLogService(
 	}
 }
 
-func (l *logService) GetAllLogs(ctx context.Context, userID, title, content, logType string) (logs []domains.Log, err error) {
+func (l *logService) GetAllLogs(ctx context.Context, userID, languageID, labRoadID, logType, content string) (logs []domains.Log, err error) {
+	var languageIDInt, labRoadIDInt int
 	var userIDU uuid.UUID
 	if userID != "" {
 		userIDU, err = uuid.Parse(userID)
@@ -32,11 +34,23 @@ func (l *logService) GetAllLogs(ctx context.Context, userID, title, content, log
 		}
 	}
 
+	if languageID != "" && labRoadID != "" {
+		languageIDInt, err = strconv.Atoi(languageID)
+		if err != nil {
+			return nil, service_errors.NewServiceErrorWithMessage(400, "invalid language id")
+		}
+		labRoadIDInt, err = strconv.Atoi(labRoadID)
+		if err != nil {
+			return nil, service_errors.NewServiceErrorWithMessage(400, "invalid lab or road id")
+		}
+	}
+
 	logFilter := domains.LogFilter{
-		UserID:  userIDU,
-		LType:   logType,
-		Title:   title,
-		Content: content,
+		UserID:     userIDU,
+		LanguageID: int32(languageIDInt),
+		LType:      logType,
+		LabRoadID:  int32(labRoadIDInt),
+		Content:    content,
 	}
 
 	logs, _, err = l.logRepositories.Filter(ctx, logFilter)
@@ -97,8 +111,13 @@ func (l *logService) GetByContent(ctx context.Context, content string) (logs []d
 }
 
 // Recives Logs with Spesific Title
-func (l *logService) GetByTitle(ctx context.Context, title string) (logs []domains.Log, err error) {
-	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{Title: title})
+func (l *logService) GetByLabRoadID(ctx context.Context, labRoadID string) (logs []domains.Log, err error) {
+	labRoadIDInt, err := strconv.Atoi(labRoadID)
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid lab or road id")
+	}
+
+	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{LabRoadID: int32(labRoadIDInt)})
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
 	}
@@ -107,9 +126,9 @@ func (l *logService) GetByTitle(ctx context.Context, title string) (logs []domai
 }
 
 // Adds log
-func (l *logService) Add(ctx context.Context, userID, title, ltype, content string) (err error) {
+func (l *logService) Add(ctx context.Context, userID, ltype, content string, languageID, labRoadID int32) (err error) {
 	// Creates new log
-	newLog, err := domains.NewLog(userID, title, ltype, content)
+	newLog, err := domains.NewLog(userID, ltype, content, languageID, labRoadID)
 	if err != nil {
 		return err
 	}

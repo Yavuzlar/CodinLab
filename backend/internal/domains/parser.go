@@ -55,10 +55,10 @@ type Lab struct {
 
 // Labs represents a collection of labs grouped together.
 type Labs struct {
-	Name        string `json:"name"`
-	DockerImage string `json:"dockerImage"`
-	IconPath    string `json:"iconPath"`
-	Labs        []Lab  `json:"labs"`
+	Name        string
+	DockerImage string
+	IconPath    string
+	Labs        []Lab
 }
 
 // Path represents a coding learning path.
@@ -70,8 +70,8 @@ type Path struct {
 
 // Road represents a collection of learning paths.
 type Road struct {
-	Name        string `json:"name"`
-	DockerImage string `json:"dockerImage"`
-	IconPath    string `json:"iconPath"`
-	Paths       []Path `json:"paths"`
+	Name        string
+	DockerImage string
+	IconPath    string
+	Paths       []Path
 }

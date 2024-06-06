@@ -11,11 +11,12 @@ func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 }
 
 type LogDTO struct {
-	ID      uuid.UUID `json:"id"`
-	UserID  uuid.UUID `json:"userId"`
-	Title   string    `json:"title"`
-	LType   string    `json:"type"`
-	Content string    `json:"content"`
+	ID         uuid.UUID `json:"id"`
+	UserID     uuid.UUID `json:"userId"`
+	LanguageID int32     `json:"languageID"`
+	LabRoadID  int32     `json:"labRoadID"`
+	LType      string    `json:"type"`
+	Content    string    `json:"content"`
 }
 
 // @Tags Log
@@ -24,18 +25,20 @@ type LogDTO struct {
 // @Accept json
 // @Produce json
 // @Param userID query string false "User ID"
-// @Param title query string false "Log Title"
+// @Param languageID query int32 false "Language ID"
+// @Param labRoadID query int32 false "Log Lab or Road ID"
 // @Param content query string false "Log Content"
 // @Param type query string false "Log Type"
 // @Success 200 {object} response.BaseResponse{data=[]LogDTO}
 // @Router /private/log [get]
 func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 	userID := c.Query("userID")
-	title := c.Query("title")
+	languageID := c.Query("languageID")
+	labRoadID := c.Query("labRoadID")
 	content := c.Query("content")
 	logType := c.Query("type")
 
-	logs, err := h.services.LogService.GetAllLogs(c.Context(), userID, title, content, logType)
+	logs, err := h.services.LogService.GetAllLogs(c.Context(), userID, languageID, labRoadID, content, logType)
 	if err != nil {
 		return err
 	}
@@ -44,10 +47,11 @@ func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 	var logDTOs []LogDTO
 	for _, log := range logs {
 		logDTO := LogDTO{
-			ID:      log.ID(),
-			UserID:  log.UserID(),
-			Title:   log.Title(),
-			Content: log.Content(),
+			ID:         log.ID(),
+			UserID:     log.UserID(),
+			LanguageID: log.LanguageID(),
+			LabRoadID:  log.LabRoadID(),
+			Content:    log.Content(),
 		}
 		logDTOs = append(logDTOs, logDTO)
 	}

@@ -3,9 +3,10 @@
 CREATE TABLE IF NOT EXISTS t_logs (
     id TEXT PRIMARY KEY NOT NULL,
     user_id TEXT NOT NULL,
+    language_id TEXT NOT NULL,
     type TEXT NOT NULL,
+    lab_road_id TEXT,
     content TEXT NOT NULL,
-    title TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES t_users(id) ON DELETE CASCADE
 );

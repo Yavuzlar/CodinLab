@@ -6,12 +6,21 @@ definitions:
         type: string
       id:
         type: string
-      title:
-        type: string
+      labRoadID:
+        type: integer
+      languageID:
+        type: integer
       type:
         type: string
       userId:
         type: string
+    type: object
+  private.StartDTO:
+    properties:
+      languageID:
+        type: integer
+    required:
+    - languageID
     type: object
   public.LoginDTO:
     properties:
@@ -83,10 +92,14 @@ paths:
         in: query
         name: userID
         type: string
-      - description: Log Title
+      - description: Language ID
         in: query
-        name: title
-        type: string
+        name: languageID
+        type: integer
+      - description: Log Lab or Road ID
+        in: query
+        name: labRoadID
+        type: integer
       - description: Log Content
         in: query
         name: content
@@ -117,6 +130,13 @@ paths:
       consumes:
       - application/json
       description: Start
+      parameters:
+      - description: Start
+        in: body
+        name: start
+        required: true
+        schema:
+          $ref: '#/definitions/private.StartDTO'
       produces:
       - application/json
       responses:
