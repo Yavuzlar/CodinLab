@@ -26,7 +26,7 @@ type LogDTO struct {
 // @Produce json
 // @Param userID query string false "User ID"
 // @Param languageID query int32 false "Language ID"
-// @Param labRoadID query int32 false "Log Lab or Road ID"
+// @Param labRoadID query int32 false "Log Lab or Path ID"
 // @Param content query string false "Log Content"
 // @Param type query string false "Log Type"
 // @Success 200 {object} response.BaseResponse{data=[]LogDTO}
@@ -50,7 +50,7 @@ func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 			ID:         log.ID(),
 			UserID:     log.UserID(),
 			LanguageID: log.LanguageID(),
-			LabRoadID:  log.LabRoadID(),
+			LabRoadID:  log.LabPathID(),
 			Content:    log.Content(),
 		}
 		logDTOs = append(logDTOs, logDTO)

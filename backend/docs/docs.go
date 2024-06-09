@@ -43,7 +43,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "Log Lab or Road ID",
+                        "description": "Log Lab or Path ID",
                         "name": "labRoadID",
                         "in": "query"
                     },

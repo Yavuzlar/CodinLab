@@ -3,5 +3,5 @@ RUN mkdir /app
 WORKDIR /app
 ENV CGO_ENABLED=1
 RUN apk update && apk add --no-cache docker-cli gcc musl-dev
-RUN go install github.com/cosmtrek/air@latest
+RUN go install github.com/air-verse/air@latest
 ENTRYPOINT [ "air","dev" ]

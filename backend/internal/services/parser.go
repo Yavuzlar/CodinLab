@@ -54,7 +54,7 @@ func (s *parserService) findJSONFiles(rootDir string) (jsonFiles []string, err e
 	return
 }
 
-func (s *parserService) getInventory() (inventory []domains.Inventory, err error) {
+func (s *parserService) GetInventory() (inventory []domains.InventoryP, err error) {
 	// Check if the directory exists
 	err = s.checkDir("object")
 	if err != nil {
@@ -76,7 +76,7 @@ func (s *parserService) getInventory() (inventory []domains.Inventory, err error
 	return
 }
 
-func (s *parserService) GetLabs() (labs []domains.Labs, err error) {
+func (s *parserService) GetLabs() (labs []domains.LabsP, err error) {
 	// Check if the directory exists
 	err = s.checkDir("object")
 	if err != nil {
@@ -84,14 +84,15 @@ func (s *parserService) GetLabs() (labs []domains.Labs, err error) {
 	}
 
 	// Get list of programming languages
-	inventory, err := s.getInventory()
+	inventory, err := s.GetInventory()
 	if err != nil {
 		return nil, err
 	}
 
 	// Loop through each language
 	for _, language := range inventory {
-		oneLab := domains.Labs{
+		oneLab := domains.LabsP{
+			ID:          language.ID,
 			Name:        language.Name,
 			DockerImage: language.DockerImage,
 			IconPath:    language.IconPath,
@@ -111,13 +112,12 @@ func (s *parserService) GetLabs() (labs []domains.Labs, err error) {
 				return nil, err
 			}
 
-			var lab domains.Lab
+			var lab domains.LabP
 			err = json.Unmarshal(jsonData, &lab)
 			if err != nil {
 				return nil, err
 			}
 			oneLab.Labs = append(oneLab.Labs, lab)
-
 			// Append the quest to the lab
 		}
 
@@ -128,7 +128,7 @@ func (s *parserService) GetLabs() (labs []domains.Labs, err error) {
 	return
 }
 
-func (s *parserService) GetRoads() (roads []domains.Road, err error) {
+func (s *parserService) GetRoads() (roads []domains.RoadP, err error) {
 	// Ensure the "object" directory exists
 	err = s.checkDir("object")
 	if err != nil {
@@ -136,14 +136,14 @@ func (s *parserService) GetRoads() (roads []domains.Road, err error) {
 	}
 
 	// Retrieve the list of programming languages
-	inventory, err := s.getInventory()
+	inventory, err := s.GetInventory()
 	if err != nil {
 		return nil, err
 	}
 
 	// Iterate over each language in the inventory
 	for _, language := range inventory {
-		road := domains.Road{
+		road := domains.RoadP{
 			Name:        language.Name,
 			DockerImage: language.DockerImage,
 			IconPath:    language.IconPath,
@@ -163,7 +163,7 @@ func (s *parserService) GetRoads() (roads []domains.Road, err error) {
 				return nil, err
 			}
 
-			var path domains.Path
+			var path domains.PathP
 			// Unmarshal the JSON data into the path object
 			err = json.Unmarshal(jsonData, &path)
 			if err != nil {

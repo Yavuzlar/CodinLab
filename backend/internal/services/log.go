@@ -24,8 +24,8 @@ func newLogService(
 	}
 }
 
-func (l *logService) GetAllLogs(ctx context.Context, userID, languageID, labRoadID, logType, content string) (logs []domains.Log, err error) {
-	var languageIDInt, labRoadIDInt int
+func (l *logService) GetAllLogs(ctx context.Context, userID, languageID, labPathID, logType, content string) (logs []domains.Log, err error) {
+	var languageIDInt, labPathIDInt int
 	var userIDU uuid.UUID
 	if userID != "" {
 		userIDU, err = uuid.Parse(userID)
@@ -34,14 +34,17 @@ func (l *logService) GetAllLogs(ctx context.Context, userID, languageID, labRoad
 		}
 	}
 
-	if languageID != "" && labRoadID != "" {
+	if languageID != "" {
 		languageIDInt, err = strconv.Atoi(languageID)
 		if err != nil {
 			return nil, service_errors.NewServiceErrorWithMessage(400, "invalid language id")
 		}
-		labRoadIDInt, err = strconv.Atoi(labRoadID)
+	}
+
+	if labPathID != "" {
+		labPathIDInt, err = strconv.Atoi(labPathID)
 		if err != nil {
-			return nil, service_errors.NewServiceErrorWithMessage(400, "invalid lab or road id")
+			return nil, service_errors.NewServiceErrorWithMessage(400, "invalid lab or path id")
 		}
 	}
 
@@ -49,7 +52,7 @@ func (l *logService) GetAllLogs(ctx context.Context, userID, languageID, labRoad
 		UserID:     userIDU,
 		LanguageID: int32(languageIDInt),
 		LType:      logType,
-		LabRoadID:  int32(labRoadIDInt),
+		LabPathID:  int32(labPathIDInt),
 		Content:    content,
 	}
 
@@ -111,13 +114,13 @@ func (l *logService) GetByContent(ctx context.Context, content string) (logs []d
 }
 
 // Recives Logs with Spesific Title
-func (l *logService) GetByLabRoadID(ctx context.Context, labRoadID string) (logs []domains.Log, err error) {
-	labRoadIDInt, err := strconv.Atoi(labRoadID)
+func (l *logService) GetByLanguageID(ctx context.Context, languageID string) (logs []domains.Log, err error) {
+	labPathIDInt, err := strconv.Atoi(languageID)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid lab or road id")
 	}
 
-	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{LabRoadID: int32(labRoadIDInt)})
+	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{LanguageID: int32(labPathIDInt)})
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
 	}
@@ -126,9 +129,9 @@ func (l *logService) GetByLabRoadID(ctx context.Context, labRoadID string) (logs
 }
 
 // Adds log
-func (l *logService) Add(ctx context.Context, userID, ltype, content string, languageID, labRoadID int32) (err error) {
+func (l *logService) Add(ctx context.Context, userID, ltype, content string, languageID, labPathID int32) (err error) {
 	// Creates new log
-	newLog, err := domains.NewLog(userID, ltype, content, languageID, labRoadID)
+	newLog, err := domains.NewLog(userID, ltype, content, languageID, labPathID)
 	if err != nil {
 		return err
 	}

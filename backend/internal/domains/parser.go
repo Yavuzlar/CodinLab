@@ -2,23 +2,23 @@ package domains
 
 // IParserService is the interface that provides the methods for the parser service.
 type IParserService interface {
-	GetLabs() (labs []Labs, err error)
-	GetRoads() (roads []Road, err error)
+	GetLabs() (labs []LabsP, err error)
+	GetRoads() (roads []RoadP, err error)
 }
 
 // Inventory represents the information related to an item in inventory.
-type Inventory struct {
-	ID          int        `json:"id"`
-	Name        string     `json:"name"`
-	DockerImage string     `json:"dockerImage"`
-	PathDir     string     `json:"pathDir"`
-	LabDir      string     `json:"labDir"`
-	IconPath    string     `json:"iconPath"`
-	Languages   []Language `json:"languages"`
+type InventoryP struct {
+	ID          int         `json:"id"`
+	Name        string      `json:"name"`
+	DockerImage string      `json:"dockerImage"`
+	PathDir     string      `json:"pathDir"`
+	LabDir      string      `json:"labDir"`
+	IconPath    string      `json:"iconPath"`
+	Languages   []LanguageP `json:"languages"`
 }
 
 // Language represents the details of a programming language.
-type Language struct {
+type LanguageP struct {
 	Lang        string `json:"lang"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
@@ -27,51 +27,52 @@ type Language struct {
 }
 
 // Test represents a test case for a function.
-type Test struct {
+type TestP struct {
 	Input  []string `json:"input"`
 	Output []string `json:"output"`
 }
 
 // Param represents a parameter of a function.
-type Param struct {
+type ParamP struct {
 	Name string `json:"name"`
 	Type string `json:"type"`
 }
 
 // Quest represents a coding challenge or task.
-type Quest struct {
-	Difficulty int     `json:"difficulty"`
-	FuncName   string  `json:"funcName"`
-	Tests      []Test  `json:"tests"`
-	Params     []Param `json:"params"`
+type QuestP struct {
+	Difficulty int      `json:"difficulty"`
+	FuncName   string   `json:"funcName"`
+	Tests      []TestP  `json:"tests"`
+	Params     []ParamP `json:"params"`
 }
 
 // Lab represents a specific coding lab exercise.
-type Lab struct {
-	ID        int        `json:"id"`
-	Languages []Language `json:"languages"`
-	Quest     Quest      `json:"quest"`
+type LabP struct {
+	ID        int         `json:"id"`
+	Languages []LanguageP `json:"languages"`
+	Quest     QuestP      `json:"quest"`
 }
 
 // Labs represents a collection of labs grouped together.
-type Labs struct {
+type LabsP struct {
+	ID          int
 	Name        string
 	DockerImage string
 	IconPath    string
-	Labs        []Lab
+	Labs        []LabP
 }
 
 // Path represents a coding learning path.
-type Path struct {
-	ID        int        `json:"id"`
-	Languages []Language `json:"languages"`
-	Quest     Quest      `json:"quest"`
+type PathP struct {
+	ID        int         `json:"id"`
+	Languages []LanguageP `json:"languages"`
+	Quest     QuestP      `json:"quest"`
 }
 
 // Road represents a collection of learning paths.
-type Road struct {
+type RoadP struct {
 	Name        string
 	DockerImage string
 	IconPath    string
-	Paths       []Path
+	Paths       []PathP
 }
