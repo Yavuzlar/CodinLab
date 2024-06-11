@@ -96,7 +96,7 @@ paths:
         in: query
         name: languageID
         type: integer
-      - description: Log Lab or Road ID
+      - description: Log Lab or Path ID
         in: query
         name: labRoadID
         type: integer

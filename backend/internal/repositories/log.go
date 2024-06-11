@@ -18,7 +18,7 @@ type dbModelLogs struct {
 	ID         sql.NullString `db:"id"`
 	UserID     sql.NullString `db:"user_id"`
 	LanguageID sql.NullInt32  `db:"language_id"`
-	LabRoadID  sql.NullInt32  `db:"lab_road_id"`
+	LabPathID  sql.NullInt32  `db:"lab_path_id"`
 	Type       sql.NullString `db:"type"`
 	Content    sql.NullString `db:"content"`
 	CreatedAt  sql.NullTime   `db:"created_at"`
@@ -32,7 +32,7 @@ func (r *LogRepository) dbModelToAppModel(dbModel dbModelLogs) (log domains.Log)
 		dbModel.Type.String,
 		dbModel.Content.String,
 		dbModel.LanguageID.Int32,
-		dbModel.LabRoadID.Int32,
+		dbModel.LabPathID.Int32,
 		dbModel.CreatedAt.Time,
 	)
 	return
@@ -52,9 +52,9 @@ func (r *LogRepository) dbModelFromAppModel(domModel domains.Log) (dbModel dbMod
 		dbModel.LanguageID.Int32 = domModel.LanguageID()
 		dbModel.LanguageID.Valid = true
 	}
-	if domModel.LabRoadID() != 0 {
-		dbModel.LabRoadID.Int32 = domModel.LabRoadID()
-		dbModel.LabRoadID.Valid = true
+	if domModel.LabPathID() != 0 {
+		dbModel.LabPathID.Int32 = domModel.LabPathID()
+		dbModel.LabPathID.Valid = true
 	}
 	if domModel.Type() != "" {
 		dbModel.Type.String = domModel.Type()
@@ -86,9 +86,9 @@ func (r *LogRepository) dbModelFromAppFilter(filter domains.LogFilter) (dbFilter
 		dbFilter.LanguageID.Int32 = filter.LanguageID
 		dbFilter.LanguageID.Valid = true
 	}
-	if filter.LabRoadID != 0 {
-		dbFilter.LabRoadID.Int32 = filter.LabRoadID
-		dbFilter.LabRoadID.Valid = true
+	if filter.LabPathID != 0 {
+		dbFilter.LabPathID.Int32 = filter.LabPathID
+		dbFilter.LabPathID.Valid = true
 	}
 	if filter.LType != "" {
 		dbFilter.Type.String = filter.LType
@@ -119,12 +119,12 @@ func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (l
 		(? IS NULL OR id = ?) AND
 		(? IS NULL OR user_id = ?) AND
 		(? IS NULL OR language_id = ?) AND
-		(? IS NULL OR lab_road_id LIKE CONCAT('%', ?, '%')) AND
+		(? IS NULL OR lab_path_id = ?) AND
 		(? IS NULL OR type LIKE CONCAT('%', ?, '%')) AND
 		(? IS NULL OR content LIKE CONCAT('%', ?, '%'))
 	`
 
-	err = r.db.Select(&dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.UserID, dbFilter.UserID, dbFilter.LanguageID, dbFilter.LanguageID, dbFilter.LabRoadID, dbFilter.LabRoadID, dbFilter.Type, dbFilter.Type, dbFilter.Content, dbFilter.Content)
+	err = r.db.Select(&dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.UserID, dbFilter.UserID, dbFilter.LanguageID, dbFilter.LanguageID, dbFilter.LabPathID, dbFilter.LabPathID, dbFilter.Type, dbFilter.Type, dbFilter.Content, dbFilter.Content)
 	if err != nil {
 		return
 	}
@@ -139,23 +139,23 @@ func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (l
 func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 	// Checks the logs already in the db. If the log exists then we will not insert a new one.
 	query := `
-		SELECT
-			EXISTS (
-				SELECT 1
-				FROM t_logs
-				WHERE 
-					user_id = :user_id AND 
-					language_id = :language_id AND
-					type = :type AND 
-					content = :content AND 
-					(lab_road_id IS NULL OR lab_road_id = :lab_road_id)
-			)
-	`
+    SELECT
+        EXISTS (
+            SELECT 1
+            FROM t_logs
+            WHERE 
+                user_id = :user_id AND 
+                ((language_id IS NULL AND :language_id IS NULL) OR (language_id = :language_id)) AND
+                type = :type AND 
+                content = :content AND 
+                ((lab_path_id IS NULL AND :lab_path_id IS NULL) OR (lab_path_id = :lab_path_id))
+        )
+`
 
 	params := r.dbModelFromAppModel(*log)
 
 	var exists bool
-	err = r.db.GetContext(ctx, &exists, query, params.UserID, params.LanguageID, params.Type, params.Content, params.LabRoadID)
+	err = r.db.GetContext(ctx, &exists, query, params.UserID, params.LanguageID, params.Type, params.Content, params.LabPathID)
 	if err != nil {
 		return err
 	}
@@ -167,9 +167,9 @@ func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 	query = `
 		INSERT INTO
 			t_logs
-		(id, user_id, language_id, lab_road_id, type, content)
+		(id, user_id, language_id, lab_path_id, type, content)
 			VALUES
-		(:id, :user_id, :language_id, :lab_road_id, :type, :content)
+		(:id, :user_id, :language_id, :lab_path_id, :type, :content)
 	`
 
 	_, err = r.db.NamedExecContext(ctx, query, dbModel)

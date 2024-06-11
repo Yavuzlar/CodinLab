@@ -23,7 +23,7 @@ type ILogService interface {
 	GetByUserID(ctx context.Context, userID string) (logs []Log, err error)
 	GetByType(ctx context.Context, logType string) (logs []Log, err error)
 	GetByContent(ctx context.Context, content string) (logs []Log, err error)
-	GetByLabRoadID(ctx context.Context, labRoadID string) (logs []Log, err error)
+	GetByLanguageID(ctx context.Context, languageID string) (logs []Log, err error)
 	IsExists(ctx context.Context, logID string) (isExists bool, err error)
 }
 
@@ -32,7 +32,7 @@ type LogFilter struct {
 	ID         uuid.UUID
 	UserID     uuid.UUID
 	LanguageID int32
-	LabRoadID  int32 // Lab - Road title
+	LabPathID  int32 // Lab - Road title
 	LType      string
 	Content    string // Success etc.
 }
@@ -42,14 +42,14 @@ type Log struct {
 	id         uuid.UUID
 	userId     uuid.UUID
 	languageID int32
-	labRoadID  int32
+	labPathID  int32
 	lType      string
 	content    string
 	createdAt  time.Time
 }
 
 // NewLog creates a new log
-func NewLog(userID, lType, content string, languageID, labRoadID int32) (*Log, error) {
+func NewLog(userID, lType, content string, languageID, labPathID int32) (*Log, error) {
 	if userID == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "user id is required")
 	}
@@ -58,9 +58,6 @@ func NewLog(userID, lType, content string, languageID, labRoadID int32) (*Log, e
 	}
 	if lType == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "log type is required")
-	}
-	if languageID == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "log language is required")
 	}
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {
@@ -71,7 +68,7 @@ func NewLog(userID, lType, content string, languageID, labRoadID int32) (*Log, e
 		id:         uuid.New(),
 		userId:     userUUID,
 		languageID: languageID,
-		labRoadID:  labRoadID,
+		labPathID:  labPathID,
 		lType:      lType,
 		content:    content,
 	}, nil
@@ -81,13 +78,13 @@ func NewLog(userID, lType, content string, languageID, labRoadID int32) (*Log, e
 func (l *Log) Unmarshal(
 	id, userId uuid.UUID,
 	lType, content string,
-	languageID, labRoadID int32,
+	languageID, labPathID int32,
 	createdAt time.Time,
 ) {
 	l.id = id
 	l.userId = userId
 	l.languageID = languageID
-	l.labRoadID = labRoadID
+	l.labPathID = labPathID
 	l.lType = lType
 	l.content = content
 	l.createdAt = createdAt
@@ -105,8 +102,8 @@ func (l *Log) LanguageID() int32 {
 	return l.languageID
 }
 
-func (l *Log) LabRoadID() int32 {
-	return l.labRoadID
+func (l *Log) LabPathID() int32 {
+	return l.labPathID
 }
 
 func (l *Log) Type() string {

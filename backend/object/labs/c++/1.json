@@ -1,6 +1,6 @@
 {
 	"id": 1,
-	"language": [
+	"languages": [
 		{
 			"lang": "en",
 			"title": "Palindrome Checker",
