@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS t_logs (
     id TEXT PRIMARY KEY NOT NULL,
     user_id TEXT NOT NULL,
-    language_id INTEGER NOT NULL,
+    language_id INTEGER,
     type TEXT NOT NULL,
     lab_path_id INTEGER,
     content TEXT NOT NULL,

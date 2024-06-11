@@ -139,18 +139,18 @@ func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (l
 func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 	// Checks the logs already in the db. If the log exists then we will not insert a new one.
 	query := `
-		SELECT
-			EXISTS (
-				SELECT 1
-				FROM t_logs
-				WHERE 
-					user_id = :user_id AND 
-					language_id = :language_id AND
-					type = :type AND 
-					content = :content AND 
-					(lab_path_id IS NULL OR lab_path_id = :lab_path_id)
-			)
-	`
+    SELECT
+        EXISTS (
+            SELECT 1
+            FROM t_logs
+            WHERE 
+                user_id = :user_id AND 
+                ((language_id IS NULL AND :language_id IS NULL) OR (language_id = :language_id)) AND
+                type = :type AND 
+                content = :content AND 
+                ((lab_path_id IS NULL AND :lab_path_id IS NULL) OR (lab_path_id = :lab_path_id))
+        )
+`
 
 	params := r.dbModelFromAppModel(*log)
 

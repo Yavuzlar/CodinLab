@@ -59,9 +59,6 @@ func NewLog(userID, lType, content string, languageID, labPathID int32) (*Log, e
 	if lType == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "log type is required")
 	}
-	if languageID == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "log language is required")
-	}
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid user id")

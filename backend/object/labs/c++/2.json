@@ -1,6 +1,6 @@
 {
 	"id": 2,
-	"language": [
+	"languages": [
 		{
 			"lang": "en",
 			"title": "Factorial Calculator",
