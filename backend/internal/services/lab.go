@@ -138,13 +138,13 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 
 		var newLabList []domains.Lab
 		for _, lab := range labCollection.Labs {
+
 			if labId != 0 && lab.ID != labId {
 				continue
 			}
 			if isStarted != "" && lab.IsStarted != isStarted {
 				continue
 			}
-
 			if isFinished != "" && lab.IsFinished != isFinished {
 				continue
 			}
