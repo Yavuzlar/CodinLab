@@ -141,9 +141,9 @@ func (s *userService) GetProfile(ctx context.Context, userID string) (user *doma
 	return
 }
 
-func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile string) (err error) {
-	var updateUser *domains.User
+func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile, name, surname string) (err error) {
 	user, err := s.GetProfile(ctx, userID)
+
 	if err != nil {
 		return err
 	}
@@ -151,6 +151,7 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 	if err := s.checkPassword(ctx, user.Password(), password); err != nil {
 		return err
 	}
+
 	// Checking if username is being updated
 	if username != "" {
 		//Checking the username is already being used
@@ -164,7 +165,12 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 				return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 			}
 		}
+		err = user.SetUsername(username)
+		if err != nil {
+			return err
+		}
 	}
+
 	// Checking if password is being updated
 	if newPassword != "" {
 		//Hashing new password
@@ -172,16 +178,29 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 		if err != nil {
 			return service_errors.NewServiceErrorWithMessageAndError(500, "error while hashing the password", err)
 		}
-		updateUser, err = domains.UpdateUser(username, hashedPassword, githubProfile, user.ID())
-		if err != nil {
-			return err
-		}
-	} else {
-		updateUser, err = domains.UpdateUser(username, "", githubProfile, user.ID())
+		err = user.SetPassword(newPassword, hashedPassword)
 		if err != nil {
 			return err
 		}
 	}
+	user.SetGithubProfile(githubProfile)
+	user.SetName(name)
+	user.SetSurname(surname)
+
+	updateUser, err := domains.NewUser(
+		user.Username(),
+		user.Password(),
+		user.Name(),
+		user.Surname(),
+		user.Role(),
+		user.GithubProfile(),
+		user.TotalPoints(),
+	)
+	if err != nil {
+		return err
+	}
+
+	updateUser.SetID(user.ID())
 
 	if err = s.userRepositories.Update(ctx, updateUser); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while updating user", err)

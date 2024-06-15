@@ -27,10 +27,14 @@ definitions:
       githubProfile:
         maxLength: 30
         type: string
+      name:
+        type: string
       newPassword:
         minLength: 8
         type: string
       password:
+        type: string
+      surname:
         type: string
       username:
         maxLength: 30
@@ -44,20 +48,13 @@ definitions:
       bestLanguage:
         type: string
       githubProfile:
-        maxLength: 30
         type: string
       name:
         type: string
       surname:
         type: string
       username:
-        maxLength: 30
-        minLength: 3
         type: string
-    required:
-    - name
-    - surname
-    - username
     type: object
   public.LoginDTO:
     properties:

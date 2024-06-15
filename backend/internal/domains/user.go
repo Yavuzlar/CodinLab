@@ -24,7 +24,7 @@ type IUserService interface {
 	CreateUser(ctx context.Context, username, name, surname, password, githubProfile string) (err error)
 	GetAllUsers(ctx context.Context) (users []User, err error)
 	GetProfile(ctx context.Context, userID string) (user *User, err error)
-	UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile string) (err error)
+	UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile, name, surname string) (err error)
 	DeleteUser(ctx context.Context, userID string) (err error)
 	BestLanguage(ctx context.Context, userID string) (bestLanguage string, err error)
 	// Devamı gelecek...
@@ -86,31 +86,6 @@ func NewUser(username, password, name, surname, role, githubProfile string, tota
 	}, nil
 }
 
-// Checks which value is being updated
-func UpdateUser(username, password, githubProfile string, userID uuid.UUID) (*User, error) {
-	user := &User{
-		id: userID,
-	}
-	if username != "" {
-		if len(username) < 3 {
-			return nil, service_errors.NewServiceErrorWithMessage(400, "username must be at least 3 characters")
-		} else if len(username) > 30 {
-			return nil, service_errors.NewServiceErrorWithMessage(400, "username must be at most 30 characters")
-		}
-		user.username = username
-	}
-	if password != "" {
-		if len(password) < 8 {
-			return nil, service_errors.NewServiceErrorWithMessage(400, "password must be at least 8 characters")
-		}
-		user.password = password
-	}
-	if githubProfile != "" {
-		user.githubProfile = githubProfile
-	}
-	return user, nil
-}
-
 // Unmarshal unmarshals the user for database operations. It is used in the repository.
 func (u *User) Unmarshal(
 	id uuid.UUID,
@@ -163,4 +138,60 @@ func (u *User) CreatedAt() time.Time {
 
 func (u *User) TotalPoints() int32 {
 	return u.totalPoints
+}
+
+// Setters
+func (u *User) SetTotalPoints(totalPoints int32) {
+	if totalPoints >= 0 {
+		u.totalPoints = totalPoints
+	}
+}
+
+func (u *User) SetRole(role string) {
+	if role != "" {
+		u.role = role
+	}
+}
+
+func (u *User) SetGithubProfile(githubProfile string) {
+	if githubProfile != "" {
+		u.githubProfile = githubProfile
+	}
+}
+
+func (u *User) SetPassword(password, hashedPassword string) error {
+	if password != "" {
+		if len(password) < 8 {
+			return service_errors.NewServiceErrorWithMessage(400, "password must be at least 8 characters")
+		}
+		u.password = hashedPassword
+	}
+	return nil
+}
+
+func (u *User) SetName(name string) {
+	if name != "" {
+		u.name = name
+	}
+}
+
+func (u *User) SetSurname(surname string) {
+	if surname != "" {
+		u.surname = surname
+	}
+}
+
+func (u *User) SetUsername(username string) error {
+	if username != "" {
+		if len(username) < 3 {
+			return service_errors.NewServiceErrorWithMessage(400, "username must be at least 3 characters")
+		} else if len(username) > 30 {
+			return service_errors.NewServiceErrorWithMessage(400, "username must be at most 30 characters")
+		}
+		u.username = username
+	}
+	return nil
+}
+func (u *User) SetID(id uuid.UUID) {
+	u.id = id
 }

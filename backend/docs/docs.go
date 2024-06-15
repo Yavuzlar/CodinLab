@@ -332,11 +332,17 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 30
                 },
+                "name": {
+                    "type": "string"
+                },
                 "newPassword": {
                     "type": "string",
                     "minLength": 8
                 },
                 "password": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 },
                 "username": {
@@ -348,18 +354,12 @@ const docTemplate = `{
         },
         "private.UserDTO": {
             "type": "object",
-            "required": [
-                "name",
-                "surname",
-                "username"
-            ],
             "properties": {
                 "bestLanguage": {
                     "type": "string"
                 },
                 "githubProfile": {
-                    "type": "string",
-                    "maxLength": 30
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -368,9 +368,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 3
+                    "type": "string"
                 }
             }
         },

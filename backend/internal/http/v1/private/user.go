@@ -15,16 +15,18 @@ func (h *PrivateHandler) initUserRoutes(root fiber.Router) {
 
 type UpdateUserDTO struct {
 	Username      string `json:"username" validate:"omitempty,min=3,max=30" `
+	Name          string `json:"name"`
+	Surname       string `json:"surname" `
 	Password      string `json:"password" validate:"required"`
 	NewPassword   string `json:"newPassword" validate:"omitempty,min=8"`
 	GithubProfile string `json:"githubProfile" validate:"max=30"`
 }
 
 type UserDTO struct {
-	Username      string `json:"username" validate:"required,alphanum,min=3,max=30"`
-	Name          string `json:"name" validate:"required"`
-	Surname       string `json:"surname" validate:"required"`
-	GithubProfile string `json:"githubProfile" validate:"max=30"`
+	Username      string `json:"username"`
+	Name          string `json:"name"`
+	Surname       string `json:"surname"`
+	GithubProfile string `json:"githubProfile"`
 	BestLanguage  string `json:"bestLanguage"`
 }
 
@@ -77,7 +79,7 @@ func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := h.services.UserService.UpdateUser(c.Context(), userID, update.Password, update.NewPassword, update.Username, update.GithubProfile); err != nil {
+	if err := h.services.UserService.UpdateUser(c.Context(), userID, update.Password, update.NewPassword, update.Username, update.GithubProfile, update.Name, update.Surname); err != nil {
 		return err
 	}
 

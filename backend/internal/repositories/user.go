@@ -163,9 +163,11 @@ func (r *UserRepository) Update(ctx context.Context, user *domains.User) (err er
 		UPDATE
          t_users
 		SET
-			username = COALESCE(:username, username),
-			password = COALESCE(:password, password),
-			github_profile = COALESCE(:github_profile, github_profile),
+			name = :name,
+			surname = :surname,
+			username = :username,
+			password = :password,
+			github_profile = :github_profile,
 			total_points = COALESCE(:total_points, total_points)
 		WHERE
 			id = :id
