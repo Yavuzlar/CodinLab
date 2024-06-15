@@ -187,22 +187,11 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 	user.SetName(name)
 	user.SetSurname(surname)
 
-	updateUser, err := domains.NewUser(
-		user.Username(),
-		user.Password(),
-		user.Name(),
-		user.Surname(),
-		user.Role(),
-		user.GithubProfile(),
-		user.TotalPoints(),
-	)
 	if err != nil {
 		return err
 	}
 
-	updateUser.SetID(user.ID())
-
-	if err = s.userRepositories.Update(ctx, updateUser); err != nil {
+	if err = s.userRepositories.Update(ctx, user); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while updating user", err)
 	}
 
