@@ -22,6 +22,7 @@ type dbModelUsers struct {
 	Surname       sql.NullString `db:"surname"`
 	Role          sql.NullString `db:"role"`
 	GithubProfile sql.NullString `db:"github_profile"`
+	TotalPoints   sql.NullInt32  `db:"total_points"`
 	CreatedAt     sql.NullTime   `db:"created_at"`
 }
 
@@ -35,6 +36,7 @@ func (r *UserRepository) dbModelToAppModel(dbModel dbModelUsers) (user domains.U
 		dbModel.Surname.String,
 		dbModel.Role.String,
 		dbModel.GithubProfile.String,
+		dbModel.TotalPoints.Int32,
 		dbModel.CreatedAt.Time,
 	)
 	return
@@ -69,6 +71,10 @@ func (r *UserRepository) dbModelFromAppModel(domModel domains.User) (dbModel dbM
 	if domModel.GithubProfile() != "" {
 		dbModel.GithubProfile.String = domModel.GithubProfile()
 		dbModel.GithubProfile.Valid = true
+	}
+	if domModel.TotalPoints() != 0 {
+		dbModel.TotalPoints.Int32 = domModel.TotalPoints()
+		dbModel.TotalPoints.Valid = true
 	}
 	if !domModel.CreatedAt().IsZero() {
 		dbModel.CreatedAt.Time = domModel.CreatedAt()
@@ -145,6 +151,41 @@ func (r *UserRepository) Add(ctx context.Context, user *domains.User) (err error
 	`
 
 	_, err = r.db.NamedExecContext(ctx, query, dbModel)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (r *UserRepository) Update(ctx context.Context, user *domains.User) (err error) {
+	dbModel := r.dbModelFromAppModel(*user)
+	query := `
+		UPDATE
+         t_users
+		SET
+			username = COALESCE(:username, username),
+			password = COALESCE(:password, password),
+			github_profile = COALESCE(:github_profile, github_profile),
+			total_points = COALESCE(:total_points, total_points)
+		WHERE
+			id = :id
+
+	`
+	_, err = r.db.NamedExecContext(ctx, query, dbModel)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (r *UserRepository) Delete(ctx context.Context, userID uuid.UUID) (err error) {
+	query := `
+		DELETE FROM
+			t_users
+		WHERE
+			id = ?
+	`
+	_, err = r.db.ExecContext(ctx, query, userID)
 	if err != nil {
 		return
 	}

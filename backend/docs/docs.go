@@ -15,6 +15,38 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/private/labs/{id}": {
+            "get": {
+                "description": "Get Lab By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GetLab",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Lab ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/log": {
             "get": {
                 "description": "Retrieves all logs based on the provided query parameters.",
@@ -106,6 +138,73 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/private.StartDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/user/": {
+            "get": {
+                "description": "Gets users profile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetProfile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/private.UserDTO"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UpdateUser",
+                "parameters": [
+                    {
+                        "description": "UpdateUser",
+                        "name": "update",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/private.UpdateUserDTO"
                         }
                     }
                 ],
@@ -220,6 +319,58 @@ const docTemplate = `{
             "properties": {
                 "languageID": {
                     "type": "integer"
+                }
+            }
+        },
+        "private.UpdateUserDTO": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "githubProfile": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "newPassword": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 3
+                }
+            }
+        },
+        "private.UserDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "surname",
+                "username"
+            ],
+            "properties": {
+                "bestLanguage": {
+                    "type": "string"
+                },
+                "githubProfile": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "name": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 3
                 }
             }
         },

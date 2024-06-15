@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS t_users (
     surname TEXT NOT NULL,
     role TEXT NOT NULL,
     github_profile TEXT,
+    total_points INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 -- +goose StatementEnd

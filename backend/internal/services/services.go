@@ -24,9 +24,9 @@ func CreateNewServices(
 ) *Services {
 	utilsService := newUtilService(hasherService, validatorService)
 	logService := newLogService(logRepositories, utilsService)
-	userService := newUserService(userRepositories, logService, utilsService)
-	dockerService := newDockerService(utilsService)
 	parserService := newParserService(utilsService)
+	userService := newUserService(userRepositories, logService, parserService, utilsService)
+	dockerService := newDockerService(utilsService)
 	labService := newLabService(utilsService, logService, parserService)
 	// diğer servisler buraya eklenecek
 
