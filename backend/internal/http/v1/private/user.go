@@ -14,12 +14,12 @@ func (h *PrivateHandler) initUserRoutes(root fiber.Router) {
 }
 
 type UpdateUserDTO struct {
-	Username      string `json:"username" validate:"omitempty,min=3,max=30" `
+	Username      string `json:"username" validate:"omitempty,alphanum,min=3,max=30" `
 	Name          string `json:"name"`
 	Surname       string `json:"surname" `
 	Password      string `json:"password" validate:"required"`
 	NewPassword   string `json:"newPassword" validate:"omitempty,min=8"`
-	GithubProfile string `json:"githubProfile" validate:"max=30"`
+	GithubProfile string `json:"githubProfile" validate:"omitempty,max=30"`
 }
 
 type UserDTO struct {

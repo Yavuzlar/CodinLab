@@ -5,6 +5,7 @@ import (
 	"time"
 
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
+	hasher_service "github.com/Yavuzlar/CodinLab/pkg/hasher"
 	"github.com/google/uuid"
 )
 
@@ -54,36 +55,24 @@ type User struct {
 
 // NewUser creates a new user.
 func NewUser(username, password, name, surname, role, githubProfile string, totalPoints int32) (*User, error) {
-	if username == "" {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "username is required")
+	user := &User{}
+	if err := user.SetUsername(username); err != nil {
+		return nil, err
 	}
-	if len(username) < 3 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "username must be at least 3 characters")
-	} else if len(username) > 30 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "username must be at most 30 characters")
+	if err := user.SetPassword(password); err != nil {
+		return nil, err
 	}
-	if password == "" {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "password is required")
+	if err := user.SetName(name); err != nil {
+		return nil, err
 	}
-	if len(password) < 8 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "password must be at least 8 characters")
+	if err := user.SetSurname(surname); err != nil {
+		return nil, err
 	}
-	if name == "" || surname == "" {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "name and surname are required")
-	}
-	if role == "" {
-		role = "user"
-	}
-	return &User{
-		id:            uuid.New(),
-		username:      username,
-		password:      password,
-		name:          name,
-		surname:       surname,
-		role:          role,
-		githubProfile: githubProfile,
-		totalPoints:   totalPoints,
-	}, nil
+	user.SetID()
+	user.SetRole(role)
+	user.SetGithubProfile(githubProfile)
+	user.SetTotalPoints(totalPoints)
+	return user, nil
 }
 
 // Unmarshal unmarshals the user for database operations. It is used in the repository.
@@ -148,50 +137,59 @@ func (u *User) SetTotalPoints(totalPoints int32) {
 }
 
 func (u *User) SetRole(role string) {
-	if role != "" {
-		u.role = role
+	if role == "" {
+		u.role = "user"
 	}
 }
 
 func (u *User) SetGithubProfile(githubProfile string) {
-	if githubProfile != "" {
-		u.githubProfile = githubProfile
-	}
+	u.githubProfile = githubProfile
 }
 
-func (u *User) SetPassword(password, hashedPassword string) error {
-	if password != "" {
-		if len(password) < 8 {
-			return service_errors.NewServiceErrorWithMessage(400, "password must be at least 8 characters")
-		}
-		u.password = hashedPassword
+func (u *User) SetPassword(password string) error {
+	if password == "" {
+		return service_errors.NewServiceErrorWithMessage(400, "password is required")
 	}
+	if len(password) < 8 {
+		return service_errors.NewServiceErrorWithMessage(400, "password must be at least 8 characters")
+	}
+	// Hashing password for db
+	hashedPassword, err := hasher_service.HashPassword(password)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while hashing the password", err)
+	}
+	u.password = hashedPassword
 	return nil
 }
 
-func (u *User) SetName(name string) {
-	if name != "" {
-		u.name = name
+func (u *User) SetName(name string) error {
+	if name == "" {
+		return service_errors.NewServiceErrorWithMessage(400, "name is required")
 	}
+	u.name = name
+	return nil
 }
 
-func (u *User) SetSurname(surname string) {
-	if surname != "" {
-		u.surname = surname
+func (u *User) SetSurname(surname string) error {
+	if surname == "" {
+		return service_errors.NewServiceErrorWithMessage(400, "surname is required")
 	}
+	u.surname = surname
+	return nil
 }
 
 func (u *User) SetUsername(username string) error {
-	if username != "" {
-		if len(username) < 3 {
-			return service_errors.NewServiceErrorWithMessage(400, "username must be at least 3 characters")
-		} else if len(username) > 30 {
-			return service_errors.NewServiceErrorWithMessage(400, "username must be at most 30 characters")
-		}
-		u.username = username
+	if username == "" {
+		return service_errors.NewServiceErrorWithMessage(400, "username is required")
 	}
+	if len(username) < 3 {
+		return service_errors.NewServiceErrorWithMessage(400, "username must be at least 3 characters")
+	} else if len(username) > 30 {
+		return service_errors.NewServiceErrorWithMessage(400, "username must be at most 30 characters")
+	}
+	u.username = username
 	return nil
 }
-func (u *User) SetID(id uuid.UUID) {
-	u.id = id
+func (u *User) SetID() {
+	u.id = uuid.New()
 }
