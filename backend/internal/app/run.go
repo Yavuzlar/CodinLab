@@ -39,15 +39,14 @@ func Run(cfg *config.Config) {
 	logRepo := repositories.NewLogRepository(conn)
 
 	// utilities initialize
-	hasher := hasher_service.NewHasherService()
 	validator := validator_service.NewValidatorService()
 
 	// service initialize
 
-	allService := services.CreateNewServices(userRepo, logRepo, hasher, validator)
+	allService := services.CreateNewServices(userRepo, logRepo, validator)
 
 	//---------------first run -----------------
-	hashedPass, err := hasher.HashPassword(cfg.Application.Managment.ManagmentPassword)
+	hashedPass, err := hasher_service.HashPassword(cfg.Application.Managment.ManagmentPassword)
 	if err != nil {
 		panic(err)
 	}

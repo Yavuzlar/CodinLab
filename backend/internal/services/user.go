@@ -5,6 +5,7 @@ import (
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
+	hasher_service "github.com/Yavuzlar/CodinLab/pkg/hasher"
 	"github.com/google/uuid"
 )
 
@@ -40,7 +41,7 @@ func (s *userService) Login(ctx context.Context, username, password string) (use
 		return nil, service_errors.NewServiceErrorWithMessage(400, "username or password not match")
 	}
 	user = &users[0]
-	ok, err := s.utils.Hasher().CompareHashAndPassword(user.Password(), password)
+	ok, err := hasher_service.CompareHashAndPassword(user.Password(), password)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while comparing password", err)
 	}
@@ -60,14 +61,8 @@ func (s *userService) Register(ctx context.Context, username, name, surname, pas
 		return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 	}
 
-	// Hashing password for db
-	hashedPassword, err := s.utils.Hasher().HashPassword(password)
-	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while hashing the password", err)
-	}
-
 	// Creating New User Model
-	newUser, err := domains.NewUser(username, hashedPassword, name, surname, "", githubProfile, 0)
+	newUser, err := domains.NewUser(username, password, name, surname, "", githubProfile, 0)
 	if err != nil {
 		return err
 	}
@@ -91,12 +86,7 @@ func (s *userService) CreateUser(ctx context.Context, username, name, surname, p
 		return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 	}
 
-	hashedPassword, err := s.utils.Hasher().HashPassword(password)
-	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while hashing the password", err)
-	}
-
-	newUser, err := domains.NewUser(username, hashedPassword, name, surname, "", githubProfile, 0)
+	newUser, err := domains.NewUser(username, password, name, surname, "", githubProfile, 0)
 	if err != nil {
 		return err
 	}
@@ -143,7 +133,6 @@ func (s *userService) GetProfile(ctx context.Context, userID string) (user *doma
 
 func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile, name, surname string) (err error) {
 	user, err := s.GetProfile(ctx, userID)
-
 	if err != nil {
 		return err
 	}
@@ -165,30 +154,28 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 				return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 			}
 		}
-		err = user.SetUsername(username)
-		if err != nil {
+		if err := user.SetUsername(username); err != nil {
 			return err
 		}
 	}
 
 	// Checking if password is being updated
 	if newPassword != "" {
-		//Hashing new password
-		hashedPassword, err := s.utils.Hasher().HashPassword(newPassword)
-		if err != nil {
-			return service_errors.NewServiceErrorWithMessageAndError(500, "error while hashing the password", err)
-		}
-		err = user.SetPassword(newPassword, hashedPassword)
-		if err != nil {
+		if err := user.SetPassword(newPassword); err != nil {
 			return err
 		}
 	}
-	user.SetGithubProfile(githubProfile)
-	user.SetName(name)
-	user.SetSurname(surname)
 
-	if err != nil {
-		return err
+	user.SetGithubProfile(githubProfile)
+	if name != "" {
+		if err := user.SetName(name); err != nil {
+			return err
+		}
+	}
+	if surname != "" {
+		if err := user.SetSurname(surname); err != nil {
+			return err
+		}
 	}
 
 	if err = s.userRepositories.Update(ctx, user); err != nil {
@@ -199,8 +186,8 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 }
 
 func (s *userService) checkPassword(ctx context.Context, userPassword, password string) (err error) {
-	//Checking if the password is true
-	ok, err := s.utils.Hasher().CompareHashAndPassword(userPassword, password)
+	// Checking if password matches
+	ok, err := hasher_service.CompareHashAndPassword(userPassword, password)
 	if err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while comparing password", err)
 	}
