@@ -139,6 +139,8 @@ func (u *User) SetTotalPoints(totalPoints int32) {
 func (u *User) SetRole(role string) {
 	if role == "" {
 		u.role = "user"
+	} else {
+		u.role = role
 	}
 }
 
