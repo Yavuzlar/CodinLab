@@ -1,0 +1,152 @@
+[
+    {
+        "level": 1,
+        "minPoints":0,
+        "maxPoints": 5, 
+        "languages": [
+            {
+                "lang": "en",
+                "description": "Beginner level"
+            },
+            {
+                "lang": "tr",
+                "description": "Başlangıç seviye"
+            }
+        ]
+    },
+    {
+        "level": 2,
+        "minPoints": 6,
+        "maxPoints": 14,
+        "languages": [
+            {
+                "lang": "en",
+                "description": "Beginner level"
+            },
+            {
+                "lang": "tr",
+                "description": "Başlangıç seviye"
+            }
+        ]
+    },
+    {
+        "level": 3,
+        "minPoints": 15,
+        "maxPoints": 25,
+        "languages":[
+            {
+                "lang": "en",
+                "description": "Intermediate level"
+            },
+            {
+                "lang": "tr",
+                "description": "Orta seviye"
+            }
+        ]
+    },
+    {
+        "level": 4,
+        "minPoints": 26,
+        "maxPoints": 40,
+        "languages":[
+            {
+                "lang": "en",
+                "description": "Intermediate level"
+            },
+            {
+                "lang": "tr",
+                "description": "Orta seviye"
+            }
+        ]
+    },
+    {
+        "level": 5,
+        "minPoints": 41,
+        "maxPoints": 56,
+        "languages":[
+            {
+                "lang": "en",
+                "description": "Intermediate level"
+            },
+            {
+                "lang": "tr",
+                "description": "Orta seviye"
+            }
+        ]
+    },
+    {
+        "level": 6,
+        "minPoints": 57,
+        "maxPoints": 73,
+        "languages":[
+            {
+                "lang": "en",
+                "description": "Advanced level"
+            },
+            {
+                "lang": "tr",
+                "description": "İleri seviye"
+            }
+        ]
+    },
+    {
+        "level": 7,
+        "minPoints": 74,
+        "maxPoints": 90,
+        "languages":[
+            {
+                "lang": "en",
+                "description": "Advanced level"
+            },
+            {
+                "lang": "tr",
+                "description": "İleri seviye"
+            }
+        ]
+    },
+    {
+        "level": 8,
+        "minPoints": 91,
+        "maxPoints": 109,
+       "languages":[
+            {
+                "lang": "en",
+                "description": "Advanced level"
+            },
+            {
+                "lang": "tr",
+                "description": "İleri seviye"
+            }
+        ]
+    },
+    {
+        "level": 9,
+        "minPoints": 110,
+        "maxPoints": 130,
+        "languages":[
+            {
+                "lang": "en",
+                "description": "Professional level"
+            },
+            {
+                "lang": "tr",
+                "description": "Profesyonel seviye"
+            }
+        ]
+    },
+    {
+        "level": 10,
+        "minPoints": 131,
+        "maxPoints": 153,
+        "languages":[
+            {
+                "lang": "en",
+                "description": "Professional level"
+            },
+            {
+                "lang": "tr",
+                "description": "Profesyonel seviye"
+            }
+        ]
+    }
+]

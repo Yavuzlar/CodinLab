@@ -11,6 +11,7 @@ type Services struct {
 	DockerService domains.IDockerService
 	ParserService domains.IParserService
 	LabService    domains.ILabService
+	LevelService  domains.ILevelService
 	// diğer servisler buraya eklenecek
 }
 
@@ -24,9 +25,11 @@ func CreateNewServices(
 	utilsService := newUtilService(validatorService)
 	logService := newLogService(logRepositories, utilsService)
 	parserService := newParserService(utilsService)
+	levelService := newLevelService(utilsService, logService, parserService, userRepositories)
 	userService := newUserService(userRepositories, logService, parserService, utilsService)
 	dockerService := newDockerService(utilsService)
 	labService := newLabService(utilsService, logService, parserService)
+
 	// diğer servisler buraya eklenecek
 
 	return &Services{
@@ -36,6 +39,7 @@ func CreateNewServices(
 		LogService:    logService,
 		ParserService: parserService,
 		LabService:    labService,
+		LevelService:  levelService,
 		// diğer servisler buraya eklenecek
 
 	}

@@ -178,3 +178,23 @@ func (s *parserService) GetRoads() (roads []domains.RoadP, err error) {
 	}
 	return
 }
+
+func (s *parserService) GetLevels() (levels []domains.LevelP, err error) {
+	// Ensure the "object" directory exists
+	err = s.checkDir("object")
+	if err != nil {
+		return nil, err
+	}
+	// Read the JSON file containing level information
+	jsonData, err := os.ReadFile("object/level.json")
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal the JSON data into level slice
+	err = json.Unmarshal(jsonData, &levels)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
