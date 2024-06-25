@@ -17,7 +17,7 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 
 // @Tags Lab
 // @Summary GetLabsById
-// @Description Get Labs By ID
+// @Description Get Labs By Lang ID
 // @Accept json
 // @Produce json
 // @Param id path string true "Labs ID"
@@ -45,7 +45,7 @@ func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
 
 // @Tags Lab
 // @Summary GetLabById
-// @Description Get Lab By ID
+// @Description Get Lab By Lang ID & Lab ID
 // @Accept json
 // @Produce json
 // @Param langId path string true "Lang ID"
