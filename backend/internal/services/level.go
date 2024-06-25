@@ -60,7 +60,7 @@ func (s *levelService) UpdateUserPoint(ctx context.Context, userID string, diffi
 	}
 
 	for _, level := range levels {
-		if newPoint >= level.MinPoints && newPoint <= level.MaxPoints {
+		if newPoint >= level.MinPoints && newPoint < level.MaxPoints {
 			if userLevel.Level() != level.Level { //Compares the old level with the new level
 				if err = s.logService.Add(ctx, userID, domains.TypeUser, domains.ContentLevelUp, 0, 0); err != nil {
 					return service_errors.NewServiceErrorWithMessageAndError(500, "error while creating log", err)
@@ -94,7 +94,7 @@ func (s *levelService) GetUserLevel(ctx context.Context, userID string) (userLev
 	var lang []domains.LanguageL
 
 	for _, level := range levels {
-		if userPoint >= level.MinPoints && userPoint <= level.MaxPoints { //Checks level limits
+		if userPoint >= level.MinPoints && userPoint < level.MaxPoints { //Checks level limits
 			levelPercentage := ((userPoint - level.MinPoints) * 100) / (level.MaxPoints - level.MinPoints) //level percentage
 			for _, language := range level.Languages {
 				lang = append(lang, domains.LanguageL{Lang: language.Lang, Description: language.Description})

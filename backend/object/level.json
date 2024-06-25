@@ -16,7 +16,7 @@
     },
     {
         "level": 2,
-        "minPoints": 6,
+        "minPoints": 5,
         "maxPoints": 14,
         "languages": [
             {
@@ -31,7 +31,7 @@
     },
     {
         "level": 3,
-        "minPoints": 15,
+        "minPoints": 14,
         "maxPoints": 25,
         "languages":[
             {
@@ -46,7 +46,7 @@
     },
     {
         "level": 4,
-        "minPoints": 26,
+        "minPoints": 25,
         "maxPoints": 40,
         "languages":[
             {
@@ -61,7 +61,7 @@
     },
     {
         "level": 5,
-        "minPoints": 41,
+        "minPoints": 40,
         "maxPoints": 56,
         "languages":[
             {
@@ -76,7 +76,7 @@
     },
     {
         "level": 6,
-        "minPoints": 57,
+        "minPoints": 56,
         "maxPoints": 73,
         "languages":[
             {
@@ -91,7 +91,7 @@
     },
     {
         "level": 7,
-        "minPoints": 74,
+        "minPoints": 73,
         "maxPoints": 90,
         "languages":[
             {
@@ -106,7 +106,7 @@
     },
     {
         "level": 8,
-        "minPoints": 91,
+        "minPoints": 90,
         "maxPoints": 109,
        "languages":[
             {
@@ -121,7 +121,7 @@
     },
     {
         "level": 9,
-        "minPoints": 110,
+        "minPoints": 109,
         "maxPoints": 130,
         "languages":[
             {
@@ -136,7 +136,7 @@
     },
     {
         "level": 10,
-        "minPoints": 131,
+        "minPoints": 130,
         "maxPoints": 153,
         "languages":[
             {
