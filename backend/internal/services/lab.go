@@ -26,7 +26,7 @@ func newLabService(
 }
 
 // Customize and bring all labs
-func (s *labService) GetAllLabs(userID string) ([]domains.Labs, error) {
+func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 	src, err := s.parserService.GetLabs()
 	if err != nil {
 		return nil, err
@@ -122,9 +122,13 @@ func (s *labService) GetAllLabs(userID string) ([]domains.Labs, error) {
 
 // Fetch labs by filters
 func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished string) ([]domains.Labs, error) {
-	allLabs, err := s.GetAllLabs(userID)
+	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
+	}
+
+	if userID == "" && labsId == 0 && labId == 0 && isStarted == "" && isFinished == "" {
+		return allLabs, nil
 	}
 
 	var filteredLabs []domains.Labs
@@ -138,13 +142,13 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 
 		var newLabList []domains.Lab
 		for _, lab := range labCollection.Labs {
+
 			if labId != 0 && lab.ID != labId {
 				continue
 			}
 			if isStarted != "" && lab.IsStarted != isStarted {
 				continue
 			}
-
 			if isFinished != "" && lab.IsFinished != isFinished {
 				continue
 			}
@@ -162,10 +166,6 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 				Labs:        newLabList,
 			})
 		}
-	}
-
-	if len(filteredLabs) == 0 && (userID == "" && labsId == 0 && labId == 0 && isStarted == "" && isFinished == "") {
-		return allLabs, nil
 	}
 
 	return filteredLabs, nil

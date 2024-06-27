@@ -22,6 +22,40 @@ definitions:
     required:
     - languageID
     type: object
+  private.UpdateUserDTO:
+    properties:
+      githubProfile:
+        maxLength: 30
+        type: string
+      name:
+        type: string
+      newPassword:
+        minLength: 8
+        type: string
+      password:
+        type: string
+      surname:
+        type: string
+      username:
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - password
+    type: object
+  private.UserDTO:
+    properties:
+      bestLanguage:
+        type: string
+      githubProfile:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+      username:
+        type: string
+    type: object
   public.LoginDTO:
     properties:
       password:
@@ -82,6 +116,27 @@ info:
   title: API Service
   version: v1
 paths:
+  /private/labs/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Lab By ID
+      parameters:
+      - description: Lab ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetLab
+      tags:
+      - Lab
   /private/log:
     get:
       consumes:
@@ -147,6 +202,47 @@ paths:
       summary: Start
       tags:
       - Road
+  /private/user/:
+    get:
+      consumes:
+      - application/json
+      description: Gets users profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/private.UserDTO'
+              type: object
+      summary: GetProfile
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Updates user
+      parameters:
+      - description: UpdateUser
+        in: body
+        name: update
+        required: true
+        schema:
+          $ref: '#/definitions/private.UpdateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: UpdateUser
+      tags:
+      - User
   /public/login:
     post:
       consumes:

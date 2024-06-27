@@ -4,6 +4,7 @@ package domains
 type IParserService interface {
 	GetLabs() (labs []LabsP, err error)
 	GetRoads() (roads []RoadP, err error)
+	GetInventory() (inventory []InventoryP, err error)
 }
 
 // Inventory represents the information related to an item in inventory.

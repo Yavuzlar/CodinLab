@@ -2,7 +2,6 @@ package domains
 
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
-	GetAllLabs(userID string) (labs []Labs, err error)
 	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished string) ([]Labs, error)
 }
 
