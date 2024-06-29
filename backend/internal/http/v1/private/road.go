@@ -1,6 +1,8 @@
 package private
 
 import (
+	"strconv"
+
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -12,7 +14,10 @@ type StartDTO struct {
 }
 
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
-	root.Post("/road/start", h.Start)
+	roadRoute := root.Group("/road")
+
+	roadRoute.Post("/start", h.Start)
+	roadRoute.Get("/:roadId", h.GetAllRoads)
 }
 
 // @Tags Road
@@ -63,3 +68,36 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 	// if the "Road Started Successfully" message recived. The frontend will redirect the user to the spesific road.
 	return response.Response(200, "Road Started Successfully", nil)
 }
+
+// @Tags Road
+// @Summary GetRoads
+// @Description Get All Roads
+// @Accept json
+// @Produce json
+// @Param roadId path string true "roadId"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/{roadId} [get]
+func (h *PrivateHandler) GetAllRoads(c *fiber.Ctx) error {
+	// NEED ROAD SERVICE FOR BOTTOM
+	// We have to get all roads and send them to the frontend.
+
+	// Recive user session from session_store
+
+	userSession := session_store.GetSessionData(c)
+
+	// Declare and assign roadId variable
+	roadId := c.Params("roadId")
+	num, err := strconv.Atoi(roadId)
+	if err != nil {
+		return response.Response(400, "Invalid ID", nil)
+	}
+
+	// Get all roads
+	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, num, 0, false, false)
+	if err != nil {
+		return err
+	}
+
+	return response.Response(200, "GetRoads successful", roads)
+}
+

@@ -15,9 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/private/labs/{id}": {
+        "/private/lab/{langId}/{labId}": {
             "get": {
-                "description": "Get Lab By ID",
+                "description": "Get Lab By Lang ID \u0026 Lab ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,11 +27,50 @@ const docTemplate = `{
                 "tags": [
                     "Lab"
                 ],
-                "summary": "GetLab",
+                "summary": "GetLabById",
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Lang ID",
+                        "name": "langId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Lab ID",
+                        "name": "labId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/labs/{id}": {
+            "get": {
+                "description": "Get Labs By Lang ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GetLabsById",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Labs ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -139,6 +178,38 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/private.StartDTO"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/{roadId}": {
+            "get": {
+                "description": "Get All Roads",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "GetRoads",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "roadId",
+                        "name": "roadId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
