@@ -137,7 +137,7 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 		return err
 	}
 
-	if err := s.checkPassword(ctx, user.Password(), password); err != nil {
+	if err := s.checkPassword(user.Password(), password); err != nil {
 		return err
 	}
 
@@ -185,7 +185,7 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 	return
 }
 
-func (s *userService) checkPassword(ctx context.Context, userPassword, password string) (err error) {
+func (s *userService) checkPassword(userPassword, password string) (err error) {
 	// Checking if password matches
 	ok, err := hasher_service.CompareHashAndPassword(userPassword, password)
 	if err != nil {

@@ -1,5 +1,18 @@
 basePath: /api/v1
 definitions:
+  private.LanguageDTO:
+    properties:
+      content:
+        type: string
+      description:
+        type: string
+      lang:
+        type: string
+      note:
+        type: string
+      title:
+        type: string
+    type: object
   private.LogDTO:
     properties:
       content:
@@ -14,6 +27,34 @@ definitions:
         type: string
       userId:
         type: string
+    type: object
+  private.PathDTO:
+    properties:
+      difficulty:
+        type: integer
+      id:
+        type: integer
+      isFinished:
+        type: boolean
+      isStarted:
+        type: boolean
+      languages:
+        items:
+          $ref: '#/definitions/private.LanguageDTO'
+        type: array
+      name:
+        type: string
+    type: object
+  private.RoadDTO:
+    properties:
+      iconPath:
+        type: string
+      name:
+        type: string
+      paths:
+        items:
+          $ref: '#/definitions/private.PathDTO'
+        type: array
     type: object
   private.StartDTO:
     properties:
@@ -223,8 +264,44 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.BaseResponse'
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/private.RoadDTO'
+              type: object
       summary: GetRoads
+      tags:
+      - Road
+  /private/road/{roadId}/{pathId}:
+    get:
+      consumes:
+      - application/json
+      description: Get Path By ID
+      parameters:
+      - description: Road ID
+        in: path
+        name: roadId
+        required: true
+        type: string
+      - description: Path ID
+        in: path
+        name: pathId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/private.PathDTO'
+              type: object
+      summary: GetPathById
       tags:
       - Road
   /private/road/start:
