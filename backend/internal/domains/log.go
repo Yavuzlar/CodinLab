@@ -131,4 +131,5 @@ var (
 	ContentStarted   = "Started"
 	ContentCompleted = "Completed"
 	ContentProfile   = "Profile Updated"
+	ContentLevelUp   = "Level Up"
 )
