@@ -5,6 +5,7 @@ type IParserService interface {
 	GetLabs() (labs []LabsP, err error)
 	GetRoads() (roads []RoadP, err error)
 	GetInventory() (inventory []InventoryP, err error)
+	GetLevels() (userLevel []LevelP, err error)
 }
 
 // Inventory represents the information related to an item in inventory.
@@ -21,7 +22,7 @@ type InventoryP struct {
 // Language represents the details of a programming language.
 type LanguageP struct {
 	Lang        string `json:"lang"`
-	Title       string `json:"title"`
+	Title       string `json:"title,omitempty"`
 	Description string `json:"description"`
 	Note        string `json:"note,omitempty"`
 	Hint        string `json:"hint,omitempty"`
@@ -78,4 +79,11 @@ type RoadP struct {
 	DockerImage string
 	IconPath    string
 	Paths       []PathP
+}
+
+type LevelP struct {
+	Level     int         `json:"level"`
+	MinPoints int32       `json:"minPoints"`
+	MaxPoints int32       `json:"maxPoints"`
+	Languages []LanguageP `json:"languages"`
 }

@@ -8,6 +8,32 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// Language Dto for transfer
+type LanguageDto struct {
+	Lang        string `json:"lang"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Note        string `json:"note,omitempty"`
+	Hint        string `json:"hint,omitempty"`
+}
+
+// Lab Dto for transfer
+type LabDto struct {
+	ID         int           `json:"id"`
+	Languages  []LanguageDto `json:"languages"`
+	IsStarted  string        `json:"isStarted"`
+	IsFinished string        `json:"isFinished"`
+	Difficulty int           `json:"difficulty"`
+}
+
+// Labs Dto for transfer
+type LabsDto struct {
+	ID       int
+	Name     string   `json:"name"`
+	IconPath string   `json:"iconPath"`
+	Labs     []LabDto `json:"labs"`
+}
+
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/:id", h.GetLabsByID)
 	root.Get("/lab/:langId/:labId", h.GetLabByID)
@@ -31,16 +57,49 @@ func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
 	}
 	userSession := session_store.GetSessionData(c)
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intId, 0, "", "")
+	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, intId, 0, "", "")
 	if err != nil {
 		return err
 	}
 
-	if len(labData) == 0 {
-		return response.Response(404, "Labs not found", labData)
+	var labsDtoList []LabsDto
+	for _, labCollection := range filteredLabs {
+		var labDtoList []LabDto
+		for _, lab := range labCollection.Labs {
+			var languageDtoList []LanguageDto
+			for _, language := range lab.Languages {
+				languageDto := LanguageDto{
+					Lang:        language.Lang,
+					Title:       language.Title,
+					Description: language.Description,
+					Note:        language.Note,
+					Hint:        language.Hint,
+				}
+				languageDtoList = append(languageDtoList, languageDto)
+			}
+			labDto := LabDto{
+				ID:         lab.ID,
+				Languages:  languageDtoList,
+				IsStarted:  lab.IsStarted,
+				IsFinished: lab.IsFinished,
+				Difficulty: lab.Quest.Difficulty,
+			}
+			labDtoList = append(labDtoList, labDto)
+		}
+		labsDto := LabsDto{
+			ID:       labCollection.ID,
+			Name:     labCollection.Name,
+			IconPath: labCollection.IconPath,
+			Labs:     labDtoList,
+		}
+		labsDtoList = append(labsDtoList, labsDto)
 	}
 
-	return response.Response(200, "GetLabs successful", labData)
+	if len(labsDtoList) == 0 {
+		return response.Response(404, "Labs not found", labsDtoList)
+	}
+
+	return response.Response(200, "GetLabs successful", labsDtoList)
 }
 
 // @Tags Lab
