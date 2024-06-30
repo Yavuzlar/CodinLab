@@ -147,6 +147,7 @@ func (s *parserService) GetRoads() (roads []domains.RoadP, err error) {
 			Name:        language.Name,
 			DockerImage: language.DockerImage,
 			IconPath:    language.IconPath,
+			ID:          language.ID,
 		}
 
 		// Locate JSON files within the language's lab directory

@@ -190,6 +190,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/road/{roadId}": {
+            "get": {
+                "description": "Get All Roads",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "GetRoads",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "roadId",
+                        "name": "roadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/user/": {
             "get": {
                 "description": "Gets users profile",

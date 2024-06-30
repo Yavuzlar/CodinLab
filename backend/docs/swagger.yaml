@@ -206,6 +206,27 @@ paths:
       summary: Get all logs
       tags:
       - Log
+  /private/road/{roadId}:
+    get:
+      consumes:
+      - application/json
+      description: Get All Roads
+      parameters:
+      - description: roadId
+        in: path
+        name: roadId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetRoads
+      tags:
+      - Road
   /private/road/start:
     post:
       consumes:

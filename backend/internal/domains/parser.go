@@ -26,6 +26,7 @@ type LanguageP struct {
 	Description string `json:"description"`
 	Note        string `json:"note,omitempty"`
 	Hint        string `json:"hint,omitempty"`
+	Content     string `json:"content,omitempty"`
 }
 
 // Test represents a test case for a function.
@@ -73,6 +74,7 @@ type PathP struct {
 
 // Road represents a collection of learning paths.
 type RoadP struct {
+	ID          int
 	Name        string
 	DockerImage string
 	IconPath    string
