@@ -29,47 +29,26 @@ import visibilityOnIcon from "../assets/icons/icons8-eye-1.png";
 import visibilityOffIcon from "../assets/icons/icons8-eye-1.png";
 import Image from "next/image";
 import manImg from "../assets/3d/3d-casual-life-young-man-sitting-with-laptop-and-waving.png";
-import { useTranslation } from "next-i18next";
 const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState(null);
-  const [errors, setErrors] = useState({});
-  const [formSubmit, setFormSubmit] = useState(false);
-  const [visibleEmailLabel, setVisibleEmailLabel] = useState(false);
-  const [visiblePasswordLabel, setVisiblePasswordLabel] = useState(false);
-
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   // const handleMouseDownPassword = (event) => {
   //   event.preventDefault();
   // };
+  const [formData, setFormData] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [formSubmit, setFormSubmit] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    if (e.target.name === "email") {
-      setEmail(e.target.value);
-      handleVisibleEmailLabel(e.target.value);
-    }
-
-    if (e.target.name === "password") {
-      setPassword(e.target.value);
-      handleVisiblePasswordLabel(e.target.value);
-    }
   };
 
   const handleSubmit = async () => {
     setFormSubmit(true);
-  };
-
-  const handleVisibleEmailLabel = (email) => {
-    setVisibleEmailLabel(email !== "");
-  };
-
-  const handleVisiblePasswordLabel = (password) => {
-    setVisiblePasswordLabel(password !== "");
   };
 
   useEffect(() => {
@@ -81,8 +60,6 @@ const Login = () => {
     };
     fetchData();
   }, [formData, formSubmit]);
-
-  const { t } = useTranslation();
   const sm_down = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const sm_up = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   const mdmd_down = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
@@ -92,12 +69,26 @@ const Login = () => {
       sx={{
         display: "flex",
         width: "100%",
+
         alignItems: "center",
         justifyContent: "center",
         height: "100vh",
       }}
     >
-      <Box
+      <Button
+        sx={{
+          background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+          border: 0,
+          borderRadius: 3,
+          boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+          color: "white",
+          height: 48,
+          padding: "0 30px",
+        }}
+      >
+        Özel Buton
+      </Button>
+      {/* <Box
         sx={{
           width: "50.625rem",
           position: "relative",
@@ -152,22 +143,6 @@ const Login = () => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sx={{ width: "100%", mt: "2.5rem" }}>
-                <Typography
-                  sx={{
-                    // display: visibleEmailLabel ? "block" : "none",
-                    mb: "0.438rem",
-                    ml: "1.438rem",
-                    color: "#0A3B7A",
-                    fontWeight: "bold",
-                    transform: visibleEmailLabel
-                      ? "translateY(0)"
-                      : "translateY(20px)",
-                    opacity: visibleEmailLabel ? 1 : 0,
-                    transition: "all 0.3s ease-in-out",
-                  }}
-                >
-                  <Translations text={"login.email"} />
-                </Typography>
                 <FormControl
                   sx={{
                     alignItems: "center",
@@ -177,7 +152,7 @@ const Login = () => {
                 >
                   <TextField
                     name="email"
-                    placeholder={t("login.email")}
+                    label="Email"
                     variant="outlined"
                     onChange={handleChange}
                     error={errors.email ? true : false}
@@ -210,26 +185,10 @@ const Login = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sx={{ width: "100%", mt: "2.5rem" }}>
-                <Typography
-                  sx={{
-                    // display: visiblePasswordLabel ? "block" : "none",
-                    mb: "0.438rem",
-                    ml: "1.438rem",
-                    color: "#0A3B7A",
-                    fontWeight: "bold",
-                    transform: visiblePasswordLabel
-                      ? "translateY(0)"
-                      : "translateY(20px)",
-                    opacity: visiblePasswordLabel ? 1 : 0,
-                    transition: "all 0.3s ease-in-out",
-                  }}
-                >
-                  <Translations text={"login.password"} />
-                </Typography>
                 <FormControl sx={{ width: "100%" }}>
                   <TextField
                     name="password"
-                    placeholder={t("login.password")}
+                    label={<Translations text={"login.password"} />}
                     variant="outlined"
                     type={showPassword ? "text" : "password"}
                     onChange={handleChange}
@@ -452,7 +411,7 @@ const Login = () => {
             }}
           />
         )}
-      </Box>
+      </Box> */}
     </Box>
   );
 };
