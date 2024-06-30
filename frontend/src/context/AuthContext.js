@@ -4,6 +4,8 @@ import { createContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 // ** Axios
 import authConfig from "src/configs/auth";
+import axios from "axios";
+import { showToast } from "src/utils/showToast";
 
 // ** Defaults
 const defaultProvider = {
@@ -58,7 +60,27 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const handleRegister = async ({ params }) => {};
+
+  const handleRegister = async (formData) => {
+    try {
+      const response = await axios({
+        url: authConfig.register,
+        method: "POST",
+        data: formData,
+      });
+      if (response.status === 200) {
+        showToast("dismiss");
+        showToast("success", "Account created successfully");
+        router.push("/login");
+      } else {
+        showToast("dismiss");
+        showToast("error", response.data.message);
+      }
+    } catch (error) {
+      showToast("dismiss");
+      showToast("error", error.message);
+    }
+  };
 
   useEffect(() => {
     initAuth();

@@ -30,6 +30,7 @@ import { registerValidation } from "src/configs/validation/registerSchema";
 import CardImage from "src/assets/3d/3d-casual-life-windows-with-developer-code-symbols.png";
 import GirlImage from "src/assets/3d/3d-casual-life-girl-holding-laptop-and-having-an-idea.png";
 import Translations from "src/components/Translations";
+import { useAuth } from "src/hooks/useAuth";
 
 const Register = () => {
   const [formData, setFormData] = useState(null);
@@ -38,6 +39,7 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const {register} = useAuth()
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -45,7 +47,7 @@ const Register = () => {
   };
 
   const handleSubmit = async () => {
-    setFormSubmit(true);
+    register({formData})
   };
 
   useEffect(() => {
