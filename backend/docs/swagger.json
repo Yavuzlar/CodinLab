@@ -9,9 +9,9 @@
     "host": "localhost:8080",
     "basePath": "/api/v1",
     "paths": {
-        "/private/labs/{id}": {
+        "/private/lab/{langId}/{labId}": {
             "get": {
-                "description": "Get Lab By ID",
+                "description": "Get Lab By Lang ID \u0026 Lab ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -21,11 +21,50 @@
                 "tags": [
                     "Lab"
                 ],
-                "summary": "GetLab",
+                "summary": "GetLabById",
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Lang ID",
+                        "name": "langId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Lab ID",
+                        "name": "labId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/labs/{id}": {
+            "get": {
+                "description": "Get Labs By Lang ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GetLabsById",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Labs ID",
                         "name": "id",
                         "in": "path",
                         "required": true

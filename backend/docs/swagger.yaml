@@ -116,13 +116,39 @@ info:
   title: API Service
   version: v1
 paths:
+  /private/lab/{langId}/{labId}:
+    get:
+      consumes:
+      - application/json
+      description: Get Lab By Lang ID & Lab ID
+      parameters:
+      - description: Lang ID
+        in: path
+        name: langId
+        required: true
+        type: string
+      - description: Lab ID
+        in: path
+        name: labId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetLabById
+      tags:
+      - Lab
   /private/labs/{id}:
     get:
       consumes:
       - application/json
-      description: Get Lab By ID
+      description: Get Labs By Lang ID
       parameters:
-      - description: Lab ID
+      - description: Labs ID
         in: path
         name: id
         required: true
@@ -134,7 +160,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: GetLab
+      summary: GetLabsById
       tags:
       - Lab
   /private/log:
