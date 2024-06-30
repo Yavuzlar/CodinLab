@@ -26,9 +26,9 @@ func (h *Handler) Init(devMode bool, middlewares ...func(*fiber.Ctx) error) *fib
 		app.Use(middlewares[i])
 	}
 	if devMode {
-		app.Static("/docs/", "./docs")                    // default // air ile çalışıldığından ./docs/ olarak değiştirildi.
+		app.Static("/api/dev/docs/", "./docs")            // default // air ile çalışıldığından ./docs/ olarak değiştirildi.
 		app.Get("/api/dev/*", swagger.New(swagger.Config{ // custom
-			URL:          "/docs/swagger.yaml",
+			URL:          "/api/dev/docs/swagger.yaml",
 			DocExpansion: "none",
 		}))
 	}
