@@ -7,8 +7,6 @@ const breakpoints = {
     mdlg: 1024,
     mdxl: 1080,
     mdmd: 800,
-    md: 900,
-    mdlg: 1024,
     lg: 1200,
     lgPlus: 1280,
     lgXl: 1440,

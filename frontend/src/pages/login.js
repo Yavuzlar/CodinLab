@@ -30,6 +30,7 @@ import visibilityOffIcon from "../assets/icons/icons8-eye-1.png";
 import Image from "next/image";
 import manImg from "../assets/3d/3d-casual-life-young-man-sitting-with-laptop-and-waving.png";
 import { useTranslation } from "next-i18next";
+import themeConfig from "src/configs/themeConfig";
 const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Login = () => {
@@ -148,7 +149,7 @@ const Login = () => {
                     font: "normal normal bold 35px/44px Outfit;",
                   }}
                 >
-                  CodinLab
+                  {themeConfig.projectName}
                 </Typography>
               </Grid>
               <Grid item xs={12} sx={{ width: "100%", mt: "2.5rem" }}>
@@ -157,7 +158,7 @@ const Login = () => {
                     // display: visibleEmailLabel ? "block" : "none",
                     mb: "0.438rem",
                     ml: "1.438rem",
-                    color: "#0A3B7A",
+                    color: (theme) => `${theme.palette.border.secondary}`,
                     fontWeight: "bold",
                     transform: visibleEmailLabel
                       ? "translateY(0)"
@@ -243,23 +244,21 @@ const Login = () => {
                             onClick={handleClickShowPassword}
                             edge="end"
                           >
-                            {showPassword ? (
-                              <Image
-                                style={{ zIndex: 99 }}
-                                src={visibilityOnIcon}
-                                alt="visibilityOnIcon"
-                                width={30}
-                                height={30}
-                              />
-                            ) : (
-                              <Image
-                                style={{ zIndex: 99 }}
-                                src={visibilityOffIcon}
-                                alt="visibilityOnIcon"
-                                width={30}
-                                height={30}
-                              />
-                            )}
+                            <Image
+                              style={{ zIndex: 99 }}
+                              src={
+                                showPassword
+                                  ? visibilityOnIcon
+                                  : visibilityOffIcon
+                              }
+                              alt={
+                                showPassword
+                                  ? "visibilityOnIcon"
+                                  : "visibilityOffIcon"
+                              }
+                              width={30}
+                              height={30}
+                            />
                           </IconButton>
                         </InputAdornment>
                       ),
