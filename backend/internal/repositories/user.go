@@ -129,7 +129,7 @@ func (r *UserRepository) Filter(ctx context.Context, filter domains.UserFilter, 
 		ORDER BY created_at DESC
 		LIMIT ? OFFSET ?
 	`
-	err = r.db.Select(&dbResult, query, dbFilter.Id, dbFilter.Id, dbFilter.Username, dbFilter.Username, dbFilter.Name, dbFilter.Name, dbFilter.Surname, dbFilter.Surname, dbFilter.Role, dbFilter.Role, limit, (page-1)*limit)
+	err = r.db.SelectContext(ctx, &dbResult, query, dbFilter.Id, dbFilter.Id, dbFilter.Username, dbFilter.Username, dbFilter.Name, dbFilter.Name, dbFilter.Surname, dbFilter.Surname, dbFilter.Role, dbFilter.Role, limit, (page-1)*limit)
 	if err != nil {
 		return
 	}

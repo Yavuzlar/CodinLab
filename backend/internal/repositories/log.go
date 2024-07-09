@@ -124,7 +124,7 @@ func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (l
 		(? IS NULL OR content LIKE CONCAT('%', ?, '%'))
 	`
 
-	err = r.db.Select(&dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.UserID, dbFilter.UserID, dbFilter.LanguageID, dbFilter.LanguageID, dbFilter.LabPathID, dbFilter.LabPathID, dbFilter.Type, dbFilter.Type, dbFilter.Content, dbFilter.Content)
+	err = r.db.SelectContext(ctx, &dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.UserID, dbFilter.UserID, dbFilter.LanguageID, dbFilter.LanguageID, dbFilter.LabPathID, dbFilter.LabPathID, dbFilter.Type, dbFilter.Type, dbFilter.Content, dbFilter.Content)
 	if err != nil {
 		return
 	}
