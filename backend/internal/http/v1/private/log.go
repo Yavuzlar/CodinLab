@@ -51,6 +51,7 @@ func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 			UserID:     log.UserID(),
 			LanguageID: log.LanguageID(),
 			LabRoadID:  log.LabPathID(),
+			LType:      log.Type(),
 			Content:    log.Content(),
 		}
 		logDTOs = append(logDTOs, logDTO)

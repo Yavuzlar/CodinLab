@@ -128,7 +128,7 @@ func (s *roadService) GetRoadFilter(userID string, roadId, pathId int, isStarted
 
 		var newRoadList []domains.Path
 		for _, road := range roadCollection.Paths {
-			if pathId != 0 {
+			if pathId != 0 && road.ID != pathId {
 				continue
 			}
 			if isStarted != false && road.IsStarted != isStarted {

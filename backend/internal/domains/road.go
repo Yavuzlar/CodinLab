@@ -1,4 +1,3 @@
-
 package domains
 
 // IRoadService is the interface that provides the methods for the road service.
@@ -29,8 +28,8 @@ type ParamR struct {
 
 // Quest represents a coding challenge or task.
 type QuestR struct {
-	Difficulty int     `json:"difficulty"`
-	FuncName   string  `json:"funcName"`
+	Difficulty int      `json:"difficulty"`
+	FuncName   string   `json:"funcName"`
 	Tests      []TestR  `json:"tests"`
 	Params     []ParamR `json:"params"`
 }
@@ -39,9 +38,9 @@ type QuestR struct {
 type Path struct {
 	ID         int         `json:"id"`
 	Languages  []LanguageR `json:"languages"`
-	Quest      QuestR       `json:"quest"`
-	IsStarted  bool      `json:"isStarted"`
-	IsFinished bool      `json:"isFinished"`
+	Quest      QuestR      `json:"quest"`
+	IsStarted  bool        `json:"isStarted"`
+	IsFinished bool        `json:"isFinished"`
 }
 
 // Roads represents a collection of roads grouped together.
@@ -50,6 +49,5 @@ type Roads struct {
 	Name        string `json:"name"`
 	DockerImage string `json:"dockerImage"`
 	IconPath    string `json:"iconPath"`
-	Paths       []Path `json:"labs"`
+	Paths       []Path `json:"paths"`
 }
-
