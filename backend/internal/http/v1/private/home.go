@@ -34,13 +34,14 @@ type AdvancementDTO struct {
 }
 
 func (h *PrivateHandler) initHomeRoutes(root fiber.Router) {
-	root.Get("/home/inventories", h.GetInventories)
-	root.Get("/home/level", h.GetUserLevel)
-	root.Get("/home/development", h.GetUserDevelopment)
-	root.Get("/home/advancement", h.GetUserAdvancement)
-	root.Get("/home/welcome", h.GetWelcomeContent)
-	root.Get("/home/road", h.GetRoadContent)
-	root.Get("/home/lab", h.GetLabContent)
+	homeRoute := root.Group("/home")
+	homeRoute.Get("/inventories", h.GetInventories)
+	homeRoute.Get("/level", h.GetUserLevel)
+	homeRoute.Get("/development", h.GetUserDevelopment)
+	homeRoute.Get("/advancement", h.GetUserAdvancement)
+	homeRoute.Get("/welcome", h.GetWelcomeContent)
+	homeRoute.Get("/road", h.GetRoadContent)
+	homeRoute.Get("/lab", h.GetLabContent)
 	// initialize routes
 	// Buraya yeni route'lar eklenecek lütfen Swagger'da belirtmeyi unutmayın
 }
