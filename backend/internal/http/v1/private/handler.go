@@ -37,6 +37,7 @@ func (h *PrivateHandler) Init(router fiber.Router) {
 	h.initLogRoutes(root)
 	h.initUserRoutes(root)
 	h.initLabRoutes(root)
+	h.initHomeRoutes(root)
 	// initialize routes
 	// Buraya yeni route'lar eklenecek
 

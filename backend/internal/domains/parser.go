@@ -6,6 +6,9 @@ type IParserService interface {
 	GetRoads() (roads []RoadP, err error)
 	GetInventory() (inventory []InventoryP, err error)
 	GetLevels() (userLevel []LevelP, err error)
+	GetWelcomeBanner() (content []WelcomeContent, err error)
+	GetLabBanner() (content []LabContent, err error)
+	GetRoadBanner() (content []RoadContent, err error)
 }
 
 // Inventory represents the information related to an item in inventory.
@@ -86,4 +89,25 @@ type LevelP struct {
 	MinPoints int32       `json:"minPoints"`
 	MaxPoints int32       `json:"maxPoints"`
 	Languages []LanguageP `json:"languages"`
+}
+
+// The structure of the Welcome content on the home page
+type WelcomeContent struct {
+	Lang        string `json:"lang"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+}
+
+// The structure of the Road content on the home page
+type RoadContent struct {
+	Lang        string `json:"lang"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+}
+
+// The structure of the Lab content on the home page
+type LabContent struct {
+	Lang        string `json:"lang"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }

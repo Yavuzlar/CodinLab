@@ -199,3 +199,63 @@ func (s *parserService) GetLevels() (levels []domains.LevelP, err error) {
 	}
 	return
 }
+
+func (s *parserService) GetWelcomeBanner() (content []domains.WelcomeContent, err error) {
+	// Ensure the "object" directory exists
+	err = s.checkDir("object")
+	if err != nil {
+		return nil, err
+	}
+	// Read the JSON file containing welcome information
+	jsonData, err := os.ReadFile("object/home/welcome.json")
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal the JSON data into level slice
+	err = json.Unmarshal(jsonData, &content)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (s *parserService) GetLabBanner() (content []domains.LabContent, err error) {
+	// Ensure the "object" directory exists
+	err = s.checkDir("object")
+	if err != nil {
+		return nil, err
+	}
+	// Read the JSON file containing welcome information
+	jsonData, err := os.ReadFile("object/home/lab.json")
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal the JSON data into level slice
+	err = json.Unmarshal(jsonData, &content)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (s *parserService) GetRoadBanner() (content []domains.RoadContent, err error) {
+	// Ensure the "object" directory exists
+	err = s.checkDir("object")
+	if err != nil {
+		return nil, err
+	}
+	// Read the JSON file containing welcome information
+	jsonData, err := os.ReadFile("object/home/road.json")
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal the JSON data into level slice
+	err = json.Unmarshal(jsonData, &content)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
