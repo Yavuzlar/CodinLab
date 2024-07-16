@@ -13,6 +13,8 @@
   "roads.content": "Lay the basics of programming (software) languages firmly and move step by step through the coding universe with Roads!",
   "register.name": "Name",
   "register.surname": "Surname",
+  "register.name": "Name",
+  "register.surname": "Surname",
   "register.username": "Username",
   "register.email": "E-mail",
   "register.password": "Password",
