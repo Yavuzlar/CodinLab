@@ -55,6 +55,15 @@
   "register.or": "or",
   "register.signup": "Sign Up",
   "register.already": "Already have an account?",
+  "register.login": "Login",
+  "register.nameError": "Name is required",
+  "register.surnameError": "Surname is required",
+  "register.usernameError": "Username is required",
+  "register.emailError": "Invalid email",
+  "register.emailRequiredError": "Email is required",
+  "register.passwordError": "Password is required",
+  "register.passwordMinError": "Password must be at least 8 characters",
+  "register.checkboxError": "Please accept the policy & terms to proceed",
   "register.githubProfile": "Github Username",
   "register.githubProfileError": "Github username is required"
 }
