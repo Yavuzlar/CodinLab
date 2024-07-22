@@ -198,6 +198,14 @@ const Register = () => {
                     helperText={errors.username}
                   />
                   <TextField
+                    name="githubProfile"
+                    label={<Translations text="register.githubProfile" />}
+                    InputLabelProps={inputLabelStyle}
+                    onChange={handleChange}
+                    error={errors.githubProfile ? true : false}
+                    helperText={errors.githubProfile}
+                  />
+                  <TextField
                     name="email"
                     label={<Translations text="register.email" />}
                     InputLabelProps={inputLabelStyle}
@@ -216,11 +224,16 @@ const Register = () => {
                     helperText={errors.password}
                     InputProps={{
                       endAdornment: (
-                        <InputAdornment position="end">
+                        <InputAdornment>
                           <IconButton
+                            sx={{ zIndex: 999 }}
                             aria-label="toggle password visibility"
                             onClick={handleClickShowPassword}>
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? (
+                              <VisibilityOff sx={{ color: "#000" }} />
+                            ) : (
+                              <Visibility sx={{ color: "#000" }} />
+                            )}
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -239,7 +252,6 @@ const Register = () => {
                             color: errors.checkbox ? "red" : "#FFF",
                           },
                         }}
-                        onChange={handleChange}
                         error={errors.checkbox ? true : false}
                       />
                     }
