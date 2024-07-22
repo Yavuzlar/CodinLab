@@ -14,6 +14,9 @@ export const registerValidation = async (values) => {
     githubProfile: yup
       .string()
       .required(<Translations text="register.githubProfileError" />),
+    email: yup
+      .string()
+      .required(<Translations text="register.githubProfileError" />),
     password: yup
       .string()
       .required(<Translations text="register.passwordError" />)
