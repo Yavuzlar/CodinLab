@@ -1,7 +1,6 @@
 package private
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
