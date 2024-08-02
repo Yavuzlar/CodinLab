@@ -9,7 +9,7 @@ import (
 
 func (h *PrivateHandler) initAdminRoutes(root fiber.Router) {
 	adminRoute := root.Group("/admin")
-	//adminRoute.Use(h.adminAuthMiddleware)
+	adminRoute.Use(h.adminAuthMiddleware)
 	adminRoute.Get("/user/:id", h.GetUserProfile)
 	adminRoute.Put("/user/:id", h.UpdateUser)
 	adminRoute.Get("/users", h.GetAllUsers)
