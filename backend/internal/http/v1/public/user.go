@@ -58,6 +58,7 @@ func (h *PublicHandler) Login(c *fiber.Ctx) error {
 	if err := sess.Save(); err != nil {
 		return err
 	}
+
 	return response.Response(200, "Login successful", nil)
 }
 

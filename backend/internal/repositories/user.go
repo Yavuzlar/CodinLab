@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/google/uuid"
@@ -149,7 +150,7 @@ func (r *UserRepository) Add(ctx context.Context, user *domains.User) (err error
 			VALUES
 		(:id, :username, :password, :name, :surname, :role, :github_profile)
 	`
-
+	fmt.Println(user.ID())
 	_, err = r.db.NamedExecContext(ctx, query, dbModel)
 	if err != nil {
 		return

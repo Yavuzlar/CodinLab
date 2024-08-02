@@ -157,3 +157,23 @@ func (l *logService) IsExists(ctx context.Context, logID string) (isExists bool,
 
 	return
 }
+
+// author: yasir
+func (l *logService) CountSolutionsByDay(ctx context.Context) (solutions []domains.SolutionsByDay, err error) {
+	solutions, err = l.logRepositories.CountSolutionsByDay(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return solutions, err
+}
+
+// author: yasir
+func (l *logService) CountSolutionsHoursByLanguageLast7Days(ctx context.Context) (solutions []domains.SolutionsHoursByLanguage, err error) {
+	solutions, err = l.logRepositories.CountSolutionsHoursByLanguageLast7Days(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return solutions, err
+}

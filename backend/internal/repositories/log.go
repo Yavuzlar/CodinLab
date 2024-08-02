@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/google/uuid"
@@ -22,6 +23,27 @@ type dbModelLogs struct {
 	Type       sql.NullString `db:"type"`
 	Content    sql.NullString `db:"content"`
 	CreatedAt  sql.NullTime   `db:"created_at"`
+}
+
+// lab and road numbers solved day by day
+// author: yasir
+type dbModelSolutionsByDay struct {
+	Date      string `db:"date"`
+	RoadCount int    `db:"road_count"`
+	LabCount  int    `db:"lab_count"`
+}
+
+// author: yasir
+func (r *LogRepository) dbModelSolutionsByDayToAppModel(dbModelSolutionsByDay dbModelSolutionsByDay) (solutionsByDay domains.SolutionsByDay, err error) {
+	date, parseErr := time.Parse("2006-01-02", dbModelSolutionsByDay.Date)
+	if parseErr != nil {
+		return domains.SolutionsByDay{}, parseErr
+	}
+	return domains.SolutionsByDay{
+		Date:      date,
+		RoadCount: dbModelSolutionsByDay.RoadCount,
+		LabCount:  dbModelSolutionsByDay.LabCount,
+	}, nil
 }
 
 // dbModelToAppModel converts dbModelLogs to domains.Log for application operations (e.g. return to client)
@@ -194,4 +216,88 @@ func (r *LogRepository) IsExists(ctx context.Context, log *domains.LogFilter) (e
 		return false, err
 	}
 	return exists, nil
+}
+
+// CountSolutionsByDay counts the number of lab and road solutions completed each day.
+func (r *LogRepository) CountSolutionsByDay(ctx context.Context) (solutions []domains.SolutionsByDay, err error) {
+	var dbModelSolutions []dbModelSolutionsByDay
+
+	query := `
+    SELECT 
+        DATE(created_at) AS date,
+        SUM(CASE WHEN type = 'Road' AND content = 'Completed' THEN 1 ELSE 0 END) AS road_count,
+        SUM(CASE WHEN type = 'Lab' AND content = 'Completed' THEN 1 ELSE 0 END) AS lab_count
+    FROM 
+        t_logs
+    WHERE
+        content = 'Completed'
+    GROUP BY 
+        DATE(created_at)
+    ORDER BY 
+        DATE(created_at) DESC
+    `
+
+	err = r.db.SelectContext(ctx, &dbModelSolutions, query)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, dbModelSolution := range dbModelSolutions {
+		appModelSolution, parseErr := r.dbModelSolutionsByDayToAppModel(dbModelSolution)
+		if parseErr != nil {
+			return nil, parseErr
+		}
+		solutions = append(solutions, appModelSolution)
+	}
+
+	return solutions, nil
+}
+
+// SolutionsHoursByLanguage represents the total hours spent on lab and road solutions for each language.
+type dbModelSolutionsHoursByLanguage struct {
+	LanguageID     int32   `db:"language_id"`
+	TotalLabHours  float64 `db:"total_lab_hours"`
+	TotalRoadHours float64 `db:"total_road_hours"`
+}
+
+// CountSolutionsHoursByLanguageLast7Days counts the total hours spent on lab and road solutions in the last 7 days for each language.
+func (r *LogRepository) CountSolutionsHoursByLanguageLast7Days(ctx context.Context) (solutionsHours []domains.SolutionsHoursByLanguage, err error) {
+	query := `
+	SELECT
+		l1.language_id,
+		SUM(CASE WHEN l1.type = 'Lab' THEN (JULIANDAY(l2.created_at) - JULIANDAY(l1.created_at)) * 24 ELSE 0 END) AS total_lab_hours,
+		SUM(CASE WHEN l1.type = 'Road' THEN (JULIANDAY(l2.created_at) - JULIANDAY(l1.created_at)) * 24 ELSE 0 END) AS total_road_hours
+	FROM
+		t_logs l1
+	JOIN
+		t_logs l2 ON l1.user_id = l2.user_id
+	             AND l1.language_id = l2.language_id
+	             AND l1.lab_path_id = l2.lab_path_id
+	             AND l1.type = l2.type
+	             AND l1.content = 'Started'
+	             AND l2.content = 'Completed'
+	             AND l1.created_at < l2.created_at
+	WHERE
+		l1.type IN ('Road', 'Lab')
+		AND l1.created_at >= DATE('now', '-7 days')
+	GROUP BY
+		l1.language_id
+	`
+
+	var dbModelSolutionsHours []dbModelSolutionsHoursByLanguage
+
+	err = r.db.SelectContext(ctx, &dbModelSolutionsHours, query)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, result := range dbModelSolutionsHours {
+		solutionsHours = append(solutionsHours, domains.SolutionsHoursByLanguage{
+			LanguageID: result.LanguageID,
+			LabHours:   result.TotalLabHours,
+			RoadHours:  result.TotalRoadHours,
+		})
+	}
+
+	return solutionsHours, nil
 }

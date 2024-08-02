@@ -15,6 +15,134 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/private/admin/user": {
+            "post": {
+                "description": "User Creation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Creates User",
+                "parameters": [
+                    {
+                        "description": "User",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/private.CreateUserDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/admin/user/{id}": {
+            "get": {
+                "description": "Gets user profile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "GetProfile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/private.UserDTO"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/admin/users": {
+            "get": {
+                "description": "Retrieves all users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get All Users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/private.GetUserDTO"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/home/advancement": {
             "get": {
                 "description": "Get User Advancement",
@@ -317,6 +445,82 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/log/solution/byday": {
+            "get": {
+                "description": "Retrieves the number of lab and road solutions solved day by day.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "GetSolutionsByDay",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/private.SolutionsByDayDTO"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/private/log/solution/hours": {
+            "get": {
+                "description": "Retrieves the total hours spent on lab and road solutions for each language in the last week.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "GetSolutionsHoursByLanguage",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/private.SolutionsHoursByLanguageDTO"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/private/road/start": {
             "post": {
                 "description": "Start",
@@ -583,6 +787,68 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "private.CreateUserDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "password",
+                "role",
+                "surname",
+                "username"
+            ],
+            "properties": {
+                "githubProfile": {
+                    "description": "Github Profile is must be max 30 characters long.",
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "name": {
+                    "description": "Name is required",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "Password is required and must be at least 8 characters",
+                    "type": "string",
+                    "minLength": 8
+                },
+                "role": {
+                    "type": "string"
+                },
+                "surname": {
+                    "description": "Surname is required",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "Username is required, must be alphanumeric and between 3-30 characters",
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 3
+                }
+            }
+        },
+        "private.GetUserDTO": {
+            "type": "object",
+            "properties": {
+                "bestLanguage": {
+                    "type": "string"
+                },
+                "githubProfile": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "private.LanguageDTO": {
             "type": "object",
             "properties": {
@@ -666,6 +932,34 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/private.PathDTO"
                     }
+                }
+            }
+        },
+        "private.SolutionsByDayDTO": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "labCount": {
+                    "type": "integer"
+                },
+                "roadCount": {
+                    "type": "integer"
+                }
+            }
+        },
+        "private.SolutionsHoursByLanguageDTO": {
+            "type": "object",
+            "properties": {
+                "lab_hours": {
+                    "type": "number"
+                },
+                "language_id": {
+                    "type": "integer"
+                },
+                "road_hours": {
+                    "type": "number"
                 }
             }
         },

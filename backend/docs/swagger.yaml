@@ -1,5 +1,50 @@
 basePath: /api/v1
 definitions:
+  private.CreateUserDTO:
+    properties:
+      githubProfile:
+        description: Github Profile is must be max 30 characters long.
+        maxLength: 30
+        type: string
+      name:
+        description: Name is required
+        type: string
+      password:
+        description: Password is required and must be at least 8 characters
+        minLength: 8
+        type: string
+      role:
+        type: string
+      surname:
+        description: Surname is required
+        type: string
+      username:
+        description: Username is required, must be alphanumeric and between 3-30 characters
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - name
+    - password
+    - role
+    - surname
+    - username
+    type: object
+  private.GetUserDTO:
+    properties:
+      bestLanguage:
+        type: string
+      githubProfile:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+      username:
+        type: string
+    type: object
   private.LanguageDTO:
     properties:
       content:
@@ -55,6 +100,24 @@ definitions:
         items:
           $ref: '#/definitions/private.PathDTO'
         type: array
+    type: object
+  private.SolutionsByDayDTO:
+    properties:
+      date:
+        type: string
+      labCount:
+        type: integer
+      roadCount:
+        type: integer
+    type: object
+  private.SolutionsHoursByLanguageDTO:
+    properties:
+      lab_hours:
+        type: number
+      language_id:
+        type: integer
+      road_hours:
+        type: number
     type: object
   private.StartDTO:
     properties:
@@ -157,6 +220,84 @@ info:
   title: API Service
   version: v1
 paths:
+  /private/admin/user:
+    post:
+      consumes:
+      - application/json
+      description: User Creation
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/private.CreateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Creates User
+      tags:
+      - Admin
+  /private/admin/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Gets user profile
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/private.UserDTO'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetProfile
+      tags:
+      - Admin
+  /private/admin/users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/private.GetUserDTO'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get All Users
+      tags:
+      - Admin
   /private/home/advancement:
     get:
       consumes:
@@ -350,6 +491,51 @@ paths:
                   type: array
               type: object
       summary: Get all logs
+      tags:
+      - Log
+  /private/log/solution/byday:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the number of lab and road solutions solved day by day.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/private.SolutionsByDayDTO'
+                  type: array
+              type: object
+      summary: GetSolutionsByDay
+      tags:
+      - Log
+  /private/log/solution/hours:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the total hours spent on lab and road solutions for each
+        language in the last week.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/private.SolutionsHoursByLanguageDTO'
+                  type: array
+              type: object
+      summary: GetSolutionsHoursByLanguage
       tags:
       - Log
   /private/road/{roadId}:

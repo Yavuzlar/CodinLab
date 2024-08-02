@@ -1,6 +1,9 @@
 package private
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -8,6 +11,8 @@ import (
 
 func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 	root.Get("/log", h.GetAllLogs)
+	root.Get("/log/solution/byday", h.GetSolutionsByDay)
+	root.Get("/log/solution/hours", h.GetSolutionsHoursByLanguage)
 }
 
 type LogDTO struct {
@@ -17,6 +22,22 @@ type LogDTO struct {
 	LabRoadID  int32     `json:"labRoadID"`
 	LType      string    `json:"type"`
 	Content    string    `json:"content"`
+}
+
+// lab and road numbers solved day by day
+// author: yasir
+type SolutionsByDayDTO struct {
+	Date      time.Time
+	RoadCount int
+	LabCount  int
+}
+
+// SolutionsHoursByLanguage represents the total hours spent on lab and road solutions for each language.
+// author: yasir
+type SolutionsHoursByLanguageDTO struct {
+	LanguageID int32   `json:"language_id"`
+	LabHours   float64 `json:"lab_hours"`
+	RoadHours  float64 `json:"road_hours"`
 }
 
 // @Tags Log
@@ -38,7 +59,7 @@ func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 	content := c.Query("content")
 	logType := c.Query("type")
 
-	logs, err := h.services.LogService.GetAllLogs(c.Context(), userID, languageID, labRoadID, content, logType)
+	logs, err := h.services.LogService.GetAllLogs(c.Context(), userID, languageID, labRoadID, logType, content)
 	if err != nil {
 		return err
 	}
@@ -58,4 +79,54 @@ func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "Status OK", logDTOs)
+}
+
+// @Tags Log
+// @Summary GetSolutionsByDay
+// @Description Retrieves the number of lab and road solutions solved day by day.
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{data=[]SolutionsByDayDTO}
+// @Router /private/log/solution/byday [get]
+func (h *PrivateHandler) GetSolutionsByDay(c *fiber.Ctx) error {
+	solutionsByDay, err := h.services.LogService.CountSolutionsByDay(c.Context())
+	if err != nil {
+		return err
+	}
+
+	var solutionsByDayDTOs []SolutionsByDayDTO
+	for _, solution := range solutionsByDay {
+		solutionsByDayDTOs = append(solutionsByDayDTOs, SolutionsByDayDTO{
+			Date:      solution.Date,
+			RoadCount: solution.RoadCount,
+			LabCount:  solution.LabCount,
+		})
+	}
+
+	return response.Response(200, "Status OK", solutionsByDayDTOs)
+}
+
+// @Tags Log
+// @Summary GetSolutionsHoursByLanguage
+// @Description Retrieves the total hours spent on lab and road solutions for each language in the last week.
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{data=[]SolutionsHoursByLanguageDTO}
+// @Router /private/log/solution/hours [get]
+func (h *PrivateHandler) GetSolutionsHoursByLanguage(c *fiber.Ctx) error {
+	solutionsHours, err := h.services.LogService.CountSolutionsHoursByLanguageLast7Days(c.Context())
+	if err != nil {
+		return err
+	}
+
+	var solutionsHoursDTOs []SolutionsHoursByLanguageDTO
+	for _, solution := range solutionsHours {
+		solutionsHoursDTOs = append(solutionsHoursDTOs, SolutionsHoursByLanguageDTO{
+			LanguageID: solution.LanguageID,
+			LabHours:   solution.LabHours,
+			RoadHours:  solution.RoadHours,
+		})
+	}
+
+	return response.Response(200, "Status OK", solutionsHoursDTOs)
 }

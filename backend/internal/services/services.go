@@ -14,6 +14,7 @@ type Services struct {
 	RoadService   domains.IRoadService
 	LevelService  domains.ILevelService
 	HomeService   domains.IHomeService
+	AdminService  domains.IAdminService
 	// diğer servisler buraya eklenecek
 }
 
@@ -33,6 +34,7 @@ func CreateNewServices(
 	labService := newLabService(utilsService, logService, parserService)
 	roadService := newRoadService(utilsService, logService, parserService)
 	homeService := newHomeService(utilsService, logService, parserService, levelService)
+	adminService := newAdminService(userRepositories, logService, parserService, utilsService)
 	// diğer servisler buraya eklenecek
 
 	return &Services{
@@ -45,6 +47,7 @@ func CreateNewServices(
 		RoadService:   roadService,
 		LevelService:  levelService,
 		HomeService:   homeService,
+		AdminService:  adminService,
 		// diğer servisler buraya eklenecek
 
 	}
