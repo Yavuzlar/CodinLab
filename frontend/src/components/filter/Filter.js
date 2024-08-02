@@ -39,7 +39,7 @@ const Filter = ({
 
 
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: '40px', height: '44px' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: '44px', flexWrap: 'wrap' }}>
             <Box sx={{ display: 'flex', gap: '20px' }}>
                 {
                     progressStatuses.map((item, index) => {
@@ -78,7 +78,7 @@ const Filter = ({
                         onChange={(e) => { setFilters({ ...filters, search: e.target.value }) }}
                         InputProps={{
                             startAdornment: (
-                                <InputAdornment sx={{ zIndex: 10, mx: 1 }}>
+                                <InputAdornment sx={{ zIndex: 10, mr: 1 }}>
                                     <Search />
                                 </InputAdornment>
                             ),
@@ -106,7 +106,7 @@ const Filter = ({
                 </FormControl>
             </Box>
 
-            <Box sx={{ height: '100%' }}>
+            <Box sx={{ height: '44px' }}>
                 <SortFilter filters={filters} setFilters={setFilters} />
             </Box>
         </Box>

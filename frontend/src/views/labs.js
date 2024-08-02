@@ -1,8 +1,9 @@
-import { Grid } from "@mui/material";
+import { Box, Card, Grid } from "@mui/material";
 import { useState } from "react";
 import InfoCard from "src/components/cards/Info";
+import LanguageProgress from "src/components/cards/LanguageProgress";
 import Filter from "src/components/filter/Filter";
-import { labs } from "src/data/home";
+import { labs, languages } from "src/data/home";
 
 const Labs = () => {
 
@@ -14,19 +15,34 @@ const Labs = () => {
 
   return (
     <>
-      <Grid container>
-        <Grid item container xs={12} md={7}>
+      <Grid container spacing={2}>
+        <Grid item container xs={12} md={6.5} sx={{ pt: '0px !important' }}>
           <Grid item xs={12}>
-            <Filter filters={filters} setFilters={setFilters} />
-          </Grid>
+            <Box sx={{ display: 'flex', gap: '1rem', flexDirection: 'column', height: '100%' }}>
+              <Filter filters={filters} setFilters={setFilters} />
 
-          <Grid item xs={12}>
-            <InfoCard {...labs} />
+              <InfoCard {...labs} />
+
+              <Grid container spacing={2} sx={{ height: '100%' }}>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ height: '100%' }}></Card>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ height: '100%' }}></Card>
+                </Grid>
+              </Grid>
+            </Box>
           </Grid>
         </Grid>
 
-        <Grid item container xs={12} md={5}>
-
+        <Grid item container xs={12} md={5.5} spacing={2} sx={{ maxHeight: 'calc(100vh - 143px)', overflow: 'auto', pt: '0px !important' }}>
+          {languages.map((language, index) => (
+            <Grid item xs={12} md={12} key={index}>
+              <LanguageProgress language={language} />
+            </Grid>
+          ))}
+          <Grid item xs={12} md={12}></Grid>
         </Grid>
       </Grid>
     </>

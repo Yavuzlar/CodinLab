@@ -12,14 +12,15 @@ const SortFilter = ({ filters, setFilters }) => {
     }, [sort])
 
     return (
-        <Card sx={{
-            width: '100%', height: 'calc(100% - 4px)', cursor: 'pointer',
-            border: "2px solid " + theme.palette.primary.main,
-            "&:hover": {
-                border: "2px solid " + theme.palette.primary.dark,
-            },
+        <Card
+            sx={{
+                width: 'calc(100% - 4px)', height: 'calc(100% - 4px)', cursor: 'pointer',
+                border: "2px solid " + theme.palette.primary.main,
+                "&:hover": {
+                    border: "2px solid " + theme.palette.primary.dark,
+                },
 
-        }}
+            }}
             onClick={() => { setSort((sort + 1) % 3) }}
         >
             <Box sx={{ display: 'flex', alignItems: 'center', p: '0px 16px 0px 8px', height: '100%' }}>
