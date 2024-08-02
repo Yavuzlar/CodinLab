@@ -1,4 +1,7 @@
 {
+  "all": "Hepsi",
+  "in_progress": "Devam ediyor",
+  "completed": "Tamamlandı",
   "home.title": "CodinLab'a Hoşgeldiniz",
   "active_locale": "Türkçe",
   "home.content": "Farklı kodlama dillerinde ustalaşın, fikirlerinizi hayata geçirin ve geleneksel yöntemleri aşan eğlenceli ve etkileşimli bir öğrenme yolculuğunu deneyimleyin.",
@@ -25,5 +28,7 @@
   "login.login.button": "Giriş",
   "login.divider.or": "ya da",
   "login.new.on.platform": "Platformumuzda yeni misiniz?",
-  "login.create.new.account": "Hesap Oluştur"
+  "login.create.new.account": "Hesap Oluştur",
+  "labs.search.placeholder": "Lablarda ara",
+  "labs.sort_the_labs": "Labları sırala"
 }

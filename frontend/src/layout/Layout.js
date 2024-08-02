@@ -2,7 +2,7 @@
 import Navbar from "src/layout/components/Navbar";
 import Footer from "src/layout/components/Footer";
 import ScrollTop from "src/layout/components/ScrollTop";
-// import NextNProgress from "nextjs-progressbar";
+import NextNProgress from "nextjs-progressbar";
 import { useState, useEffect, Fragment } from "react";
 import { Box, Container } from "@mui/material";
 import CustomBreadcrumbs from "src/components/breadcrumbs";
@@ -11,8 +11,8 @@ import navigation from "src/navigation";
 import findParent from "src/utils/findParent";
 
 const Layout = ({ children }) => {
-  
-  
+
+
   const router = useRouter();
 
   const [mounted, setMounted] = useState(false);
@@ -37,42 +37,33 @@ const Layout = ({ children }) => {
 
   return (
     <Fragment>
-      {/* <NextNProgress
-                color="#e11d48"
-                startPosition={0.3}
-                stopDelayMs={200}
-                height={3}
-                showOnShallow={true}
-                options={{ easing: "ease-in-out", speed: 500 }}
-            /> */}
-      {/* <Navbar /> */}
+      <NextNProgress
+        color="#3894d0"
+        startPosition={0.3}
+        stopDelayMs={200}
+        height={3}
+        showOnShallow={true}
+        options={{ easing: "ease-in-out", speed: 500 }}
+      />
+
       <Navbar />
+
+      <Box sx={{ mt: "68px" }}>
+        <Container maxWidth="lgPlus">
+          <CustomBreadcrumbs titles={titles} />
+        </Container>
+      </Box>
 
       <Box
         sx={{
           width: "100%",
-          display: "flex",
-          py: "25px",
-          minHeight: `calc(100vh - 80px)`,
-          // gap: "40px",
+          minHeight: `calc(100vh - 192px)`,
+          pb: "48px",
         }}
       >
-        <Navbar />
-        <Container maxWidth="xxl"> 
-          <Box
-            sx={{
-              // minHeight: `calc(100vh - ${(navbarHeight || 0) + (footerHeight || 0)}px)`
-              position: "relative",
-              minHeight: `calc(100%)`,
-              maxWidth: "100%",
-              width: "100%",
-              // ml: '200px'
-              // px: "140px"
-            }}
-          >
-            <CustomBreadcrumbs titles={titles} />
-
-            <Box sx={{ mt: "1rem" }}>{children}</Box>
+        <Container maxWidth="lgPlus">
+          <Box sx={{ mt: '27px' }}>
+            {children}
           </Box>
         </Container>
       </Box>

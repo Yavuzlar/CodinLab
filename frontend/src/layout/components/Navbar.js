@@ -12,7 +12,6 @@ import themeConfig from "src/configs/themeConfig";
 import navigation from "src/navigation";
 import NavItem from "./navigation/item/NavItem";
 import LanguageSelector from "./navigation/item/LanguageSelector";
-import { MenuItem } from "@mui/material";
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -29,8 +28,8 @@ function ResponsiveAppBar() {
     <AppBar
       // position="static" // removed due to incorrect appreance
       sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters variant="dense" sx={{ mx: 7 }}>
+      <Container maxWidth="lgPlus">
+        <Toolbar disableGutters variant="dense">
           <CircleIcon
             sx={{
               display: { xs: "none", mdlg: "flex" },

@@ -1,8 +1,9 @@
 import { Button, Menu, MenuItem, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Turkish from "src/assets/flags/turkish.png";
 import English from "src/assets/flags/english.png";
+import { useTranslation } from "react-i18next";
 
 const LanguageSelector = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -14,6 +15,25 @@ const LanguageSelector = () => {
     setAnchorEl(null);
   };
   const [language, setLanguage] = useState("turkish");
+
+
+  const { i18n } = useTranslation()
+
+  useEffect(() => {
+    switch (language) {
+      case "turkish":
+        i18n.changeLanguage("tr")
+        break;
+
+      case "english":
+        i18n.changeLanguage("en")
+
+      default:
+        i18n.changeLanguage("en")
+        break;
+    }
+  }, [language])
+
   return (
     <>
       <Button

@@ -1,4 +1,7 @@
 {
+  "all": "All",
+  "in_progress": "In Progress",
+  "completed": "Completed",
   "home.title": "Welcome to CodinLab",
   "active_locale": "English",
   "home.content": "Master diverse coding languages, bring your ideas to life, and experience a fun and interactive learning journey that surpasses traditional methods.",
@@ -25,5 +28,7 @@
   "login.login.button": "Login",
   "login.divider.or": "or",
   "login.new.on.platform": "Are you new on our platform?",
-  "login.create.new.account": "Create an account"
+  "login.create.new.account": "Create an account",
+  "labs.search.placeholder": "Search in labs",
+  "labs.sort_the_labs": "Sort the labs"
 }

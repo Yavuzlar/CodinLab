@@ -5,7 +5,7 @@ const textfield = (theme) => {
         root: ({ ownerState }) => ({
           "& fieldset": {
             border: "none",
-            borderRadius: "15px",
+            borderRadius: "1rem",
             backgroundColor: "#FFF",
           },
           // text color
