@@ -28,8 +28,7 @@ function ResponsiveAppBar() {
   return (
     <AppBar
       // position="static" // removed due to incorrect appreance
-      sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}
-    >
+      sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters variant="dense" sx={{ mx: 7 }}>
           <CircleIcon
@@ -51,8 +50,7 @@ function ResponsiveAppBar() {
               fontWeight: 700,
               color: "inherit",
               textDecoration: "none",
-            }}
-          >
+            }}>
             {themeConfig.projectName}
           </Typography>
 
@@ -76,12 +74,16 @@ function ResponsiveAppBar() {
               fontWeight: 700,
               color: "inherit",
               textDecoration: "none",
-            }}
-          >
+            }}>
             {themeConfig.projectName}
           </Typography>
 
-          <Box sx={{ flexGrow: 0, display: { xs: "flex", mdlg: "none" } }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: { xs: "flex", mdlg: "none" },
+              flexDirection: "column",
+            }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -89,8 +91,7 @@ function ResponsiveAppBar() {
               aria-haspopup="true"
               s
               onClick={handleOpenNavMenu}
-              color="inherit"
-            >
+              color="inherit">
               <MenuIcon />
             </IconButton>
             <Menu
@@ -111,13 +112,12 @@ function ResponsiveAppBar() {
                 display: { xs: "block", mdlg: "none" },
                 mt: "1px",
                 "& .MuiMenu-paper": { backgroundColor: "#0A3B7A" },
-              }}
-            >
-              {navigation.map((item, index) => (
-                <MenuItem>
+              }}>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                {navigation.map((item, index) => (
                   <NavItem key={index} {...item} />
-                </MenuItem>
-              ))}
+                ))}
+              </Box>
               <LanguageSelector isMenu={true} />
             </Menu>
           </Box>
@@ -128,8 +128,7 @@ function ResponsiveAppBar() {
               display: { xs: "none", mdlg: "flex" },
               ml: "auto",
               gap: 13,
-            }}
-          >
+            }}>
             {navigation.map((item, index) => (
               <NavItem key={index} {...item} />
             ))}
