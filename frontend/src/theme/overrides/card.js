@@ -3,7 +3,7 @@ const card = (theme) => {
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: "1.875rem",
+          borderRadius: "1rem",
           backgroundColor: theme.palette.background.paper,
         },
       },

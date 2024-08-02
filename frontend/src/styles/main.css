@@ -1,7 +1,7 @@
 body {
     margin: 0;
     background-color: #DAF0FE;
-    font-family: 'Outfit', sans-serif ;
+    font-family: 'Outfit', sans-serif !important;
 }
 
 a {
