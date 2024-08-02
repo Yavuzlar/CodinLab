@@ -25,5 +25,6 @@
   "login.login.button": "Login",
   "login.divider.or": "or",
   "login.new.on.platform": "Are you new on our platform?",
-  "login.create.new.account": "Create an account"
+  "login.create.new.account": "Create an account",
+  "labs.search.placeholder": "Search in labs"
 }

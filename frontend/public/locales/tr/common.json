@@ -25,5 +25,6 @@
   "login.login.button": "Giriş",
   "login.divider.or": "ya da",
   "login.new.on.platform": "Platformumuzda yeni misiniz?",
-  "login.create.new.account": "Hesap Oluştur"
+  "login.create.new.account": "Hesap Oluştur",
+  "labs.search.placeholder": "Lablarda ara"
 }
