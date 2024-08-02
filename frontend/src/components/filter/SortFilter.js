@@ -1,6 +1,7 @@
 import { PlayArrow } from "@mui/icons-material"
 import { Box, Card, Typography, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
+import Translations from "../Translations"
 
 const SortFilter = ({ filters, setFilters }) => {
     const theme = useTheme()
@@ -39,7 +40,7 @@ const SortFilter = ({ filters, setFilters }) => {
                 </Box>
 
                 <Typography>
-                    Sort the labs
+                    <Translations text={"labs.sort_the_labs"} />
                 </Typography>
             </Box>
         </Card>

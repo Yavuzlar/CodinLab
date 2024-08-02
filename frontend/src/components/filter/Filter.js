@@ -24,15 +24,15 @@ const Filter = ({
 
     const progressStatuses = [
         {
-            name: "All",
+            name: t("all"),
             status: "all"
         },
         {
-            name: "In Progress",
+            name: t("in_progress"),
             status: "in-progress"
         },
         {
-            name: "Completed",
+            name: t("completed"),
             status: "completed"
         }
     ]
