@@ -176,6 +176,7 @@ func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 }
 
 func (r *LogRepository) IsExists(ctx context.Context, log *domains.Log) (exists bool, err error) {
+	// if log type is user you can add multiple log.
 	if canMultipleLogExists(log.Type()) {
 		return false, nil
 	}
