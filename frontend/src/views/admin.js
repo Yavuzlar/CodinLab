@@ -1,46 +1,41 @@
-import { Box, Button, Card, Grid, Typography } from "@mui/material";
+import { Box, Card, Grid, Typography,Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import {time, activity } from "src/data/admin";
+import Translations from "src/components/Translations";
+import Timestatistic from "src/components/cards/Timestatistic";
+import Activity from "src/components/cards/Activity";
 import Image from "next/image";
 import userIcon from "../assets/icons/icons8-male-user-100.png";
 import settingsIcon from "../assets/icons/icons8-settings-128.png";
-import InfoCard from "src/components/cards/Info";
-import { time, activity } from "src/data/admin";
-import Translations from "src/components/Translations";
+
+
+
 
 const Admin = () => {
   const theme = useTheme();
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={8} sx={{ pt: "0px !important" }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Card
-                sx={{
-                  height: "290px",
-                  width: "100%",
-                }}
-              >
-                <InfoCard {...time} />
-              </Card>
-            </Grid>
-            <Grid item xs={12}>
-              <Card
-                sx={{
-                  height: "290px",
-                  width: "100%",
-                }}
-              >
-                <InfoCard {...activity} />
-              </Card>
-            </Grid>
+     <Grid container spacing={2}>
+      {/* left */}
+     <Grid item container xs={12} md={7} sx={{ pt: '0px !important' }}>
+          <Grid item xs={12}>
+            <Box sx={{ display: 'flex', gap: '1rem', flexDirection: 'column', height: '100%' }}>
+            <Box sx={{height:'450px'}}>
+                <Timestatistic {...time}/>
+            </Box>
+            <Box sx={{height:'450px'}}>
+                <Activity {...activity}/>
+            </Box>
+
+            </Box>
           </Grid>
         </Grid>
 
-        <Grid item xs={12} md={4} sx={{ pt: "0px !important" }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Card sx={{ height: "420px", width: "100%" }}>
+
+{/* right */}
+        <Grid item container xs={12} md={5} spacing={2} sx={{ pt: '0px !important' }}>
+          <Grid item xs={12}>
+         <Card sx={{  width: "100%",height:"660px" }}>
                 <Typography
                   variant="h5"
                   sx={{
@@ -49,21 +44,19 @@ const Admin = () => {
                     textAlign: "center",
                   }}
                 >
-                  <Translations text="admin.center.title" />
+                  <Translations text="admin.language.rates" />
                 </Typography>
               </Card>
-            </Grid>
-            <Grid item xs={12}>
-              <Card
-                sx={{
-                  height: "160px",
-                  width: "100%",
-                  boxSizing: "border-box",
-                  padding: "10px",
-                  textAlign: "center",
-                }}
-              >
-                <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+
+              <Card sx={{  width: "100%",height:"235px",marginTop :"20px" }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontWeight: "bold",
+                    padding: "30px",
+                    textAlign: "center",
+                  }}
+                >
                   <Translations text="admin.center.title" />
                 </Typography>
                 <Box
@@ -134,10 +127,14 @@ const Admin = () => {
                   </Button>
                 </Box>
               </Card>
-            </Grid>
           </Grid>
+          
+              
+          
         </Grid>
+
       </Grid>
+      
     </>
   );
 };
