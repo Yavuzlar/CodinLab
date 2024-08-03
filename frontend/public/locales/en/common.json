@@ -30,5 +30,13 @@
   "login.new.on.platform": "Are you new on our platform?",
   "login.create.new.account": "Create an account",
   "labs.search.placeholder": "Search in labs",
-  "labs.sort_the_labs": "Sort the labs"
+  "labs.sort_the_labs": "Sort the labs",
+  "admin.time.title" : "Time Spent & Languages",
+  "admin.time.content" : "This graph shows how much time is spent in which software languages on a weekly basis.",
+  "admin.activity.title" : "Activity Calendar",
+  "admin.activity.content" :"Activities are measured by the completion of roads and labs.",
+  "admin.settings.button" : "Settings",
+  "admin.profile.button" : "Users",
+   "admin.center.title" : "Admin Center",
+  "admin.language.rates" : "Languages Usage Rates"
 }

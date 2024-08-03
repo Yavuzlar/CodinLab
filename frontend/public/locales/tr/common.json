@@ -30,5 +30,13 @@
   "login.new.on.platform": "Platformumuzda yeni misiniz?",
   "login.create.new.account": "Hesap Oluştur",
   "labs.search.placeholder": "Lablarda ara",
-  "labs.sort_the_labs": "Labları sırala"
+  "labs.sort_the_labs": "Labları sırala",
+  "admin.time.title" : "Harcanan Zaman & Diller",
+  "admin.time.content" : "Bu grafik, haftalık bazda hangi yazılım dillerinde ne kadar zaman harcandığını göstermektedir.",
+  "admin.activity.title" : "Aktivite takvimi",
+  "admin.activity.content" :"Aktivite etkinlikleri laboratuvarların tamamlanmasıyla ölçülür.",
+  "admin.settings.button" : "Ayarlar",
+  "admin.profile.button" : "Kullanıcılar",
+  "admin.center.title" : "Yönetim Merkezi",
+  "admin.language.rates" : "Yazılım Dil İlerleme Oranları"
 }
