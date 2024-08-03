@@ -37,11 +37,13 @@ const Admin = () => {
           <Grid item xs={12}>
          <Card sx={{  width: "100%",height:"660px" }}>
                 <Typography
-                  variant="h5"
+                  variant="title"
                   sx={{
                     fontWeight: "bold",
-                    padding: "20px",
-                    textAlign: "center",
+                    padding: "30px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
                   <Translations text="admin.language.rates" />
@@ -50,11 +52,13 @@ const Admin = () => {
 
               <Card sx={{  width: "100%",height:"235px",marginTop :"20px" }}>
                 <Typography
-                  variant="h5"
+                  variant="title"
                   sx={{
                     fontWeight: "bold",
                     padding: "30px",
-                    textAlign: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
                   <Translations text="admin.center.title" />
