@@ -30,6 +30,7 @@ import { registerValidation } from "src/configs/validation/registerSchema";
 import CardImage from "src/assets/3d/3d-casual-life-windows-with-developer-code-symbols.png";
 import GirlImage from "src/assets/3d/3d-casual-life-girl-holding-laptop-and-having-an-idea.png";
 import Translations from "src/components/Translations";
+import { useAuth } from "src/hooks/useAuth";
 
 const Register = () => {
   const [formData, setFormData] = useState(null);
@@ -38,14 +39,32 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const {register} = useAuth()
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     console.log(formData);
   };
 
-  const handleSubmit = async () => {
-    setFormSubmit(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      //Since the data entered was incorrect, it was entered as fake.
+
+      githubProfile : "githubProfile", //when data changes, change this for the new data
+      name : "name", //when data changes, change this for the new data
+      surname : "surname", //when data changes, change this for the new data
+      password : "password", //when data changes, change this for the new data
+      username : "username", //when data changes, change this for the new data
+    }
+
+    try {
+      await register(data)
+    }
+    catch (error) {
+      console.log(error)
+    }
+
   };
 
   useEffect(() => {
