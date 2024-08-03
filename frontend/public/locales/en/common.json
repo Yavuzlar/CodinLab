@@ -1,4 +1,7 @@
 {
+  "all": "All",
+  "in_progress": "In Progress",
+  "completed": "Completed",
   "home.title": "Welcome to CodinLab",
   "active_locale": "English",
   "home.content": "Master diverse coding languages, bring your ideas to life, and experience a fun and interactive learning journey that surpasses traditional methods.",
@@ -6,8 +9,6 @@
   "home.roads.content": "Lay the basics of programming (software) languages firmly and move step by step through the coding universe with Roads!",
   "home.labs.title": "Labs",
   "home.labs.content": "Improve your algorithm and programming skills, get practical experience and put your coding knowledge into practice with Labs!",
-  "roads.title": "Roads",
-  "roads.content": "Lay the basics of programming (software) languages firmly and move step by step through the coding universe with Roads!",
   "register.fullname": "Full name",
   "register.username": "Username",
   "register.email": "E-mail",
@@ -17,5 +18,17 @@
   "register.or": "or",
   "register.signup": "Sign Up",
   "register.already": "Already have an account?",
-  "register.login": "Login"
+  "register.login": "Login",
+  "roads.title": "Roads",
+  "roads.content": "Lay the basis of software languages firmly and move step by step through the coding universe with Roads!",
+  "login.email": "Email",
+  "login.password": "Password",
+  "login.remember.me": "Remember Me",
+  "login.forget.password": "Forgot Password?",
+  "login.login.button": "Login",
+  "login.divider.or": "or",
+  "login.new.on.platform": "Are you new on our platform?",
+  "login.create.new.account": "Create an account",
+  "labs.search.placeholder": "Search in labs",
+  "labs.sort_the_labs": "Sort the labs"
 }

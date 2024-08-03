@@ -1,7 +1,6 @@
 package public
 
 import (
-	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
@@ -38,11 +37,6 @@ func (h *PublicHandler) initUserRoutes(root fiber.Router) {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /public/login [post]
 func (h *PublicHandler) Login(c *fiber.Ctx) error {
-	a := h.services.LogService.Add(c.Context(), "32afd90c-5eab-403c-9f7b-d15eec82d11d", domains.TypeUser, domains.ContentProfile, 1, 0)
-	if a != nil {
-		return a
-	}
-
 	var login LoginDTO
 	if err := c.BodyParser(&login); err != nil {
 		return err
@@ -64,6 +58,7 @@ func (h *PublicHandler) Login(c *fiber.Ctx) error {
 	if err := sess.Save(); err != nil {
 		return err
 	}
+
 	return response.Response(200, "Login successful", nil)
 }
 

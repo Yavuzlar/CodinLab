@@ -2,7 +2,7 @@
 
 const themeConfig = {
   // ** Layout Configs
-  templateName: "CodinLab" /* App Name */,
+  projectName: "CodinLab" /* App Name */,
 
   // ** Routing Configs
   routingLoader: true /* true | false */,

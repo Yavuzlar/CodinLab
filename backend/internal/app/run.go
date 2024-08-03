@@ -72,6 +72,9 @@ func Run(cfg *config.Config) {
 	<-c                                             // This blocks the main thread until an interrupt is received
 	fmt.Println("Gracefully shutting down...")      // Daha iyi yapılabilir !!
 	_ = fiberSrv.Shutdown(context.Background())
+	if err := conn.Close(); err != nil {
+		fmt.Println("Error while closing database connection: ", err.Error())
+	}
 	fmt.Println("Fiber was successful shutdown.")
 }
 

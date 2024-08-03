@@ -1,6 +1,8 @@
 package private
 
 import (
+	"strconv"
+
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -11,8 +13,34 @@ type StartDTO struct {
 	LanguageID int32 `json:"languageID" validate:"required"`
 }
 
+type LanguageDTO struct {
+	Lang        string `json:"lang"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Content     string `json:"content"`
+	Note        string `json:"note"`
+}
+
+type PathDTO struct {
+	ID         int           `json:"id,omitempty"`
+	Name       string        `json:"name,omitempty"`
+	Language   []LanguageDTO `json:"languages"`
+	Difficulty int           `json:"difficulty"`
+	IsStarted  bool          `json:"isStarted"`
+	IsFinished bool          `json:"isFinished"`
+}
+
+type RoadDTO struct {
+	Name     string    `json:"name"`
+	IconPath string    `json:"iconPath"`
+	Paths    []PathDTO `json:"paths"`
+}
+
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
-	root.Post("/road/start", h.Start)
+	roadRoute := root.Group("/road")
+	roadRoute.Post("/start", h.Start)
+	roadRoute.Get("/:roadId", h.GetAllRoads)
+	roadRoute.Get("/:roadId/:pathId", h.GetPath)
 }
 
 // @Tags Road
@@ -62,4 +90,126 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 
 	// if the "Road Started Successfully" message recived. The frontend will redirect the user to the spesific road.
 	return response.Response(200, "Road Started Successfully", nil)
+}
+
+// @Tags Road
+// @Summary GetRoads
+// @Description Get All Roads
+// @Accept json
+// @Produce json
+// @Param roadId path string true "roadId"
+// @Success 200 {object} response.BaseResponse{data=RoadDTO}
+// @Router /private/road/{roadId} [get]
+func (h *PrivateHandler) GetAllRoads(c *fiber.Ctx) error {
+	// NEED ROAD SERVICE FOR BOTTOM
+	// We have to get all roads and send them to the frontend.
+
+	// Recive user session from session_store
+
+	userSession := session_store.GetSessionData(c)
+
+	// Declare and assign roadId variable
+	roadId := c.Params("roadId")
+	num, err := strconv.Atoi(roadId)
+	if err != nil {
+		return response.Response(400, "Invalid ID", nil)
+	}
+
+	// Get all roads
+	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, num, 0, false, false)
+	if err != nil {
+		return err
+	}
+
+	var pathDTOs []PathDTO
+	var roadDTO *RoadDTO
+	for _, road := range roads {
+		for _, path := range road.Paths {
+			var languageDTOs []LanguageDTO
+			for _, lang := range path.Languages {
+				languageDTO := LanguageDTO{
+					Lang:        lang.Lang,
+					Title:       lang.Title,
+					Description: lang.Description,
+					Content:     lang.Content,
+					Note:        lang.Note,
+				}
+				languageDTOs = append(languageDTOs, languageDTO)
+			}
+			pathDTO := PathDTO{
+				ID:         path.ID,
+				Language:   languageDTOs,
+				Difficulty: path.Quest.Difficulty,
+				IsStarted:  path.IsStarted,
+				IsFinished: path.IsFinished,
+			}
+			pathDTOs = append(pathDTOs, pathDTO)
+		}
+		roadDTO = &RoadDTO{
+			Name:     road.Name,
+			IconPath: road.IconPath,
+			Paths:    pathDTOs,
+		}
+	}
+
+	return response.Response(200, "GetRoads successful", roadDTO)
+}
+
+// @Tags Road
+// @Summary GetPathById
+// @Description Get Path By ID
+// @Accept json
+// @Produce json
+// @Param roadId path string true "Road ID"
+// @Param pathId path string true "Path ID"
+// @Success 200 {object} response.BaseResponse{data=PathDTO}
+// @Router /private/road/{roadId}/{pathId} [get]
+func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
+	langID := c.Params("roadId")
+	intLangID, err := strconv.Atoi(langID)
+	if err != nil {
+		return response.Response(400, "Invalid ID", nil)
+	}
+
+	pathID := c.Params("pathId")
+
+	intPathID, err := strconv.Atoi(pathID)
+	if err != nil {
+		return response.Response(400, "Invalid ID", nil)
+	}
+
+	session := session_store.GetSessionData(c)
+	userID := session.UserID
+
+	roadData, err := h.services.RoadService.GetRoadFilter(userID, intLangID, intPathID, false, false)
+	if err != nil {
+		return err
+	}
+	if len(roadData) == 0 {
+		return response.Response(404, "Path not found", nil)
+	}
+	roads := &roadData[0]
+	var pathDTO PathDTO
+	for _, path := range roads.Paths {
+		var langugaeDTOs []LanguageDTO
+		for _, lang := range path.Languages {
+			langugaeDTO := LanguageDTO{
+				Lang:        lang.Lang,
+				Title:       lang.Title,
+				Description: lang.Description,
+				Content:     lang.Content,
+				Note:        lang.Note,
+			}
+			langugaeDTOs = append(langugaeDTOs, langugaeDTO)
+		}
+		pathDTO = PathDTO{
+			Name:       roads.Name,
+			Language:   langugaeDTOs,
+			Difficulty: path.Quest.Difficulty,
+			IsStarted:  path.IsStarted,
+			IsFinished: path.IsFinished,
+		}
+	}
+
+	return response.Response(200, "Path Retrieved Successfully", pathDTO)
 }

@@ -46,8 +46,25 @@ const Register = () => {
     console.log(formData);
   };
 
-  const handleSubmit = async () => {
-    register({formData})
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      //Since the data entered was incorrect, it was entered as fake.
+
+      githubProfile : "githubProfile", //when data changes, change this for the new data
+      name : "name", //when data changes, change this for the new data
+      surname : "surname", //when data changes, change this for the new data
+      password : "password", //when data changes, change this for the new data
+      username : "username", //when data changes, change this for the new data
+    }
+
+    try {
+      await register(data)
+    }
+    catch (error) {
+      console.log(error)
+    }
+
   };
 
   useEffect(() => {

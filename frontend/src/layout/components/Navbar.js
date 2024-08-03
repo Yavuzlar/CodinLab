@@ -12,7 +12,6 @@ import themeConfig from "src/configs/themeConfig";
 import navigation from "src/navigation";
 import NavItem from "./navigation/item/NavItem";
 import LanguageSelector from "./navigation/item/LanguageSelector";
-import { MenuItem } from "@mui/material";
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -29,8 +28,8 @@ function ResponsiveAppBar() {
     <AppBar
       // position="static" // removed due to incorrect appreance
       sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters variant="dense" sx={{ mx: 7 }}>
+      <Container maxWidth="lgPlus">
+        <Toolbar disableGutters variant="dense">
           <CircleIcon
             sx={{
               display: { xs: "none", mdlg: "flex" },
@@ -51,7 +50,7 @@ function ResponsiveAppBar() {
               color: "inherit",
               textDecoration: "none",
             }}>
-            {themeConfig.templateName}
+            {themeConfig.projectName}
           </Typography>
 
           <CircleIcon
@@ -75,10 +74,15 @@ function ResponsiveAppBar() {
               color: "inherit",
               textDecoration: "none",
             }}>
-            {themeConfig.templateName}
+            {themeConfig.projectName}
           </Typography>
 
-          <Box sx={{ flexGrow: 0, display: { xs: "flex", mdlg: "none" } }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: { xs: "flex", mdlg: "none" },
+              flexDirection: "column",
+            }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -108,11 +112,11 @@ function ResponsiveAppBar() {
                 mt: "1px",
                 "& .MuiMenu-paper": { backgroundColor: "#0A3B7A" },
               }}>
-              {navigation.map((item, index) => (
-                <MenuItem>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                {navigation.map((item, index) => (
                   <NavItem key={index} {...item} />
-                </MenuItem>
-              ))}
+                ))}
+              </Box>
               <LanguageSelector isMenu={true} />
             </Menu>
           </Box>

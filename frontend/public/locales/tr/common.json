@@ -1,4 +1,7 @@
 {
+  "all": "Hepsi",
+  "in_progress": "Devam ediyor",
+  "completed": "Tamamlandı",
   "home.title": "CodinLab'a Hoşgeldiniz",
   "active_locale": "Türkçe",
   "home.content": "Farklı kodlama dillerinde ustalaşın, fikirlerinizi hayata geçirin ve geleneksel yöntemleri aşan eğlenceli ve etkileşimli bir öğrenme yolculuğunu deneyimleyin.",
@@ -17,5 +20,15 @@
   "register.or": "ya da",
   "register.signup": "Kayıt Ol",
   "register.already": "Zaten hesabın var mı?",
-  "register.login": "Giriş yap"
+  "register.login": "Giriş yap",
+  "login.email": "Eposta",
+  "login.password": "Parola",
+  "login.remember.me": "Beni Hatırla",
+  "login.forget.password": "Şifreni mi Unuttun?",
+  "login.login.button": "Giriş",
+  "login.divider.or": "ya da",
+  "login.new.on.platform": "Platformumuzda yeni misiniz?",
+  "login.create.new.account": "Hesap Oluştur",
+  "labs.search.placeholder": "Lablarda ara",
+  "labs.sort_the_labs": "Labları sırala"
 }

@@ -37,6 +37,8 @@ func (h *PrivateHandler) Init(router fiber.Router) {
 	h.initLogRoutes(root)
 	h.initUserRoutes(root)
 	h.initLabRoutes(root)
+	h.initHomeRoutes(root)
+	h.initAdminRoutes(root)
 	// initialize routes
 	// Buraya yeni route'lar eklenecek
 
@@ -60,4 +62,24 @@ func (h *PrivateHandler) authMiddleware(c *fiber.Ctx) error {
 	}
 	c.Locals("user", session_data)
 	return c.Next()
+}
+
+func (h *PrivateHandler) adminAuthMiddleware(c *fiber.Ctx) error {
+    session, err := h.sess_store.Get(c)
+    if err != nil {
+        return err
+    }
+    user := session.Get("user")
+    if user == nil {
+        return service_errors.NewServiceErrorWithMessage(401, "unauthorized")
+    }
+    session_data, ok := user.(session_store.SessionData)
+    if !ok {
+        return service_errors.NewServiceErrorWithMessage(500, "session data error")
+    }
+    if session_data.Role != "admin" {
+        return service_errors.NewServiceErrorWithMessage(403, "forbidden")
+    }
+    c.Locals("user", session_data)
+    return c.Next()
 }

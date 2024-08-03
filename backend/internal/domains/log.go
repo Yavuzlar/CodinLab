@@ -13,6 +13,8 @@ type ILogRepository interface {
 	Filter(ctx context.Context, filter LogFilter) (logs []Log, dataCount int64, err error)
 	Add(ctx context.Context, log *Log) (err error)
 	IsExists(ctx context.Context, log *LogFilter) (exists bool, err error)
+	CountSolutionsByDay(ctx context.Context) (solutions []SolutionsByDay, err error)
+	CountSolutionsHoursByLanguageLast7Days(ctx context.Context) (solutions []SolutionsHoursByLanguage, err error)
 }
 
 // ILogService is the interface that provides the methods for the log service.
@@ -25,6 +27,8 @@ type ILogService interface {
 	GetByContent(ctx context.Context, content string) (logs []Log, err error)
 	GetByLanguageID(ctx context.Context, languageID string) (logs []Log, err error)
 	IsExists(ctx context.Context, logID string) (isExists bool, err error)
+	CountSolutionsByDay(ctx context.Context) (solutions []SolutionsByDay, err error)
+	CountSolutionsHoursByLanguageLast7Days(ctx context.Context) (solutions []SolutionsHoursByLanguage, err error)
 }
 
 // LogFilter is the struct that represents the log filter.
@@ -46,6 +50,22 @@ type Log struct {
 	lType      string
 	content    string
 	createdAt  time.Time
+}
+
+// lab and road numbers solved day by day
+// author: yasir
+type SolutionsByDay struct {
+	Date      time.Time
+	RoadCount int
+	LabCount  int
+}
+
+// SolutionsHoursByLanguage represents the total hours spent on lab and road solutions for each language.
+// author: yasir
+type SolutionsHoursByLanguage struct {
+	LanguageID int32
+	LabHours   float64
+	RoadHours  float64
 }
 
 // NewLog creates a new log
