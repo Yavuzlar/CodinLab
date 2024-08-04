@@ -144,13 +144,13 @@ func (l *logService) Add(ctx context.Context, userID, ltype, content string, lan
 	return
 }
 
-func (l *logService) IsExists(ctx context.Context, logID string) (isExists bool, err error) {
-	logIDU, err := uuid.Parse(logID)
+func (l *logService) IsExists(ctx context.Context, userID, ltype, content string, languageID, labPathID int32) (isExists bool, err error) {
+	log, err := domains.NewLog(userID, ltype, content, languageID, labPathID)
 	if err != nil {
-		return false, service_errors.NewServiceErrorWithMessageAndError(400, "invalid log id", err)
+		return false, err
 	}
 
-	isExists, err = l.logRepositories.IsExists(ctx, &domains.LogFilter{ID: logIDU})
+	isExists, err = l.logRepositories.IsExists(ctx, log)
 	if err != nil {
 		return
 	}

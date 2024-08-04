@@ -79,13 +79,19 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 		if err := h.services.DockerService.Pull(c.Context(), "golang:latest"); err != nil {
 			return err
 		}
-
 	}
 
 	// if the road has started. Log will not be created
 	// Log a road start event for the user
-	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.LanguageID, 0); err != nil {
+	ok, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.LanguageID, 0)
+	if err != nil {
 		return err
+	}
+
+	if !ok {
+		if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.LanguageID, 0); err != nil {
+			return err
+		}
 	}
 
 	// if the "Road Started Successfully" message recived. The frontend will redirect the user to the spesific road.

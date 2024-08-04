@@ -12,7 +12,7 @@ import (
 type ILogRepository interface {
 	Filter(ctx context.Context, filter LogFilter) (logs []Log, dataCount int64, err error)
 	Add(ctx context.Context, log *Log) (err error)
-	IsExists(ctx context.Context, log *LogFilter) (exists bool, err error)
+	IsExists(ctx context.Context, log *Log) (exists bool, err error)
 	CountSolutionsByDay(ctx context.Context) (solutions []SolutionsByDay, err error)
 	CountSolutionsHoursByLanguageLast7Days(ctx context.Context) (solutions []SolutionsHoursByLanguage, err error)
 }
@@ -26,7 +26,7 @@ type ILogService interface {
 	GetByType(ctx context.Context, logType string) (logs []Log, err error)
 	GetByContent(ctx context.Context, content string) (logs []Log, err error)
 	GetByLanguageID(ctx context.Context, languageID string) (logs []Log, err error)
-	IsExists(ctx context.Context, logID string) (isExists bool, err error)
+	IsExists(ctx context.Context, userID, ltype, content string, languageID, labPathID int32) (isExists bool, err error)
 	CountSolutionsByDay(ctx context.Context) (solutions []SolutionsByDay, err error)
 	CountSolutionsHoursByLanguageLast7Days(ctx context.Context) (solutions []SolutionsHoursByLanguage, err error)
 }

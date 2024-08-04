@@ -159,34 +159,8 @@ func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (l
 
 // Adds Log
 func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
-	// Checks the logs already in the db. If the log exists then we will not insert a new one.
-	query := `
-    SELECT
-        EXISTS (
-            SELECT 1
-            FROM t_logs
-            WHERE 
-                user_id = :user_id AND 
-                ((language_id IS NULL AND :language_id IS NULL) OR (language_id = :language_id)) AND
-                type = :type AND 
-                content = :content AND 
-                ((lab_path_id IS NULL AND :lab_path_id IS NULL) OR (lab_path_id = :lab_path_id))
-        )
-`
-
-	params := r.dbModelFromAppModel(*log)
-
-	var exists bool
-	err = r.db.GetContext(ctx, &exists, query, params.UserID, params.LanguageID, params.Type, params.Content, params.LabPathID)
-	if err != nil {
-		return err
-	}
-	if exists {
-		return
-	}
-
 	dbModel := r.dbModelFromAppModel(*log)
-	query = `
+	query := `
 		INSERT INTO
 			t_logs
 		(id, user_id, language_id, lab_path_id, type, content)
@@ -201,20 +175,37 @@ func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 	return
 }
 
-func (r *LogRepository) IsExists(ctx context.Context, log *domains.LogFilter) (exists bool, err error) {
+func (r *LogRepository) IsExists(ctx context.Context, log *domains.Log) (exists bool, err error) {
+	// if log type is user you can add multiple log.
+	if canMultipleLogExists(log.Type()) {
+		return false, nil
+	}
+
+	// Checks the logs already in the db. If the log exists then we will not insert a new one.
 	query := `
 		SELECT
 			EXISTS (
 				SELECT 1
 				FROM t_logs
-				WHERE id = :id
+				WHERE 
+					user_id = :user_id AND 
+					((language_id IS NULL AND :language_id IS NULL) OR (language_id = :language_id)) AND
+					type = :type AND 
+					content = :content AND 
+					((lab_path_id IS NULL AND :lab_path_id IS NULL) OR (lab_path_id = :lab_path_id))
 			)
 	`
 
-	err = r.db.GetContext(ctx, &exists, query, log.ID)
+	params := r.dbModelFromAppModel(*log)
+
+	err = r.db.GetContext(ctx, &exists, query, params.UserID, params.LanguageID, params.Type, params.Content, params.LabPathID)
 	if err != nil {
 		return false, err
 	}
+	if exists {
+		return true, nil
+	}
+
 	return exists, nil
 }
 
@@ -300,4 +291,10 @@ func (r *LogRepository) CountSolutionsHoursByLanguageLast7Days(ctx context.Conte
 	}
 
 	return solutionsHours, nil
+}
+
+// Normal
+
+func canMultipleLogExists(logType string) bool {
+	return logType == domains.TypeUser
 }
