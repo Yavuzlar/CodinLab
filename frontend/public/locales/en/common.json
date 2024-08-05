@@ -38,5 +38,12 @@
   "admin.settings.button" : "Settings",
   "admin.profile.button" : "Users",
    "admin.center.title" : "Admin Center",
-  "admin.language.rates" : "Languages Usage Rates"
+  "admin.language.rates" : "Languages Usage Rates",
+  "admin.change.button" : "Save Changes",
+  "admin.password.button" : "Save Password",
+  "admin.change.username" : "Username",
+  "admin.change.github" : "Github Username",
+  "admin.old.password" : "Current Password",
+  "admin.new.password" : "New Password",
+  "admin.confirm.password" : "Confirm New Password"
 }
