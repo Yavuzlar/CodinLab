@@ -10,19 +10,19 @@ import (
 func (h *PrivateHandler) initAdminRoutes(root fiber.Router) {
 	adminRoute := root.Group("/admin")
 	adminRoute.Use(h.adminAuthMiddleware)
-	adminRoute.Get("/user/:id", h.GetUserProfile)
-	adminRoute.Put("/user/:id", h.UpdateUser)
+	adminRoute.Get("/user/:ID", h.GetUserProfile)
+	adminRoute.Put("/user/:ID", h.UpdateUser)
 	adminRoute.Get("/users", h.GetAllUsers)
 	adminRoute.Post("/user", h.CreateUser)
 }
 
 type GetUserDTO struct {
-	Username      string    `json:"username"`
-	Name          string    `json:"name"`
-	Surname       string    `json:"surname"`
-	GithubProfile string    `json:"githubProfile"`
-	BestLanguage  string    `json:"bestLanguage"`
-	ID            uuid.UUID `json:"id"`
+	ID                      uuid.UUID `json:"id"`
+	Username                string    `json:"username"`
+	Name                    string    `json:"name"`
+	Surname                 string    `json:"surname"`
+	GithubProfile           string    `json:"githubProfile"`
+	BestProgrammingLanguage string    `json:"bestProgrammingLanguage"`
 }
 
 type CreateUserDTO struct {
@@ -40,18 +40,18 @@ type CreateUserDTO struct {
 // @Description Gets user profile
 // @Accept json
 // @Produce json
-// @Param id path string true "User ID"
+// @Param ID path string true "User ID"
 // @Success 200 {object} response.BaseResponse{data=UserDTO}
 // @Failure 400 {object} response.BaseResponse
-// @Router /private/admin/user/{id} [get]
+// @Router /private/admin/user/{ID} [get]
 func (h *PrivateHandler) GetUserProfile(c *fiber.Ctx) error {
-	userID := c.Params("id")
+	userID := c.Params("ID")
 	user, err := h.services.AdminService.GetProfile(c.Context(), userID)
 	if err != nil {
 		return err
 	}
 	//best language hangi serviceten alinacak?
-	mostUsedLanguage, err := h.services.UserService.BestLanguage(c.Context(), user.ID().String())
+	mostUsedLanguage, err := h.services.UserService.BestProgrammingLanguages(c.Context(), user.ID().String())
 	if err != nil {
 		return err
 	}

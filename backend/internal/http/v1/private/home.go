@@ -26,7 +26,7 @@ type DevelopmentDto struct {
 }
 
 type AdvancementDTO struct {
-	LangID         int
+	ProgrammingID  int
 	Name           string
 	IconPath       string
 	RoadPercentage int32
@@ -133,7 +133,7 @@ func (h *PrivateHandler) GetUserAdvancement(c *fiber.Ctx) error {
 	var advancementDTOs []AdvancementDTO
 	for _, advancement := range userAdvancement {
 		advancementDTO := AdvancementDTO{
-			LangID:         advancement.LangID(),
+			ProgrammingID:  advancement.ProgrammingID(),
 			Name:           advancement.Name(),
 			IconPath:       advancement.IconPath(),
 			RoadPercentage: advancement.RoadPercentage(),

@@ -43,7 +43,7 @@
                 }
             }
         },
-        "/private/admin/user/{id}": {
+        "/private/admin/user/{ID}": {
             "get": {
                 "description": "Gets user profile",
                 "consumes": [
@@ -60,7 +60,7 @@
                     {
                         "type": "string",
                         "description": "User ID",
-                        "name": "id",
+                        "name": "ID",
                         "in": "path",
                         "required": true
                     }
@@ -298,7 +298,7 @@
                 }
             }
         },
-        "/private/lab/{langId}/{labId}": {
+        "/private/lab/{programmingID}/{labID}": {
             "get": {
                 "description": "Get Lab By Lang ID \u0026 Lab ID",
                 "consumes": [
@@ -310,19 +310,19 @@
                 "tags": [
                     "Lab"
                 ],
-                "summary": "GetLabById",
+                "summary": "GetLabByID",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Lang ID",
-                        "name": "langId",
+                        "name": "programmingID",
                         "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Lab ID",
-                        "name": "labId",
+                        "name": "labID",
                         "in": "path",
                         "required": true
                     }
@@ -337,7 +337,7 @@
                 }
             }
         },
-        "/private/labs/{id}": {
+        "/private/labs/{ID}": {
             "get": {
                 "description": "Get Labs By Lang ID",
                 "consumes": [
@@ -349,12 +349,12 @@
                 "tags": [
                     "Lab"
                 ],
-                "summary": "GetLabsById",
+                "summary": "GetLabsByID",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Labs ID",
-                        "name": "id",
+                        "name": "ID",
                         "in": "path",
                         "required": true
                     }
@@ -391,8 +391,8 @@
                     },
                     {
                         "type": "integer",
-                        "description": "Language ID",
-                        "name": "languageID",
+                        "description": "Programming ID",
+                        "name": "programmingID",
                         "in": "query"
                     },
                     {
@@ -479,7 +479,7 @@
         },
         "/private/log/solution/hours": {
             "get": {
-                "description": "Retrieves the total hours spent on lab and road solutions for each language in the last week.",
+                "description": "Retrieves the total hours spent on lab and road solutions for each programming language in the last week.",
                 "consumes": [
                     "application/json"
                 ],
@@ -489,7 +489,7 @@
                 "tags": [
                     "Log"
                 ],
-                "summary": "GetSolutionsHoursByLanguage",
+                "summary": "GetSolutionsHoursByProgramming",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -504,7 +504,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/private.SolutionsHoursByLanguageDTO"
+                                                "$ref": "#/definitions/private.SolutionsHoursByProgrammingDTO"
                                             }
                                         }
                                     }
@@ -549,7 +549,7 @@
                 }
             }
         },
-        "/private/road/{roadId}": {
+        "/private/road/{roadID}": {
             "get": {
                 "description": "Get All Roads",
                 "consumes": [
@@ -565,8 +565,8 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "roadId",
-                        "name": "roadId",
+                        "description": "roadID",
+                        "name": "roadID",
                         "in": "path",
                         "required": true
                     }
@@ -593,7 +593,7 @@
                 }
             }
         },
-        "/private/road/{roadId}/{pathId}": {
+        "/private/road/{roadID}/{pathID}": {
             "get": {
                 "description": "Get Path By ID",
                 "consumes": [
@@ -605,19 +605,19 @@
                 "tags": [
                     "Road"
                 ],
-                "summary": "GetPathById",
+                "summary": "GetPathByID",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Road ID",
-                        "name": "roadId",
+                        "name": "roadID",
                         "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Path ID",
-                        "name": "pathId",
+                        "name": "pathID",
                         "in": "path",
                         "required": true
                     }
@@ -823,7 +823,7 @@
         "private.GetUserDTO": {
             "type": "object",
             "properties": {
-                "bestLanguage": {
+                "bestProgrammingLanguage": {
                     "type": "string"
                 },
                 "githubProfile": {
@@ -875,7 +875,7 @@
                 "labRoadID": {
                     "type": "integer"
                 },
-                "languageID": {
+                "programmingID": {
                     "type": "integer"
                 },
                 "type": {
@@ -943,16 +943,16 @@
                 }
             }
         },
-        "private.SolutionsHoursByLanguageDTO": {
+        "private.SolutionsHoursByProgrammingDTO": {
             "type": "object",
             "properties": {
-                "lab_hours": {
+                "labHours": {
                     "type": "number"
                 },
-                "language_id": {
+                "programmingID": {
                     "type": "integer"
                 },
-                "road_hours": {
+                "roadHours": {
                     "type": "number"
                 }
             }
@@ -960,10 +960,10 @@
         "private.StartDTO": {
             "type": "object",
             "required": [
-                "languageID"
+                "programmingID"
             ],
             "properties": {
-                "languageID": {
+                "programmingID": {
                     "type": "integer"
                 }
             }

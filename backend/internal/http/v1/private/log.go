@@ -11,16 +11,16 @@ import (
 func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 	root.Get("/log", h.GetAllLogs)
 	root.Get("/log/solution/byday", h.GetSolutionsByDay)
-	root.Get("/log/solution/hours", h.GetSolutionsHoursByLanguage)
+	root.Get("/log/solution/hours", h.GetSolutionsHoursByProgramming)
 }
 
 type LogDTO struct {
-	ID         uuid.UUID `json:"id"`
-	UserID     uuid.UUID `json:"userId"`
-	LanguageID int32     `json:"languageID"`
-	LabRoadID  int32     `json:"labRoadID"`
-	LType      string    `json:"type"`
-	Content    string    `json:"content"`
+	ID            uuid.UUID `json:"id"`
+	UserID        uuid.UUID `json:"userId"`
+	ProgrammingID int32     `json:"programmingID"`
+	LabRoadID     int32     `json:"labRoadID"`
+	LType         string    `json:"type"`
+	Content       string    `json:"content"`
 }
 
 // lab and road numbers solved day by day
@@ -31,12 +31,12 @@ type SolutionsByDayDTO struct {
 	LabCount  int
 }
 
-// SolutionsHoursByLanguage represents the total hours spent on lab and road solutions for each language.
+// SolutionsHoursByProgramming represents the total hours spent on lab and road solutions for each programming language.
 // author: yasir
-type SolutionsHoursByLanguageDTO struct {
-	LanguageID int32   `json:"language_id"`
-	LabHours   float64 `json:"lab_hours"`
-	RoadHours  float64 `json:"road_hours"`
+type SolutionsHoursByProgrammingDTO struct {
+	ProgrammingID int32   `json:"programmingID"`
+	LabHours      float64 `json:"labHours"`
+	RoadHours     float64 `json:"roadHours"`
 }
 
 // @Tags Log
@@ -45,7 +45,7 @@ type SolutionsHoursByLanguageDTO struct {
 // @Accept json
 // @Produce json
 // @Param userID query string false "User ID"
-// @Param languageID query int32 false "Language ID"
+// @Param programmingID query int32 false "Programming ID"
 // @Param labRoadID query int32 false "Log Lab or Path ID"
 // @Param content query string false "Log Content"
 // @Param type query string false "Log Type"
@@ -53,12 +53,12 @@ type SolutionsHoursByLanguageDTO struct {
 // @Router /private/log [get]
 func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 	userID := c.Query("userID")
-	languageID := c.Query("languageID")
+	programmingID := c.Query("programmingID")
 	labRoadID := c.Query("labRoadID")
 	content := c.Query("content")
 	logType := c.Query("type")
 
-	logs, err := h.services.LogService.GetAllLogs(c.Context(), userID, languageID, labRoadID, logType, content)
+	logs, err := h.services.LogService.GetAllLogs(c.Context(), userID, programmingID, labRoadID, logType, content)
 	if err != nil {
 		return err
 	}
@@ -67,12 +67,12 @@ func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 	var logDTOs []LogDTO
 	for _, log := range logs {
 		logDTO := LogDTO{
-			ID:         log.ID(),
-			UserID:     log.UserID(),
-			LanguageID: log.LanguageID(),
-			LabRoadID:  log.LabPathID(),
-			LType:      log.Type(),
-			Content:    log.Content(),
+			ID:            log.ID(),
+			UserID:        log.UserID(),
+			ProgrammingID: log.ProgrammingID(),
+			LabRoadID:     log.LabPathID(),
+			LType:         log.Type(),
+			Content:       log.Content(),
 		}
 		logDTOs = append(logDTOs, logDTO)
 	}
@@ -106,24 +106,24 @@ func (h *PrivateHandler) GetSolutionsByDay(c *fiber.Ctx) error {
 }
 
 // @Tags Log
-// @Summary GetSolutionsHoursByLanguage
-// @Description Retrieves the total hours spent on lab and road solutions for each language in the last week.
+// @Summary GetSolutionsHoursByProgramming
+// @Description Retrieves the total hours spent on lab and road solutions for each programming language in the last week.
 // @Accept json
 // @Produce json
-// @Success 200 {object} response.BaseResponse{data=[]SolutionsHoursByLanguageDTO}
+// @Success 200 {object} response.BaseResponse{data=[]SolutionsHoursByProgrammingDTO}
 // @Router /private/log/solution/hours [get]
-func (h *PrivateHandler) GetSolutionsHoursByLanguage(c *fiber.Ctx) error {
-	solutionsHours, err := h.services.LogService.CountSolutionsHoursByLanguageLast7Days(c.Context())
+func (h *PrivateHandler) GetSolutionsHoursByProgramming(c *fiber.Ctx) error {
+	solutionsHours, err := h.services.LogService.CountSolutionsHoursByProgrammingLast7Days(c.Context())
 	if err != nil {
 		return err
 	}
 
-	var solutionsHoursDTOs []SolutionsHoursByLanguageDTO
+	var solutionsHoursDTOs []SolutionsHoursByProgrammingDTO
 	for _, solution := range solutionsHours {
-		solutionsHoursDTOs = append(solutionsHoursDTOs, SolutionsHoursByLanguageDTO{
-			LanguageID: solution.LanguageID,
-			LabHours:   solution.LabHours,
-			RoadHours:  solution.RoadHours,
+		solutionsHoursDTOs = append(solutionsHoursDTOs, SolutionsHoursByProgrammingDTO{
+			ProgrammingID: solution.ProgrammingID,
+			LabHours:      solution.LabHours,
+			RoadHours:     solution.RoadHours,
 		})
 	}
 
