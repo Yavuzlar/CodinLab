@@ -219,7 +219,7 @@ const settings = () => {
                       marginBottom: 2,
                     }}
                   >
-                    General Settings
+                          <Translations text={"settings.page.title"} />
                   </Typography>
 
                   <FormControl fullWidth>
@@ -236,7 +236,7 @@ const settings = () => {
                         transition: "all 0.3s ease-in-out",
                       }}
                     >
-                      <Translations text={"admin.change.username"} />
+                      <Translations text={"settings.change.username"} />
                     </Typography>
                     <TextField
                       id="outlined-basic"
@@ -279,7 +279,7 @@ const settings = () => {
                         transition: "all 0.3s ease-in-out",
                       }}
                     >
-                      <Translations text={"admin.change.github"} />
+                      <Translations text={"settings.change.github"} />
                     </Typography>
                     <TextField
                       id="outlined-basic"
@@ -319,7 +319,7 @@ const settings = () => {
                         color: `${theme.palette.common.white} !important`,
                       }}
                     >
-                      <Translations text={"admin.change.button"} />
+                      <Translations text={"settings.change.button"} />
                     </Typography>
                   </Button>
 
@@ -342,7 +342,7 @@ const settings = () => {
                         transition: "all 0.3s ease-in-out",
                       }}
                     >
-                      <Translations text={"admin.old.password"} />
+                      <Translations text={"settings.old.password"} />
                     </Typography>
                     <TextField
                       id="outlined-basic"
@@ -410,7 +410,7 @@ const settings = () => {
                         transition: "all 0.3s ease-in-out",
                       }}
                     >
-                      <Translations text={"admin.new.password"} />
+                      <Translations text={"settings.new.password"} />
                     </Typography>
                     <TextField
                       id="outlined-basic"
@@ -478,7 +478,7 @@ const settings = () => {
                         transition: "all 0.3s ease-in-out",
                       }}
                     >
-                      <Translations text={"admin.confirm.password"} />
+                      <Translations text={"settings.confirm.password"} />
                     </Typography>
                     <TextField
                       id="outlined-basic"
@@ -542,7 +542,7 @@ const settings = () => {
                         color: `${theme.palette.common.white} !important`,
                       }}
                     >
-                      <Translations text={"admin.password.button"} />
+                      <Translations text={"settings.password.button"} />
                     </Typography>
                   </Button>
                 </Grid>

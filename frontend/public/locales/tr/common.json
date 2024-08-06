@@ -39,11 +39,12 @@
   "admin.profile.button" : "Kullanıcılar",
   "admin.center.title" : "Yönetim Merkezi",
   "admin.language.rates" : "Yazılım Dil İlerleme Oranları",
-  "admin.change.button" : "Değisiklikleri Kaydet",
-  "admin.password.button" : "Sifreyi Değistir",
-  "admin.change.username" : "Kullanıcı Adı",
-  "admin.change.github" : "Github Kullanıcı Adı",
-  "admin.old.password" : "Mevcut Şifre",
-  "admin.new.password" : "Yeni Şifre",
-  "admin.confirm.password" : "Şifreyi Onayla"
+  "settings.page.title" : "Ayarlar",
+  "settings.change.button" : "Değisiklikleri Kaydet",
+  "settings.password.button" : "Sifreyi Değistir",
+  "settings.change.username" : "Kullanıcı Adı",
+  "settings.change.github" : "Github Kullanıcı Adı",
+  "settings.old.password" : "Mevcut Şifre",
+  "settings.new.password" : "Yeni Şifre",
+  "settings.confirm.password" : "Şifreyi Onayla"
 }
