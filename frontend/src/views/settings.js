@@ -27,6 +27,14 @@ const settings = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [visibleUsernameLabel, setVisibleUsernameLabel] = useState(false);
+  const [visibleGithubLabel, setVisibleGithubLabel] = useState(false);
+
+  const [visibleOldPasswordLabel, setVisibleOldPasswordLabel] = useState(false);
+  const [visibleNewPasswordLabel, setVisibleNewPasswordLabel] = useState(false);
+  const [visibleConfirmPasswordLabel, setVisibleConfirmPasswordLabel] =
+    useState(false);
+
   const [error, setError] = useState(null);
 
   const hanldeClickShowOldPassword = () => {
@@ -44,6 +52,22 @@ const settings = () => {
       ...infoSettingsData,
       [e.target.name]: e.target.value,
     });
+
+    if (e.target.name === "username") {
+      if (e.target.value.length > 0) {
+        setVisibleUsernameLabel(true);
+      } else {
+        setVisibleUsernameLabel(false);
+      }
+    }
+
+    if (e.target.name === "github") {
+      if (e.target.value.length > 0) {
+        setVisibleGithubLabel(true);
+      } else {
+        setVisibleGithubLabel(false);
+      }
+    }
   };
 
   const handlePasswordSettings = (e) => {
@@ -51,6 +75,30 @@ const settings = () => {
       ...passwordSettingsData,
       [e.target.name]: e.target.value,
     });
+
+    if (e.target.name === "oldPassword") {
+      if (e.target.value.length > 0) {
+        setVisibleOldPasswordLabel(true);
+      } else {
+        setVisibleOldPasswordLabel(false);
+      }
+    }
+
+    if (e.target.name === "newPassword") {
+      if (e.target.value.length > 0) {
+        setVisibleNewPasswordLabel(true);
+      } else {
+        setVisibleNewPasswordLabel(false);
+      }
+    }
+
+    if (e.target.name === "confirmPassword") {
+      if (e.target.value.length > 0) {
+        setVisibleConfirmPasswordLabel(true);
+      } else {
+        setVisibleConfirmPasswordLabel(false);
+      }
+    }
   };
 
   const theme = useTheme();
@@ -174,116 +222,135 @@ const settings = () => {
                     General Settings
                   </Typography>
 
-                  <FormControl
-                    fullWidth
-                    sx={{
-                      marginTop: 4,
-                      marginBottom: 4,
-                    }}
-                  >
+                  <FormControl fullWidth>
+                    <Typography
+                      sx={{
+                        mb: "0.2rem",
+                        color: (theme) =>
+                          `${theme.palette.border.secondary} !important`,
+                        fontWeight: "bold",
+                        transform: visibleUsernameLabel
+                          ? "translateY(0)"
+                          : "translateY(20px)",
+                        opacity: visibleUsernameLabel ? 1 : 0,
+                        transition: "all 0.3s ease-in-out",
+                      }}
+                    >
+                      <Translations text={"admin.change.username"} />
+                    </Typography>
                     <TextField
                       id="outlined-basic"
-                      label={<Translations text={"admin.change.username"} />}
+                      placeholder="JhonDoe"
                       variant="outlined"
+                      name="username"
                       onChange={handleInfoSettings}
                       fullWidth
                       sx={{
                         height: "52px",
-                        "& .MuiFormLabel-root": {
-                          color: "#0A3B7A",
-                          fontWeight: "bold",
-                          backgroundColor: "transparent",
-                        },
                         "& .MuiOutlinedInput-root": {
-                          "& fieldset": {
-                            color: "#0A3B7A",
-                            fontWeight: "bold",
-                          },
-                          "&:hover fieldset": {
-                            borderColor: "#0A3B7A",
-                          },
                           "&.Mui-focused fieldset": {
                             borderColor: "#0A3B7A",
                           },
-                        },
-                        "& .MuiInputLabel-shrink": {
-                          backgroundColor: "transparent",
                         },
                         "& .MuiInputBase-input": {
                           color: "#0A3B7A",
                           fontWeight: "bold",
                         },
-                        marginTop: 2,
                       }}
                     />
-                    <TextField
-                      id="outlined-basic"
-                      label={<Translations text={"admin.change.github"} />}
-                      variant="outlined"
-                      fullWidth
-                      sx={{
-                        height: "52px",
-                        "& .MuiFormLabel-root": {
-                          color: "#0A3B7A",
-                          fontWeight: "bold",
-                          backgroundColor: "transparent",
-                        },
-                        "& .MuiOutlinedInput-root": {
-                          "& fieldset": {
-                            color: "#0A3B7A",
-                            fontWeight: "bold",
-                          },
-                          "&:hover fieldset": {
-                            borderColor: "#0A3B7A",
-                          },
-                          "&.Mui-focused fieldset": {
-                            borderColor: "#0A3B7A",
-                          },
-                        },
-                        "& .MuiInputLabel-shrink": {
-                          backgroundColor: "transparent",
-                        },
-                        "& .MuiInputBase-input": {
-                          color: "#0A3B7A",
-                          fontWeight: "bold",
-                        },
-                        marginTop: 2,
-                      }}
-                    />
-                    <Button
-                      variant="dark"
-                      sx={{
-                        marginTop: 2,
-                        width: "45%",
-                        position: "relative",
-                        left: "55%",
-                        height: "52px",
-                        textTransform: "none",
-                      }}
-                    >
-                      <Typography
-                        variant="infoText"
-                        sx={{
-                          color: `${theme.palette.common.white} !important`,
-                        }}
-                      >
-                        <Translations text={"admin.change.button"} />
-                      </Typography>
-                    </Button>
                   </FormControl>
 
                   <FormControl
                     fullWidth
                     sx={{
-                      marginTop: 4,
-                      marginBottom: 4,
+                      marginTop: 3,
                     }}
                   >
+                    <Typography
+                      sx={{
+                        mb: "0.2rem",
+                        color: (theme) =>
+                          `${theme.palette.border.secondary} !important`,
+                        fontWeight: "bold",
+                        transform: visibleGithubLabel
+                          ? "translateY(0)"
+                          : "translateY(20px)",
+                        opacity: visibleGithubLabel ? 1 : 0,
+                        transition: "all 0.3s ease-in-out",
+                      }}
+                    >
+                      <Translations text={"admin.change.github"} />
+                    </Typography>
                     <TextField
                       id="outlined-basic"
-                      label={<Translations text={"admin.old.password"} />}
+                      placeholder="jhondoe"
                       variant="outlined"
+                      name="github"
+                      onChange={handleInfoSettings}
+                      fullWidth
+                      sx={{
+                        height: "52px",
+                        "& .MuiOutlinedInput-root": {
+                          "&.Mui-focused fieldset": {
+                            borderColor: "#0A3B7A",
+                          },
+                        },
+                        "& .MuiInputBase-input": {
+                          color: "#0A3B7A",
+                          fontWeight: "bold",
+                        },
+                      }}
+                    />
+                  </FormControl>
+                  <Button
+                    variant="dark"
+                    sx={{
+                      marginTop: 4,
+                      width: "45%",
+                      position: "relative",
+                      left: "55%",
+                      height: "52px",
+                      textTransform: "none",
+                    }}
+                  >
+                    <Typography
+                      variant="infoText"
+                      sx={{
+                        color: `${theme.palette.common.white} !important`,
+                      }}
+                    >
+                      <Translations text={"admin.change.button"} />
+                    </Typography>
+                  </Button>
+
+                  <FormControl
+                    fullWidth
+                    sx={{
+                      marginTop: 8,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        mb: "0.2rem",
+                        color: (theme) =>
+                          `${theme.palette.border.secondary} !important`,
+                        fontWeight: "bold",
+                        transform: visibleOldPasswordLabel
+                          ? "translateY(0)"
+                          : "translateY(20px)",
+                        opacity: visibleOldPasswordLabel ? 1 : 0,
+                        transition: "all 0.3s ease-in-out",
+                      }}
+                    >
+                      <Translations text={"admin.old.password"} />
+                    </Typography>
+                    <TextField
+                      id="outlined-basic"
+                      placeholder="********"
+                      variant="outlined"
+                      name="oldPassword"
                       type={showOldPassword ? "text" : "password"}
+                      onChange={handlePasswordSettings}
                       InputProps={{
                         endAdornment: (
                           <IconButton
@@ -311,38 +378,47 @@ const settings = () => {
                       fullWidth
                       sx={{
                         height: "52px",
-                        "& .MuiFormLabel-root": {
-                          color: "#0A3B7A",
-                          fontWeight: "bold",
-                          backgroundColor: "transparent",
-                        },
                         "& .MuiOutlinedInput-root": {
-                          "& fieldset": {
-                            color: "#0A3B7A",
-                            fontWeight: "bold",
-                          },
-                          "&:hover fieldset": {
-                            borderColor: "#0A3B7A",
-                          },
                           "&.Mui-focused fieldset": {
                             borderColor: "#0A3B7A",
                           },
-                        },
-                        "& .MuiInputLabel-shrink": {
-                          backgroundColor: "transparent",
                         },
                         "& .MuiInputBase-input": {
                           color: "#0A3B7A",
                           fontWeight: "bold",
                         },
-                        marginTop: 2,
                       }}
                     />
+                  </FormControl>
+
+                  <FormControl
+                    fullWidth
+                    sx={{
+                      marginTop: 3,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        mb: "0.2rem",
+                        color: (theme) =>
+                          `${theme.palette.border.secondary} !important`,
+                        fontWeight: "bold",
+                        transform: visibleNewPasswordLabel
+                          ? "translateY(0)"
+                          : "translateY(20px)",
+                        opacity: visibleNewPasswordLabel ? 1 : 0,
+                        transition: "all 0.3s ease-in-out",
+                      }}
+                    >
+                      <Translations text={"admin.new.password"} />
+                    </Typography>
                     <TextField
                       id="outlined-basic"
-                      label={<Translations text={"admin.new.password"} />}
+                      placeholder="********"
                       variant="outlined"
+                      name="newPassword"
                       type={showNewPassword ? "text" : "password"}
+                      onChange={handlePasswordSettings}
                       fullWidth
                       InputProps={{
                         endAdornment: (
@@ -370,38 +446,47 @@ const settings = () => {
                       }}
                       sx={{
                         height: "52px",
-                        "& .MuiFormLabel-root": {
-                          color: "#0A3B7A",
-                          fontWeight: "bold",
-                          backgroundColor: "transparent",
-                        },
                         "& .MuiOutlinedInput-root": {
-                          "& fieldset": {
-                            color: "#0A3B7A",
-                            fontWeight: "bold",
-                          },
-                          "&:hover fieldset": {
-                            borderColor: "#0A3B7A",
-                          },
                           "&.Mui-focused fieldset": {
                             borderColor: "#0A3B7A",
                           },
-                        },
-                        "& .MuiInputLabel-shrink": {
-                          backgroundColor: "transparent",
                         },
                         "& .MuiInputBase-input": {
                           color: "#0A3B7A",
                           fontWeight: "bold",
                         },
-                        marginTop: 2,
                       }}
                     />
+                  </FormControl>
+
+                  <FormControl
+                    fullWidth
+                    sx={{
+                      marginTop: 3,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        mb: "0.2rem",
+                        color: (theme) =>
+                          `${theme.palette.border.secondary} !important`,
+                        fontWeight: "bold",
+                        transform: visibleConfirmPasswordLabel
+                          ? "translateY(0)"
+                          : "translateY(20px)",
+                        opacity: visibleConfirmPasswordLabel ? 1 : 0,
+                        transition: "all 0.3s ease-in-out",
+                      }}
+                    >
+                      <Translations text={"admin.confirm.password"} />
+                    </Typography>
                     <TextField
                       id="outlined-basic"
-                      label={<Translations text={"admin.confirm.password"} />}
+                      placeholder="********"
                       variant="outlined"
+                      name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
+                      onChange={handlePasswordSettings}
                       fullWidth
                       InputProps={{
                         endAdornment: (
@@ -429,53 +514,37 @@ const settings = () => {
                       }}
                       sx={{
                         height: "52px",
-                        "& .MuiFormLabel-root": {
-                          color: "#0A3B7A",
-                          fontWeight: "bold",
-                          backgroundColor: "transparent",
-                        },
                         "& .MuiOutlinedInput-root": {
-                          "& fieldset": {
-                            color: "#0A3B7A",
-                            fontWeight: "bold",
-                          },
-                          "&:hover fieldset": {
-                            borderColor: "#0A3B7A",
-                          },
                           "&.Mui-focused fieldset": {
                             borderColor: "#0A3B7A",
                           },
-                        },
-                        "& .MuiInputLabel-shrink": {
-                          backgroundColor: "transparent",
                         },
                         "& .MuiInputBase-input": {
                           color: "#0A3B7A",
                           fontWeight: "bold",
                         },
-                        marginTop: 2,
                       }}
                     />
-                    <Button
-                      variant="dark"
+                  </FormControl>
+                  <Button
+                    variant="dark"
+                    sx={{
+                      marginTop: 4,
+                      width: "45%",
+                      position: "relative",
+                      left: "55%",
+                      height: "52px",
+                      textTransform: "none",
+                    }}
+                  >
+                    <Typography
                       sx={{
-                        marginTop: 2,
-                        width: "45%",
-                        position: "relative",
-                        left: "55%",
-                        height: "52px",
-                        textTransform: "none",
+                        color: `${theme.palette.common.white} !important`,
                       }}
                     >
-                      <Typography
-                        sx={{
-                          color: `${theme.palette.common.white} !important`,
-                        }}
-                      >
-                        <Translations text={"admin.password.button"} />
-                      </Typography>
-                    </Button>
-                  </FormControl>
+                      <Translations text={"admin.password.button"} />
+                    </Typography>
+                  </Button>
                 </Grid>
               </Grid>
             </CardContent>
