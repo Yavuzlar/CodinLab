@@ -103,6 +103,8 @@ const settings = () => {
 
   const theme = useTheme();
 
+ 
+
   // when de settings validation is done
   // useEffect will be added here for the passwordSettingsData and infoSettingsData
 
@@ -219,7 +221,7 @@ const settings = () => {
                       marginBottom: 2,
                     }}
                   >
-                          <Translations text={"settings.page.title"} />
+                    <Translations text={"settings.page.title"} />
                   </Typography>
 
                   <FormControl fullWidth>
