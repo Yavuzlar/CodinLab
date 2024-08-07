@@ -10,7 +10,7 @@ import (
 )
 
 type StartDTO struct {
-	LanguageID int32 `json:"languageID" validate:"required"`
+	ProgrammingID int32 `json:"programmingID" validate:"required"`
 }
 
 type LanguageDTO struct {
@@ -39,8 +39,8 @@ type RoadDTO struct {
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
 	roadRoute.Post("/start", h.Start)
-	roadRoute.Get("/:roadId", h.GetAllRoads)
-	roadRoute.Get("/:roadId/:pathId", h.GetPath)
+	roadRoute.Get("/:roadID", h.GetAllRoads)
+	roadRoute.Get("/:roadID/:pathID", h.GetPath)
 }
 
 // @Tags Road
@@ -83,13 +83,16 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 
 	// if the road has started. Log will not be created
 	// Log a road start event for the user
-	ok, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.LanguageID, 0)
+	ok, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.ProgrammingID, 0)
 	if err != nil {
 		return err
 	}
 
 	if !ok {
-		if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.LanguageID, 0); err != nil {
+		if start.ProgrammingID == 0 {
+			return response.Response(200, "Invalid Programming ID", nil)
+		}
+		if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.ProgrammingID, 0); err != nil {
 			return err
 		}
 	}
@@ -103,9 +106,9 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 // @Description Get All Roads
 // @Accept json
 // @Produce json
-// @Param roadId path string true "roadId"
+// @Param roadID path string true "roadID"
 // @Success 200 {object} response.BaseResponse{data=RoadDTO}
-// @Router /private/road/{roadId} [get]
+// @Router /private/road/{roadID} [get]
 func (h *PrivateHandler) GetAllRoads(c *fiber.Ctx) error {
 	// NEED ROAD SERVICE FOR BOTTOM
 	// We have to get all roads and send them to the frontend.
@@ -114,9 +117,9 @@ func (h *PrivateHandler) GetAllRoads(c *fiber.Ctx) error {
 
 	userSession := session_store.GetSessionData(c)
 
-	// Declare and assign roadId variable
-	roadId := c.Params("roadId")
-	num, err := strconv.Atoi(roadId)
+	// Declare and assign roadID variable
+	roadID := c.Params("roadID")
+	num, err := strconv.Atoi(roadID)
 	if err != nil {
 		return response.Response(400, "Invalid ID", nil)
 	}
@@ -162,22 +165,22 @@ func (h *PrivateHandler) GetAllRoads(c *fiber.Ctx) error {
 }
 
 // @Tags Road
-// @Summary GetPathById
+// @Summary GetPathByID
 // @Description Get Path By ID
 // @Accept json
 // @Produce json
-// @Param roadId path string true "Road ID"
-// @Param pathId path string true "Path ID"
+// @Param roadID path string true "Road ID"
+// @Param pathID path string true "Path ID"
 // @Success 200 {object} response.BaseResponse{data=PathDTO}
-// @Router /private/road/{roadId}/{pathId} [get]
+// @Router /private/road/{roadID}/{pathID} [get]
 func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
-	langID := c.Params("roadId")
-	intLangID, err := strconv.Atoi(langID)
+	programmingID := c.Params("roadID")
+	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return response.Response(400, "Invalid ID", nil)
 	}
 
-	pathID := c.Params("pathId")
+	pathID := c.Params("pathID")
 
 	intPathID, err := strconv.Atoi(pathID)
 	if err != nil {
@@ -187,7 +190,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	session := session_store.GetSessionData(c)
 	userID := session.UserID
 
-	roadData, err := h.services.RoadService.GetRoadFilter(userID, intLangID, intPathID, false, false)
+	roadData, err := h.services.RoadService.GetRoadFilter(userID, intProgrammingID, intPathID, false, false)
 	if err != nil {
 		return err
 	}

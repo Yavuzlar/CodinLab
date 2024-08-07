@@ -32,7 +32,7 @@ definitions:
     type: object
   private.GetUserDTO:
     properties:
-      bestLanguage:
+      bestProgrammingLanguage:
         type: string
       githubProfile:
         type: string
@@ -66,7 +66,7 @@ definitions:
         type: string
       labRoadID:
         type: integer
-      languageID:
+      programmingID:
         type: integer
       type:
         type: string
@@ -110,21 +110,21 @@ definitions:
       roadCount:
         type: integer
     type: object
-  private.SolutionsHoursByLanguageDTO:
+  private.SolutionsHoursByProgrammingDTO:
     properties:
-      lab_hours:
+      labHours:
         type: number
-      language_id:
+      programmingID:
         type: integer
-      road_hours:
+      roadHours:
         type: number
     type: object
   private.StartDTO:
     properties:
-      languageID:
+      programmingID:
         type: integer
     required:
-    - languageID
+    - programmingID
     type: object
   private.UpdateUserDTO:
     properties:
@@ -242,7 +242,7 @@ paths:
       summary: Creates User
       tags:
       - Admin
-  /private/admin/user/{id}:
+  /private/admin/user/{ID}:
     get:
       consumes:
       - application/json
@@ -250,7 +250,7 @@ paths:
       parameters:
       - description: User ID
         in: path
-        name: id
+        name: ID
         required: true
         type: string
       produces:
@@ -403,7 +403,7 @@ paths:
       summary: GetWelcomeContent
       tags:
       - Home
-  /private/lab/{langId}/{labId}:
+  /private/lab/{programmingID}/{labID}:
     get:
       consumes:
       - application/json
@@ -411,12 +411,12 @@ paths:
       parameters:
       - description: Lang ID
         in: path
-        name: langId
+        name: programmingID
         required: true
         type: string
       - description: Lab ID
         in: path
-        name: labId
+        name: labID
         required: true
         type: string
       produces:
@@ -426,10 +426,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: GetLabById
+      summary: GetLabByID
       tags:
       - Lab
-  /private/labs/{id}:
+  /private/labs/{ID}:
     get:
       consumes:
       - application/json
@@ -437,7 +437,7 @@ paths:
       parameters:
       - description: Labs ID
         in: path
-        name: id
+        name: ID
         required: true
         type: string
       produces:
@@ -447,7 +447,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: GetLabsById
+      summary: GetLabsByID
       tags:
       - Lab
   /private/log:
@@ -460,9 +460,9 @@ paths:
         in: query
         name: userID
         type: string
-      - description: Language ID
+      - description: Programming ID
         in: query
-        name: languageID
+        name: programmingID
         type: integer
       - description: Log Lab or Path ID
         in: query
@@ -520,7 +520,7 @@ paths:
       consumes:
       - application/json
       description: Retrieves the total hours spent on lab and road solutions for each
-        language in the last week.
+        programming language in the last week.
       produces:
       - application/json
       responses:
@@ -532,21 +532,21 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/private.SolutionsHoursByLanguageDTO'
+                    $ref: '#/definitions/private.SolutionsHoursByProgrammingDTO'
                   type: array
               type: object
-      summary: GetSolutionsHoursByLanguage
+      summary: GetSolutionsHoursByProgramming
       tags:
       - Log
-  /private/road/{roadId}:
+  /private/road/{roadID}:
     get:
       consumes:
       - application/json
       description: Get All Roads
       parameters:
-      - description: roadId
+      - description: roadID
         in: path
-        name: roadId
+        name: roadID
         required: true
         type: string
       produces:
@@ -564,7 +564,7 @@ paths:
       summary: GetRoads
       tags:
       - Road
-  /private/road/{roadId}/{pathId}:
+  /private/road/{roadID}/{pathID}:
     get:
       consumes:
       - application/json
@@ -572,12 +572,12 @@ paths:
       parameters:
       - description: Road ID
         in: path
-        name: roadId
+        name: roadID
         required: true
         type: string
       - description: Path ID
         in: path
-        name: pathId
+        name: pathID
         required: true
         type: string
       produces:
@@ -592,7 +592,7 @@ paths:
                 data:
                   $ref: '#/definitions/private.PathDTO'
               type: object
-      summary: GetPathById
+      summary: GetPathByID
       tags:
       - Road
   /private/road/start:

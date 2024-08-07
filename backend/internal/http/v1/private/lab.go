@@ -35,22 +35,22 @@ type LabsDto struct {
 }
 
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
-	root.Get("/labs/:id", h.GetLabsByID)
-	root.Get("/lab/:langId/:labId", h.GetLabByID)
+	root.Get("/labs/:ID", h.GetLabsByID)
+	root.Get("/lab/:programmingID/:labID", h.GetLabByID)
 	// initialize routes
 	// Buraya yeni route'lar eklenecek lütfen Swagger'da belirtmeyi unutmayın
 }
 
 // @Tags Lab
-// @Summary GetLabsById
+// @Summary GetLabsByID
 // @Description Get Labs By Lang ID
 // @Accept json
 // @Produce json
-// @Param id path string true "Labs ID"
+// @Param ID path string true "Labs ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/{id} [get]
+// @Router /private/labs/{ID} [get]
 func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
-	id := c.Params("id")
+	id := c.Params("ID")
 	intId, err := strconv.Atoi(id)
 	if err != nil {
 		return response.Response(400, "Invalid ID", nil)
@@ -103,30 +103,30 @@ func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
 }
 
 // @Tags Lab
-// @Summary GetLabById
+// @Summary GetLabByID
 // @Description Get Lab By Lang ID & Lab ID
 // @Accept json
 // @Produce json
-// @Param langId path string true "Lang ID"
-// @Param labId path string true "Lab ID"
+// @Param programmingID path string true "Lang ID"
+// @Param labID path string true "Lab ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/lab/{langId}/{labId} [get]
+// @Router /private/lab/{programmingID}/{labID} [get]
 func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
-	langId := c.Params("langId")
-	labId := c.Params("labId")
+	programmingID := c.Params("programmingID")
+	labID := c.Params("labID")
 
-	intLangId, err := strconv.Atoi(langId)
+	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return response.Response(400, "Invalid Lang ID", nil)
 	}
-	intLabId, err := strconv.Atoi(labId)
+	intLabID, err := strconv.Atoi(labID)
 	if err != nil {
 		return response.Response(400, "Invalid Labs ID", nil)
 	}
 
 	userSession := session_store.GetSessionData(c)
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLangId, intLabId, "", "")
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, "", "")
 	if err != nil {
 		return err
 	}

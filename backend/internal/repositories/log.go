@@ -16,13 +16,13 @@ type LogRepository struct {
 
 // dbModelLogs is the struct that represents the log in the database.
 type dbModelLogs struct {
-	ID         sql.NullString `db:"id"`
-	UserID     sql.NullString `db:"user_id"`
-	LanguageID sql.NullInt32  `db:"language_id"`
-	LabPathID  sql.NullInt32  `db:"lab_path_id"`
-	Type       sql.NullString `db:"type"`
-	Content    sql.NullString `db:"content"`
-	CreatedAt  sql.NullTime   `db:"created_at"`
+	ID            sql.NullString `db:"id"`
+	UserID        sql.NullString `db:"user_id"`
+	ProgrammingID sql.NullInt32  `db:"programming_id"`
+	LabPathID     sql.NullInt32  `db:"lab_path_id"`
+	Type          sql.NullString `db:"type"`
+	Content       sql.NullString `db:"content"`
+	CreatedAt     sql.NullTime   `db:"created_at"`
 }
 
 // lab and road numbers solved day by day
@@ -53,7 +53,7 @@ func (r *LogRepository) dbModelToAppModel(dbModel dbModelLogs) (log domains.Log)
 		uuid.MustParse(dbModel.UserID.String),
 		dbModel.Type.String,
 		dbModel.Content.String,
-		dbModel.LanguageID.Int32,
+		dbModel.ProgrammingID.Int32,
 		dbModel.LabPathID.Int32,
 		dbModel.CreatedAt.Time,
 	)
@@ -70,9 +70,9 @@ func (r *LogRepository) dbModelFromAppModel(domModel domains.Log) (dbModel dbMod
 		dbModel.UserID.String = domModel.UserID().String()
 		dbModel.UserID.Valid = true
 	}
-	if domModel.LanguageID() != 0 {
-		dbModel.LanguageID.Int32 = domModel.LanguageID()
-		dbModel.LanguageID.Valid = true
+	if domModel.ProgrammingID() != 0 {
+		dbModel.ProgrammingID.Int32 = domModel.ProgrammingID()
+		dbModel.ProgrammingID.Valid = true
 	}
 	if domModel.LabPathID() != 0 {
 		dbModel.LabPathID.Int32 = domModel.LabPathID()
@@ -104,9 +104,9 @@ func (r *LogRepository) dbModelFromAppFilter(filter domains.LogFilter) (dbFilter
 		dbFilter.UserID.String = filter.UserID.String()
 		dbFilter.UserID.Valid = true
 	}
-	if filter.LanguageID != 0 {
-		dbFilter.LanguageID.Int32 = filter.LanguageID
-		dbFilter.LanguageID.Valid = true
+	if filter.ProgrammingID != 0 {
+		dbFilter.ProgrammingID.Int32 = filter.ProgrammingID
+		dbFilter.ProgrammingID.Valid = true
 	}
 	if filter.LabPathID != 0 {
 		dbFilter.LabPathID.Int32 = filter.LabPathID
@@ -140,13 +140,13 @@ func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (l
 	WHERE
 		(? IS NULL OR id = ?) AND
 		(? IS NULL OR user_id = ?) AND
-		(? IS NULL OR language_id = ?) AND
+		(? IS NULL OR programming_id = ?) AND
 		(? IS NULL OR lab_path_id = ?) AND
 		(? IS NULL OR type LIKE CONCAT('%', ?, '%')) AND
 		(? IS NULL OR content LIKE CONCAT('%', ?, '%'))
 	`
 
-	err = r.db.SelectContext(ctx, &dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.UserID, dbFilter.UserID, dbFilter.LanguageID, dbFilter.LanguageID, dbFilter.LabPathID, dbFilter.LabPathID, dbFilter.Type, dbFilter.Type, dbFilter.Content, dbFilter.Content)
+	err = r.db.SelectContext(ctx, &dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.UserID, dbFilter.UserID, dbFilter.ProgrammingID, dbFilter.ProgrammingID, dbFilter.LabPathID, dbFilter.LabPathID, dbFilter.Type, dbFilter.Type, dbFilter.Content, dbFilter.Content)
 	if err != nil {
 		return
 	}
@@ -163,9 +163,9 @@ func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 	query := `
 		INSERT INTO
 			t_logs
-		(id, user_id, language_id, lab_path_id, type, content)
+		(id, user_id, programming_id, lab_path_id, type, content)
 			VALUES
-		(:id, :user_id, :language_id, :lab_path_id, :type, :content)
+		(:id, :user_id, :programming_id, :lab_path_id, :type, :content)
 	`
 
 	_, err = r.db.NamedExecContext(ctx, query, dbModel)
@@ -189,7 +189,7 @@ func (r *LogRepository) IsExists(ctx context.Context, log *domains.Log) (exists 
 				FROM t_logs
 				WHERE 
 					user_id = :user_id AND 
-					((language_id IS NULL AND :language_id IS NULL) OR (language_id = :language_id)) AND
+					((programming_id IS NULL AND :programming_id IS NULL) OR (programming_id = :programming_id)) AND
 					type = :type AND 
 					content = :content AND 
 					((lab_path_id IS NULL AND :lab_path_id IS NULL) OR (lab_path_id = :lab_path_id))
@@ -198,7 +198,7 @@ func (r *LogRepository) IsExists(ctx context.Context, log *domains.Log) (exists 
 
 	params := r.dbModelFromAppModel(*log)
 
-	err = r.db.GetContext(ctx, &exists, query, params.UserID, params.LanguageID, params.Type, params.Content, params.LabPathID)
+	err = r.db.GetContext(ctx, &exists, query, params.UserID, params.ProgrammingID, params.Type, params.Content, params.LabPathID)
 	if err != nil {
 		return false, err
 	}
@@ -246,23 +246,23 @@ func (r *LogRepository) CountSolutionsByDay(ctx context.Context) (solutions []do
 
 // SolutionsHoursByLanguage represents the total hours spent on lab and road solutions for each language.
 type dbModelSolutionsHoursByLanguage struct {
-	LanguageID     int32   `db:"language_id"`
+	ProgrammingID  int32   `db:"programming_id"`
 	TotalLabHours  float64 `db:"total_lab_hours"`
 	TotalRoadHours float64 `db:"total_road_hours"`
 }
 
 // CountSolutionsHoursByLanguageLast7Days counts the total hours spent on lab and road solutions in the last 7 days for each language.
-func (r *LogRepository) CountSolutionsHoursByLanguageLast7Days(ctx context.Context) (solutionsHours []domains.SolutionsHoursByLanguage, err error) {
+func (r *LogRepository) CountSolutionsHoursByProgrammingLast7Days(ctx context.Context) (solutionsHours []domains.SolutionsHoursByProgramming, err error) {
 	query := `
 	SELECT
-		l1.language_id,
+		l1.programming_id,
 		SUM(CASE WHEN l1.type = 'Lab' THEN (JULIANDAY(l2.created_at) - JULIANDAY(l1.created_at)) * 24 ELSE 0 END) AS total_lab_hours,
 		SUM(CASE WHEN l1.type = 'Road' THEN (JULIANDAY(l2.created_at) - JULIANDAY(l1.created_at)) * 24 ELSE 0 END) AS total_road_hours
 	FROM
 		t_logs l1
 	JOIN
 		t_logs l2 ON l1.user_id = l2.user_id
-	             AND l1.language_id = l2.language_id
+	             AND l1.programming_id = l2.programming_id
 	             AND l1.lab_path_id = l2.lab_path_id
 	             AND l1.type = l2.type
 	             AND l1.content = 'Started'
@@ -272,7 +272,7 @@ func (r *LogRepository) CountSolutionsHoursByLanguageLast7Days(ctx context.Conte
 		l1.type IN ('Road', 'Lab')
 		AND l1.created_at >= DATE('now', '-7 days')
 	GROUP BY
-		l1.language_id
+		l1.programming_id
 	`
 
 	var dbModelSolutionsHours []dbModelSolutionsHoursByLanguage
@@ -283,10 +283,10 @@ func (r *LogRepository) CountSolutionsHoursByLanguageLast7Days(ctx context.Conte
 	}
 
 	for _, result := range dbModelSolutionsHours {
-		solutionsHours = append(solutionsHours, domains.SolutionsHoursByLanguage{
-			LanguageID: result.LanguageID,
-			LabHours:   result.TotalLabHours,
-			RoadHours:  result.TotalRoadHours,
+		solutionsHours = append(solutionsHours, domains.SolutionsHoursByProgramming{
+			ProgrammingID: result.ProgrammingID,
+			LabHours:      result.TotalLabHours,
+			RoadHours:     result.TotalRoadHours,
 		})
 	}
 

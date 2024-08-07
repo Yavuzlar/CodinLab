@@ -44,7 +44,7 @@ func (h *PrivateHandler) GetProfile(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	mostUsedLanguage, err := h.services.UserService.BestLanguage(c.Context(), user.ID().String())
+	mostUsedLanguage, err := h.services.UserService.BestProgrammingLanguages(c.Context(), user.ID().String())
 	if err != nil {
 		return err
 	}

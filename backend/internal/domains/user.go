@@ -27,7 +27,7 @@ type IUserService interface {
 	GetProfile(ctx context.Context, userID string) (user *User, err error)
 	UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile, name, surname string) (err error)
 	DeleteUser(ctx context.Context, userID string) (err error)
-	BestLanguage(ctx context.Context, userID string) (bestLanguage string, err error)
+	BestProgrammingLanguages(ctx context.Context, userID string) (bestLanguage string, err error)
 	// Devamı gelecek...
 }
 

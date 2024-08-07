@@ -24,8 +24,8 @@ func newLogService(
 	}
 }
 
-func (l *logService) GetAllLogs(ctx context.Context, userID, languageID, labPathID, logType, content string) (logs []domains.Log, err error) {
-	var languageIDInt, labPathIDInt int
+func (l *logService) GetAllLogs(ctx context.Context, userID, programmingID, labPathID, logType, content string) (logs []domains.Log, err error) {
+	var programmingIDInt, labPathIDInt int
 	var userIDU uuid.UUID
 	if userID != "" {
 		userIDU, err = uuid.Parse(userID)
@@ -34,8 +34,8 @@ func (l *logService) GetAllLogs(ctx context.Context, userID, languageID, labPath
 		}
 	}
 
-	if languageID != "" {
-		languageIDInt, err = strconv.Atoi(languageID)
+	if programmingID != "" {
+		programmingIDInt, err = strconv.Atoi(programmingID)
 		if err != nil {
 			return nil, service_errors.NewServiceErrorWithMessage(400, "invalid language id")
 		}
@@ -49,11 +49,11 @@ func (l *logService) GetAllLogs(ctx context.Context, userID, languageID, labPath
 	}
 
 	logFilter := domains.LogFilter{
-		UserID:     userIDU,
-		LanguageID: int32(languageIDInt),
-		LType:      logType,
-		LabPathID:  int32(labPathIDInt),
-		Content:    content,
+		UserID:        userIDU,
+		ProgrammingID: int32(programmingIDInt),
+		LType:         logType,
+		LabPathID:     int32(labPathIDInt),
+		Content:       content,
 	}
 
 	logs, _, err = l.logRepositories.Filter(ctx, logFilter)
@@ -114,13 +114,13 @@ func (l *logService) GetByContent(ctx context.Context, content string) (logs []d
 }
 
 // Recives Logs with Spesific Title
-func (l *logService) GetByLanguageID(ctx context.Context, languageID string) (logs []domains.Log, err error) {
-	labPathIDInt, err := strconv.Atoi(languageID)
+func (l *logService) GetByProgrammingID(ctx context.Context, programmingID string) (logs []domains.Log, err error) {
+	programmingIDInt, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid lab or road id")
 	}
 
-	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{LanguageID: int32(labPathIDInt)})
+	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{ProgrammingID: int32(programmingIDInt)})
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
 	}
@@ -129,9 +129,9 @@ func (l *logService) GetByLanguageID(ctx context.Context, languageID string) (lo
 }
 
 // Adds log
-func (l *logService) Add(ctx context.Context, userID, ltype, content string, languageID, labPathID int32) (err error) {
+func (l *logService) Add(ctx context.Context, userID, ltype, content string, programmingID, labPathID int32) (err error) {
 	// Creates new log
-	newLog, err := domains.NewLog(userID, ltype, content, languageID, labPathID)
+	newLog, err := domains.NewLog(userID, ltype, content, programmingID, labPathID)
 	if err != nil {
 		return err
 	}
@@ -144,8 +144,8 @@ func (l *logService) Add(ctx context.Context, userID, ltype, content string, lan
 	return
 }
 
-func (l *logService) IsExists(ctx context.Context, userID, ltype, content string, languageID, labPathID int32) (isExists bool, err error) {
-	log, err := domains.NewLog(userID, ltype, content, languageID, labPathID)
+func (l *logService) IsExists(ctx context.Context, userID, ltype, content string, programmingID, labPathID int32) (isExists bool, err error) {
+	log, err := domains.NewLog(userID, ltype, content, programmingID, labPathID)
 	if err != nil {
 		return false, err
 	}
@@ -169,8 +169,8 @@ func (l *logService) CountSolutionsByDay(ctx context.Context) (solutions []domai
 }
 
 // author: yasir
-func (l *logService) CountSolutionsHoursByLanguageLast7Days(ctx context.Context) (solutions []domains.SolutionsHoursByLanguage, err error) {
-	solutions, err = l.logRepositories.CountSolutionsHoursByLanguageLast7Days(ctx)
+func (l *logService) CountSolutionsHoursByProgrammingLast7Days(ctx context.Context) (solutions []domains.SolutionsHoursByProgramming, err error) {
+	solutions, err = l.logRepositories.CountSolutionsHoursByProgrammingLast7Days(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -217,9 +217,9 @@ func (s *userService) DeleteUser(ctx context.Context, userID string) (err error)
 	return
 }
 
-// Find users most used languages
-func (s *userService) BestLanguage(ctx context.Context, userID string) (bestLanguage string, err error) {
-	languageCount := make(map[int32]int)
+// Find users most used programming languages
+func (s *userService) BestProgrammingLanguages(ctx context.Context, userID string) (bestProgrammingLanguage string, err error) {
+	programmingLanguageCount := make(map[int32]int)
 	if s.logService == nil || s.parserService == nil {
 		return "", service_errors.NewServiceErrorWithMessage(500, "service is not initialized")
 	}
@@ -227,15 +227,15 @@ func (s *userService) BestLanguage(ctx context.Context, userID string) (bestLang
 		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting logs", err)
 	} else {
 		for _, log := range logs {
-			languageCount[log.LanguageID()]++
+			programmingLanguageCount[log.ProgrammingID()]++
 		}
 	}
 	max := 0
-	var mostUsedLanguageID int32
-	for lang, count := range languageCount {
+	var mostUsedProgrammingLanguageID int32
+	for lang, count := range programmingLanguageCount {
 		if count > max {
 			max = count
-			mostUsedLanguageID = lang
+			mostUsedProgrammingLanguageID = lang
 		}
 	}
 	languages, err := s.parserService.GetInventory()
@@ -245,9 +245,9 @@ func (s *userService) BestLanguage(ctx context.Context, userID string) (bestLang
 	if languages == nil {
 		return "", service_errors.NewServiceErrorWithMessageAndError(500, "languages list is nil", err)
 	}
-	for _, lang := range languages {
-		if lang.ID == int(mostUsedLanguageID) {
-			bestLanguage = lang.Name
+	for _, programming := range languages {
+		if programming.ID == int(mostUsedProgrammingLanguageID) {
+			bestProgrammingLanguage = programming.Name
 		}
 	}
 	return

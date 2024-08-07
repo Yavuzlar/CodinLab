@@ -32,7 +32,7 @@ func NewInventory(id int, name string, iconPath string) *Inventory {
 
 func NewAdvancement(id int, name string, iconPath string, roadPercentage int32, labPercentage int32) *Advancement {
 	advancement := &Advancement{
-		langID:         id,
+		programmingID:  id,
 		name:           name,
 		iconPath:       iconPath,
 		roadPercentage: roadPercentage,
@@ -61,15 +61,15 @@ func (d *Development) LabPercentage() int32 {
 }
 
 type Advancement struct {
-	langID         int
+	programmingID  int
 	name           string
 	iconPath       string
 	roadPercentage int32
 	labPercentage  int32
 }
 
-func (a *Advancement) LangID() int {
-	return a.langID
+func (a *Advancement) ProgrammingID() int {
+	return a.programmingID
 }
 
 func (a *Advancement) Name() string {

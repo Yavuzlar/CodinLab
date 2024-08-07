@@ -32,7 +32,7 @@ func newAdminService(
 }
 
 func (s *adminService) CreateUser(ctx context.Context, username, name, surname, password, role, githubProfile string) (err error) {
-	if role != "admin" && role != "user"{
+	if role != "admin" && role != "user" {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "invalid role", err)
 	}
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
@@ -170,7 +170,7 @@ func (s *adminService) BestLanguage(ctx context.Context, userID string) (bestLan
 		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting logs", err)
 	} else {
 		for _, log := range logs {
-			languageCount[log.LanguageID()]++
+			languageCount[log.ProgrammingID()]++
 		}
 	}
 	max := 0
