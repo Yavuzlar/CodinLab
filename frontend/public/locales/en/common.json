@@ -37,13 +37,14 @@
   "admin.activity.content" :"Activities are measured by the completion of roads and labs.",
   "admin.settings.button" : "Settings",
   "admin.profile.button" : "Users",
-   "admin.center.title" : "Admin Center",
-  "admin.language.rates" : "Languages Usage Rates",
-  "admin.change.button" : "Save Changes",
-  "admin.password.button" : "Save Password",
-  "admin.change.username" : "Username",
-  "admin.change.github" : "Github Username",
-  "admin.old.password" : "Current Password",
-  "admin.new.password" : "New Password",
-  "admin.confirm.password" : "Confirm New Password"
+  "admin.center.title" : "Admin Center",
+  "settings.page.title" : "General Settings",
+  "settings.language.rates" : "Languages Usage Rates",
+  "settings.change.button" : "Save Changes",
+  "settings.password.button" : "Save Password",
+  "settings.change.username" : "Username",
+  "settings.change.github" : "Github Username",
+  "settings.old.password" : "Current Password",
+  "settings.new.password" : "New Password",
+  "settings.confirm.password" : "Confirm New Password"
 }

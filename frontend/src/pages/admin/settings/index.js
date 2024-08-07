@@ -1,4 +1,4 @@
-import SettingsPage from "src/views/settings";
+import SettingsPage from "src/views/settings-admin";
 
 const Settings = () => <SettingsPage />;
 
