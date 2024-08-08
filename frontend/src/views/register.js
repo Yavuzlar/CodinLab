@@ -38,6 +38,7 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -239,7 +240,7 @@ const Register = () => {
                   />
                   <TextField
                     name="githubProfile"
-                    label={<Translations text="register.githubProfile" />}
+                    placeholder={t("register.githubProfile")}
                     InputLabelProps={inputLabelStyle}
                     onChange={handleChange}
                     error={errors.githubProfile ? true : false}
