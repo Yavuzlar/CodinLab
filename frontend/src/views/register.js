@@ -38,7 +38,6 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -74,6 +73,7 @@ const Register = () => {
     }
     // Call API
     try {
+      console.log(formData);
       await register(formData);
     } catch (error) {
       console.log(error);
