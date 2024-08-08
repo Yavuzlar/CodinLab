@@ -249,14 +249,6 @@ const Register = () => {
                     onChange={handleChange}
                     error={errors.githubProfile ? true : false}
                     helperText={errors.githubProfile}
-                  />
-                  <TextField
-                    name="githubProfile"
-                    placeholder={t("register.githubProfile")}
-                    InputLabelProps={inputLabelStyle}
-                    onChange={handleChange}
-                    error={errors.githubProfile ? true : false}
-                    helperText={errors.githubProfile}
                     sx={textFieldStyle}
                   />
                   <TextField
