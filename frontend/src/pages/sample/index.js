@@ -4,6 +4,6 @@ const ChallengesPage = () => <Sample />;
 
 ChallengesPage.acl = {
   action: "read",
-  permission: "sample",
+  permission: "home",
 };
 export default ChallengesPage;
