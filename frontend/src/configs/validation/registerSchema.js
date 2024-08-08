@@ -14,17 +14,10 @@ export const registerValidation = async (values) => {
     githubProfile: yup
       .string()
       .required(<Translations text="register.githubProfileError" />),
-    email: yup
-      .string()
-      .email(<Translations text="register.emailError" />)
-      .required(<Translations text="register.emailRequiredError" />),
     password: yup
       .string()
       .required(<Translations text="register.passwordError" />)
       .min(8, <Translations text="register.passwordMinError" />),
-    checkbox: yup
-      .string()
-      .required(<Translations text="register.checkboxError" />),
   });
 
   return await validation(schema, values);

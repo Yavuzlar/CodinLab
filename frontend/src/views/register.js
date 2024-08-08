@@ -29,37 +29,58 @@ import { useState, useEffect } from "react";
 import { registerValidation } from "src/configs/validation/registerSchema";
 import CardImage from "src/assets/3d/3d-casual-life-windows-with-developer-code-symbols.png";
 import GirlImage from "src/assets/3d/3d-casual-life-girl-holding-laptop-and-having-an-idea.png";
-import Translations from "src/components/Translations";
+import themeConfig from "src/configs/themeConfig";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
   const [formData, setFormData] = useState(null);
   const [errors, setErrors] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleChange = (e) => {
+    if (e.target.name === "checkbox") {
+      setIsChecked(!isChecked);
+      return;
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
     console.log(formData);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setFormSubmit(true);
+
+    const validationErrors = await registerValidation(formData);
+    setErrors(validationErrors);
+
+    if (!isChecked) {
+      setErrors({ ...errors, checkbox: "You must accept" });
+      return;
+    }
+    if (Object.keys(validationErrors).length > 0) {
+      console.log("Form has errors:", validationErrors);
+      return;
+    }
+    // Call API
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (formData && formSubmit) {
+    const validate = async () => {
+      if (formSubmit) {
         const errors = await registerValidation(formData);
         setErrors(errors);
       }
     };
-    fetchData();
+    validate();
   }, [formData, formSubmit]);
 
   const theme = useTheme();
   const bgColor = theme.palette.primary.dark;
+  const { t } = useTranslation();
 
   const iconSize = {
     width: 30,
@@ -77,6 +98,27 @@ const Register = () => {
       color: "#0A3B7A",
       font: "normal normal bold 18px/23px Outfit",
       ml: 1,
+    },
+  };
+
+  const textFieldStyle = {
+    "& .MuiFormLabel-root": {
+      color: "#0A3B7A",
+      fontWeight: "bold",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        color: "#0A3B7A",
+        fontWeight: "bold",
+      },
+      "&:hover fieldset": {
+        color: "#0A3B7A",
+        fontWeight: "bold",
+      },
+      "&.Mui-focused": {
+        color: "#0A3B7A",
+        fontWeight: "bold",
+      },
     },
   };
 
@@ -100,7 +142,7 @@ const Register = () => {
           },
           zIndex: 1,
         }}>
-        <Image src={CardImage} width={368} height={226} />
+        <Image src={CardImage} width={368} height={226} alt="Cards" />
       </Box>
       <Box
         sx={{
@@ -117,7 +159,13 @@ const Register = () => {
           },
           zIndex: 1,
         }}>
-        <Image src={GirlImage} width={368} height={803} />
+        <Image
+          src={GirlImage}
+          width={368}
+          height={803}
+          priority
+          alt="Girl holding laptop"
+        />
       </Box>
       <Container sx={{ display: "flex", justifyContent: "center", mt: "4%" }}>
         <Card
@@ -149,60 +197,57 @@ const Register = () => {
                   fontFamily="Outfit"
                   fontWeight="600"
                   fontSize="35px">
-                  CodinLab
+                  {themeConfig.projectName}
                 </Typography>
               </Box>
               <FormControl>
                 <Grid container direction="column" gap={3}>
                   <TextField
                     name="name"
-                    label={<Translations text="register.name" />}
+                    placeholder={t("register.name")}
+                    variant="outlined"
                     InputLabelProps={inputLabelStyle}
                     onChange={handleChange}
                     error={errors.name ? true : false}
                     helperText={errors.name}
+                    sx={textFieldStyle}
                   />
                   <TextField
                     name="surname"
-                    label={<Translations text="register.surname" />}
+                    placeholder={t("register.surname")}
                     InputLabelProps={inputLabelStyle}
                     onChange={handleChange}
                     error={errors.surname ? true : false}
                     helperText={errors.surname}
+                    sx={textFieldStyle}
                   />
                   <TextField
                     name="username"
-                    label={<Translations text="register.username" />}
+                    placeholder={t("register.username")}
                     InputLabelProps={inputLabelStyle}
                     onChange={handleChange}
                     error={errors.username ? true : false}
                     helperText={errors.username}
+                    sx={textFieldStyle}
                   />
                   <TextField
                     name="githubProfile"
-                    label={<Translations text="register.githubProfile" />}
+                    placeholder={t("register.githubProfile")}
                     InputLabelProps={inputLabelStyle}
                     onChange={handleChange}
                     error={errors.githubProfile ? true : false}
                     helperText={errors.githubProfile}
-                  />
-                  <TextField
-                    name="email"
-                    label={<Translations text="register.email" />}
-                    InputLabelProps={inputLabelStyle}
-                    type="email"
-                    onChange={handleChange}
-                    error={errors.email ? true : false}
-                    helperText={errors.email}
+                    sx={textFieldStyle}
                   />
                   <TextField
                     name="password"
-                    label={<Translations text="register.password" />}
+                    placeholder={t("register.password")}
                     InputLabelProps={inputLabelStyle}
                     type={showPassword ? "text" : "password"}
                     onChange={handleChange}
                     error={errors.password ? true : false}
                     helperText={errors.password}
+                    sx={textFieldStyle}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment>
@@ -224,6 +269,7 @@ const Register = () => {
                     control={
                       <Checkbox
                         name="checkbox"
+                        onChange={handleChange}
                         sx={{
                           color: "#FFF",
                           "&.Mui-checked": {
@@ -241,12 +287,12 @@ const Register = () => {
                         fontWeight={300}
                         fontSize={18}
                         fontFamily={"Outfit"}>
-                        {<Translations text="register.accept" />}
+                        {t("register.accept")}
                         <Link
                           sx={{ textDecoration: "none", fontWeight: "600" }}
                           color={"#0A3B7A"}
                           href="#">
-                          {<Translations text="register.terms" />}
+                          {t("register.terms")}
                         </Link>
                       </Typography>
                     }
@@ -261,14 +307,11 @@ const Register = () => {
                     }}
                     onClick={handleSubmit}
                     fullWidth>
-                    {<Translations text="register.signup" />}
+                    {t("register.signup")}
                   </Button>
                 </Grid>
               </FormControl>
-              <Divider sx={{ mt: 3 }}>
-                {" "}
-                {<Translations text={"register.or"} />}{" "}
-              </Divider>
+              <Divider sx={{ mt: 3 }}> {t("register.or")}</Divider>
               <Stack direction="row" justifyContent="center" gap={3} mt={3}>
                 <IconButton variant="contained" sx={iconBtnStyle}>
                   <Google sx={iconSize} />
@@ -282,12 +325,12 @@ const Register = () => {
                 textAlign={"center"}
                 mt={4}
                 fontFamily={"Outfit"}>
-                {<Translations text="register.already" />}
+                {t("register.already")}
                 <Link
                   href="/login"
                   color={bgColor}
                   sx={{ fontWeight: "600", textDecoration: "none", ml: 1 }}>
-                  {<Translations text="register.login" />}
+                  {t("register.login")}
                 </Link>
               </Typography>
             </Grid>
