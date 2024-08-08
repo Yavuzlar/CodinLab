@@ -38,12 +38,17 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const { register } = useAuth();
 
   const handleChange = (e) => {
+    if (e.target.name === "checkbox") {
+      setIsChecked(!isChecked);
+      return;
+    }
     if (e.target.name === "checkbox") {
       setIsChecked(!isChecked);
       return;
