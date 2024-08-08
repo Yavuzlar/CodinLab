@@ -48,6 +48,10 @@ const Register = () => {
       setIsChecked(!isChecked);
       return;
     }
+    if (e.target.name === "checkbox") {
+      setIsChecked(!isChecked);
+      return;
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
     console.log(formData);
   };
