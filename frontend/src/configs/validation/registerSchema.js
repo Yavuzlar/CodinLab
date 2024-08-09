@@ -1,18 +1,23 @@
 import * as yup from "yup";
 import { validation } from "src/utils/validation";
+import Translations from "src/components/Translations";
 
 export const registerValidation = async (values) => {
   const schema = yup.object().shape({
-    fullname: yup.string().required("Fullname is required"),
-    username: yup.string().required("Username is required"),
-    email: yup.string().email("Invalid email").required("Email is required"),
+    name: yup.string().required(<Translations text="register.nameError" />),
+    surname: yup
+      .string()
+      .required(<Translations text="register.surnameError" />),
+    username: yup
+      .string()
+      .required(<Translations text="register.usernameError" />),
+    githubProfile: yup
+      .string()
+      .required(<Translations text="register.githubProfileError" />),
     password: yup
       .string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters"),
-    checkbox: yup
-      .string()
-      .required("Please accept the policy & terms to proceed"),
+      .required(<Translations text="register.passwordError" />)
+      .min(8, <Translations text="register.passwordMinError" />),
   });
 
   return await validation(schema, values);
