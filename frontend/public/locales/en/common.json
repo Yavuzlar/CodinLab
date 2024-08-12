@@ -17,6 +17,9 @@
   "login.divider.or": "or",
   "login.new.on.platform": "Are you new on our platform?",
   "login.create.new.account": "Create an account",
+  "login.invalidError": "Invalid email",
+  "login.emailError": "Email is required",
+  "login.passwordError": "Password is required",
   "labs.search.placeholder": "Search in labs",
   "labs.sort_the_labs": "Sort the labs",
   "admin.time.title": "Time Spent & Languages",
@@ -35,6 +38,12 @@
   "settings.old.password": "Current Password",
   "settings.new.password": "New Password",
   "settings.confirm.password": "Confirm New Password",
+  "settings.usernameError": "Username is required",
+  "settings.invalidError": "Invalid email",
+  "settings.emailError": "Email is required",
+  "settings.currentPasswordError": "Current password is required",
+  "settings.newPasswordError": "New password is required",
+  "settings.confirmPasswordError": "Passwords do not match",
   "register.login": "Login",
   "register.nameError": "Name is required",
   "register.surnameError": "Surname is required",
@@ -63,5 +72,11 @@
   "register.passwordMinError": "Password must be at least 8 characters",
   "register.checkboxError": "Please accept the policy & terms to proceed",
   "register.githubProfile": "Github Username",
-  "register.githubProfileError": "Github username is required"
+  "register.githubProfileError": "Github username is required",
+  "changePassword.currentPasswordError": "Current password is required",
+  "changePassword.newPasswordError": "New password is required",
+  "changePassword.passwordMinError" : "Password must be at least 8 characters",
+  "changePassword.confirmPasswordError": "Passwords do not match"
+
+  
 }

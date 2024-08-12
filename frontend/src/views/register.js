@@ -34,7 +34,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "src/hooks/useAuth";
 
 const Register = () => {
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState();
   const [errors, setErrors] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
