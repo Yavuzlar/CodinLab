@@ -13,6 +13,7 @@ const Welcome = ({ title = "", description = "", image = null }) => {
   const _mdlg = useMediaQuery((theme) => theme.breakpoints.down("mdlg"));
   const _smd = useMediaQuery((theme) => theme.breakpoints.down("smd"));
   const _lg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const _xxxl = useMediaQuery((theme) => theme.breakpoints.down("xxxl"));
 
   return (
     <Box sx={{ display: "flex", position: "relative", width: "100%" }}>
@@ -36,9 +37,12 @@ const Welcome = ({ title = "", description = "", image = null }) => {
               sx={{
                 textAlign: "left",
                 paddingTop: "1.8rem",
+
                 ...(_mdlg
                   ? { maxWidth: "40ch" }
-                  : _lgPlus && { maxWidth: "60ch" }),
+                  : _xxxl && { maxWidth: "60ch" }
+                  
+                ),
               }}
             >
               {description}
@@ -50,7 +54,7 @@ const Welcome = ({ title = "", description = "", image = null }) => {
         <Image
           style={{
             position: "absolute",
-            right: _lg ? "1rem" : "8rem",
+            right: _lg ? "1rem" : "2rem",
             opacity: _smd ? "0.25" : "1",
             bottom: "0",
           }}

@@ -40,20 +40,20 @@ const Languages = ({ language }) => {
             flexDirection: "row",
             justifyContent: "start",
             alignItems: "center",
-            gap: "1.5rem",
-            ...(_md && { gap: "0.5rem" }),
+            gap: "0.5rem",
           }}
         >
           <Image
             src={language.image}
             alt={language.name}
-            width={60}
-            height={60}
+            width={50}
+            height={50}
           />
           <Typography
             variant="title"
             sx={{
               fontWeight: "bold",
+              fontSize: "1.5rem",
             }}
           >
             {language.name}
@@ -78,8 +78,7 @@ const Languages = ({ language }) => {
               backgroundColor: "primary.main",
               ":hover": {
                 zIndex: 1,
-                width: "70vh",
-                ...(_md && { width: "100vh" }),
+                width: "100vh",
                 transition: "width 0.3s",
               },
             }}
@@ -95,8 +94,7 @@ const Languages = ({ language }) => {
               backgroundColor: "primary.main",
               ":hover": {
                 zIndex: 1,
-                width: "70vh",
-                ...(_md && { width: "100vh" }),
+                width: "100vh",
                 transition: "width 0.3s",
               },
             }}
