@@ -126,6 +126,21 @@ definitions:
     required:
     - programmingID
     type: object
+  private.UpdatePasswordDTO:
+    properties:
+      confirmPassword:
+        minLength: 8
+        type: string
+      newPassword:
+        minLength: 8
+        type: string
+      password:
+        type: string
+    required:
+    - confirmPassword
+    - newPassword
+    - password
+    type: object
   private.UpdateUserDTO:
     properties:
       githubProfile:
@@ -133,10 +148,8 @@ definitions:
         type: string
       name:
         type: string
-      newPassword:
-        minLength: 8
-        type: string
       password:
+        description: requires users password for update
         type: string
       surname:
         type: string
@@ -656,6 +669,28 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: UpdateUser
+      tags:
+      - User
+  /private/user/password:
+    put:
+      consumes:
+      - application/json
+      description: Updates users password
+      parameters:
+      - description: UpdatePassword
+        in: body
+        name: update
+        required: true
+        schema:
+          $ref: '#/definitions/private.UpdatePasswordDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: UpdatePassword
       tags:
       - User
   /public/login:

@@ -717,6 +717,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/user/password": {
+            "put": {
+                "description": "Updates users password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UpdatePassword",
+                "parameters": [
+                    {
+                        "description": "UpdatePassword",
+                        "name": "update",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/private.UpdatePasswordDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/public/login": {
             "post": {
                 "description": "Login",
@@ -974,6 +1008,27 @@ const docTemplate = `{
                 }
             }
         },
+        "private.UpdatePasswordDTO": {
+            "type": "object",
+            "required": [
+                "confirmPassword",
+                "newPassword",
+                "password"
+            ],
+            "properties": {
+                "confirmPassword": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "newPassword": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "private.UpdateUserDTO": {
             "type": "object",
             "required": [
@@ -987,11 +1042,8 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "newPassword": {
-                    "type": "string",
-                    "minLength": 8
-                },
                 "password": {
+                    "description": "requires users password for update",
                     "type": "string"
                 },
                 "surname": {
