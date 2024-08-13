@@ -46,5 +46,11 @@
   "settings.change.github" : "Github Username",
   "settings.old.password" : "Current Password",
   "settings.new.password" : "New Password",
-  "settings.confirm.password" : "Confirm New Password"
+  "settings.confirm.password" : "Confirm New Password",
+  "userlist.order.name" : "Order",
+  "userlist.username.name" : "Username",
+  "userlist.level.name" : "Level",
+  "userlist.best.name" : "Best Language",
+  "users.search.placeholder": "Search in users",
+  "users.sort_the_labs": "Sort the users"
 }

@@ -46,5 +46,11 @@
   "settings.change.github" : "Github Kullanıcı Adı",
   "settings.old.password" : "Mevcut Şifre",
   "settings.new.password" : "Yeni Şifre",
-  "settings.confirm.password" : "Şifreyi Onayla"
-}
+  "settings.confirm.password" : "Şifreyi Onayla",
+  "userlist.order.name" : "Sıra",
+  "userlist.username.name" : "Kullanıcı Adı",
+  "userlist.level.name" : "Level",
+  "userlist.best.name" : "En İyi Oldugu Dil" ,
+  "users.search.placeholder": "Kullanıcılarda ara",
+  "users.sort_the_labs": "Kullanıcıları Sırala"
+} 
