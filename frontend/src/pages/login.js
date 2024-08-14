@@ -31,13 +31,14 @@ import Image from "next/image";
 import manImg from "../assets/3d/3d-casual-life-young-man-sitting-with-laptop-and-waving.png";
 import { useTranslation } from "next-i18next";
 import themeConfig from "src/configs/themeConfig";
+import { set } from "nprogress";
 const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState();
   const [errors, setErrors] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
   const [visibleEmailLabel, setVisibleEmailLabel] = useState(false);
@@ -61,10 +62,6 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    setFormSubmit(true);
-  };
-
   const handleVisibleEmailLabel = (email) => {
     setVisibleEmailLabel(email !== "");
   };
@@ -73,14 +70,20 @@ const Login = () => {
     setVisiblePasswordLabel(password !== "");
   };
 
+  const handleSubmit = async () => {
+    setFormSubmit(true); 
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      if (formData && formSubmit) {
-        const errors = await loginValidation(formData);
-        setErrors(errors);
-      }
-    };
-    fetchData();
+    if (formSubmit) {
+      const validateForm = async () => {
+        const validationErrors = await loginValidation(formData);
+        setErrors(validationErrors);
+        console.log(validationErrors, "errors");
+
+      };
+      validateForm();
+    }
   }, [formData, formSubmit]);
 
   const { t } = useTranslation();

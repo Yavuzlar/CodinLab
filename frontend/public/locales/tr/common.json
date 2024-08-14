@@ -70,6 +70,9 @@
   "login.divider.or": "ya da",
   "login.new.on.platform": "Platformumuzda yeni misiniz?",
   "login.create.new.account": "Hesap Oluştur",
+  "login.invalidEroor": "Geçersiz e-posta",
+  "login.emailError": "E-posta gereklidir",
+  "login.passwordError": "Parola gereklidir",
   "labs.search.placeholder": "Lablarda ara",
   "labs.sort_the_labs": "Labları sırala",
   "admin.time.title": "Harcanan Zaman & Diller",
@@ -87,5 +90,15 @@
   "settings.change.github": "Github Kullanıcı Adı",
   "settings.old.password": "Mevcut Şifre",
   "settings.new.password": "Yeni Şifre",
-  "settings.confirm.password": "Şifreyi Onayla"
+  "settings.confirm.password": "Şifreyi Onayla",
+  "settings.usernameError": "Kullanıcı adı gereklidir",
+  "settings.invalidError": "Geçersiz e-posta",
+  "settings.emailError": "E-posta gereklidir",
+  "settings.currentPasswordError": "Mevcut şifre gereklidir",
+  "settings.newPasswordError": "Yeni şifre gereklidir",
+  "settings.confirmPasswordError": "Şifreler eşleşmiyor",
+  "changePassword.currentPasswordError": "Mevcut şifre gereklidir",
+  "changePassword.newPasswordError": "Yeni şifre gereklidir",
+  "changePassword.passwordMinError" : "Şifre en az 8 karakter olmalıdır",
+  "changePassword.confirmPasswordError": "Şifreler eşleşmiyor"
 }
