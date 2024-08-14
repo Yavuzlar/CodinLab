@@ -25,9 +25,10 @@ type IUserService interface {
 	CreateUser(ctx context.Context, username, name, surname, password, githubProfile string) (err error)
 	GetAllUsers(ctx context.Context) (users []User, err error)
 	GetProfile(ctx context.Context, userID string) (user *User, err error)
-	UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile, name, surname string) (err error)
+	UpdateUser(ctx context.Context, userID, password, username, githubProfile, name, surname string) (err error)
 	DeleteUser(ctx context.Context, userID string) (err error)
 	BestProgrammingLanguages(ctx context.Context, userID string) (bestLanguage string, err error)
+	UpdatePassword(ctx context.Context, userID, password, newPassword, confirmPassword string) (err error)
 	// Devamı gelecek...
 }
 
