@@ -1,15 +1,16 @@
 import * as yup from "yup";
 import { validation } from "@/utils/validation";
+import Translations from "src/components/Translations";
 
 export const changePasswordValidation = async (values) => {
     const schema = yup.object().shape({
-      currentPassword: yup.string().required("Current password is required"),
+      currentPassword: yup.string().required(<Translations text="changePassword.currentPasswordError" />),
       newPassword: yup.string()
-        .required("New password is required")
-        .min(8, "Password must be at least 8 characters"),
+        .required(<Translations text="changePassword.newPasswordError" />)
+        .min(8, <Translations text="changePassword.passwordMinError" />),
       confirmPassword: yup.string().oneOf(
         [yup.ref("newPassword"), null],
-        "Passwords must match"
+        <Translations text="changePassword.confirmPasswordError" />
       ),
     });
   
