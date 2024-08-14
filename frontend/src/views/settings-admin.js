@@ -11,17 +11,19 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import ComputerImage from "../assets/3d/3d-casual-life-website-browser-window-in-laptop.png";
-import MauseImage from "../assets/3d/casual-life-3d-cursor.png";
 import CofeeImage from "../assets/3d/casual-life-3d-green-coffee-cup.png";
 import Translations from "src/components/Translations";
-import { useState } from "react";
 import visibilityOnIcon from "../assets/icons/icons8-eye-1.png";
 import visibilityOffIcon from "../assets/icons/eye-hidden.png";
 import { useTheme } from "@mui/material/styles";
+import { useState, useEffect } from "react";
+import MauseImage from "../assets/3d/casual-life-3d-cursor.png";
+import { profileSettingsValidation } from "src/configs/validation/profileSettingsSchema";
+import { changePasswordValidation } from "src/configs/validation/changePassSchema";
 
 const settings = () => {
-  const [infoSettingsData, setInfoSettingsData] = useState(null);
-  const [passwordSettingsData, setPasswordSettingsData] = useState(null);
+  const [infoSettingsData, setInfoSettingsData] = useState();
+  const [passwordSettingsData, setPasswordSettingsData] = useState();
 
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -29,13 +31,20 @@ const settings = () => {
 
   const [visibleUsernameLabel, setVisibleUsernameLabel] = useState(false);
   const [visibleGithubLabel, setVisibleGithubLabel] = useState(false);
+  const [visibleNameLabe, setVisibleNameLabel] = useState(false);
+  const [visibleSurnameLabel, setVisibleSurnameLabel] = useState(false);
 
   const [visibleOldPasswordLabel, setVisibleOldPasswordLabel] = useState(false);
   const [visibleNewPasswordLabel, setVisibleNewPasswordLabel] = useState(false);
   const [visibleConfirmPasswordLabel, setVisibleConfirmPasswordLabel] =
     useState(false);
 
-  const [error, setError] = useState(null);
+  const [infoSettingsSubmitted, setInfoSettingsSubmitted] = useState(false);
+  const [passwordSettingsSubmitted, setPasswordSettingsSubmitted] =
+    useState(false);
+
+  const [errorInfo, setErrorInfo] = useState({});
+  const [errorPassword, setErrorPassword] = useState({});
 
   const hanldeClickShowOldPassword = () => {
     setShowOldPassword(!showOldPassword);
@@ -66,6 +75,22 @@ const settings = () => {
         setVisibleGithubLabel(true);
       } else {
         setVisibleGithubLabel(false);
+      }
+    }
+
+    if (e.target.name === "name") {
+      if (e.target.value.length > 0) {
+        setVisibleNameLabel(true);
+      } else {
+        setVisibleNameLabel(false);
+      }
+    }
+
+    if (e.target.name === "surname") {
+      if (e.target.value.length > 0) {
+        setVisibleSurnameLabel(true);
+      } else {
+        setVisibleSurnameLabel(false);
       }
     }
   };
@@ -103,10 +128,61 @@ const settings = () => {
 
   const theme = useTheme();
 
- 
+  const handleSubmitInfoSettings = async (e) => {
+    e.preventDefault();
+    setInfoSettingsSubmitted(true);
 
-  // when de settings validation is done
-  // useEffect will be added here for the passwordSettingsData and infoSettingsData
+    const validationInfoErrors = await profileSettingsValidation(
+      infoSettingsData
+    );
+    setErrorInfo(validationInfoErrors);
+
+    if (validationInfoErrors) {
+      return;
+    }
+
+    // when the api ready, the api call will be added here
+  };
+
+  const handleSubmitPasswordSettings = async (e) => {
+    e.preventDefault();
+    setPasswordSettingsSubmitted(true);
+
+    const validationPasswordErrors = await changePasswordValidation(
+      passwordSettingsData
+    );
+    setErrorPassword(validationPasswordErrors);
+
+    if (validationPasswordErrors) {
+      return;
+    }
+
+    // when the api ready, the api call will be added here
+  };
+
+  useEffect(() => {
+    const validateInfoSettings = async () => {
+      if (infoSettingsSubmitted) {
+        const validationInfoErrors = await profileSettingsValidation(
+          infoSettingsData
+        );
+        setErrorInfo(validationInfoErrors);
+      }
+    };
+    validateInfoSettings();
+  }, [infoSettingsData, infoSettingsSubmitted]);
+
+  useEffect(() => {
+    const validatePasswordSettings = async () => {
+      if (passwordSettingsSubmitted) {
+        const validationPasswordErrors = await changePasswordValidation(
+          passwordSettingsData
+        );
+        setErrorPassword(validationPasswordErrors);
+      }
+    };
+    validatePasswordSettings();
+  }, [passwordSettingsData, passwordSettingsSubmitted]);
 
   return (
     <div>
@@ -224,7 +300,102 @@ const settings = () => {
                     <Translations text={"settings.page.title"} />
                   </Typography>
 
-                  <FormControl fullWidth>
+                  <FormControl
+                    fullWidth
+                    sx={{
+                      marginTop: 4,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        mb: "0.2rem",
+                        color: (theme) =>
+                          `${theme.palette.border.secondary} !important`,
+                        fontWeight: "bold",
+                        transform: visibleNameLabe
+                          ? "translateY(0)"
+                          : "translateY(20px)",
+                        opacity: visibleNameLabe ? 1 : 0,
+                        transition: "all 0.3s ease-in-out",
+                      }}
+                    >
+                      <Translations text={"settings.change.name"} />
+                    </Typography>
+                    <TextField
+                      id="outlined-basic"
+                      placeholder="Jhon"
+                      variant="outlined"
+                      name="name"
+                      error = {errorInfo.name ? true : false}
+                      helperText={errorInfo.name}
+                      onChange={handleInfoSettings}
+                      fullWidth
+                      sx={{
+                        height: "52px",
+                        "& .MuiOutlinedInput-root": {
+                          "&.Mui-focused fieldset": {
+                            borderColor: "#0A3B7A",
+                          },
+                        },
+                        "& .MuiInputBase-input": {
+                          color: "#0A3B7A",
+                          fontWeight: "bold",
+                        },
+                      }}
+                    />
+                  </FormControl>
+
+                  <FormControl
+                    fullWidth
+                    sx={{
+                      marginTop: 4,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        mb: "0.2rem",
+                        color: (theme) =>
+                          `${theme.palette.border.secondary} !important`,
+                        fontWeight: "bold",
+                        transform: visibleSurnameLabel
+                          ? "translateY(0)"
+                          : "translateY(20px)",
+                        opacity: visibleSurnameLabel ? 1 : 0,
+                        transition: "all 0.3s ease-in-out",
+                      }}
+                    >
+                      <Translations text={"settings.change.surname"} />
+                    </Typography>
+                    <TextField
+                      id="outlined-basic"
+                      placeholder="Doe"
+                      variant="outlined"
+                      name="surname"
+                      onChange={handleInfoSettings}
+                      error = {errorInfo.surname ? true : false}
+                      helperText={errorInfo.surname}
+                      fullWidth
+                      sx={{
+                        height: "52px",
+                        "& .MuiOutlinedInput-root": {
+                          "&.Mui-focused fieldset": {
+                            borderColor: "#0A3B7A",
+                          },
+                        },
+                        "& .MuiInputBase-input": {
+                          color: "#0A3B7A",
+                          fontWeight: "bold",
+                        },
+                      }}
+                    />
+                  </FormControl>
+
+                  <FormControl
+                    sx={{
+                      marginTop: 4,
+                    }}
+                    fullWidth
+                  >
                     <Typography
                       sx={{
                         mb: "0.2rem",
@@ -246,6 +417,8 @@ const settings = () => {
                       variant="outlined"
                       name="username"
                       onChange={handleInfoSettings}
+                      error = {errorInfo.username ? true : false}
+                      helperText={errorInfo.username}
                       fullWidth
                       sx={{
                         height: "52px",
@@ -263,10 +436,10 @@ const settings = () => {
                   </FormControl>
 
                   <FormControl
-                    fullWidth
                     sx={{
-                      marginTop: 3,
+                      marginTop: 4,
                     }}
+                    fullWidth
                   >
                     <Typography
                       sx={{
@@ -289,6 +462,8 @@ const settings = () => {
                       variant="outlined"
                       name="github"
                       onChange={handleInfoSettings}
+                      error = {errorInfo.github ? true : false}
+                      helperText={errorInfo.github}
                       fullWidth
                       sx={{
                         height: "52px",
@@ -304,7 +479,9 @@ const settings = () => {
                       }}
                     />
                   </FormControl>
+
                   <Button
+                    onClick={handleSubmitInfoSettings}
                     variant="dark"
                     sx={{
                       marginTop: 4,
@@ -353,6 +530,8 @@ const settings = () => {
                       name="oldPassword"
                       type={showOldPassword ? "text" : "password"}
                       onChange={handlePasswordSettings}
+                      error = {errorPassword.oldPassword ? true : false}
+                      helperText={errorPassword.oldPassword}
                       InputProps={{
                         endAdornment: (
                           <IconButton
@@ -396,7 +575,7 @@ const settings = () => {
                   <FormControl
                     fullWidth
                     sx={{
-                      marginTop: 3,
+                      marginTop: 4,
                     }}
                   >
                     <Typography
@@ -421,6 +600,8 @@ const settings = () => {
                       name="newPassword"
                       type={showNewPassword ? "text" : "password"}
                       onChange={handlePasswordSettings}
+                      error = {errorPassword.newPassword ? true : false}
+                      helperText={errorPassword.newPassword}
                       fullWidth
                       InputProps={{
                         endAdornment: (
@@ -464,7 +645,7 @@ const settings = () => {
                   <FormControl
                     fullWidth
                     sx={{
-                      marginTop: 3,
+                      marginTop: 4,
                     }}
                   >
                     <Typography
@@ -489,6 +670,8 @@ const settings = () => {
                       name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       onChange={handlePasswordSettings}
+                      error = {errorPassword.confirmPassword ? true : false}
+                      helperText={errorPassword.confirmPassword}
                       fullWidth
                       InputProps={{
                         endAdornment: (
@@ -529,6 +712,7 @@ const settings = () => {
                     />
                   </FormControl>
                   <Button
+                    onClick={handleSubmitPasswordSettings}
                     variant="dark"
                     sx={{
                       marginTop: 4,
@@ -537,6 +721,7 @@ const settings = () => {
                       left: "55%",
                       height: "52px",
                       textTransform: "none",
+                      
                     }}
                   >
                     <Typography
