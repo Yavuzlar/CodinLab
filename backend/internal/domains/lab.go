@@ -2,31 +2,8 @@ package domains
 
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
-	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished bool) ([]Labs, error)
-	UserLanguageLabStats(userID string, language string) (LanguageStats, error)
-	UserGeneralLabStats(userID string) (GeneralStats, error)
+	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished string) ([]Labs, error)
 }
-
-// LanguageStats represents the statistics for a specific language lab.
-type LanguageStats struct {
-	TotalLabs     int     `json:"totalLabs"`
-	CompletedLabs int     `json:"completedLabs"`
-	Percentage    float64 `json:"Percentage"`
-}
-
-// UserGeneralLabStatsDto represents the DTO for user general lab statistics
-type GeneralStats struct {
-	TotalLabs        int     `json:"totalLabs"`
-	TotalPercentage  float64 `json:"TotalPercentage"`
-	EasyLabs         int     `json:"easyLabs"`
-	EasyPercentage   float64 `json:"easyPercentage"`
-	MediumLabs       int     `json:"mediumlabs"`
-	MediumPercentage float64 `json:"mediumPercentage"`
-	HardLabs         int     `json:"hardLabs"`
-	HardPercentage   float64 `json:"hardPercentage"`
-}
-
-// ILabService is the interface that provides the methods for the lab service.
 
 // Language represents the details of a programming language.
 type Language struct {
@@ -62,8 +39,8 @@ type Lab struct {
 	ID         int        `json:"id"`
 	Languages  []Language `json:"languages"`
 	Quest      Quest      `json:"quest"`
-	IsStarted  bool       `json:"isStarted"`
-	IsFinished bool       `json:"isFinished"`
+	IsStarted  string     `json:"isStarted"`
+	IsFinished string     `json:"isFinished"`
 }
 
 // Labs represents a collection of labs grouped together.

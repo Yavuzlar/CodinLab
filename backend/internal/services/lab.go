@@ -81,8 +81,8 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 				ID:         lab.ID,
 				Languages:  languages,
 				Quest:      quest,
-				IsStarted:  false, // Varsayılan değer false
-				IsFinished: false, // Varsayılan değer false
+				IsStarted:  "false", // Varsayılan değer false
+				IsFinished: "false", // Varsayılan değer false
 				//Lab parametreleri buraya eklenecek
 			}
 			labIDString := strconv.Itoa(lab.ID)
@@ -93,7 +93,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 			}
 
 			if len(logStartedStatus) > 0 {
-				newLab.IsStarted = true
+				newLab.IsStarted = "true"
 			}
 
 			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", labIDString, domains.TypeLab, domains.ContentCompleted)
@@ -102,7 +102,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 			}
 
 			if len(logFinishedStatus) > 0 {
-				newLab.IsFinished = true
+				newLab.IsFinished = "true"
 			}
 
 			newLabList = append(newLabList, newLab)
@@ -121,13 +121,13 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished bool) ([]domains.Labs, error) {
+func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished string) ([]domains.Labs, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStarted && isFinished {
+	if userID == "" && labsId == 0 && labId == 0 && isStarted == "" && isFinished == "" {
 		return allLabs, nil
 	}
 
@@ -146,10 +146,10 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 			if labId != 0 && lab.ID != labId {
 				continue
 			}
-			if lab.IsStarted != isStarted {
+			if isStarted != "" && lab.IsStarted != isStarted {
 				continue
 			}
-			if lab.IsFinished != isFinished {
+			if isFinished != "" && lab.IsFinished != isFinished {
 				continue
 			}
 			//lab structı için filtreleme eklenebilir.
@@ -169,84 +169,4 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 	}
 
 	return filteredLabs, nil
-}
-
-// Lab Sayfasindaki Dil bazli lab istatistikleri
-func (s *labService) UserLanguageLabStats(userID string, language string) (domains.LanguageStats, error) {
-	allLabs, err := s.getAllLabs(userID)
-	if err != nil {
-		return domains.LanguageStats{}, err
-	}
-
-	totalLabs := 0
-	solvedLabs := 0
-
-	for _, labCollection := range allLabs {
-		for _, lab := range labCollection.Labs {
-			for _, lang := range lab.Languages {
-				if lang.Lang == language {
-					totalLabs++
-					if lab.IsFinished {
-						solvedLabs++
-					}
-					break
-				}
-			}
-		}
-	}
-	returnval := domains.LanguageStats{}
-
-	returnval = domains.LanguageStats{
-		TotalLabs:     totalLabs,
-		CompletedLabs: solvedLabs,
-		Percentage:    float64(solvedLabs) / float64(totalLabs) * 100,
-	}
-	return returnval, nil
-}
-
-// Labs sayfasindaki genel lab istatistikleri
-func (s *labService) UserGeneralLabStats(userID string) (domains.GeneralStats, error) {
-	allLabs, err := s.getAllLabs(userID)
-	if err != nil {
-		return domains.GeneralStats{}, err
-	}
-	totalLabs := 0
-	solvedLabs := 0
-	easyLabs := 0
-	mediumLabs := 0
-	hardLabs := 0
-
-	for _, labCollection := range allLabs {
-		for _, lab := range labCollection.Labs {
-			totalLabs++
-			if lab.IsFinished {
-				solvedLabs++
-			}
-			switch lab.Quest.Difficulty {
-			case 1:
-				easyLabs++
-			case 2:
-				mediumLabs++
-			case 3:
-				hardLabs++
-			}
-		}
-	}
-
-	totalPercentage := float64(solvedLabs) / float64(totalLabs) * 100
-	easyPercentage := float64(easyLabs) / float64(totalLabs) * 100
-	mediumPercentage := float64(mediumLabs) / float64(totalLabs) * 100
-	hardPercentage := float64(hardLabs) / float64(totalLabs) * 100
-	returnval := domains.GeneralStats{
-		TotalLabs:        totalLabs,
-		TotalPercentage:  totalPercentage,
-		EasyLabs:         easyLabs,
-		EasyPercentage:   easyPercentage,
-		MediumLabs:       mediumLabs,
-		MediumPercentage: mediumPercentage,
-		HardLabs:         hardLabs,
-		HardPercentage:   hardPercentage,
-	}
-	return returnval, nil
-
 }

@@ -21,8 +21,8 @@ type LanguageDto struct {
 type LabDto struct {
 	ID         int           `json:"id"`
 	Languages  []LanguageDto `json:"languages"`
-	IsStarted  bool          `json:"isStarted"`
-	IsFinished bool          `json:"isFinished"`
+	IsStarted  string        `json:"isStarted"`
+	IsFinished string        `json:"isFinished"`
 	Difficulty int           `json:"difficulty"`
 }
 
@@ -34,108 +34,30 @@ type LabsDto struct {
 	Labs     []LabDto `json:"labs"`
 }
 
-// UserLanguageLabStatsDto represents the DTO for user language lab statistics
-type UserLanguageLabStatsDto struct {
-	TotalLabs     int     `json:"totalLabs"`
-	CompletedLabs int     `json:"completedLabs"`
-	Percentage    float64 `json:"Percentage"`
-}
-
-// UserGeneralLabStatsDto represents the DTO for user general lab statistics
-type UserGeneralLabStatsDto struct {
-	TotalLabs        int     `json:"totalLabs"`
-	TotalPercentage  float64 `json:"TotalPercentage"`
-	EasyLabs         int     `json:"easyLabs"`
-	EasyPercentage   float64 `json:"easyPercentage"`
-	MediumLabs       int     `json:"mediumlabs"`
-	MediumPercentage float64 `json:"mediumPercentage"`
-	HardLabs         int     `json:"hardLabs"`
-	HardPercentage   float64 `json:"hardPercentage"`
-}
-
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/:ID", h.GetLabsByID)
 	root.Get("/lab/:programmingID/:labID", h.GetLabByID)
-	root.Get(("/labs/stats/:language/:userID"), h.GetUserLanguageLabStats)
-	root.Get(("/labs/stats/:userID"), h.GetUserGeneralLabStats)
-
 	// initialize routes
 	// Buraya yeni route'lar eklenecek lütfen Swagger'da belirtmeyi unutmayın
 }
 
 // @Tags Lab
-// @Summary GetUserLanguageLabStats
-// @Description Get user language lab statistics
-// @Accept json
-// @Produce json
-// @Param userID path string true "User ID"
-// @Param language path string true "Language"
-// @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/stats/{language}/{userID} [get]
-func (h *PrivateHandler) GetUserLanguageLabStats(c *fiber.Ctx) error {
-	userID := c.Params("userID")
-	language := c.Params("language")
-
-	stats, err := h.services.LabService.UserLanguageLabStats(userID, language)
-	if err != nil {
-		return err
-	}
-
-	dto := UserLanguageLabStatsDto{
-		TotalLabs:     stats.TotalLabs,
-		CompletedLabs: stats.CompletedLabs,
-		Percentage:    stats.Percentage,
-	}
-	return response.Response(200, "GetUserLanguageLabStats successful", dto)
-}
-
-// @Tags Lab
-// @Summary GetUserGeneralLabStats
-// @Description Get user general lab statistics
-// @Accept json
-// @Produce json
-// @Param userID path string true "User ID"
-// @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/stats/{userID} [get]
-func (h *PrivateHandler) GetUserGeneralLabStats(c *fiber.Ctx) error {
-	userID := c.Params("userID")
-
-	stats, err := h.services.LabService.UserGeneralLabStats(userID)
-	if err != nil {
-		return err
-	}
-
-	dto := UserGeneralLabStatsDto{
-		TotalLabs:        stats.TotalLabs,
-		TotalPercentage:  stats.TotalPercentage,
-		EasyLabs:         stats.EasyLabs,
-		EasyPercentage:   stats.EasyPercentage,
-		MediumLabs:       stats.MediumLabs,
-		MediumPercentage: stats.MediumPercentage,
-		HardLabs:         stats.HardLabs,
-		HardPercentage:   stats.HardPercentage,
-	}
-
-	return response.Response(200, "GetUserGeneralLabStats successful", dto)
-}
-
-// @Tags Lab
-// @Summary GetLabsById
+// @Summary GetLabsByID
 // @Description Get Labs By Lang ID
 // @Accept json
 // @Produce json
-// @Param id path string true "Labs ID"
+// @Param ID path string true "Labs ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/{id} [get]
+// @Router /private/labs/{ID} [get]
 func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
-	id := c.Params("id")
+	id := c.Params("ID")
 	intId, err := strconv.Atoi(id)
 	if err != nil {
 		return response.Response(400, "Invalid ID", nil)
 	}
 	userSession := session_store.GetSessionData(c)
 
-	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, intId, 0, false, false) //buraya bakilsin (false tan dolayi veriler gelmeyebilir) !!11!1!!11
+	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, intId, 0, "", "")
 	if err != nil {
 		return err
 	}
@@ -198,14 +120,13 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		return response.Response(400, "Invalid Lang ID", nil)
 	}
 	intLabID, err := strconv.Atoi(labID)
-
 	if err != nil {
 		return response.Response(400, "Invalid Labs ID", nil)
 	}
 
 	userSession := session_store.GetSessionData(c)
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, false, false) //buraya bakilsin (false tan dolayi veriler gelmeyebilir) !!11!1!!11
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, "", "")
 	if err != nil {
 		return err
 	}
