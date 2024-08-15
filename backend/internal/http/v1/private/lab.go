@@ -21,8 +21,8 @@ type LanguageDto struct {
 type LabDto struct {
 	ID         int           `json:"id"`
 	Languages  []LanguageDto `json:"languages"`
-	IsStarted  string        `json:"isStarted"`
-	IsFinished string        `json:"isFinished"`
+	IsStarted  bool          `json:"isStarted"`
+	IsFinished bool          `json:"isFinished"`
 	Difficulty int           `json:"difficulty"`
 }
 
@@ -135,7 +135,7 @@ func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
 	}
 	userSession := session_store.GetSessionData(c)
 
-	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, intId, 0, "", "")
+	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, intId, 0, false, false) //buraya bakilsin (false tan dolayi veriler gelmeyebilir) !!11!1!!11
 	if err != nil {
 		return err
 	}
@@ -205,7 +205,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 
 	userSession := session_store.GetSessionData(c)
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, "", "")
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, false, false) //buraya bakilsin (false tan dolayi veriler gelmeyebilir) !!11!1!!11
 	if err != nil {
 		return err
 	}

@@ -2,7 +2,7 @@ package domains
 
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
-	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished string) ([]Labs, error)
+	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished bool) ([]Labs, error)
 	UserLanguageLabStats(userID string, language string) (LanguageStats, error)
 	UserGeneralLabStats(userID string) (GeneralStats, error)
 }
@@ -62,8 +62,8 @@ type Lab struct {
 	ID         int        `json:"id"`
 	Languages  []Language `json:"languages"`
 	Quest      Quest      `json:"quest"`
-	IsStarted  string     `json:"isStarted"`
-	IsFinished string     `json:"isFinished"`
+	IsStarted  bool       `json:"isStarted"`
+	IsFinished bool       `json:"isFinished"`
 }
 
 // Labs represents a collection of labs grouped together.

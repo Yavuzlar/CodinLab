@@ -81,8 +81,8 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 				ID:         lab.ID,
 				Languages:  languages,
 				Quest:      quest,
-				IsStarted:  "false", // Varsayılan değer false
-				IsFinished: "false", // Varsayılan değer false
+				IsStarted:  false, // Varsayılan değer false
+				IsFinished: false, // Varsayılan değer false
 				//Lab parametreleri buraya eklenecek
 			}
 			labIDString := strconv.Itoa(lab.ID)
@@ -93,7 +93,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 			}
 
 			if len(logStartedStatus) > 0 {
-				newLab.IsStarted = "true"
+				newLab.IsStarted = true
 			}
 
 			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", labIDString, domains.TypeLab, domains.ContentCompleted)
@@ -102,7 +102,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 			}
 
 			if len(logFinishedStatus) > 0 {
-				newLab.IsFinished = "true"
+				newLab.IsFinished = true
 			}
 
 			newLabList = append(newLabList, newLab)
@@ -121,13 +121,13 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished string) ([]domains.Labs, error) {
+func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished bool) ([]domains.Labs, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStarted == "" && isFinished == "" {
+	if userID == "" && labsId == 0 && labId == 0 && isStarted && isFinished {
 		return allLabs, nil
 	}
 
@@ -146,10 +146,10 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 			if labId != 0 && lab.ID != labId {
 				continue
 			}
-			if isStarted != "" && lab.IsStarted != isStarted {
+			if lab.IsStarted != isStarted {
 				continue
 			}
-			if isFinished != "" && lab.IsFinished != isFinished {
+			if lab.IsFinished != isFinished {
 				continue
 			}
 			//lab structı için filtreleme eklenebilir.
@@ -171,6 +171,7 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 	return filteredLabs, nil
 }
 
+// Lab Sayfasindaki Dil bazli lab istatistikleri
 func (s *labService) UserLanguageLabStats(userID string, language string) (domains.LanguageStats, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
@@ -185,7 +186,7 @@ func (s *labService) UserLanguageLabStats(userID string, language string) (domai
 			for _, lang := range lab.Languages {
 				if lang.Lang == language {
 					totalLabs++
-					if lab.IsFinished == "true" {
+					if lab.IsFinished {
 						solvedLabs++
 					}
 					break
@@ -203,6 +204,7 @@ func (s *labService) UserLanguageLabStats(userID string, language string) (domai
 	return returnval, nil
 }
 
+// Labs sayfasindaki genel lab istatistikleri
 func (s *labService) UserGeneralLabStats(userID string) (domains.GeneralStats, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
@@ -217,7 +219,7 @@ func (s *labService) UserGeneralLabStats(userID string) (domains.GeneralStats, e
 	for _, labCollection := range allLabs {
 		for _, lab := range labCollection.Labs {
 			totalLabs++
-			if lab.IsFinished == "true" {
+			if lab.IsFinished {
 				solvedLabs++
 			}
 			switch lab.Quest.Difficulty {
