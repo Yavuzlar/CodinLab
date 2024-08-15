@@ -109,7 +109,7 @@ func firstRun(conn *sql.DB, username, pass string) {
 		if err != nil {
 			panic(err)
 		}
-		id, err := res.LastInsertId()
+		_, err = res.LastInsertId()
 		if err != nil {
 			panic(err)
 		}
@@ -117,6 +117,5 @@ func firstRun(conn *sql.DB, username, pass string) {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Println("Admin user created with id: ", id)
 	}
 }

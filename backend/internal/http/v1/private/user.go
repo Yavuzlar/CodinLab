@@ -11,15 +11,21 @@ func (h *PrivateHandler) initUserRoutes(root fiber.Router) {
 	userRoute := root.Group("/user")
 	userRoute.Get("/", h.GetProfile)
 	userRoute.Put("/", h.UpdateUser)
+	userRoute.Put("/password", h.UpdatePassword)
 }
 
 type UpdateUserDTO struct {
 	Username      string `json:"username" validate:"omitempty,alphanum,min=3,max=30" `
 	Name          string `json:"name"`
 	Surname       string `json:"surname" `
-	Password      string `json:"password" validate:"required"`
-	NewPassword   string `json:"newPassword" validate:"omitempty,min=8"`
+	Password      string `json:"password" validate:"required"` //requires users password for update
 	GithubProfile string `json:"githubProfile" validate:"omitempty,max=30"`
+}
+
+type UpdatePasswordDTO struct {
+	Password        string `json:"password" validate:"required"`
+	NewPassword     string `json:"newPassword" validate:"required,min=8"`
+	ConfirmPassword string `json:"confirmPassword" validate:"required,min=8"`
 }
 
 type UserDTO struct {
@@ -79,7 +85,7 @@ func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := h.services.UserService.UpdateUser(c.Context(), userID, update.Password, update.NewPassword, update.Username, update.GithubProfile, update.Name, update.Surname); err != nil {
+	if err := h.services.UserService.UpdateUser(c.Context(), userID, update.Password, update.Username, update.GithubProfile, update.Name, update.Surname); err != nil {
 		return err
 	}
 
@@ -89,4 +95,35 @@ func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "User successfully updated", nil)
+}
+
+// @Tags User
+// @Summary UpdatePassword
+// @Description Updates users password
+// @Accept json
+// @Produce json
+// @Param update body UpdatePasswordDTO true "UpdatePassword"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/user/password [put]
+func (h *PrivateHandler) UpdatePassword(c *fiber.Ctx) error {
+	session := session_store.GetSessionData(c)
+	userID := session.UserID
+	var update UpdatePasswordDTO
+	if err := c.BodyParser(&update); err != nil {
+		return err
+	}
+	if err := h.services.UtilService.Validator().ValidateStruct(update); err != nil {
+		return err
+	}
+
+	if err := h.services.UserService.UpdatePassword(c.Context(), userID, update.Password, update.NewPassword, update.ConfirmPassword); err != nil {
+		return err
+	}
+
+	//Update operation has been logged
+	if err := h.services.LogService.Add(c.Context(), userID, domains.TypeUser, domains.ContentProfile, 0, 0); err != nil {
+		return err
+	}
+
+	return response.Response(200, "Password successfully updated", nil)
 }

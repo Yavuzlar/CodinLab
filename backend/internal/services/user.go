@@ -131,7 +131,7 @@ func (s *userService) GetProfile(ctx context.Context, userID string) (user *doma
 	return
 }
 
-func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile, name, surname string) (err error) {
+func (s *userService) UpdateUser(ctx context.Context, userID, password, username, githubProfile, name, surname string) (err error) {
 	user, err := s.GetProfile(ctx, userID)
 	if err != nil {
 		return err
@@ -159,14 +159,9 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 		}
 	}
 
-	// Checking if password is being updated
-	if newPassword != "" {
-		if err := user.SetPassword(newPassword); err != nil {
-			return err
-		}
-	}
-
 	user.SetGithubProfile(githubProfile)
+
+	//checking if name is updated
 	if name != "" {
 		if err := user.SetName(name); err != nil {
 			return err
@@ -183,6 +178,33 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, newPassw
 	}
 
 	return
+}
+
+func (s *userService) UpdatePassword(ctx context.Context, userID, password, newPassword, confirmPassword string) (err error) {
+	user, err := s.GetProfile(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	if err := s.checkPassword(user.Password(), password); err != nil {
+		return err
+	}
+
+	// Checking if password is being updated & password match with confirm password
+	if newPassword != "" {
+		if newPassword != confirmPassword {
+			return service_errors.NewServiceErrorWithMessage(400, "password do not match")
+		}
+		if err := user.SetPassword(newPassword); err != nil {
+			return err
+		}
+	}
+
+	if err = s.userRepositories.Update(ctx, user); err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while updating user", err)
+	}
+	return
+
 }
 
 func (s *userService) checkPassword(userPassword, password string) (err error) {
