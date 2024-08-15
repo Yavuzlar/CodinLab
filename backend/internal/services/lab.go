@@ -170,3 +170,81 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 
 	return filteredLabs, nil
 }
+
+func (s *labService) UserLanguageLabStats(userID string, language string) (domains.LanguageStats, error) {
+	allLabs, err := s.getAllLabs(userID)
+	if err != nil {
+		return domains.LanguageStats{}, err
+	}
+
+	totalLabs := 0
+	solvedLabs := 0
+
+	for _, labCollection := range allLabs {
+		for _, lab := range labCollection.Labs {
+			for _, lang := range lab.Languages {
+				if lang.Lang == language {
+					totalLabs++
+					if lab.IsFinished == "true" {
+						solvedLabs++
+					}
+					break
+				}
+			}
+		}
+	}
+	returnval := domains.LanguageStats{}
+
+	returnval = domains.LanguageStats{
+		TotalLabs:     totalLabs,
+		CompletedLabs: solvedLabs,
+		Percentage:    float64(solvedLabs) / float64(totalLabs) * 100,
+	}
+	return returnval, nil
+}
+
+func (s *labService) UserGeneralLabStats(userID string) (domains.GeneralStats, error) {
+	allLabs, err := s.getAllLabs(userID)
+	if err != nil {
+		return domains.GeneralStats{}, err
+	}
+	totalLabs := 0
+	solvedLabs := 0
+	easyLabs := 0
+	mediumLabs := 0
+	hardLabs := 0
+
+	for _, labCollection := range allLabs {
+		for _, lab := range labCollection.Labs {
+			totalLabs++
+			if lab.IsFinished == "true" {
+				solvedLabs++
+			}
+			switch lab.Quest.Difficulty {
+			case 1:
+				easyLabs++
+			case 2:
+				mediumLabs++
+			case 3:
+				hardLabs++
+			}
+		}
+	}
+
+	totalPercentage := float64(solvedLabs) / float64(totalLabs) * 100
+	easyPercentage := float64(easyLabs) / float64(totalLabs) * 100
+	mediumPercentage := float64(mediumLabs) / float64(totalLabs) * 100
+	hardPercentage := float64(hardLabs) / float64(totalLabs) * 100
+	returnval := domains.GeneralStats{
+		TotalLabs:        totalLabs,
+		TotalPercentage:  totalPercentage,
+		EasyLabs:         easyLabs,
+		EasyPercentage:   easyPercentage,
+		MediumLabs:       mediumLabs,
+		MediumPercentage: mediumPercentage,
+		HardLabs:         hardLabs,
+		HardPercentage:   hardPercentage,
+	}
+	return returnval, nil
+
+}
