@@ -107,7 +107,7 @@ const Filter = ({
             </Box>
 
             <Box sx={{ height: '44px' }}>
-                <SortFilter filters={filters} setFilters={setFilters} />
+                <SortFilter filters={filters} setFilters={setFilters} textKey="labs.sort_the_labs" />
             </Box>
         </Box>
     )
