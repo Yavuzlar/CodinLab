@@ -29,7 +29,7 @@
   "register.passwordError": "Parola gerekli",
   "register.passwordMinError": "Parola en az 8 karakter olmalıdır",
   "register.checkboxError": "Devam etmek için lütfen gizlilik politikasını & şartları kabul edin",
-  "login.email": "Eposta",
+  "login.username": "Kullanıcı adı",
   "login.password": "Parola",
   "login.remember.me": "Beni Hatırla",
   "login.forget.password": "Şifreni mi Unuttun?",

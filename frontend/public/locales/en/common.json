@@ -9,7 +9,7 @@
   "home.roads.content": "Lay the basics of programming (software) languages firmly and move step by step through the coding universe with Roads!",
   "home.labs.title": "Labs",
   "home.labs.content": "Improve your algorithm and programming skills, get practical experience and put your coding knowledge into practice with Labs!",
-  "login.email": "Email",
+  "login.username": "Username",
   "login.password": "Password",
   "login.remember.me": "Remember Me",
   "login.forget.password": "Forgot Password?",
@@ -80,6 +80,4 @@
   "changePassword.passwordMinError" : "Password must be at least 8 characters",
   "changePassword.confirmPasswordError": "Passwords do not match",
   "settings.change.name" : "Name",
-  "settings.change.surname" : "Surname"
-
-}
+  "settings.change.surname" : "Surname"}
