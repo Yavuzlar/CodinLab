@@ -1,9 +1,9 @@
 import { PlayArrow } from "@mui/icons-material"
-import { Box, Card, Typography, useTheme } from "@mui/material"
+import { Box, Card, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
 import Translations from "../Translations"
 
-const SortFilter = ({ filters, setFilters }) => {
+const SortFilter = ({ filters, setFilters, textKey }) => {
     const theme = useTheme()
 
     const [sort, setSort] = useState(0) // 0,1,2
@@ -11,6 +11,7 @@ const SortFilter = ({ filters, setFilters }) => {
     useEffect(() => {
         setFilters({ ...filters, sort: sort == 2 ? "desc" : sort == 1 ? "asc" : "" })
     }, [sort])
+
 
     return (
         <Card

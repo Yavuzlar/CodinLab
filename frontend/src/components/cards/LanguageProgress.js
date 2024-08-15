@@ -13,6 +13,7 @@ import labsIcon from "../../assets/icons/icons8-test-tube-100.png";
 
 const LanguageProgress = ({ language }) => {
   const _md = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  const _sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   return (
     <Card>
@@ -22,14 +23,16 @@ const LanguageProgress = ({ language }) => {
           flexDirection: "row",
           justifyContent: "start",
           alignItems: "center",
-          gap: "1.5rem",
+          gap: _sm ? "1rem" : "1.5rem",
         }}
       >
         <Image
           src={language.image}
           alt={language.name}
-          width={60}
-          height={60}
+          width={_sm ? 30 : 60}
+          height={_sm ? 30 : 60}
+
+
         />
 
         {
@@ -38,7 +41,7 @@ const LanguageProgress = ({ language }) => {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
               <Typography
                 variant="h5"
-                sx={{ fontWeight: 600, width: '120px' }}
+                sx={{ fontWeight: 600, width: _sm ? "100px" : "120px",fontSize:_sm ? "1rem" : "2rem",  }}
               >
                 {language.name}
               </Typography>
@@ -49,7 +52,7 @@ const LanguageProgress = ({ language }) => {
                 <Typography variant="infoText">20 Lab</Typography>
               </Box>
 
-              <Button variant="dark" sx={{ textTransform: 'none', width: '120px' }}>
+              <Button variant="dark" sx={{ textTransform: 'none', width: _sm ? "40px" : "120px" }}>
                 <Typography variant="infoText">Start</Typography>
               </Button>
             </Box>

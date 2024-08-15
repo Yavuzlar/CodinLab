@@ -75,6 +75,8 @@
   "login.passwordError": "Parola gereklidir",
   "labs.search.placeholder": "Lablarda ara",
   "labs.sort_the_labs": "Labları sırala",
+  "roads.search.placeholder": "Yol haritasında ara",
+  "roads.sort_the_labs": "Yol haritalarını sırala",
   "admin.time.title": "Harcanan Zaman & Diller",
   "admin.time.content": "Bu grafik, haftalık bazda hangi yazılım dillerinde ne kadar zaman harcandığını göstermektedir.",
   "admin.activity.title": "Aktivite takvimi",
