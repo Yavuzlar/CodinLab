@@ -20,8 +20,14 @@ import { useState, useEffect } from "react";
 import MauseImage from "../assets/3d/casual-life-3d-cursor.png";
 import { profileSettingsValidation } from "src/configs/validation/profileSettingsSchema";
 import { changePasswordValidation } from "src/configs/validation/changePassSchema";
+import { useDispatch } from "react-redux";
+import { changePassword, changeProfile } from "src/store/auth";
+
 
 const settings = () => {
+
+  const dispatch = useDispatch();
+
   const [infoSettingsData, setInfoSettingsData] = useState();
   const [passwordSettingsData, setPasswordSettingsData] = useState();
 
@@ -134,14 +140,20 @@ const settings = () => {
 
     const validationInfoErrors = await profileSettingsValidation(
       infoSettingsData
+
     );
     setErrorInfo(validationInfoErrors);
+      dispatch(changeProfile(infoSettingsData));
 
     if (validationInfoErrors) {
       return;
     }
-
-    // when the api ready, the api call will be added here
+    try {
+      console.log("deneme", infoSettingsData);
+    }
+    catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSubmitPasswordSettings = async (e) => {
@@ -157,7 +169,7 @@ const settings = () => {
       return;
     }
 
-    // when the api ready, the api call will be added here
+    dispatch(changePassword(passwordSettingsData));
   };
 
   useEffect(() => {
