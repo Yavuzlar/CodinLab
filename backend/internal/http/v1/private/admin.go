@@ -4,7 +4,6 @@ import (
 	_ "github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 )
 
 func (h *PrivateHandler) initAdminRoutes(root fiber.Router) {
@@ -17,12 +16,10 @@ func (h *PrivateHandler) initAdminRoutes(root fiber.Router) {
 }
 
 type GetUserDTO struct {
-	ID                      uuid.UUID `json:"id"`
-	Username                string    `json:"username"`
-	Name                    string    `json:"name"`
-	Surname                 string    `json:"surname"`
-	GithubProfile           string    `json:"githubProfile"`
-	BestProgrammingLanguage string    `json:"bestProgrammingLanguage"`
+	Order        int    `json:"order"`
+	Username     string `json:"username"`
+	Level        string `json:"level"`
+	BestLanguage string `json:"bestLanguage"`
 }
 
 type CreateUserDTO struct {
@@ -82,25 +79,18 @@ func (h *PrivateHandler) GetAllUsers(c *fiber.Ctx) error {
 		return err
 	}
 
-	userDTOs := make([]UserDTO, len(users))
-	for i, user := range users {
-		//best language atama işlemini service katmanında mı yapsak?
-		//adminModelUser structı olusturmak gerek domainsde
-		mostUsedLanguage, err := h.services.AdminService.BestLanguage(c.Context(), user.ID().String())
-		if err != nil {
-			return err
+	var userDto []GetUserDTO
+	for _, user := range users {
+		dto := GetUserDTO{
+			Order:        user.GetAdminUserOrder(),
+			Username:     user.GetAdminUsername(),
+			Level:        user.GetAdminUserLevel(),
+			BestLanguage: user.GetAdminUserBestLanguage(),
 		}
-
-		userDTOs[i] = UserDTO{
-			Username:      user.Username(),
-			Name:          user.Name(),
-			Surname:       user.Surname(),
-			GithubProfile: user.GithubProfile(),
-			BestLanguage:  mostUsedLanguage,
-		}
+		userDto = append(userDto, dto)
 	}
 
-	return response.Response(200, "STATUS OK", userDTOs)
+	return response.Response(200, "STATUS OK", userDto)
 }
 
 // @Tags Admin

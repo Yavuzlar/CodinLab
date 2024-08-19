@@ -4,6 +4,7 @@ package services
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
@@ -15,18 +16,21 @@ type adminService struct {
 	logService       domains.ILogService
 	utils            IUtilService
 	parserService    domains.IParserService
+	levelService     domains.ILevelService
 }
 
 func newAdminService(
 	userRepositories domains.IUserRepository,
 	logService domains.ILogService,
 	parserService domains.IParserService,
+	levelService domains.ILevelService,
 	utils IUtilService,
 ) domains.IAdminService {
 	return &adminService{
 		userRepositories: userRepositories,
 		logService:       logService,
 		parserService:    parserService,
+		levelService:     levelService,
 		utils:            utils,
 	}
 }
@@ -57,16 +61,36 @@ func (s *adminService) CreateUser(ctx context.Context, username, name, surname, 
 	return
 }
 
-func (s *adminService) GetAllUsers(ctx context.Context) (users []domains.User, err error) {
-	// Retrieves all users whose role is 'user' from the database
-	users, _, err = s.userRepositories.Filter(ctx, domains.UserFilter{
+func (s *adminService) GetAllUsers(ctx context.Context) ([]domains.AdminModelUser, error) {
+	var adminModelUsers []domains.AdminModelUser
+
+	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
 		Role: "user",
 	}, 1000000, 1)
+
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}
 
-	return
+	if len(users) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessageAndError(404, "user list is empty", err)
+	}
+
+	for i, user := range users {
+
+		mostUsedLanguage, err := s.BestLanguage(ctx, user.ID().String())
+		if err != nil {
+			return nil, err
+		}
+
+		userLevel, err := s.levelService.GetUserLevel(ctx, user.ID().String())
+		if err != nil {
+			return nil, err
+		}
+		adminModelUsers = append(adminModelUsers, *domains.NewAdminUser(i+1, user.Username(), strconv.Itoa(userLevel.Level())+" Level", mostUsedLanguage))
+	}
+
+	return adminModelUsers, nil
 }
 
 func (s *adminService) GetProfile(ctx context.Context, userID string) (user *domains.User, err error) {
