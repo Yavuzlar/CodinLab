@@ -172,10 +172,10 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 }
 
 // Lab Sayfasindaki Dil bazli lab istatistikleri
-func (s *labService) UserLanguageLabStats(userID string, language string) (domains.LanguageStats, error) {
+func (s *labService) UserLanguageLabStats(userID string, language string) (domains.ProgrammingLanguageStats, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
-		return domains.LanguageStats{}, err
+		return domains.ProgrammingLanguageStats{}, err
 	}
 
 	totalLabs := 0
@@ -194,9 +194,9 @@ func (s *labService) UserLanguageLabStats(userID string, language string) (domai
 			}
 		}
 	}
-	returnval := domains.LanguageStats{}
+	returnval := domains.ProgrammingLanguageStats{}
 
-	returnval = domains.LanguageStats{
+	returnval = domains.ProgrammingLanguageStats{
 		TotalLabs:     totalLabs,
 		CompletedLabs: solvedLabs,
 		Percentage:    float64(solvedLabs) / float64(totalLabs) * 100,

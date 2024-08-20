@@ -1,9 +1,8 @@
 basePath: /api/v1
 definitions:
-  private.CreateUserDTO:
+  dto.CreateUserDTO:
     properties:
       githubProfile:
-        description: Github Profile is must be max 30 characters long.
         maxLength: 30
         type: string
       name:
@@ -30,22 +29,7 @@ definitions:
     - surname
     - username
     type: object
-  private.GetUserDTO:
-    properties:
-      bestProgrammingLanguage:
-        type: string
-      githubProfile:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      surname:
-        type: string
-      username:
-        type: string
-    type: object
-  private.LanguageDTO:
+  dto.LanguageDTO:
     properties:
       content:
         type: string
@@ -58,22 +42,35 @@ definitions:
       title:
         type: string
     type: object
-  private.LogDTO:
+  dto.LogDTO:
     properties:
       content:
         type: string
       id:
         type: string
-      labRoadID:
+      labPathID:
         type: integer
+      logType:
+        type: string
       programmingID:
         type: integer
-      type:
-        type: string
       userId:
         type: string
     type: object
-  private.PathDTO:
+  dto.LoginDTO:
+    properties:
+      password:
+        minLength: 8
+        type: string
+      username:
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  dto.PathDTO:
     properties:
       difficulty:
         type: integer
@@ -85,12 +82,34 @@ definitions:
         type: boolean
       languages:
         items:
-          $ref: '#/definitions/private.LanguageDTO'
+          $ref: '#/definitions/dto.LanguageDTO'
         type: array
       name:
         type: string
     type: object
-  private.RoadDTO:
+  dto.RegisterDTO:
+    properties:
+      githubProfile:
+        maxLength: 30
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      surname:
+        type: string
+      username:
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - name
+    - password
+    - surname
+    - username
+    type: object
+  dto.RoadDTO:
     properties:
       iconPath:
         type: string
@@ -98,10 +117,10 @@ definitions:
         type: string
       paths:
         items:
-          $ref: '#/definitions/private.PathDTO'
+          $ref: '#/definitions/dto.PathDTO'
         type: array
     type: object
-  private.SolutionsByDayDTO:
+  dto.SolutionsByDayDTO:
     properties:
       date:
         type: string
@@ -110,7 +129,7 @@ definitions:
       roadCount:
         type: integer
     type: object
-  private.SolutionsHoursByProgrammingDTO:
+  dto.SolutionsHoursByProgrammingDTO:
     properties:
       labHours:
         type: number
@@ -119,14 +138,14 @@ definitions:
       roadHours:
         type: number
     type: object
-  private.StartDTO:
+  dto.StartDTO:
     properties:
       programmingID:
         type: integer
     required:
     - programmingID
     type: object
-  private.UpdatePasswordDTO:
+  dto.UpdatePasswordDTO:
     properties:
       confirmPassword:
         minLength: 8
@@ -141,7 +160,7 @@ definitions:
     - newPassword
     - password
     type: object
-  private.UpdateUserDTO:
+  dto.UpdateUserDTO:
     properties:
       githubProfile:
         maxLength: 30
@@ -149,7 +168,6 @@ definitions:
       name:
         type: string
       password:
-        description: requires users password for update
         type: string
       surname:
         type: string
@@ -160,7 +178,7 @@ definitions:
     required:
     - password
     type: object
-  private.UserDTO:
+  dto.UserDTO:
     properties:
       bestLanguage:
         type: string
@@ -172,48 +190,6 @@ definitions:
         type: string
       username:
         type: string
-    type: object
-  public.LoginDTO:
-    properties:
-      password:
-        description: Password is required and must be at least 8 characters
-        minLength: 8
-        type: string
-      username:
-        description: Username is required, must be alphanumeric and between 3-30 characters
-        maxLength: 30
-        minLength: 3
-        type: string
-    required:
-    - password
-    - username
-    type: object
-  public.RegisterDTO:
-    properties:
-      githubProfile:
-        description: Github Profile is must be max 30 characters long.
-        maxLength: 30
-        type: string
-      name:
-        description: Name is required
-        type: string
-      password:
-        description: Password is required and must be at least 8 characters
-        minLength: 8
-        type: string
-      surname:
-        description: Surname is required
-        type: string
-      username:
-        description: Username is required, must be alphanumeric and between 3-30 characters
-        maxLength: 30
-        minLength: 3
-        type: string
-    required:
-    - name
-    - password
-    - surname
-    - username
     type: object
   response.BaseResponse:
     properties:
@@ -237,14 +213,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: User Creation
+      description: Creates User
       parameters:
       - description: User
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/private.CreateUserDTO'
+          $ref: '#/definitions/dto.CreateUserDTO'
       produces:
       - application/json
       responses:
@@ -259,7 +235,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Gets user profile
+      description: Retrieves User Profile
       parameters:
       - description: User ID
         in: path
@@ -276,39 +252,32 @@ paths:
             - $ref: '#/definitions/response.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/private.UserDTO'
+                  $ref: '#/definitions/dto.UserDTO'
               type: object
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: GetProfile
+      summary: Get Profile
       tags:
       - Admin
   /private/admin/users:
     get:
       consumes:
       - application/json
-      description: Retrieves all users
+      description: Retrieves All Users
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/response.BaseResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/private.GetUserDTO'
-                  type: array
-              type: object
+            $ref: '#/definitions/response.BaseResponse'
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: Get All Users
+      summary: Get Users
       tags:
       - Admin
   /private/home/advancement:
@@ -420,9 +389,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get Lab By Lang ID & Lab ID
+      description: Get Lab By Programming Language ID & Lab ID
       parameters:
-      - description: Lang ID
+      - description: Programming Language ID
         in: path
         name: programmingID
         required: true
@@ -446,11 +415,11 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get Labs By Lang ID
+      description: Get Labs By Programming Language ID
       parameters:
-      - description: Labs ID
+      - description: Programming Language ID
         in: path
-        name: ID
+        name: id
         required: true
         type: string
       produces:
@@ -460,7 +429,54 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: GetLabsByID
+      summary: GetLabsById
+      tags:
+      - Lab
+  /private/labs/stats/{language}/{userID}:
+    get:
+      consumes:
+      - application/json
+      description: Get User Programming Language Lab Statistics
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: Language
+        in: path
+        name: language
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserProgrammingLanguageLabStats
+      tags:
+      - Lab
+  /private/labs/stats/{userID}:
+    get:
+      consumes:
+      - application/json
+      description: Get User General Lab Statistics
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserGeneralLabStats
       tags:
       - Lab
   /private/log:
@@ -500,7 +516,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/private.LogDTO'
+                    $ref: '#/definitions/dto.LogDTO'
                   type: array
               type: object
       summary: Get all logs
@@ -522,7 +538,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/private.SolutionsByDayDTO'
+                    $ref: '#/definitions/dto.SolutionsByDayDTO'
                   type: array
               type: object
       summary: GetSolutionsByDay
@@ -545,7 +561,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/private.SolutionsHoursByProgrammingDTO'
+                    $ref: '#/definitions/dto.SolutionsHoursByProgrammingDTO'
                   type: array
               type: object
       summary: GetSolutionsHoursByProgramming
@@ -555,7 +571,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get All Roads
+      description: Get Road with Paths
       parameters:
       - description: roadID
         in: path
@@ -572,7 +588,7 @@ paths:
             - $ref: '#/definitions/response.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/private.RoadDTO'
+                  $ref: '#/definitions/dto.RoadDTO'
               type: object
       summary: GetRoads
       tags:
@@ -603,7 +619,7 @@ paths:
             - $ref: '#/definitions/response.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/private.PathDTO'
+                  $ref: '#/definitions/dto.PathDTO'
               type: object
       summary: GetPathByID
       tags:
@@ -619,7 +635,7 @@ paths:
         name: start
         required: true
         schema:
-          $ref: '#/definitions/private.StartDTO'
+          $ref: '#/definitions/dto.StartDTO'
       produces:
       - application/json
       responses:
@@ -645,7 +661,7 @@ paths:
             - $ref: '#/definitions/response.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/private.UserDTO'
+                  $ref: '#/definitions/dto.UserDTO'
               type: object
       summary: GetProfile
       tags:
@@ -660,7 +676,7 @@ paths:
         name: update
         required: true
         schema:
-          $ref: '#/definitions/private.UpdateUserDTO'
+          $ref: '#/definitions/dto.UpdateUserDTO'
       produces:
       - application/json
       responses:
@@ -682,7 +698,7 @@ paths:
         name: update
         required: true
         schema:
-          $ref: '#/definitions/private.UpdatePasswordDTO'
+          $ref: '#/definitions/dto.UpdatePasswordDTO'
       produces:
       - application/json
       responses:
@@ -704,7 +720,7 @@ paths:
         name: login
         required: true
         schema:
-          $ref: '#/definitions/public.LoginDTO'
+          $ref: '#/definitions/dto.LoginDTO'
       produces:
       - application/json
       responses:
@@ -726,7 +742,7 @@ paths:
         name: register
         required: true
         schema:
-          $ref: '#/definitions/public.RegisterDTO'
+          $ref: '#/definitions/dto.RegisterDTO'
       produces:
       - application/json
       responses:

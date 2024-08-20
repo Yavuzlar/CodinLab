@@ -19,14 +19,14 @@ type ILogRepository interface {
 
 // ILogService is the interface that provides the methods for the log service.
 type ILogService interface {
-	Add(ctx context.Context, userID, ltype, content string, programmingID, labRoadID int32) (err error)
+	Add(ctx context.Context, userID, logType, content string, programmingID, labRoadID int32) (err error)
 	GetAllLogs(ctx context.Context, userID, programmingID, labRoadID, logType, content string) (logs []Log, err error)
 	GetByID(ctx context.Context, logID string) (log *Log, err error)
 	GetByUserID(ctx context.Context, userID string) (logs []Log, err error)
 	GetByType(ctx context.Context, logType string) (logs []Log, err error)
 	GetByContent(ctx context.Context, content string) (logs []Log, err error)
 	GetByProgrammingID(ctx context.Context, programmingID string) (logs []Log, err error)
-	IsExists(ctx context.Context, userID, ltype, content string, programmingID, labPathID int32) (isExists bool, err error)
+	IsExists(ctx context.Context, userID, logType, content string, programmingID, labPathID int32) (isExists bool, err error)
 	CountSolutionsByDay(ctx context.Context) (solutions []SolutionsByDay, err error)
 	CountSolutionsHoursByProgrammingLast7Days(ctx context.Context) (solutions []SolutionsHoursByProgramming, err error)
 }
@@ -47,13 +47,12 @@ type Log struct {
 	userId        uuid.UUID
 	programmingID int32
 	labPathID     int32
-	lType         string
+	logType       string
 	content       string
 	createdAt     time.Time
 }
 
 // lab and road numbers solved day by day
-// author: yasir
 type SolutionsByDay struct {
 	Date      time.Time
 	RoadCount int
@@ -61,7 +60,6 @@ type SolutionsByDay struct {
 }
 
 // SolutionsHoursByProgramming represents the total hours spent on lab and road solutions for each programming language.
-// author: yasir
 type SolutionsHoursByProgramming struct {
 	ProgrammingID int32
 	LabHours      float64
@@ -69,14 +67,14 @@ type SolutionsHoursByProgramming struct {
 }
 
 // NewLog creates a new log
-func NewLog(userID, lType, content string, programmingID, labPathID int32) (*Log, error) {
+func NewLog(userID, logType, content string, programmingID, labPathID int32) (*Log, error) {
 	if userID == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "user id is required")
 	}
 	if content == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "content is required")
 	}
-	if lType == "" {
+	if logType == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "log type is required")
 	}
 	userUUID, err := uuid.Parse(userID)
@@ -89,7 +87,7 @@ func NewLog(userID, lType, content string, programmingID, labPathID int32) (*Log
 		userId:        userUUID,
 		programmingID: programmingID,
 		labPathID:     labPathID,
-		lType:         lType,
+		logType:       logType,
 		content:       content,
 	}, nil
 }
@@ -105,7 +103,7 @@ func (l *Log) Unmarshal(
 	l.userId = userId
 	l.programmingID = programmingID
 	l.labPathID = labPathID
-	l.lType = lType
+	l.logType = lType
 	l.content = content
 	l.createdAt = createdAt
 }
@@ -127,7 +125,7 @@ func (l *Log) LabPathID() int32 {
 }
 
 func (l *Log) Type() string {
-	return l.lType
+	return l.logType
 }
 
 func (l *Log) Content() string {

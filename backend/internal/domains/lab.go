@@ -3,21 +3,21 @@ package domains
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
 	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished bool) ([]Labs, error)
-	UserLanguageLabStats(userID string, language string) (LanguageStats, error)
+	UserLanguageLabStats(userID string, language string) (ProgrammingLanguageStats, error)
 	UserGeneralLabStats(userID string) (GeneralStats, error)
 }
 
-// LanguageStats represents the statistics for a specific language lab.
-type LanguageStats struct {
+// ProgrammingLanguageStats represents the statistics for a specific language lab.
+type ProgrammingLanguageStats struct {
 	TotalLabs     int     `json:"totalLabs"`
 	CompletedLabs int     `json:"completedLabs"`
-	Percentage    float64 `json:"Percentage"`
+	Percentage    float64 `json:"percentage"`
 }
 
 // UserGeneralLabStatsDto represents the DTO for user general lab statistics
 type GeneralStats struct {
 	TotalLabs        int     `json:"totalLabs"`
-	TotalPercentage  float64 `json:"TotalPercentage"`
+	TotalPercentage  float64 `json:"totalPercentage"`
 	EasyLabs         int     `json:"easyLabs"`
 	EasyPercentage   float64 `json:"easyPercentage"`
 	MediumLabs       int     `json:"mediumlabs"`
@@ -25,8 +25,6 @@ type GeneralStats struct {
 	HardLabs         int     `json:"hardLabs"`
 	HardPercentage   float64 `json:"hardPercentage"`
 }
-
-// ILabService is the interface that provides the methods for the lab service.
 
 // Language represents the details of a programming language.
 type Language struct {

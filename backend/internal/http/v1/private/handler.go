@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
+	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/Yavuzlar/CodinLab/internal/services"
@@ -14,14 +15,19 @@ import (
 type PrivateHandler struct {
 	services   *services.Services
 	sess_store *session.Store
+	dtoManager *dto.DTOManager
 }
 
 func NewPrivateHandler(
 	service *services.Services,
-	sessStore *session.Store) *PrivateHandler {
+	sessStore *session.Store,
+	dtoManager *dto.DTOManager,
+
+) *PrivateHandler {
 	return &PrivateHandler{
 		services:   service,
 		sess_store: sessStore,
+		dtoManager: dtoManager,
 	}
 }
 
@@ -65,21 +71,21 @@ func (h *PrivateHandler) authMiddleware(c *fiber.Ctx) error {
 }
 
 func (h *PrivateHandler) adminAuthMiddleware(c *fiber.Ctx) error {
-    session, err := h.sess_store.Get(c)
-    if err != nil {
-        return err
-    }
-    user := session.Get("user")
-    if user == nil {
-        return service_errors.NewServiceErrorWithMessage(401, "unauthorized")
-    }
-    session_data, ok := user.(session_store.SessionData)
-    if !ok {
-        return service_errors.NewServiceErrorWithMessage(500, "session data error")
-    }
-    if session_data.Role != "admin" {
-        return service_errors.NewServiceErrorWithMessage(403, "forbidden")
-    }
-    c.Locals("user", session_data)
-    return c.Next()
+	session, err := h.sess_store.Get(c)
+	if err != nil {
+		return err
+	}
+	user := session.Get("user")
+	if user == nil {
+		return service_errors.NewServiceErrorWithMessage(401, "unauthorized")
+	}
+	session_data, ok := user.(session_store.SessionData)
+	if !ok {
+		return service_errors.NewServiceErrorWithMessage(500, "session data error")
+	}
+	if session_data.Role != "admin" {
+		return service_errors.NewServiceErrorWithMessage(403, "forbidden")
+	}
+	c.Locals("user", session_data)
+	return c.Next()
 }

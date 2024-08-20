@@ -1,37 +1,10 @@
 package private
 
 import (
-	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
 )
-
-type UserLevelDTO struct {
-	Level           int                 `json:"level"`
-	TotalPoints     int32               `json:"total_points"`
-	LevelPercentage int32               `json:"level_percentage"`
-	Languages       []domains.LanguageL `json:"languages"`
-}
-
-type InventoryDto struct {
-	Id       int
-	Name     string
-	IconPath string
-}
-
-type DevelopmentDto struct {
-	RoadPercentage int32
-	LabPercentage  int32
-}
-
-type AdvancementDTO struct {
-	ProgrammingID  int
-	Name           string
-	IconPath       string
-	RoadPercentage int32
-	LabPercentage  int32
-}
 
 func (h *PrivateHandler) initHomeRoutes(root fiber.Router) {
 	homeRoute := root.Group("/home")
@@ -43,7 +16,6 @@ func (h *PrivateHandler) initHomeRoutes(root fiber.Router) {
 	homeRoute.Get("/road", h.GetRoadContent)
 	homeRoute.Get("/lab", h.GetLabContent)
 	// initialize routes
-	// Buraya yeni route'lar eklenecek lütfen Swagger'da belirtmeyi unutmayın
 }
 
 // @Tags Home
@@ -60,12 +32,8 @@ func (h *PrivateHandler) GetUserLevel(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	userLevelDto := UserLevelDTO{
-		Level:           userLevel.Level(),
-		TotalPoints:     userLevel.TotalPoints(),
-		LevelPercentage: userLevel.LevelPercentage(),
-		Languages:       userLevel.Languages(),
-	}
+	userLevelDto := h.dtoManager.HomeDTOManager.ToUserLevelDTO(userLevel)
+
 	return response.Response(200, "GetUserLevel successful", userLevelDto)
 }
 
@@ -77,17 +45,16 @@ func (h *PrivateHandler) GetUserLevel(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/home/inventories [get]
 func (h *PrivateHandler) GetInventories(c *fiber.Ctx) error {
-
 	inventoryData, err := h.services.HomeService.GetInventory(c.Context())
 	if err != nil {
 		return err
 	}
-
 	if len(inventoryData) == 0 {
 		return response.Response(404, "Inventories not found", nil)
 	}
+	inventoryDTOs := h.dtoManager.HomeDTOManager.ToInventoryDTOs(inventoryData)
 
-	return response.Response(200, "GetInventories successful", inventoryData)
+	return response.Response(200, "GetInventories successful", inventoryDTOs)
 }
 
 // @Tags Home
@@ -98,19 +65,12 @@ func (h *PrivateHandler) GetInventories(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/home/development [get]
 func (h *PrivateHandler) GetUserDevelopment(c *fiber.Ctx) error {
-
 	userSession := session_store.GetSessionData(c)
-
 	userDevelopment, err := h.services.HomeService.GetUserDevelopment(c.Context(), userSession.UserID)
-
 	if err != nil {
 		return err
 	}
-
-	userDevelopmentDto := DevelopmentDto{
-		RoadPercentage: userDevelopment.RoadPercentage(),
-		LabPercentage:  userDevelopment.LabPercentage(),
-	}
+	userDevelopmentDto := h.dtoManager.HomeDTOManager.ToDevelopmentDTO(userDevelopment)
 
 	return response.Response(200, "GetUserDevelopment successful", userDevelopmentDto)
 }
@@ -125,22 +85,10 @@ func (h *PrivateHandler) GetUserDevelopment(c *fiber.Ctx) error {
 func (h *PrivateHandler) GetUserAdvancement(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	userAdvancement, err := h.services.HomeService.GetUserAdvancement(c.Context(), userSession.UserID)
-
 	if err != nil {
 		return err
 	}
-
-	var advancementDTOs []AdvancementDTO
-	for _, advancement := range userAdvancement {
-		advancementDTO := AdvancementDTO{
-			ProgrammingID:  advancement.ProgrammingID(),
-			Name:           advancement.Name(),
-			IconPath:       advancement.IconPath(),
-			RoadPercentage: advancement.RoadPercentage(),
-			LabPercentage:  advancement.LabPercentage(),
-		}
-		advancementDTOs = append(advancementDTOs, advancementDTO)
-	}
+	advancementDTOs := h.dtoManager.HomeDTOManager.ToAdvancementDTOs(userAdvancement)
 
 	return response.Response(200, "GetUserAdvancement successful", advancementDTOs)
 }
@@ -153,9 +101,7 @@ func (h *PrivateHandler) GetUserAdvancement(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/home/welcome [get]
 func (h *PrivateHandler) GetWelcomeContent(c *fiber.Ctx) error {
-
 	content, err := h.services.HomeService.GetWelcomeContent()
-
 	if err != nil {
 		return err
 	}
@@ -171,9 +117,7 @@ func (h *PrivateHandler) GetWelcomeContent(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/home/lab [get]
 func (h *PrivateHandler) GetLabContent(c *fiber.Ctx) error {
-
 	content, err := h.services.HomeService.GetLabContent()
-
 	if err != nil {
 		return err
 	}
@@ -189,9 +133,7 @@ func (h *PrivateHandler) GetLabContent(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/home/road [get]
 func (h *PrivateHandler) GetRoadContent(c *fiber.Ctx) error {
-
 	content, err := h.services.HomeService.GetRoadContent()
-
 	if err != nil {
 		return err
 	}

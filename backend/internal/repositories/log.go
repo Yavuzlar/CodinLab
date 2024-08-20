@@ -26,24 +26,35 @@ type dbModelLogs struct {
 }
 
 // lab and road numbers solved day by day
-// author: yasir
 type dbModelSolutionsByDay struct {
 	Date      string `db:"date"`
 	RoadCount int    `db:"road_count"`
 	LabCount  int    `db:"lab_count"`
 }
 
-// author: yasir
-func (r *LogRepository) dbModelSolutionsByDayToAppModel(dbModelSolutionsByDay dbModelSolutionsByDay) (solutionsByDay domains.SolutionsByDay, err error) {
-	date, parseErr := time.Parse("2006-01-02", dbModelSolutionsByDay.Date)
-	if parseErr != nil {
-		return domains.SolutionsByDay{}, parseErr
-	}
+// SolutionsHoursByLanguage represents the total hours spent on lab and road solutions for each language.
+type dbModelSolutionsHoursByProgrammingLanguage struct {
+	ProgrammingID  int32   `db:"programming_id"`
+	TotalLabHours  float64 `db:"total_lab_hours"`
+	TotalRoadHours float64 `db:"total_road_hours"`
+}
+
+func (r *LogRepository) dbModelSolutionsByDayToAppModel(dbModelSolutionsByDay dbModelSolutionsByDay) (solutionsByDay domains.SolutionsByDay) {
+	date, _ := time.Parse("2006-01-02", dbModelSolutionsByDay.Date)
+
 	return domains.SolutionsByDay{
 		Date:      date,
 		RoadCount: dbModelSolutionsByDay.RoadCount,
 		LabCount:  dbModelSolutionsByDay.LabCount,
-	}, nil
+	}
+}
+
+func (r *LogRepository) dbModelSolutionsHoursToAppModel(dbModel dbModelSolutionsHoursByProgrammingLanguage) (appModel domains.SolutionsHoursByProgramming) {
+	return domains.SolutionsHoursByProgramming{
+		ProgrammingID: dbModel.ProgrammingID,
+		LabHours:      dbModel.TotalLabHours,
+		RoadHours:     dbModel.TotalLabHours,
+	}
 }
 
 // dbModelToAppModel converts dbModelLogs to domains.Log for application operations (e.g. return to client)
@@ -234,21 +245,10 @@ func (r *LogRepository) CountSolutionsByDay(ctx context.Context) (solutions []do
 	}
 
 	for _, dbModelSolution := range dbModelSolutions {
-		appModelSolution, parseErr := r.dbModelSolutionsByDayToAppModel(dbModelSolution)
-		if parseErr != nil {
-			return nil, parseErr
-		}
-		solutions = append(solutions, appModelSolution)
+		solutions = append(solutions, r.dbModelSolutionsByDayToAppModel(dbModelSolution))
 	}
 
 	return solutions, nil
-}
-
-// SolutionsHoursByLanguage represents the total hours spent on lab and road solutions for each language.
-type dbModelSolutionsHoursByLanguage struct {
-	ProgrammingID  int32   `db:"programming_id"`
-	TotalLabHours  float64 `db:"total_lab_hours"`
-	TotalRoadHours float64 `db:"total_road_hours"`
 }
 
 // CountSolutionsHoursByLanguageLast7Days counts the total hours spent on lab and road solutions in the last 7 days for each language.
@@ -275,7 +275,7 @@ func (r *LogRepository) CountSolutionsHoursByProgrammingLast7Days(ctx context.Co
 		l1.programming_id
 	`
 
-	var dbModelSolutionsHours []dbModelSolutionsHoursByLanguage
+	var dbModelSolutionsHours []dbModelSolutionsHoursByProgrammingLanguage
 
 	err = r.db.SelectContext(ctx, &dbModelSolutionsHours, query)
 	if err != nil {
@@ -283,17 +283,11 @@ func (r *LogRepository) CountSolutionsHoursByProgrammingLast7Days(ctx context.Co
 	}
 
 	for _, result := range dbModelSolutionsHours {
-		solutionsHours = append(solutionsHours, domains.SolutionsHoursByProgramming{
-			ProgrammingID: result.ProgrammingID,
-			LabHours:      result.TotalLabHours,
-			RoadHours:     result.TotalRoadHours,
-		})
+		solutionsHours = append(solutionsHours, r.dbModelSolutionsHoursToAppModel(result))
 	}
 
 	return solutionsHours, nil
 }
-
-// Normal
 
 func canMultipleLogExists(logType string) bool {
 	return logType == domains.TypeUser
