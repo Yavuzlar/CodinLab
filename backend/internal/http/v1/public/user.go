@@ -18,7 +18,7 @@ func (h *PublicHandler) initUserRoutes(root fiber.Router) {
 // @Accept json
 // @Produce json
 // @Param login body dto.LoginDTO true "Login"
-// @Success 200 {object} response.BaseResponse{}
+// @Success 200 {object} response.BaseResponse{dto.LoginResponseDTO}
 // @Router /public/login [post]
 func (h *PublicHandler) Login(c *fiber.Ctx) error {
 	var login dto.LoginDTO
@@ -42,8 +42,9 @@ func (h *PublicHandler) Login(c *fiber.Ctx) error {
 	if err := sess.Save(); err != nil {
 		return err
 	}
+	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata)
 
-	return response.Response(200, "Login successful", nil)
+	return response.Response(200, "Login successful", loginResponse)
 }
 
 // @Tags Auth

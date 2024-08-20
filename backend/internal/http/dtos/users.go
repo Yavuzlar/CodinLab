@@ -15,6 +15,10 @@ type LoginDTO struct {
 	Password string `json:"password" validate:"required,min=8"`
 }
 
+type LoginResponseDTO struct {
+	Role string `json:"role"`
+}
+
 type RegisterDTO struct {
 	Username      string `json:"username" validate:"required,alphanum,min=3,max=30"`
 	Name          string `json:"name" validate:"required"`
@@ -47,6 +51,12 @@ func (m *UserDTOManager) ToUserDTO(user *domains.User, bestProgrammingLanguage s
 		Surname:       user.Surname(),
 		GithubProfile: user.GithubProfile(),
 		BestLanguage:  bestProgrammingLanguage,
+	}
+}
+
+func (m *UserDTOManager) ToLoginResponseDTO(user *domains.User) LoginResponseDTO {
+	return LoginResponseDTO{
+		Role: user.Role(),
 	}
 }
 
