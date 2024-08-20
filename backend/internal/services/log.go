@@ -129,9 +129,9 @@ func (l *logService) GetByProgrammingID(ctx context.Context, programmingID strin
 }
 
 // Adds log
-func (l *logService) Add(ctx context.Context, userID, ltype, content string, programmingID, labPathID int32) (err error) {
+func (l *logService) Add(ctx context.Context, userID, logType, content string, programmingID, labPathID int32) (err error) {
 	// Creates new log
-	newLog, err := domains.NewLog(userID, ltype, content, programmingID, labPathID)
+	newLog, err := domains.NewLog(userID, logType, content, programmingID, labPathID)
 	if err != nil {
 		return err
 	}
@@ -144,8 +144,8 @@ func (l *logService) Add(ctx context.Context, userID, ltype, content string, pro
 	return
 }
 
-func (l *logService) IsExists(ctx context.Context, userID, ltype, content string, programmingID, labPathID int32) (isExists bool, err error) {
-	log, err := domains.NewLog(userID, ltype, content, programmingID, labPathID)
+func (l *logService) IsExists(ctx context.Context, userID, logType, content string, programmingID, labPathID int32) (isExists bool, err error) {
+	log, err := domains.NewLog(userID, logType, content, programmingID, labPathID)
 	if err != nil {
 		return false, err
 	}
@@ -158,7 +158,6 @@ func (l *logService) IsExists(ctx context.Context, userID, ltype, content string
 	return
 }
 
-// author: yasir
 func (l *logService) CountSolutionsByDay(ctx context.Context) (solutions []domains.SolutionsByDay, err error) {
 	solutions, err = l.logRepositories.CountSolutionsByDay(ctx)
 	if err != nil {
@@ -168,7 +167,6 @@ func (l *logService) CountSolutionsByDay(ctx context.Context) (solutions []domai
 	return solutions, err
 }
 
-// author: yasir
 func (l *logService) CountSolutionsHoursByProgrammingLast7Days(ctx context.Context) (solutions []domains.SolutionsHoursByProgramming, err error) {
 	solutions, err = l.logRepositories.CountSolutionsHoursByProgrammingLast7Days(ctx)
 	if err != nil {

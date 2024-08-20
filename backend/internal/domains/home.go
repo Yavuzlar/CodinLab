@@ -23,7 +23,7 @@ func NewUserDevelopment(roadPercentage int32, labPercentage int32) *Development 
 
 func NewInventory(id int, name string, iconPath string) *Inventory {
 	inventory := &Inventory{
-		Id:       id,
+		ID:       id,
 		Name:     name,
 		IconPath: iconPath,
 	}
@@ -42,7 +42,7 @@ func NewAdvancement(id int, name string, iconPath string, roadPercentage int32, 
 }
 
 type Inventory struct {
-	Id       int
+	ID       int
 	Name     string
 	IconPath string
 }

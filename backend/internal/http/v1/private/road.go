@@ -4,42 +4,16 @@ import (
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
 )
 
-type StartDTO struct {
-	ProgrammingID int32 `json:"programmingID" validate:"required"`
-}
-
-type LanguageDTO struct {
-	Lang        string `json:"lang"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Content     string `json:"content"`
-	Note        string `json:"note"`
-}
-
-type PathDTO struct {
-	ID         int           `json:"id,omitempty"`
-	Name       string        `json:"name,omitempty"`
-	Language   []LanguageDTO `json:"languages"`
-	Difficulty int           `json:"difficulty"`
-	IsStarted  bool          `json:"isStarted"`
-	IsFinished bool          `json:"isFinished"`
-}
-
-type RoadDTO struct {
-	Name     string    `json:"name"`
-	IconPath string    `json:"iconPath"`
-	Paths    []PathDTO `json:"paths"`
-}
-
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
 	roadRoute.Post("/start", h.Start)
-	roadRoute.Get("/:roadID", h.GetAllRoads)
+	roadRoute.Get("/:roadID", h.GetRoad)
 	roadRoute.Get("/:roadID/:pathID", h.GetPath)
 }
 
@@ -48,11 +22,11 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 // @Description Start
 // @Accept json
 // @Produce json
-// @Param start body StartDTO true "Start"
+// @Param start body dto.StartDTO true "Start"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/road/start [post]
 func (h *PrivateHandler) Start(c *fiber.Ctx) error {
-	var start StartDTO
+	var start dto.StartDTO
 	if err := c.BodyParser(&start); err != nil {
 		return err
 	}
@@ -103,13 +77,13 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 
 // @Tags Road
 // @Summary GetRoads
-// @Description Get All Roads
+// @Description Get Road with Paths
 // @Accept json
 // @Produce json
 // @Param roadID path string true "roadID"
-// @Success 200 {object} response.BaseResponse{data=RoadDTO}
+// @Success 200 {object} response.BaseResponse{data=dto.RoadDTO}
 // @Router /private/road/{roadID} [get]
-func (h *PrivateHandler) GetAllRoads(c *fiber.Ctx) error {
+func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	// NEED ROAD SERVICE FOR BOTTOM
 	// We have to get all roads and send them to the frontend.
 
@@ -124,41 +98,19 @@ func (h *PrivateHandler) GetAllRoads(c *fiber.Ctx) error {
 		return response.Response(400, "Invalid ID", nil)
 	}
 
-	// Get all roads
 	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, num, 0, false, false)
 	if err != nil {
 		return err
 	}
 
-	var pathDTOs []PathDTO
-	var roadDTO *RoadDTO
+	var pathDTOs []dto.PathDTO
+	var roadDTO dto.RoadDTO
 	for _, road := range roads {
 		for _, path := range road.Paths {
-			var languageDTOs []LanguageDTO
-			for _, lang := range path.Languages {
-				languageDTO := LanguageDTO{
-					Lang:        lang.Lang,
-					Title:       lang.Title,
-					Description: lang.Description,
-					Content:     lang.Content,
-					Note:        lang.Note,
-				}
-				languageDTOs = append(languageDTOs, languageDTO)
-			}
-			pathDTO := PathDTO{
-				ID:         path.ID,
-				Language:   languageDTOs,
-				Difficulty: path.Quest.Difficulty,
-				IsStarted:  path.IsStarted,
-				IsFinished: path.IsFinished,
-			}
-			pathDTOs = append(pathDTOs, pathDTO)
+			languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageDTOs(path.Languages)
+			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTOs))
 		}
-		roadDTO = &RoadDTO{
-			Name:     road.Name,
-			IconPath: road.IconPath,
-			Paths:    pathDTOs,
-		}
+		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs)
 	}
 
 	return response.Response(200, "GetRoads successful", roadDTO)
@@ -171,16 +123,16 @@ func (h *PrivateHandler) GetAllRoads(c *fiber.Ctx) error {
 // @Produce json
 // @Param roadID path string true "Road ID"
 // @Param pathID path string true "Path ID"
-// @Success 200 {object} response.BaseResponse{data=PathDTO}
+// @Success 200 {object} response.BaseResponse{data=dto.PathDTO}
 // @Router /private/road/{roadID}/{pathID} [get]
 func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	programmingID := c.Params("roadID")
+	pathID := c.Params("pathID")
+
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return response.Response(400, "Invalid ID", nil)
 	}
-
-	pathID := c.Params("pathID")
 
 	intPathID, err := strconv.Atoi(pathID)
 	if err != nil {
@@ -198,26 +150,11 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 		return response.Response(404, "Path not found", nil)
 	}
 	roads := &roadData[0]
-	var pathDTO PathDTO
+
+	var pathDTO dto.PathDTO
 	for _, path := range roads.Paths {
-		var langugaeDTOs []LanguageDTO
-		for _, lang := range path.Languages {
-			langugaeDTO := LanguageDTO{
-				Lang:        lang.Lang,
-				Title:       lang.Title,
-				Description: lang.Description,
-				Content:     lang.Content,
-				Note:        lang.Note,
-			}
-			langugaeDTOs = append(langugaeDTOs, langugaeDTO)
-		}
-		pathDTO = PathDTO{
-			Name:       roads.Name,
-			Language:   langugaeDTOs,
-			Difficulty: path.Quest.Difficulty,
-			IsStarted:  path.IsStarted,
-			IsFinished: path.IsFinished,
-		}
+		languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageDTOs(path.Languages)
+		pathDTO = h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTOs)
 	}
 
 	return response.Response(200, "Path Retrieved Successfully", pathDTO)
