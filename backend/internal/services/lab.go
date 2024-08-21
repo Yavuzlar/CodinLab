@@ -33,65 +33,33 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 	}
 
 	var labs []domains.Labs
-
 	for _, labCollection := range src {
 		var newLabList []domains.Lab
 
 		for _, lab := range labCollection.Labs {
-
-			var languages []domains.Language
+			var languages []domains.LanguageLab
 			for _, lang := range lab.Languages {
-				languages = append(languages, *domains.NewLanguage(
-					lang.Lang,
-					lang.Title,
-					lang.Description,
-					lang.Note,
-					lang.Hint,
-					//Language parametreleri buraya eklenecek
-				))
+				languages = append(languages, *domains.NewLanguageLab(lang.Lang, lang.Title, lang.Description, lang.Note, lang.Hint))
 			}
 
-			var tests []domains.Test
+			var tests []domains.TestLab
 			for _, test := range lab.Quest.Tests {
-				tests = append(tests, *domains.NewTest(
-					test.Input,
-					test.Output,
-					//Test parametreleri buraya eklenecek
-				))
+				tests = append(tests, *domains.NewTestLab(test.Input, test.Output))
 			}
 
-			var params []domains.Param
+			var params []domains.ParamLab
 			for _, param := range lab.Quest.Params {
-				params = append(params, *domains.NewParam(
-					param.Name,
-					param.Type,
-					//Param parametreleri buraya eklenecek
-				))
+				params = append(params, *domains.NewParamLab(param.Name, param.Type))
 			}
 
-			quest := *domains.NewQuest(
-				lab.Quest.Difficulty,
-				lab.Quest.FuncName,
-				tests,
-				params,
-				//Quest parametreleri buraya eklenecek
-			)
+			quest := domains.NewQuestLab(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params)
+			newLab := domains.NewLab(lab.ID, languages, *quest, false, false)
 
-			newLab := *domains.NewLab(
-				lab.ID,
-				languages,
-				quest,
-				false, // Varsayılan değer false
-				false, // Varsayılan değer false
-				//Lab parametreleri buraya eklenecek
-			)
 			labIDString := strconv.Itoa(lab.ID)
-
 			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", labIDString, domains.TypeLab, domains.ContentStarted)
 			if err != nil {
 				return nil, err
 			}
-
 			if len(logStartedStatus) > 0 {
 				newLab.SetIsStarted(true)
 			}
@@ -100,45 +68,53 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 			if err != nil {
 				return nil, err
 			}
-
 			if len(logFinishedStatus) > 0 {
 				newLab.SetIsFinished(true)
 			}
 
-			newLabList = append(newLabList, newLab)
+			newLabList = append(newLabList, *newLab)
 		}
-
-		labs = append(labs, *domains.NewLabs(
-			labCollection.ID,
-			labCollection.Name,
-			labCollection.DockerImage,
-			labCollection.IconPath,
-			newLabList,
-		))
+		labs = append(labs, *domains.NewLabs(labCollection.ID, labCollection.Name, labCollection.DockerImage, labCollection.IconPath, newLabList))
 	}
 
 	return labs, nil
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]domains.Labs, error) {
+func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStartedStr, isFinishedStr string) ([]domains.Labs, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStarted == nil && isFinished == nil {
+	if userID == "" && labsId == 0 && labId == 0 && isStartedStr == "" && isFinishedStr == "" {
 		return allLabs, nil
 	}
 
+	// Converting string to a bool
+	var isStarted bool
+	var isFinished bool
+	if isStartedStr != "" {
+		b, err := strconv.ParseBool(isStartedStr)
+		if err != nil {
+			return nil, err // Handle the error if conversion fails
+		}
+		isStarted = b
+	}
+
+	if isFinishedStr != "" {
+		b, err := strconv.ParseBool(isFinishedStr)
+		if err != nil {
+			return nil, err // Handle the error if conversion fails
+		}
+		isFinished = b
+	}
+
 	var filteredLabs []domains.Labs
-
 	for _, labCollection := range allLabs {
-
 		if labsId != 0 && labCollection.GetID() != labsId {
 			continue
 		}
-		//labs structı için filtreleme eklenebilir.
 
 		var newLabList []domains.Lab
 		for _, lab := range labCollection.GetLabs() {
@@ -146,17 +122,12 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 			if labId != 0 && lab.GetID() != labId {
 				continue
 			}
-
-			if isStarted != nil && lab.GetIsStarted() != *isStarted {
+			if lab.GetIsStarted() != isStarted {
 				continue
 			}
-
-			if isFinished != nil && lab.GetIsFinished() != *isFinished {
+			if lab.GetIsFinished() != isFinished {
 				continue
 			}
-
-			//lab structı için filtreleme eklenebilir.
-
 			newLabList = append(newLabList, lab)
 		}
 
@@ -183,7 +154,6 @@ func (s *labService) UserLanguageLabStats(userID string, language string) (domai
 
 	totalLabs := 0
 	solvedLabs := 0
-
 	for _, labCollection := range allLabs {
 		for _, lab := range labCollection.GetLabs() {
 			for _, lang := range lab.GetLanguages() {
@@ -197,13 +167,12 @@ func (s *labService) UserLanguageLabStats(userID string, language string) (domai
 			}
 		}
 	}
-	returnval := domains.ProgrammingLanguageStats{}
-
-	returnval = *domains.NewProgrammingLanguageStats(
+	returnval := *domains.NewProgrammingLanguageStats(
 		totalLabs,
 		solvedLabs,
 		float64(solvedLabs)/float64(totalLabs)*100,
 	)
+
 	return returnval, nil
 }
 
@@ -213,20 +182,19 @@ func (s *labService) UserGeneralLabStats(userID string) (domains.GeneralStats, e
 	if err != nil {
 		return domains.GeneralStats{}, err
 	}
+
 	totalLabs := 0
 	solvedLabs := 0
 	easyLabs := 0
 	mediumLabs := 0
 	hardLabs := 0
-
 	for _, labCollection := range allLabs {
 		for _, lab := range labCollection.GetLabs() {
 			totalLabs++
 			if lab.GetIsFinished() {
 				solvedLabs++
 			}
-			difficulty := lab.GetQuest()
-			switch difficulty.GetDifficulty() {
+			switch lab.GetQuest().GetDifficulty() {
 			case 1:
 				easyLabs++
 			case 2:
@@ -241,16 +209,16 @@ func (s *labService) UserGeneralLabStats(userID string) (domains.GeneralStats, e
 	easyPercentage := float64(easyLabs) / float64(totalLabs) * 100
 	mediumPercentage := float64(mediumLabs) / float64(totalLabs) * 100
 	hardPercentage := float64(hardLabs) / float64(totalLabs) * 100
-	returnval := *domains.NewGeneralStats(
+	returnVal := *domains.NewGeneralStats(
 		totalLabs,
 		totalPercentage,
-		easyLabs,
 		easyPercentage,
-		mediumLabs,
 		mediumPercentage,
-		hardLabs,
 		hardPercentage,
+		easyLabs,
+		mediumLabs,
+		hardLabs,
 	)
-	return returnval, nil
+	return returnVal, nil
 
 }

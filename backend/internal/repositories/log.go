@@ -170,6 +170,14 @@ func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (l
 
 // Adds Log
 func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
+	ok, err := r.IsExists(ctx, log)
+	if err != nil {
+		return
+	}
+	if ok {
+		return
+	}
+
 	dbModel := r.dbModelFromAppModel(*log)
 	query := `
 		INSERT INTO

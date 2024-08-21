@@ -416,7 +416,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Programming Language ID",
-                        "name": "id",
+                        "name": "ID",
                         "in": "path",
                         "required": true
                     }

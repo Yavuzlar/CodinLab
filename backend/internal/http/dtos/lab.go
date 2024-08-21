@@ -18,14 +18,12 @@ type LabDTO struct {
 }
 
 func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTOs []LabLanguageDTO) LabDTO {
-	difficulty := lab.GetQuest()
-
 	return LabDTO{
 		ID:         lab.GetID(),
 		Languages:  languagesDTOs,
 		IsStarted:  lab.GetIsStarted(),
 		IsFinished: lab.GetIsFinished(),
-		Difficulty: difficulty.GetDifficulty(),
+		Difficulty: lab.GetQuest().GetDifficulty(),
 	}
 }
 
@@ -77,7 +75,7 @@ type LabLanguageDTO struct {
 	Hint        string `json:"hint"`
 }
 
-func (m *LabDTOManager) ToLanguageDTO(language domains.Language) LabLanguageDTO {
+func (m *LabDTOManager) ToLanguageDTO(language domains.LanguageLab) LabLanguageDTO {
 	return LabLanguageDTO{
 		Lang:        language.GetLang(),
 		Title:       language.GetTitle(),
@@ -87,7 +85,7 @@ func (m *LabDTOManager) ToLanguageDTO(language domains.Language) LabLanguageDTO 
 	}
 }
 
-func (m *LabDTOManager) ToLanguageDTOs(languages []domains.Language) []LabLanguageDTO {
+func (m *LabDTOManager) ToLanguageDTOs(languages []domains.LanguageLab) []LabLanguageDTO {
 	var languageDTOs []LabLanguageDTO
 	for _, lang := range languages {
 		languageDTOs = append(languageDTOs, m.ToLanguageDTO(lang))

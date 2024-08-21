@@ -22,17 +22,17 @@ type LanguageDTO struct {
 	Note        string `json:"note"`
 }
 
-func (m *RoadDTOManager) ToLanguageDTO(language *domains.LanguageR) LanguageDTO {
+func (m *RoadDTOManager) ToLanguageDTO(language *domains.LanguageRoad) LanguageDTO {
 	return LanguageDTO{
-		Lang:        language.Lang,
-		Title:       language.Title,
-		Description: language.Description,
-		Content:     language.Content,
-		Note:        language.Note,
+		Lang:        language.GetLang(),
+		Title:       language.GetTitle(),
+		Description: language.GetDescription(),
+		Content:     language.GetContent(),
+		Note:        language.GetNote(),
 	}
 }
 
-func (m *RoadDTOManager) ToLanguageDTOs(languages []domains.LanguageR) []LanguageDTO {
+func (m *RoadDTOManager) ToLanguageDTOs(languages []domains.LanguageRoad) []LanguageDTO {
 	var languageDTOs []LanguageDTO
 	for _, lang := range languages {
 		languageDTOs = append(languageDTOs, m.ToLanguageDTO(&lang))
@@ -51,11 +51,11 @@ type PathDTO struct {
 
 func (m *RoadDTOManager) ToPathDTO(path domains.Path, languages []LanguageDTO) PathDTO {
 	return PathDTO{
-		ID:         path.ID,
+		ID:         path.GetID(),
 		Language:   languages,
-		Difficulty: path.Quest.Difficulty,
-		IsFinished: path.IsFinished,
-		IsStarted:  path.IsStarted,
+		Difficulty: path.GetQuest().GetDifficulty(),
+		IsFinished: path.GetIsFinished(),
+		IsStarted:  path.GetIsStarted(),
 	}
 }
 
@@ -67,8 +67,8 @@ type RoadDTO struct {
 
 func (m *RoadDTOManager) ToRoadDTO(road domains.Roads, paths []PathDTO) RoadDTO {
 	return RoadDTO{
-		Name:     road.Name,
-		IconPath: road.IconPath,
+		Name:     road.GetName(),
+		IconPath: road.GetIconPath(),
 		Paths:    paths,
 	}
 }
