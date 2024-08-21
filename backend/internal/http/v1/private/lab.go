@@ -14,8 +14,8 @@ import (
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/:ID", h.GetLabsByID)
 	root.Get("/lab/:programmingID/:labID", h.GetLabByID)
-	root.Get("/labs/stats/language/:language", h.GetUserLanguageLabStats)
-	root.Get("/labs/stats/general", h.GetUserGeneralLabStats)
+	root.Get("/labs/stats/:language/:userID", h.GetUserLanguageLabStats)
+	root.Get("/labs/stats/:userID", h.GetUserGeneralLabStats)
 }
 
 // @Tags Lab
@@ -23,14 +23,15 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 // @Description Get User Programming Language Lab Statistics
 // @Accept json
 // @Produce json
+// @Param userID path string true "User ID"
 // @Param language path string true "Language"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/stats/language/{language} [get]
+// @Router /private/labs/stats/{language}/{userID} [get]
 func (h *PrivateHandler) GetUserLanguageLabStats(c *fiber.Ctx) error {
+	userID := c.Params("userID")
 	language := c.Params("language")
-	userSession := session_store.GetSessionData(c)
 
-	stats, err := h.services.LabService.UserLanguageLabStats(userSession.UserID, language)
+	stats, err := h.services.LabService.UserLanguageLabStats(userID, language)
 	if err != nil {
 		return err
 	}
@@ -44,12 +45,12 @@ func (h *PrivateHandler) GetUserLanguageLabStats(c *fiber.Ctx) error {
 // @Description Get User General Lab Statistics
 // @Accept json
 // @Produce json
+// @Param userID path string true "User ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/stats/general [get]
+// @Router /private/labs/stats/{userID} [get]
 func (h *PrivateHandler) GetUserGeneralLabStats(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
-
-	stats, err := h.services.LabService.UserGeneralLabStats(userSession.UserID)
+	userID := c.Params("userID")
+	stats, err := h.services.LabService.UserGeneralLabStats(userID)
 	if err != nil {
 		return err
 	}
@@ -67,14 +68,14 @@ func (h *PrivateHandler) GetUserGeneralLabStats(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/labs/{ID} [get]
 func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
-	id := c.Params("ID")
-	indID, err := strconv.Atoi(id)
+	ID := c.Params("ID")
+	indID, err := strconv.Atoi(ID)
 	if err != nil {
 		return response.Response(400, "Invalid ID", nil)
 	}
 	userSession := session_store.GetSessionData(c)
 
-	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, indID, 0, nil, nil)
+	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, indID, 0, nil, nil) //buraya bakilsin (false tan dolayi veriler gelmeyebilir) !!11!1!!11
 	if err != nil {
 		return err
 	}
@@ -119,22 +120,13 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	}
 
 	userSession := session_store.GetSessionData(c)
-	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, nil, nil)
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, nil, nil)
 	if err != nil {
 		return err
 	}
-	var labsDtoList []dto.LabsDTO
-	for _, labCollection := range filteredLabs {
-		var labDTOList []dto.LabDTO
-		for _, lab := range labCollection.GetLabs() {
-			languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(lab.GetLanguages())
-			labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(lab, languageDTOs))
-		}
-		labsDtoList = append(labsDtoList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, labDTOList))
-	}
-	if len(labsDtoList) == 0 {
-		return response.Response(404, "Labs not found", labsDtoList)
+	if len(labData) == 0 {
+		return response.Response(404, "Lab not found", labData)
 	}
 
-	return response.Response(200, "GetLab successful", labsDtoList)
+	return response.Response(200, "GetLab successful", labData)
 }

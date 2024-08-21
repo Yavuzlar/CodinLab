@@ -106,8 +106,8 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	var pathDTOs []dto.PathDTO
 	var roadDTO dto.RoadDTO
 	for _, road := range roads {
-		for _, path := range road.Paths {
-			languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageDTOs(path.Languages)
+		for _, path := range road.GetPaths() {
+			languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageDTOs(path.GetLanguages())
 			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTOs))
 		}
 		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs)
@@ -152,8 +152,8 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	roads := &roadData[0]
 
 	var pathDTO dto.PathDTO
-	for _, path := range roads.Paths {
-		languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageDTOs(path.Languages)
+	for _, path := range roads.GetPaths() {
+		languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageDTOs(path.GetLanguages())
 		pathDTO = h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTOs)
 	}
 

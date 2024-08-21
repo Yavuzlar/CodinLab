@@ -38,75 +38,43 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Roads, error) {
 
 		for _, path := range roadCollection.Paths {
 
-			var languages []domains.LanguageR
+			var languages []domains.LanguageRoad
 			for _, lang := range path.Languages {
-				languages = append(languages, domains.LanguageR{
-					Lang:        lang.Lang,
-					Title:       lang.Title,
-					Description: lang.Description,
-					Content:     lang.Content,
-					Note:        lang.Note,
-				})
+				languages = append(languages, *domains.NewLanguageRoad(lang.Lang, lang.Title, lang.Description, lang.Content, lang.Note))
 			}
 
-			var tests []domains.TestR
+			var tests []domains.TestRoad
 			for _, test := range path.Quest.Tests {
-				tests = append(tests, domains.TestR(
-					test,
-				))
+				tests = append(tests, *domains.NewTestRoad(test.Input, test.Output))
 			}
 
-			var params []domains.ParamR
+			var params []domains.ParamRoad
 			for _, param := range path.Quest.Params {
-				params = append(params, domains.ParamR(
-					param,
-				))
+				params = append(params, *domains.NewParamRoad(param.Name, param.Type))
 			}
+			quest := domains.NewQuestRoad(path.Quest.Difficulty, path.Quest.FuncName, tests, params)
+			newPath := domains.NewPath(path.ID, languages, *quest, false, false)
 
-			quest := domains.QuestR{
-				Difficulty: path.Quest.Difficulty,
-				FuncName:   path.Quest.FuncName,
-				Tests:      tests,
-				Params:     params,
-			}
-
-			newPath := domains.Path{
-				ID:         path.ID,
-				Languages:  languages,
-				Quest:      quest,
-				IsStarted:  false, // Default value is false
-				IsFinished: false, // Default value is false
-			}
 			pathIDString := strconv.Itoa(path.ID)
-
 			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", pathIDString, domains.TypePath, domains.ContentStarted)
 			if err != nil {
 				return nil, err
 			}
-
 			if len(logStartedStatus) > 0 {
-				newPath.IsStarted = true
+				newPath.SetIsStarted(true)
 			}
 
 			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", pathIDString, domains.TypePath, domains.ContentCompleted)
 			if err != nil {
 				return nil, err
 			}
-
 			if len(logFinishedStatus) > 0 {
-				newPath.IsFinished = true
+				newPath.SetIsFinished(true)
 			}
 
-			newPathList = append(newPathList, newPath)
+			newPathList = append(newPathList, *newPath)
 		}
-
-		roads = append(roads, domains.Roads{
-			ID:          roadCollection.ID,
-			Name:        roadCollection.Name,
-			DockerImage: roadCollection.DockerImage,
-			IconPath:    roadCollection.IconPath,
-			Paths:       newPathList,
-		})
+		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, newPathList))
 	}
 
 	return roads, nil
@@ -122,20 +90,22 @@ func (s *roadService) GetRoadFilter(userID string, roadId, pathId int, isStarted
 	var filteredRoads []domains.Roads
 	for _, roadCollection := range allRoads {
 
-		if roadCollection.ID != roadId {
+		if roadCollection.GetID() != roadId {
 			continue
 		}
 
 		var newRoadList []domains.Path
-		for _, road := range roadCollection.Paths {
-			if pathId != 0 && road.ID != pathId {
-				continue
-			}
-			if isStarted != false && road.IsStarted != isStarted {
+
+		for _, road := range roadCollection.GetPaths() {
+			if pathId != 0 && road.GetID() != pathId {
 				continue
 			}
 
-			if isFinished != false && road.IsFinished != isFinished {
+			if isStarted && !road.GetIsStarted() {
+				continue
+			}
+
+			if isFinished && !road.GetIsFinished() {
 				continue
 			}
 
@@ -143,13 +113,7 @@ func (s *roadService) GetRoadFilter(userID string, roadId, pathId int, isStarted
 		}
 
 		if len(newRoadList) > 0 {
-			filteredRoads = append(filteredRoads, domains.Roads{
-				ID:          roadCollection.ID,
-				Name:        roadCollection.Name,
-				DockerImage: roadCollection.DockerImage,
-				IconPath:    roadCollection.IconPath,
-				Paths:       newRoadList,
-			})
+			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), newRoadList))
 		}
 	}
 
