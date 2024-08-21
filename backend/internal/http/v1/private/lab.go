@@ -75,7 +75,7 @@ func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
 	}
 	userSession := session_store.GetSessionData(c)
 
-	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, indID, 0, nil, nil) //buraya bakilsin (false tan dolayi veriler gelmeyebilir) !!11!1!!11
+	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, indID, 0, "", "") //buraya bakilsin (false tan dolayi veriler gelmeyebilir) !!11!1!!11
 	if err != nil {
 		return err
 	}
@@ -86,6 +86,7 @@ func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
 		for _, lab := range labCollection.GetLabs() {
 			languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(lab.GetLanguages())
 			labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(lab, languageDTOs))
+
 		}
 		labsDtoList = append(labsDtoList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, labDTOList))
 	}
@@ -120,7 +121,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	}
 
 	userSession := session_store.GetSessionData(c)
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, nil, nil)
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, "", "")
 	if err != nil {
 		return err
 	}

@@ -35,6 +35,7 @@ func NewLanguageLevel(lang, description string) LanguageLevel {
 	return LanguageLevel{lang: lang, description: description}
 }
 
+// LanguageLevel Getter
 func (l *LanguageLevel) Lang() string {
 	return l.lang
 }
@@ -43,6 +44,7 @@ func (l *LanguageLevel) Description() string {
 	return l.description
 }
 
+// UserLevel Getter
 func (l *UserLevel) Level() int {
 	return l.level
 }

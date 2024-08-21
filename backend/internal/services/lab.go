@@ -81,14 +81,33 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]domains.Labs, error) {
+func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStartedStr, isFinishedStr string) ([]domains.Labs, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStarted == nil && isFinished == nil {
+	if userID == "" && labsId == 0 && labId == 0 && isStartedStr == "" && isFinishedStr == "" {
 		return allLabs, nil
+	}
+
+	// Converting string to a bool
+	var isStarted bool
+	var isFinished bool
+	if isStartedStr != "" {
+		b, err := strconv.ParseBool(isStartedStr)
+		if err != nil {
+			return nil, err // Handle the error if conversion fails
+		}
+		isStarted = b
+	}
+
+	if isFinishedStr != "" {
+		b, err := strconv.ParseBool(isFinishedStr)
+		if err != nil {
+			return nil, err // Handle the error if conversion fails
+		}
+		isFinished = b
 	}
 
 	var filteredLabs []domains.Labs
