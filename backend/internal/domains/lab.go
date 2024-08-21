@@ -27,44 +27,44 @@ type GeneralStats struct {
 }
 
 type Language struct {
-	lang        string `json:"lang"`
-	title       string `json:"title"`
-	description string `json:"description"`
-	note        string `json:"note,omitempty"`
-	hint        string `json:"hint,omitempty"`
+	lang        string
+	title       string
+	description string
+	note        string
+	hint        string
 }
 
 type Test struct {
-	input  []string `json:"input"`
-	output []string `json:"output"`
+	input  []string
+	output []string
 }
 
 type Param struct {
-	name     string `json:"name"`
-	typeName string `json:"type"`
+	name     string
+	typeName string
 }
 
 type Labs struct {
 	id          int
-	name        string `json:"name"`
-	dockerImage string `json:"dockerImage"`
-	iconPath    string `json:"iconPath"`
-	labs        []Lab  `json:"labs"`
+	name        string
+	dockerImage string
+	iconPath    string
+	labs        []Lab
 }
 
 type Lab struct {
-	id         int        `json:"id"`
-	languages  []Language `json:"languages"`
-	quest      Quest      `json:"quest"`
-	isStarted  bool       `json:"isStarted"`
-	isFinished bool       `json:"isFinished"`
+	id         int
+	languages  []Language
+	quest      Quest
+	isStarted  bool
+	isFinished bool
 }
 
 type Quest struct {
-	difficulty int     `json:"difficulty"`
-	funcName   string  `json:"funcName"`
-	tests      []Test  `json:"tests"`
-	params     []Param `json:"params"`
+	difficulty int
+	funcName   string
+	tests      []Test
+	params     []Param
 }
 
 func NewProgrammingLanguageStats(totalLabs, completedLabs int, percentage float64) *ProgrammingLanguageStats {
