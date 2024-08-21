@@ -18,12 +18,14 @@ type LabDTO struct {
 }
 
 func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTOs []LabLanguageDTO) LabDTO {
+	difficulty := lab.GetQuest()
+
 	return LabDTO{
-		ID:         lab.ID,
+		ID:         lab.GetID(),
 		Languages:  languagesDTOs,
-		IsStarted:  lab.IsStarted,
-		IsFinished: lab.IsFinished,
-		Difficulty: lab.Quest.Difficulty,
+		IsStarted:  lab.GetIsStarted(),
+		IsFinished: lab.GetIsFinished(),
+		Difficulty: difficulty.GetDifficulty(),
 	}
 }
 
@@ -36,9 +38,9 @@ type LabsDTO struct {
 
 func (m *LabDTOManager) ToLabsDTO(labs domains.Labs, labDTOs []LabDTO) LabsDTO {
 	return LabsDTO{
-		ID:       labs.ID,
-		Name:     labs.Name,
-		IconPath: labs.IconPath,
+		ID:       labs.GetID(),
+		Name:     labs.GetName(),
+		IconPath: labs.GetIconPath(),
 		Labs:     labDTOs,
 	}
 }
@@ -56,14 +58,14 @@ type UserGeneralLabStatsDTO struct {
 
 func (m *LabDTOManager) ToUserGeneralLabStatsDTO(stats domains.GeneralStats) UserGeneralLabStatsDTO {
 	return UserGeneralLabStatsDTO{
-		TotalLabs:        stats.TotalLabs,
-		TotalPercentage:  stats.TotalPercentage,
-		EasyLabs:         stats.EasyLabs,
-		EasyPercentage:   stats.EasyPercentage,
-		MediumLabs:       stats.MediumLabs,
-		MediumPercentage: stats.MediumPercentage,
-		HardLabs:         stats.HardLabs,
-		HardPercentage:   stats.HardPercentage,
+		TotalLabs:        stats.GetTotalLabs(),
+		TotalPercentage:  stats.GetTotalPercentage(),
+		EasyLabs:         stats.GetEasyLabs(),
+		EasyPercentage:   stats.GetEasyPercentage(),
+		MediumLabs:       stats.GetMediumLabs(),
+		MediumPercentage: stats.GetMediumPercentage(),
+		HardLabs:         stats.GetHardLabs(),
+		HardPercentage:   stats.GetHardPercentage(),
 	}
 }
 
@@ -77,11 +79,11 @@ type LabLanguageDTO struct {
 
 func (m *LabDTOManager) ToLanguageDTO(language domains.Language) LabLanguageDTO {
 	return LabLanguageDTO{
-		Lang:        language.Lang,
-		Title:       language.Title,
-		Description: language.Description,
-		Hint:        language.Hint,
-		Note:        language.Note,
+		Lang:        language.GetLang(),
+		Title:       language.GetTitle(),
+		Description: language.GetDescription(),
+		Hint:        language.GetHint(),
+		Note:        language.GetNote(),
 	}
 }
 
@@ -101,8 +103,8 @@ type UserProgrammingLanguageLabStatsDTO struct {
 
 func (m *LabDTOManager) ToUserProgrammingLanguageLabStatsDTO(stats domains.ProgrammingLanguageStats) UserProgrammingLanguageLabStatsDTO {
 	return UserProgrammingLanguageLabStatsDTO{
-		TotalLabs:     stats.TotalLabs,
-		CompletedLabs: stats.CompletedLabs,
-		Percentage:    stats.Percentage,
+		TotalLabs:     stats.GetTotalLabs(),
+		CompletedLabs: stats.GetCompletedLabs(),
+		Percentage:    stats.GetPercentage(),
 	}
 }

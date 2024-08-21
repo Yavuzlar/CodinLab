@@ -41,50 +41,50 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 
 			var languages []domains.Language
 			for _, lang := range lab.Languages {
-				languages = append(languages, domains.Language{
-					Lang:        lang.Lang,
-					Title:       lang.Title,
-					Description: lang.Description,
-					Note:        lang.Note,
-					Hint:        lang.Hint,
+				languages = append(languages, *domains.NewLanguage(
+					lang.Lang,
+					lang.Title,
+					lang.Description,
+					lang.Note,
+					lang.Hint,
 					//Language parametreleri buraya eklenecek
-				})
+				))
 			}
 
 			var tests []domains.Test
 			for _, test := range lab.Quest.Tests {
-				tests = append(tests, domains.Test{
-					Input:  test.Input,
-					Output: test.Output,
+				tests = append(tests, *domains.NewTest(
+					test.Input,
+					test.Output,
 					//Test parametreleri buraya eklenecek
-				})
+				))
 			}
 
 			var params []domains.Param
 			for _, param := range lab.Quest.Params {
-				params = append(params, domains.Param{
-					Name: param.Name,
-					Type: param.Type,
+				params = append(params, *domains.NewParam(
+					param.Name,
+					param.Type,
 					//Param parametreleri buraya eklenecek
-				})
+				))
 			}
 
-			quest := domains.Quest{
-				Difficulty: lab.Quest.Difficulty,
-				FuncName:   lab.Quest.FuncName,
-				Tests:      tests,
-				Params:     params,
+			quest := *domains.NewQuest(
+				lab.Quest.Difficulty,
+				lab.Quest.FuncName,
+				tests,
+				params,
 				//Quest parametreleri buraya eklenecek
-			}
+			)
 
-			newLab := domains.Lab{
-				ID:         lab.ID,
-				Languages:  languages,
-				Quest:      quest,
-				IsStarted:  false, // Varsayılan değer false
-				IsFinished: false, // Varsayılan değer false
+			newLab := *domains.NewLab(
+				lab.ID,
+				languages,
+				quest,
+				false, // Varsayılan değer false
+				false, // Varsayılan değer false
 				//Lab parametreleri buraya eklenecek
-			}
+			)
 			labIDString := strconv.Itoa(lab.ID)
 
 			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", labIDString, domains.TypeLab, domains.ContentStarted)
@@ -93,7 +93,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 			}
 
 			if len(logStartedStatus) > 0 {
-				newLab.IsStarted = true
+				newLab.SetIsStarted(true)
 			}
 
 			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", labIDString, domains.TypeLab, domains.ContentCompleted)
@@ -102,32 +102,32 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 			}
 
 			if len(logFinishedStatus) > 0 {
-				newLab.IsFinished = true
+				newLab.SetIsFinished(true)
 			}
 
 			newLabList = append(newLabList, newLab)
 		}
 
-		labs = append(labs, domains.Labs{
-			ID:          labCollection.ID,
-			Name:        labCollection.Name,
-			DockerImage: labCollection.DockerImage,
-			IconPath:    labCollection.IconPath,
-			Labs:        newLabList,
-		})
+		labs = append(labs, *domains.NewLabs(
+			labCollection.ID,
+			labCollection.Name,
+			labCollection.DockerImage,
+			labCollection.IconPath,
+			newLabList,
+		))
 	}
 
 	return labs, nil
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished bool) ([]domains.Labs, error) {
+func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]domains.Labs, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStarted && isFinished {
+	if userID == "" && labsId == 0 && labId == 0 && isStarted == nil && isFinished == nil {
 		return allLabs, nil
 	}
 
@@ -135,36 +135,39 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 
 	for _, labCollection := range allLabs {
 
-		if labsId != 0 && labCollection.ID != labsId {
+		if labsId != 0 && labCollection.GetID() != labsId {
 			continue
 		}
 		//labs structı için filtreleme eklenebilir.
 
 		var newLabList []domains.Lab
-		for _, lab := range labCollection.Labs {
+		for _, lab := range labCollection.GetLabs() {
 
-			if labId != 0 && lab.ID != labId {
+			if labId != 0 && lab.GetID() != labId {
 				continue
 			}
-			if lab.IsStarted != isStarted {
+
+			if isStarted != nil && lab.GetIsStarted() != *isStarted {
 				continue
 			}
-			if lab.IsFinished != isFinished {
+
+			if isFinished != nil && lab.GetIsFinished() != *isFinished {
 				continue
 			}
+
 			//lab structı için filtreleme eklenebilir.
 
 			newLabList = append(newLabList, lab)
 		}
 
 		if len(newLabList) > 0 {
-			filteredLabs = append(filteredLabs, domains.Labs{
-				ID:          labCollection.ID,
-				Name:        labCollection.Name,
-				DockerImage: labCollection.DockerImage,
-				IconPath:    labCollection.IconPath,
-				Labs:        newLabList,
-			})
+			filteredLabs = append(filteredLabs, *domains.NewLabs(
+				labCollection.GetID(),
+				labCollection.GetName(),
+				labCollection.GetDockerImage(),
+				labCollection.GetIconPath(),
+				newLabList,
+			))
 		}
 	}
 
@@ -182,11 +185,11 @@ func (s *labService) UserLanguageLabStats(userID string, language string) (domai
 	solvedLabs := 0
 
 	for _, labCollection := range allLabs {
-		for _, lab := range labCollection.Labs {
-			for _, lang := range lab.Languages {
-				if lang.Lang == language {
+		for _, lab := range labCollection.GetLabs() {
+			for _, lang := range lab.GetLanguages() {
+				if lang.GetLang() == language {
 					totalLabs++
-					if lab.IsFinished {
+					if lab.GetIsFinished() {
 						solvedLabs++
 					}
 					break
@@ -196,11 +199,11 @@ func (s *labService) UserLanguageLabStats(userID string, language string) (domai
 	}
 	returnval := domains.ProgrammingLanguageStats{}
 
-	returnval = domains.ProgrammingLanguageStats{
-		TotalLabs:     totalLabs,
-		CompletedLabs: solvedLabs,
-		Percentage:    float64(solvedLabs) / float64(totalLabs) * 100,
-	}
+	returnval = *domains.NewProgrammingLanguageStats(
+		totalLabs,
+		solvedLabs,
+		float64(solvedLabs)/float64(totalLabs)*100,
+	)
 	return returnval, nil
 }
 
@@ -217,12 +220,13 @@ func (s *labService) UserGeneralLabStats(userID string) (domains.GeneralStats, e
 	hardLabs := 0
 
 	for _, labCollection := range allLabs {
-		for _, lab := range labCollection.Labs {
+		for _, lab := range labCollection.GetLabs() {
 			totalLabs++
-			if lab.IsFinished {
+			if lab.GetIsFinished() {
 				solvedLabs++
 			}
-			switch lab.Quest.Difficulty {
+			difficulty := lab.GetQuest()
+			switch difficulty.GetDifficulty() {
 			case 1:
 				easyLabs++
 			case 2:
@@ -237,16 +241,16 @@ func (s *labService) UserGeneralLabStats(userID string) (domains.GeneralStats, e
 	easyPercentage := float64(easyLabs) / float64(totalLabs) * 100
 	mediumPercentage := float64(mediumLabs) / float64(totalLabs) * 100
 	hardPercentage := float64(hardLabs) / float64(totalLabs) * 100
-	returnval := domains.GeneralStats{
-		TotalLabs:        totalLabs,
-		TotalPercentage:  totalPercentage,
-		EasyLabs:         easyLabs,
-		EasyPercentage:   easyPercentage,
-		MediumLabs:       mediumLabs,
-		MediumPercentage: mediumPercentage,
-		HardLabs:         hardLabs,
-		HardPercentage:   hardPercentage,
-	}
+	returnval := *domains.NewGeneralStats(
+		totalLabs,
+		totalPercentage,
+		easyLabs,
+		easyPercentage,
+		mediumLabs,
+		mediumPercentage,
+		hardLabs,
+		hardPercentage,
+	)
 	return returnval, nil
 
 }
