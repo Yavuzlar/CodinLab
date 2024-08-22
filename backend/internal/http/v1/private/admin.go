@@ -53,18 +53,9 @@ func (h *PrivateHandler) GetAllUsers(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	userDTOs := h.dtoManager.AdminDTOManager.ToUserAdminDTOs(users)
 
-	var userDTOs []dto.UserDTO
-	for _, user := range users {
-		bestProgrammingLanguage, err := h.services.AdminService.BestLanguage(c.Context(), user.ID().String())
-		if err != nil {
-			return err
-		}
-		userDTO := h.dtoManager.UserDTOManager.ToUserDTO(&user, bestProgrammingLanguage)
-		userDTOs = append(userDTOs, userDTO)
-	}
-
-	return response.Response(200, "STATUS OK", userDto)
+	return response.Response(200, "STATUS OK", userDTOs)
 }
 
 // @Tags Admin
