@@ -88,5 +88,7 @@
   "labs.question.failed" : "Failed!",
   "labs.question.output" : "Output:",
   "labs.question.expected" : "Expected:",
-  "labs.question.hint" : "Hint"
+  "labs.question.hint" : "Hint",
+  "settings.change.surname" : "Surname",
+  "roads.path.start_road": "Start Road"
 }
