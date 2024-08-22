@@ -81,6 +81,7 @@
   "changePassword.passwordMinError" : "Şifre en az 8 karakter olmalıdır",
   "changePassword.confirmPasswordError": "Şifreler eşleşmiyor",
   "settings.change.name" : "İsim",
-  "settings.change.surname" : "Soyisim" 
+  "settings.change.surname" : "Soyisim",
+  "roads.path.start_road": "Yola Başla"
 }
 
