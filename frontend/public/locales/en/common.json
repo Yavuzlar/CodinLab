@@ -83,6 +83,10 @@
   "changePassword.passwordMinError" : "Password must be at least 8 characters",
   "changePassword.confirmPasswordError": "Passwords do not match",
   "settings.change.name" : "Name",
-  "settings.change.surname" : "Surname"
-
+  "settings.change.surname" : "Surname",
+  "labs.question.completed" : "Successfully completed!",
+  "labs.question.failed" : "Failed!",
+  "labs.question.output" : "Output:",
+  "labs.question.expected" : "Expected:",
+  "labs.question.hint" : "Hint"
 }
