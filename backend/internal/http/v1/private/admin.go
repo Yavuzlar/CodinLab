@@ -64,7 +64,7 @@ func (h *PrivateHandler) GetAllUsers(c *fiber.Ctx) error {
 		userDTOs = append(userDTOs, userDTO)
 	}
 
-	return response.Response(200, "STATUS OK", userDTOs)
+	return response.Response(200, "STATUS OK", userDto)
 }
 
 // @Tags Admin

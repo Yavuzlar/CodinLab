@@ -36,7 +36,7 @@ type IUserService interface {
 // bunun icin admin domaini mi olusturayim?
 type IAdminService interface {
 	CreateUser(ctx context.Context, username, name, surname, password, role, githubProfile string) (err error)
-	GetAllUsers(ctx context.Context) (users []User, err error)
+	GetAllUsers(ctx context.Context) (adminModelUsers []AdminModelUser, err error)
 	GetProfile(ctx context.Context, userID string) (user *User, err error)
 	UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile, name, surname string) (err error)
 	DeleteUser(ctx context.Context, userID string) (err error)
@@ -64,6 +64,14 @@ type User struct {
 	githubProfile string
 	totalPoints   int32
 	createdAt     time.Time
+}
+
+// User model for Admin Panel
+type AdminModelUser struct {
+	order        int
+	username     string
+	level        string
+	bestLanguage string
 }
 
 // NewUser creates a new user.
@@ -207,4 +215,32 @@ func (u *User) SetUsername(username string) error {
 }
 func (u *User) SetID() {
 	u.id = uuid.New()
+}
+
+// NewAdminUser creates a new user.
+func NewAdminUser(order int, username string, level string, bestLanguage string) (adminUser *AdminModelUser) {
+	adminUser = &AdminModelUser{
+		order:        order,
+		username:     username,
+		level:        level,
+		bestLanguage: bestLanguage,
+	}
+
+	return
+}
+
+func (a *AdminModelUser) GetAdminUserOrder() int {
+	return a.order
+}
+
+func (a *AdminModelUser) GetAdminUsername() string {
+	return a.username
+}
+
+func (a *AdminModelUser) GetAdminUserLevel() string {
+	return a.level
+}
+
+func (a *AdminModelUser) GetAdminUserBestLanguage() string {
+	return a.bestLanguage
 }
