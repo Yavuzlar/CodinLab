@@ -242,9 +242,6 @@ func (s *userService) DeleteUser(ctx context.Context, userID string) (err error)
 // Find users most used programming languages
 func (s *userService) BestProgrammingLanguages(ctx context.Context, userID string) (bestProgrammingLanguage string, err error) {
 	programmingLanguageCount := make(map[int32]int)
-	if s.logService == nil || s.parserService == nil {
-		return "", service_errors.NewServiceErrorWithMessage(500, "service is not initialized")
-	}
 	if logs, err := s.logService.GetByUserID(ctx, userID); err != nil {
 		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting logs", err)
 	} else {

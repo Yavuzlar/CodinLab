@@ -81,6 +81,11 @@
   "changePassword.passwordMinError" : "Şifre en az 8 karakter olmalıdır",
   "changePassword.confirmPasswordError": "Şifreler eşleşmiyor",
   "settings.change.name" : "İsim",
-  "settings.change.surname" : "Soyisim" 
+  "settings.change.surname" : "Soyisim",
+  "labs.question.completed" : "Başarıyla tamamlandı!",
+  "labs.question.failed" : "Başarısız oldu!",
+  "labs.question.output" : "Çıktı:",
+  "labs.question.expected" : "Beklenen:",
+  "labs.question.hint" : "İpucu"
 }
 
