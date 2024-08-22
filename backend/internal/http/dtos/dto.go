@@ -1,11 +1,12 @@
 package dto
 
 type DTOManager struct {
-	UserDTOManager *UserDTOManager
-	LogDTOManager  *LogDTOManager
-	RoadDTOManager *RoadDTOManager
-	HomeDTOManager *HomeDTOManager
-	LabDTOManager  *LabDTOManager
+	UserDTOManager  *UserDTOManager
+	LogDTOManager   *LogDTOManager
+	RoadDTOManager  *RoadDTOManager
+	HomeDTOManager  *HomeDTOManager
+	LabDTOManager   *LabDTOManager
+	AdminDTOManager *AdminDTOManager
 }
 
 func CreateNewDTOManager() *DTOManager {
@@ -14,12 +15,14 @@ func CreateNewDTOManager() *DTOManager {
 	roadDTOManager := NewRoadDTOManager()
 	homeDTOManager := NewHomeDTOManager()
 	labDTOManager := NewLabDTOManager()
+	adminDTOManager := NewAdminDTOManager()
 
 	return &DTOManager{
-		UserDTOManager: &userDTOManager,
-		LogDTOManager:  &logDTOManager,
-		RoadDTOManager: &roadDTOManager,
-		HomeDTOManager: &homeDTOManager,
-		LabDTOManager:  &labDTOManager,
+		UserDTOManager:  &userDTOManager,
+		LogDTOManager:   &logDTOManager,
+		RoadDTOManager:  &roadDTOManager,
+		HomeDTOManager:  &homeDTOManager,
+		LabDTOManager:   &labDTOManager,
+		AdminDTOManager: &adminDTOManager,
 	}
 }
