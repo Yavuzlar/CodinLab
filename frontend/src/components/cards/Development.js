@@ -1,11 +1,20 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
+import { CircularProgressStatistics } from "../progress/CircularProgressStatistics";
 
 const Development = () => {
+  let Deneme = [
+    {
+      name: "In progress", // String
+      value: 90, // Number
+      color: "#0A3B7A", // String
+    },
+  ];
+
   return (
     <Box
       sx={{
         width: "100%",
-        height: "20rem",
+        height: "25rem",
       }}
     >
       <Card
@@ -14,8 +23,28 @@ const Development = () => {
           height: "100%",
         }}
       >
-        <CardContent sx={{ textAlign: "center" }}>
-          <Typography variant="title">Development Components</Typography>
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            height: "100%",
+            textAlign: "center",
+          }}
+        >
+          <Box sx={{ textAlign: "center" }}>
+            <Typography variant="title">Development</Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexGrow: 1,
+            }}
+          >
+            <CircularProgressStatistics progresses={Deneme} />
+          </Box>
         </CardContent>
       </Card>
     </Box>

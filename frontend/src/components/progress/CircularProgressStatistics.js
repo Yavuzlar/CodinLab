@@ -28,6 +28,7 @@ export const CircularProgressStatistics = ({ progresses }) => {
   const theme = createTheme({
     palette: {
       first: {
+<<<<<<< HEAD
         main: progresses[0]?.color ? progresses[0].color : "#0A3B7A",
       },
       second: {
@@ -35,6 +36,15 @@ export const CircularProgressStatistics = ({ progresses }) => {
       },
       third: {
         main: progresses[2]?.color ? progresses[2].color : "#000fff",
+=======
+        main: progresses[0]?.color ? progresses[0]?.color : "#0A3B7A",
+      },
+      second: {
+        main: progresses[1]?.color ? progresses[1]?.color : "#8FDDFD",
+      },
+      third: {
+        main: progresses[2]?.color ? progresses[2]?.color : "#000fff",
+>>>>>>> 59c7d53 (Home page statistics added.)
       },
     },
   });
@@ -53,7 +63,8 @@ export const CircularProgressStatistics = ({ progresses }) => {
         sx={{
           position: "relative",
           display: "inline-flex",
-        }}>
+        }}
+      >
         <CircularProgress
           variant="determinate"
           sx={{
@@ -65,7 +76,7 @@ export const CircularProgressStatistics = ({ progresses }) => {
         />
         <CircularProgress
           variant="determinate"
-          value={progresses[0].value === 0 ? 1 : progresses[0].value}
+          value={progresses[0]?.value === 0 ? 1 : progresses[0]?.value}
           size={sizeFirst}
           thickness={thicknessFirst}
           color="first"
@@ -88,7 +99,8 @@ export const CircularProgressStatistics = ({ progresses }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-            }}>
+            }}
+          >
             <CircularProgress
               variant="determinate"
               sx={{
@@ -122,7 +134,8 @@ export const CircularProgressStatistics = ({ progresses }) => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                }}>
+                }}
+              >
                 <CircularProgress
                   variant="determinate"
                   sx={{
