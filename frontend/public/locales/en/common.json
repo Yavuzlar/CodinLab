@@ -9,7 +9,7 @@
   "home.roads.content": "Lay the basics of programming (software) languages firmly and move step by step through the coding universe with Roads!",
   "home.labs.title": "Labs",
   "home.labs.content": "Improve your algorithm and programming skills, get practical experience and put your coding knowledge into practice with Labs!",
-  "login.email": "Email",
+  "login.username": "Username",
   "login.password": "Password",
   "login.remember.me": "Remember Me",
   "login.forget.password": "Forgot Password?",
@@ -24,9 +24,12 @@
   "labs.sort_the_labs": "Sort the labs",
   "roads.search.placeholder": "Search in roads",
   "roads.sort_the_labs": "Sort the roads",
+<<<<<<< HEAD
   "roads.search.placeholder": "Search in roads",
   "roads.sort_the_labs": "Sort the roads",
   "roads.path.next_path": "Next Path",
+=======
+>>>>>>> 30b028f8d40be8a27850866d53fdf2815445110d
   "userlist.order.name" : "Order",
   "userlist.username.name" : "Username",
   "userlist.level.name" : "Level",
@@ -83,6 +86,7 @@
   "changePassword.passwordMinError" : "Password must be at least 8 characters",
   "changePassword.confirmPasswordError": "Passwords do not match",
   "settings.change.name" : "Name",
+<<<<<<< HEAD
   "settings.change.surname" : "Surname",
   "labs.question.completed" : "Successfully completed!",
   "labs.question.failed" : "Failed!",
@@ -90,3 +94,6 @@
   "labs.question.expected" : "Expected:",
   "labs.question.hint" : "Hint"
 }
+=======
+  "settings.change.surname" : "Surname"}
+>>>>>>> 30b028f8d40be8a27850866d53fdf2815445110d
