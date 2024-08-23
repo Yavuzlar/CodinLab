@@ -24,8 +24,6 @@
   "labs.sort_the_labs": "Sort the labs",
   "roads.search.placeholder": "Search in roads",
   "roads.sort_the_labs": "Sort the roads",
-  "roads.search.placeholder": "Search in roads",
-  "roads.sort_the_labs": "Sort the roads",
   "roads.path.next_path": "Next Path",
   "userlist.order.name" : "Order",
   "userlist.username.name" : "Username",
@@ -83,6 +81,9 @@
   "changePassword.passwordMinError" : "Password must be at least 8 characters",
   "changePassword.confirmPasswordError": "Passwords do not match",
   "settings.change.name" : "Name",
-  "settings.change.surname" : "Surname"
+  "settings.change.surname" : "Surname",
+  "lab.search.placeholder": "Search Language labs",
+  "lab.sort_the_labs" : "Sorth the labs",
+  "lab.button.solve" : "Solve"
 
 }

@@ -12,7 +12,7 @@ const breakpoints = {
     lgXl: 1440,
     xl: 1536,
     xxl: 1620,
-    xxxl: 1920,
+    xxxl: 1920, 
   },
 };
 

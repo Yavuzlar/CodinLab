@@ -1,17 +1,16 @@
 import { PlayArrow } from "@mui/icons-material"
 import { Box, Card, Typography, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
-import Translations from "../Translations"
+import Translations from "src/components/Translations";
 
-const SortFilter = ({ filters, setFilters, textKey }) => {
+const SortFilterLab = ({ filters, setFilters }) => {
     const theme = useTheme()
 
-    const [sort, setSort] = useState(0) // 0,1,2
+    const [sort, setSort] = useState(0) 
 
     useEffect(() => {
         setFilters({ ...filters, sort: sort == 2 ? "desc" : sort == 1 ? "asc" : "" })
     }, [sort])
-
 
     return (
         <Card
@@ -25,16 +24,14 @@ const SortFilter = ({ filters, setFilters, textKey }) => {
             }}
             onClick={() => { setSort((sort + 1) % 3) }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', p: '0px 16px 0px 0px', height: '100%' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', p: '0px 16px 0px 8px', height: '100%' }}>
                 <Box
                     sx={{
                         display: 'flex',
-                        alignItems: 'center',
-                        width: '28px',
-                        height: '38px',
+                        width: '22px',
+                        height: '26px',
                         position: 'relative',
                         transform: "rotate(90deg)",
-                        // color: theme.palette.primary.dark
                     }}
                 >
                     <PlayArrow sx={{ color: sort == 1 && theme.palette.primary.dark, width: '18px', transform: "rotate(180deg)", position: 'absolute', left: 0 }} /> {/* ASC a-z */}
@@ -42,11 +39,11 @@ const SortFilter = ({ filters, setFilters, textKey }) => {
                 </Box>
 
                 <Typography>
-                    <Translations text={"labs.sort_the_labs"} />
+                    <Typography><Translations text="users.sort_the_labs"></Translations></Typography>
                 </Typography>
             </Box>
         </Card>
     )
 }
 
-export default SortFilter
+export default SortFilterLab
