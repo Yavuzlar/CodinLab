@@ -13,6 +13,36 @@ type IHomeService interface {
 	GetLabContent() (content []LabContent, err error)
 }
 
+type Inventory struct {
+	id       int
+	name     string
+	iconPath string
+}
+
+type Development struct {
+	roadPercentage int32
+	labPercentage  int32
+}
+
+type Advancement struct {
+	programmingID  int
+	name           string
+	iconPath       string
+	roadPercentage int32
+	labPercentage  int32
+}
+
+// Creates a inventory
+func NewInventory(id int, name string, iconPath string) *Inventory {
+	inventory := &Inventory{
+		id:       id,
+		name:     name,
+		iconPath: iconPath,
+	}
+	return inventory
+}
+
+// Creates a user development
 func NewUserDevelopment(roadPercentage int32, labPercentage int32) *Development {
 	userDevelopment := &Development{
 		roadPercentage: roadPercentage,
@@ -21,15 +51,7 @@ func NewUserDevelopment(roadPercentage int32, labPercentage int32) *Development 
 	return userDevelopment
 }
 
-func NewInventory(id int, name string, iconPath string) *Inventory {
-	inventory := &Inventory{
-		Id:       id,
-		Name:     name,
-		IconPath: iconPath,
-	}
-	return inventory
-}
-
+// Creates a user advancement
 func NewAdvancement(id int, name string, iconPath string, roadPercentage int32, labPercentage int32) *Advancement {
 	advancement := &Advancement{
 		programmingID:  id,
@@ -41,17 +63,20 @@ func NewAdvancement(id int, name string, iconPath string, roadPercentage int32, 
 	return advancement
 }
 
-type Inventory struct {
-	Id       int
-	Name     string
-	IconPath string
+// Inventory Getter
+func (i *Inventory) ID() int {
+	return i.id
 }
 
-type Development struct {
-	roadPercentage int32
-	labPercentage  int32
+func (i *Inventory) Name() string {
+	return i.name
 }
 
+func (i *Inventory) IconPath() string {
+	return i.iconPath
+}
+
+// Development Getter
 func (d *Development) RoadPercentage() int32 {
 	return d.roadPercentage
 }
@@ -60,14 +85,7 @@ func (d *Development) LabPercentage() int32 {
 	return d.labPercentage
 }
 
-type Advancement struct {
-	programmingID  int
-	name           string
-	iconPath       string
-	roadPercentage int32
-	labPercentage  int32
-}
-
+// Advancement Getter
 func (a *Advancement) ProgrammingID() int {
 	return a.programmingID
 }

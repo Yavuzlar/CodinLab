@@ -1,6 +1,7 @@
 package public
 
 import (
+	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/services"
 	"github.com/gofiber/fiber/v2"
@@ -10,16 +11,19 @@ import (
 type PublicHandler struct {
 	services      *services.Services
 	session_store *session.Store
+	dtoManager    *dto.DTOManager
 }
 
 func NewPublicHandler(
 	service *services.Services,
 	sessionStore *session.Store,
+	dtoManager *dto.DTOManager,
 
 ) *PublicHandler {
 	return &PublicHandler{
 		services:      service,
 		session_store: sessionStore,
+		dtoManager:    dtoManager,
 	}
 }
 

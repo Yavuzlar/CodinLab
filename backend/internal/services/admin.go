@@ -4,6 +4,7 @@ package services
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
@@ -15,18 +16,21 @@ type adminService struct {
 	logService       domains.ILogService
 	utils            IUtilService
 	parserService    domains.IParserService
+	levelService     domains.ILevelService
 }
 
 func newAdminService(
 	userRepositories domains.IUserRepository,
 	logService domains.ILogService,
 	parserService domains.IParserService,
+	levelService domains.ILevelService,
 	utils IUtilService,
 ) domains.IAdminService {
 	return &adminService{
 		userRepositories: userRepositories,
 		logService:       logService,
 		parserService:    parserService,
+		levelService:     levelService,
 		utils:            utils,
 	}
 }
@@ -35,6 +39,7 @@ func (s *adminService) CreateUser(ctx context.Context, username, name, surname, 
 	if role != "admin" && role != "user" {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "invalid role", err)
 	}
+
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
 		Username: username,
 	}, 1, 1)
@@ -57,16 +62,34 @@ func (s *adminService) CreateUser(ctx context.Context, username, name, surname, 
 	return
 }
 
-func (s *adminService) GetAllUsers(ctx context.Context) (users []domains.User, err error) {
-	// Retrieves all users whose role is 'user' from the database
-	users, _, err = s.userRepositories.Filter(ctx, domains.UserFilter{
+func (s *adminService) GetAllUsers(ctx context.Context) ([]domains.AdminUserDetail, error) {
+	var adminUserDetail []domains.AdminUserDetail
+	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
 		Role: "user",
 	}, 1000000, 1)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}
+	if len(users) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessageAndError(404, "user list is empty", err)
+	}
 
-	return
+	for i, user := range users {
+		// Getting most used programming languaage
+		mostUsedProgrammingLanguage, err := s.BestProgrammingLanguage(ctx, user.ID().String())
+		if err != nil {
+			return nil, err
+		}
+
+		// Gettins user level
+		userLevel, err := s.levelService.GetUserLevel(ctx, user.ID().String())
+		if err != nil {
+			return nil, err
+		}
+		adminUserDetail = append(adminUserDetail, *domains.NewAdminUser(user.ID(), i+1, user.Username(), strconv.Itoa(userLevel.Level())+" Level", mostUsedProgrammingLanguage))
+	}
+
+	return adminUserDetail, nil
 }
 
 func (s *adminService) GetProfile(ctx context.Context, userID string) (user *domains.User, err error) {
@@ -161,7 +184,7 @@ func (s *adminService) DeleteUser(ctx context.Context, userID string) (err error
 }
 
 // Find users most used languages
-func (s *adminService) BestLanguage(ctx context.Context, userID string) (bestLanguage string, err error) {
+func (s *adminService) BestProgrammingLanguage(ctx context.Context, userID string) (bestLanguage string, err error) {
 	languageCount := make(map[int32]int)
 	if s.logService == nil || s.parserService == nil {
 		return "", service_errors.NewServiceErrorWithMessage(500, "service is not initialized")

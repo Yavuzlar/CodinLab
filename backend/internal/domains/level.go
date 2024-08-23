@@ -13,15 +13,15 @@ type UserLevel struct {
 	level           int
 	totalPoints     int32
 	levelPercentage int32
-	languages       []LanguageL
+	languages       []LanguageLevel
 }
 
-type LanguageL struct {
-	Lang        string
-	Description string
+type LanguageLevel struct {
+	lang        string
+	description string
 }
 
-func NewUserLevel(level int, totalPoints, levelPercentage int32, languages []LanguageL) *UserLevel {
+func NewUserLevel(level int, totalPoints, levelPercentage int32, languages []LanguageLevel) *UserLevel {
 	userLevel := &UserLevel{
 		level:           level,
 		totalPoints:     totalPoints,
@@ -31,6 +31,20 @@ func NewUserLevel(level int, totalPoints, levelPercentage int32, languages []Lan
 	return userLevel
 }
 
+func NewLanguageLevel(lang, description string) LanguageLevel {
+	return LanguageLevel{lang: lang, description: description}
+}
+
+// LanguageLevel Getter
+func (l *LanguageLevel) Lang() string {
+	return l.lang
+}
+
+func (l *LanguageLevel) Description() string {
+	return l.description
+}
+
+// UserLevel Getter
 func (l *UserLevel) Level() int {
 	return l.level
 }
@@ -43,6 +57,6 @@ func (l *UserLevel) LevelPercentage() int32 {
 	return l.levelPercentage
 }
 
-func (l *UserLevel) Languages() []LanguageL {
+func (l *UserLevel) Languages() []LanguageLevel {
 	return l.languages
 }

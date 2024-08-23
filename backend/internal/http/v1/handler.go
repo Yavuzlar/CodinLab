@@ -1,6 +1,7 @@
 package v1
 
 import (
+	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/v1/private"
 	"github.com/Yavuzlar/CodinLab/internal/http/v1/public"
@@ -10,12 +11,14 @@ import (
 )
 
 type V1Handler struct {
-	services *services.Services
+	services   *services.Services
+	dtoManager *dto.DTOManager
 }
 
-func NewV1Handler(services *services.Services) *V1Handler {
+func NewV1Handler(services *services.Services, dtoManager *dto.DTOManager) *V1Handler {
 	return &V1Handler{
-		services: services,
+		services:   services,
+		dtoManager: dtoManager,
 	}
 }
 
@@ -26,6 +29,6 @@ func (h *V1Handler) Init(router fiber.Router, sessionStore *session.Store) {
 	})
 	// Init Fiber Session Store
 	//---------------------------
-	private.NewPrivateHandler(h.services, sessionStore).Init(root)
-	public.NewPublicHandler(h.services, sessionStore).Init(root)
+	private.NewPrivateHandler(h.services, sessionStore, h.dtoManager).Init(root)
+	public.NewPublicHandler(h.services, sessionStore, h.dtoManager).Init(root)
 }

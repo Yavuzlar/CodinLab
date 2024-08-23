@@ -84,6 +84,10 @@
   "settings.change.surname" : "Surname",
   "lab.search.placeholder": "Search Language labs",
   "lab.sort_the_labs" : "Sorth the labs",
-  "lab.button.solve" : "Solve"
-
+  "lab.button.solve" : "Solve",
+  "labs.question.completed" : "Successfully completed!",
+  "labs.question.failed" : "Failed!",
+  "labs.question.output" : "Output:",
+  "labs.question.expected" : "Expected:",
+  "labs.question.hint" : "Hint"
 }
