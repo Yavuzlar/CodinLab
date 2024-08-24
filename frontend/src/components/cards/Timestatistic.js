@@ -14,6 +14,7 @@ import jsImg from "../../assets/icons/javascript.png";
 import pyImg from "../../assets/icons/python.png";
 import Image from "next/image";
 import { useTheme } from "@emotion/react";
+import Translations from "../Translations";
 
 const langData = [
   { name: "C", image: { cImg }, Roads: 2, Labs: 8 },
@@ -23,7 +24,7 @@ const langData = [
   { name: "Python", image: { pyImg }, Roads: 3, Labs: 8 },
 ];
 
-const Timestatistic = ({ title = "", description = "" }) => {
+const Timestatistic = () => {
   const _smd = useMediaQuery((theme) => theme.breakpoints.down("smd"));
   const theme = useTheme();
   return (
@@ -53,7 +54,7 @@ const Timestatistic = ({ title = "", description = "" }) => {
             }}
           >
             <Typography variant="title" sx={{ fontWeight: "bold" }}>
-              {title}
+              <Translations text="admin.time.title" />
             </Typography>
             <Typography
               sx={{
@@ -63,7 +64,7 @@ const Timestatistic = ({ title = "", description = "" }) => {
                 ...(_smd && { maxWidth: "60ch" }),
               }}
             >
-              {description}
+              <Translations text="admin.time.content" />
             </Typography>
           </Box>
           <Box
