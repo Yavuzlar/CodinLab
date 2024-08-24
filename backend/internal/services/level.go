@@ -91,13 +91,13 @@ func (s *levelService) GetUserLevel(ctx context.Context, userID string) (userLev
 	}
 	u := user[0]
 	userPoint = u.TotalPoints()
-	var lang []domains.LanguageL
+	var lang []domains.LanguageLevel
 
 	for _, level := range levels {
 		if userPoint >= level.MinPoints && userPoint < level.MaxPoints { //Checks level limits
 			levelPercentage := ((userPoint - level.MinPoints) * 100) / (level.MaxPoints - level.MinPoints) //level percentage
 			for _, language := range level.Languages {
-				lang = append(lang, domains.LanguageL{Lang: language.Lang, Description: language.Description})
+				lang = append(lang, domains.NewLanguageLevel(language.Lang, language.Description))
 			}
 			userLevel = domains.NewUserLevel(level.Level, userPoint, levelPercentage, lang)
 			break

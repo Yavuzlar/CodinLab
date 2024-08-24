@@ -1,6 +1,7 @@
 package http
 
 import (
+	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	v1 "github.com/Yavuzlar/CodinLab/internal/http/v1"
 	"github.com/Yavuzlar/CodinLab/internal/services"
@@ -37,7 +38,7 @@ func (h *Handler) Init(devMode bool, middlewares ...func(*fiber.Ctx) error) *fib
 	// init routes
 	sessionStore := session_store.NewSessionStore()
 
-	v1.NewV1Handler(h.services).Init(root, sessionStore)
+	v1.NewV1Handler(h.services, dto.CreateNewDTOManager()).Init(root, sessionStore)
 
 	return app
 }

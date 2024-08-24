@@ -32,18 +32,6 @@ type IUserService interface {
 	// Devamı gelecek...
 }
 
-// IAdminService is the interface that provides the methods for the admin service.
-// bunun icin admin domaini mi olusturayim?
-type IAdminService interface {
-	CreateUser(ctx context.Context, username, name, surname, password, role, githubProfile string) (err error)
-	GetAllUsers(ctx context.Context) (users []User, err error)
-	GetProfile(ctx context.Context, userID string) (user *User, err error)
-	UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile, name, surname string) (err error)
-	DeleteUser(ctx context.Context, userID string) (err error)
-	BestLanguage(ctx context.Context, userID string) (bestLanguage string, err error)
-	// Devamı gelecek...
-}
-
 // UserFilter is the struct that represents the user filter.
 type UserFilter struct {
 	Id       uuid.UUID

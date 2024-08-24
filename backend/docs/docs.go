@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/private/admin/user": {
             "post": {
-                "description": "User Creation",
+                "description": "Creates User",
                 "consumes": [
                     "application/json"
                 ],
@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/private.CreateUserDTO"
+                            "$ref": "#/definitions/dto.CreateUserDTO"
                         }
                     }
                 ],
@@ -51,7 +51,7 @@ const docTemplate = `{
         },
         "/private/admin/user/{ID}": {
             "get": {
-                "description": "Gets user profile",
+                "description": "Retrieves User Profile",
                 "consumes": [
                     "application/json"
                 ],
@@ -61,7 +61,7 @@ const docTemplate = `{
                 "tags": [
                     "Admin"
                 ],
-                "summary": "GetProfile",
+                "summary": "Get Profile",
                 "parameters": [
                     {
                         "type": "string",
@@ -83,7 +83,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/private.UserDTO"
+                                            "$ref": "#/definitions/dto.UserDTO"
                                         }
                                     }
                                 }
@@ -101,7 +101,7 @@ const docTemplate = `{
         },
         "/private/admin/users": {
             "get": {
-                "description": "Retrieves all users",
+                "description": "Retrieves All Users",
                 "consumes": [
                     "application/json"
                 ],
@@ -111,27 +111,12 @@ const docTemplate = `{
                 "tags": [
                     "Admin"
                 ],
-                "summary": "Get All Users",
+                "summary": "Get Users",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.BaseResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/private.GetUserDTO"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/response.BaseResponse"
                         }
                     },
                     "400": {
@@ -306,7 +291,7 @@ const docTemplate = `{
         },
         "/private/lab/{programmingID}/{labID}": {
             "get": {
-                "description": "Get Lab By Lang ID \u0026 Lab ID",
+                "description": "Get Lab By Programming Language ID \u0026 Lab ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -320,7 +305,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Lang ID",
+                        "description": "Programming Language ID",
                         "name": "programmingID",
                         "in": "path",
                         "required": true
@@ -343,9 +328,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/labs/{ID}": {
+        "/private/labs/stats/{language}/{userID}": {
             "get": {
-                "description": "Get Labs By Lang ID",
+                "description": "Get User Programming Language Lab Statistics",
                 "consumes": [
                     "application/json"
                 ],
@@ -355,11 +340,82 @@ const docTemplate = `{
                 "tags": [
                     "Lab"
                 ],
-                "summary": "GetLabsByID",
+                "summary": "GetUserProgrammingLanguageLabStats",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Labs ID",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "language",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/labs/stats/{userID}": {
+            "get": {
+                "description": "Get User General Lab Statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GetUserGeneralLabStats",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/labs/{ID}": {
+            "get": {
+                "description": "Get Labs By Programming Language ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GetLabsById",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
                         "name": "ID",
                         "in": "path",
                         "required": true
@@ -434,7 +490,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/private.LogDTO"
+                                                "$ref": "#/definitions/dto.LogDTO"
                                             }
                                         }
                                     }
@@ -472,7 +528,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/private.SolutionsByDayDTO"
+                                                "$ref": "#/definitions/dto.SolutionsByDayDTO"
                                             }
                                         }
                                     }
@@ -510,7 +566,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/private.SolutionsHoursByProgrammingDTO"
+                                                "$ref": "#/definitions/dto.SolutionsHoursByProgrammingDTO"
                                             }
                                         }
                                     }
@@ -541,7 +597,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/private.StartDTO"
+                            "$ref": "#/definitions/dto.StartDTO"
                         }
                     }
                 ],
@@ -557,7 +613,7 @@ const docTemplate = `{
         },
         "/private/road/{roadID}": {
             "get": {
-                "description": "Get All Roads",
+                "description": "Get Road with Paths",
                 "consumes": [
                     "application/json"
                 ],
@@ -589,7 +645,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/private.RoadDTO"
+                                            "$ref": "#/definitions/dto.RoadDTO"
                                         }
                                     }
                                 }
@@ -640,7 +696,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/private.PathDTO"
+                                            "$ref": "#/definitions/dto.PathDTO"
                                         }
                                     }
                                 }
@@ -675,7 +731,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/private.UserDTO"
+                                            "$ref": "#/definitions/dto.UserDTO"
                                         }
                                     }
                                 }
@@ -703,7 +759,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/private.UpdateUserDTO"
+                            "$ref": "#/definitions/dto.UpdateUserDTO"
                         }
                     }
                 ],
@@ -737,7 +793,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/private.UpdatePasswordDTO"
+                            "$ref": "#/definitions/dto.UpdatePasswordDTO"
                         }
                     }
                 ],
@@ -771,7 +827,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/public.LoginDTO"
+                            "$ref": "#/definitions/dto.LoginDTO"
                         }
                     }
                 ],
@@ -805,7 +861,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/public.RegisterDTO"
+                            "$ref": "#/definitions/dto.RegisterDTO"
                         }
                     }
                 ],
@@ -821,7 +877,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "private.CreateUserDTO": {
+        "dto.CreateUserDTO": {
             "type": "object",
             "required": [
                 "name",
@@ -832,7 +888,6 @@ const docTemplate = `{
             ],
             "properties": {
                 "githubProfile": {
-                    "description": "Github Profile is must be max 30 characters long.",
                     "type": "string",
                     "maxLength": 30
                 },
@@ -860,30 +915,7 @@ const docTemplate = `{
                 }
             }
         },
-        "private.GetUserDTO": {
-            "type": "object",
-            "properties": {
-                "bestProgrammingLanguage": {
-                    "type": "string"
-                },
-                "githubProfile": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "private.LanguageDTO": {
+        "dto.LanguageDTO": {
             "type": "object",
             "properties": {
                 "content": {
@@ -903,7 +935,7 @@ const docTemplate = `{
                 }
             }
         },
-        "private.LogDTO": {
+        "dto.LogDTO": {
             "type": "object",
             "properties": {
                 "content": {
@@ -912,21 +944,39 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "labRoadID": {
+                "labPathID": {
                     "type": "integer"
+                },
+                "logType": {
+                    "type": "string"
                 },
                 "programmingID": {
                     "type": "integer"
-                },
-                "type": {
-                    "type": "string"
                 },
                 "userId": {
                     "type": "string"
                 }
             }
         },
-        "private.PathDTO": {
+        "dto.LoginDTO": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 3
+                }
+            }
+        },
+        "dto.PathDTO": {
             "type": "object",
             "properties": {
                 "difficulty": {
@@ -944,7 +994,7 @@ const docTemplate = `{
                 "languages": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/private.LanguageDTO"
+                        "$ref": "#/definitions/dto.LanguageDTO"
                     }
                 },
                 "name": {
@@ -952,7 +1002,37 @@ const docTemplate = `{
                 }
             }
         },
-        "private.RoadDTO": {
+        "dto.RegisterDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "password",
+                "surname",
+                "username"
+            ],
+            "properties": {
+                "githubProfile": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 3
+                }
+            }
+        },
+        "dto.RoadDTO": {
             "type": "object",
             "properties": {
                 "iconPath": {
@@ -964,12 +1044,12 @@ const docTemplate = `{
                 "paths": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/private.PathDTO"
+                        "$ref": "#/definitions/dto.PathDTO"
                     }
                 }
             }
         },
-        "private.SolutionsByDayDTO": {
+        "dto.SolutionsByDayDTO": {
             "type": "object",
             "properties": {
                 "date": {
@@ -983,7 +1063,7 @@ const docTemplate = `{
                 }
             }
         },
-        "private.SolutionsHoursByProgrammingDTO": {
+        "dto.SolutionsHoursByProgrammingDTO": {
             "type": "object",
             "properties": {
                 "labHours": {
@@ -997,7 +1077,7 @@ const docTemplate = `{
                 }
             }
         },
-        "private.StartDTO": {
+        "dto.StartDTO": {
             "type": "object",
             "required": [
                 "programmingID"
@@ -1008,7 +1088,7 @@ const docTemplate = `{
                 }
             }
         },
-        "private.UpdatePasswordDTO": {
+        "dto.UpdatePasswordDTO": {
             "type": "object",
             "required": [
                 "confirmPassword",
@@ -1029,7 +1109,7 @@ const docTemplate = `{
                 }
             }
         },
-        "private.UpdateUserDTO": {
+        "dto.UpdateUserDTO": {
             "type": "object",
             "required": [
                 "password"
@@ -1043,7 +1123,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
-                    "description": "requires users password for update",
                     "type": "string"
                 },
                 "surname": {
@@ -1056,7 +1135,7 @@ const docTemplate = `{
                 }
             }
         },
-        "private.UserDTO": {
+        "dto.UserDTO": {
             "type": "object",
             "properties": {
                 "bestLanguage": {
@@ -1073,61 +1152,6 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
-                }
-            }
-        },
-        "public.LoginDTO": {
-            "type": "object",
-            "required": [
-                "password",
-                "username"
-            ],
-            "properties": {
-                "password": {
-                    "description": "Password is required and must be at least 8 characters",
-                    "type": "string",
-                    "minLength": 8
-                },
-                "username": {
-                    "description": "Username is required, must be alphanumeric and between 3-30 characters",
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 3
-                }
-            }
-        },
-        "public.RegisterDTO": {
-            "type": "object",
-            "required": [
-                "name",
-                "password",
-                "surname",
-                "username"
-            ],
-            "properties": {
-                "githubProfile": {
-                    "description": "Github Profile is must be max 30 characters long.",
-                    "type": "string",
-                    "maxLength": 30
-                },
-                "name": {
-                    "description": "Name is required",
-                    "type": "string"
-                },
-                "password": {
-                    "description": "Password is required and must be at least 8 characters",
-                    "type": "string",
-                    "minLength": 8
-                },
-                "surname": {
-                    "description": "Surname is required",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "Username is required, must be alphanumeric and between 3-30 characters",
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 3
                 }
             }
         },

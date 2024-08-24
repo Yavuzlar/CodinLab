@@ -89,7 +89,7 @@ func (s *homeService) GetUserDevelopment(ctx context.Context, userID string) (de
 		}
 	}
 
-	development = *domains.NewUserDevelopment(labPercentage, roadPercentage)
+	development = *domains.NewUserDevelopment(roadPercentage, labPercentage)
 	return
 }
 

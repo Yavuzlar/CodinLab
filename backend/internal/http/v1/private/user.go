@@ -2,6 +2,7 @@ package private
 
 import (
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
@@ -14,34 +15,12 @@ func (h *PrivateHandler) initUserRoutes(root fiber.Router) {
 	userRoute.Put("/password", h.UpdatePassword)
 }
 
-type UpdateUserDTO struct {
-	Username      string `json:"username" validate:"omitempty,alphanum,min=3,max=30" `
-	Name          string `json:"name"`
-	Surname       string `json:"surname" `
-	Password      string `json:"password" validate:"required"` //requires users password for update
-	GithubProfile string `json:"githubProfile" validate:"omitempty,max=30"`
-}
-
-type UpdatePasswordDTO struct {
-	Password        string `json:"password" validate:"required"`
-	NewPassword     string `json:"newPassword" validate:"required,min=8"`
-	ConfirmPassword string `json:"confirmPassword" validate:"required,min=8"`
-}
-
-type UserDTO struct {
-	Username      string `json:"username"`
-	Name          string `json:"name"`
-	Surname       string `json:"surname"`
-	GithubProfile string `json:"githubProfile"`
-	BestLanguage  string `json:"bestLanguage"`
-}
-
 // @Tags User
 // @Summary GetProfile
 // @Description Gets users profile
 // @Accept json
 // @Produce json
-// @Success 200 {object} response.BaseResponse{data=UserDTO}
+// @Success 200 {object} response.BaseResponse{data=dto.UserDTO}
 // @Router /private/user/ [get]
 func (h *PrivateHandler) GetProfile(c *fiber.Ctx) error {
 	session := session_store.GetSessionData(c)
@@ -50,18 +29,11 @@ func (h *PrivateHandler) GetProfile(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	mostUsedLanguage, err := h.services.UserService.BestProgrammingLanguages(c.Context(), user.ID().String())
+	bestProgrammingLanguage, err := h.services.UserService.BestProgrammingLanguages(c.Context(), user.ID().String())
 	if err != nil {
 		return err
 	}
-
-	userDTO := UserDTO{
-		Username:      user.Username(),
-		Name:          user.Name(),
-		Surname:       user.Surname(),
-		GithubProfile: user.GithubProfile(),
-		BestLanguage:  mostUsedLanguage,
-	}
+	userDTO := h.dtoManager.UserDTOManager.ToUserDTO(user, bestProgrammingLanguage)
 
 	return response.Response(200, "STATUS OK", userDTO)
 }
@@ -71,13 +43,13 @@ func (h *PrivateHandler) GetProfile(c *fiber.Ctx) error {
 // @Description Updates user
 // @Accept json
 // @Produce json
-// @Param update body UpdateUserDTO true "UpdateUser"
+// @Param update body dto.UpdateUserDTO true "UpdateUser"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/user/ [put]
 func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
 	session := session_store.GetSessionData(c)
 	userID := session.UserID
-	var update UpdateUserDTO
+	var update dto.UpdateUserDTO
 	if err := c.BodyParser(&update); err != nil {
 		return err
 	}
@@ -102,13 +74,13 @@ func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
 // @Description Updates users password
 // @Accept json
 // @Produce json
-// @Param update body UpdatePasswordDTO true "UpdatePassword"
+// @Param update body dto.UpdatePasswordDTO true "UpdatePassword"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/user/password [put]
 func (h *PrivateHandler) UpdatePassword(c *fiber.Ctx) error {
 	session := session_store.GetSessionData(c)
 	userID := session.UserID
-	var update UpdatePasswordDTO
+	var update dto.UpdatePasswordDTO
 	if err := c.BodyParser(&update); err != nil {
 		return err
 	}
