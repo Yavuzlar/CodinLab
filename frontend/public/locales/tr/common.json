@@ -81,15 +81,15 @@
   "changePassword.passwordMinError" : "Şifre en az 8 karakter olmalıdır",
   "changePassword.confirmPasswordError": "Şifreler eşleşmiyor",
   "settings.change.name" : "İsim",
-  "settings.change.surname" : "Soyisim",
+  "settings.change.surname" : "Soyisim" ,
+  "lab.search.placeholder": "Lablarda ara",
+  "lab.sort_the_labs" : "Labları sırala",
+  "lab.button.solve" : "Çöz",
   "labs.question.completed" : "Başarıyla tamamlandı!",
   "labs.question.failed" : "Başarısız oldu!",
   "labs.question.output" : "Çıktı:",
   "labs.question.expected" : "Beklenen:",
   "labs.question.hint" : "İpucu",
-  "settings.change.surname" : "Soyisim",
-  "roads.path.start_road": "Yola Başla"
-  "settings.change.surname" : "Soyisim",
   "roads.path.start_road": "Yola Başla"
 }
 
