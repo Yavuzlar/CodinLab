@@ -52,6 +52,7 @@ const AuthProvider = ({ children }) => {
 
     if (userData) {
       setUser(userData);
+      console.log("deneme",userData);
     } else {
       const user = { id: 1, name: "John Doe", role: "user" };
       setUser(user);
