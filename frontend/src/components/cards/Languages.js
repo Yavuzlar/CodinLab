@@ -79,7 +79,7 @@ const Languages = ({ language }) => {
               ":hover": {
                 zIndex: 1,
                 width: "100vh",
-                transition: "width 0.3s",
+                transition: "width 1.5s",
               },
             }}
           >
@@ -95,7 +95,7 @@ const Languages = ({ language }) => {
               ":hover": {
                 zIndex: 1,
                 width: "100vh",
-                transition: "width 0.3s",
+                transition: "width 1.5s",
               },
             }}
           >

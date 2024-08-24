@@ -1,4 +1,5 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
+import LevelStatistic from "../statistics/LevelStatistic";
 
 const Level = () => {
   return (
@@ -16,6 +17,7 @@ const Level = () => {
       >
         <CardContent sx={{ textAlign: "center" }}>
           <Typography variant="title">Level Components</Typography>
+          <LevelStatistic />
         </CardContent>
       </Card>
     </Box>

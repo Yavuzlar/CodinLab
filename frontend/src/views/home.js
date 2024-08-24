@@ -6,6 +6,7 @@ import { welcomeCard, languages, roads, labs } from "src/data/home";
 import Level from "src/components/cards/Level";
 import Development from "src/components/cards/Development";
 import Advancement from "src/components/cards/Advancement";
+import LevelStatistic from "src/components/statistics/LevelStatistic";
 
 const Home = () => {
   const progresses = [
@@ -68,7 +69,7 @@ const Home = () => {
           }}
         >
           <Grid item xs={12} md={6} xl={4}>
-            <Level />
+            <LevelStatistic levels={1} progress={90} />
           </Grid>
           <Grid item xs={12} md={6} xl={4}>
             <Development />

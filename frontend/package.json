@@ -20,6 +20,7 @@
     "@reduxjs/toolkit": "^2.2.0",
     "@svgr/webpack": "^8.1.0",
     "accept-language": "^3.0.18",
+    "apexcharts": "^3.52.0",
     "autoprefixer": "10.4.14",
     "axios": "^1.6.7",
     "clsx": "^2.0.0",
@@ -34,12 +35,14 @@
     "nextjs-progressbar": "^0.0.16",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
+    "react-apexcharts": "^1.4.1",
     "react-cookie": "6.1.1",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^13.5.0",
     "react-multi-carousel": "^2.8.4",
     "react-redux": "^9.1.0",
+    "recharts": "^2.12.7",
     "yup": "^1.4.0"
   },
   "devDependencies": {
