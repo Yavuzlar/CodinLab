@@ -35,6 +35,7 @@
     "nextjs-progressbar": "^0.0.16",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
+    "react-activity-calendar": "^2.3.5",
     "react-apexcharts": "^1.4.1",
     "react-cookie": "6.1.1",
     "react-dom": "^18.2.0",
