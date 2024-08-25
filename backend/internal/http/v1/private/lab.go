@@ -3,7 +3,6 @@ package private
 import (
 	"strconv"
 
-	"github.com/Yavuzlar/CodinLab/internal/domains"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -28,9 +27,6 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 // @Router /private/labs/general/stats [get]
 func (h *PrivateHandler) GetUserLanguageLabStats(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
-
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 2, 3)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 2)
 
 	stats, err := h.services.LabService.GetUserLanguageLabStats(userSession.UserID)
 	if err != nil {
