@@ -69,7 +69,7 @@ const Home = () => {
           }}
         >
           <Grid item xs={12} md={6} xl={4}>
-            <LevelStatistic levels={1} progress={90} />
+            <LevelStatistic levels={1} progress={20} />
           </Grid>
           <Grid item xs={12} md={6} xl={4}>
             <Development />
