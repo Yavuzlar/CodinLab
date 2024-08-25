@@ -9,7 +9,7 @@
   "home.roads.content": "Lay the basics of programming (software) languages firmly and move step by step through the coding universe with Roads!",
   "home.labs.title": "Labs",
   "home.labs.content": "Improve your algorithm and programming skills, get practical experience and put your coding knowledge into practice with Labs!",
-  "login.email": "Email",
+  "login.username": "Username",
   "login.password": "Password",
   "login.remember.me": "Remember Me",
   "login.forget.password": "Forgot Password?",
@@ -92,3 +92,4 @@
   "labs.question.expected": "Expected:",
   "labs.question.hint": "Hint"
 }
+

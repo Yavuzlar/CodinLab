@@ -52,6 +52,7 @@ const AuthProvider = ({ children }) => {
 
     if (userData) {
       setUser(userData);
+      console.log("deneme",userData);
     } else {
       const user = { id: 1, name: "John Doe", role: "user" };
       setUser(user);
@@ -82,6 +83,29 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const handleLogin = async (formData) => {
+    try {
+      const response = await axios({
+        url: authConfig.login,
+        method: "POST",
+        data: formData,
+      });
+      if (response.status === 200) {
+        const user = response.data;
+        window.localStorage.setItem(authConfig.userDataName, JSON.stringify(user));
+        setUser(user);
+        router.push("/home");
+      } else {
+        showToast("dismiss");
+        showToast("error", response.data.message);
+      }
+    } catch (error) {
+      showToast("dismiss");
+      showToast("error", error.message);
+    }
+  }
+
+
   useEffect(() => {
     initAuth();
   }, []);
@@ -96,6 +120,7 @@ const AuthProvider = ({ children }) => {
     logout: handleLogout,
     register: handleRegister,
     initAuth,
+    login: handleLogin,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

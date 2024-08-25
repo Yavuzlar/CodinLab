@@ -31,18 +31,20 @@ import Image from "next/image";
 import manImg from "../assets/3d/3d-casual-life-young-man-sitting-with-laptop-and-waving.png";
 import { useTranslation } from "next-i18next";
 import themeConfig from "src/configs/themeConfig";
-import { set } from "nprogress";
+import { useAuth } from "src/hooks/useAuth";
 const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Login = () => {
-  const [email, setEmail] = useState();
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState();
   const [errors, setErrors] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
-  const [visibleEmailLabel, setVisibleEmailLabel] = useState(false);
+  const [visibleUsernameLabel, setVisibleUsernameLabel] = useState(false);
   const [visiblePasswordLabel, setVisiblePasswordLabel] = useState(false);
+  const { login } = useAuth();
+
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   // const handleMouseDownPassword = (event) => {
@@ -51,9 +53,9 @@ const Login = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    if (e.target.name === "email") {
-      setEmail(e.target.value);
-      handleVisibleEmailLabel(e.target.value);
+    if (e.target.name === "username") {
+      setUsername(e.target.value);
+      handleVisibleUsernameLabel(e.target.value);
     }
 
     if (e.target.name === "password") {
@@ -62,8 +64,8 @@ const Login = () => {
     }
   };
 
-  const handleVisibleEmailLabel = (email) => {
-    setVisibleEmailLabel(email !== "");
+  const handleVisibleUsernameLabel = (username) => {
+    setVisibleUsernameLabel(username !== "");
   };
 
   const handleVisiblePasswordLabel = (password) => {
@@ -72,6 +74,20 @@ const Login = () => {
 
   const handleSubmit = async () => {
     setFormSubmit(true); 
+    const validationErrors = await loginValidation(formData);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      console.log("Form has errors:", validationErrors);
+      return;
+    }
+    // Call API
+    try {
+      console.log(formData);
+      await login(formData);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -158,19 +174,19 @@ const Login = () => {
               <Grid item xs={12} sx={{ width: "100%", mt: "2.5rem" }}>
                 <Typography
                   sx={{
-                    // display: visibleEmailLabel ? "block" : "none",
+                    // display: visibleUsernameLabel ? "block" : "none",
                     mb: "0.438rem",
                     ml: "1.438rem",
                     color: (theme) => `${theme.palette.border.secondary}`,
                     fontWeight: "bold",
-                    transform: visibleEmailLabel
+                    transform: visibleUsernameLabel
                       ? "translateY(0)"
                       : "translateY(20px)",
-                    opacity: visibleEmailLabel ? 1 : 0,
+                    opacity: visibleUsernameLabel ? 1 : 0,
                     transition: "all 0.3s ease-in-out",
                   }}
                 >
-                  <Translations text={"login.email"} />
+                  <Translations text={"login.username"} />
                 </Typography>
                 <FormControl
                   sx={{
@@ -180,12 +196,12 @@ const Login = () => {
                   }}
                 >
                   <TextField
-                    name="email"
-                    placeholder={t("login.email")}
+                    name="username"
+                    placeholder={t("login.username")}
                     variant="outlined"
                     onChange={handleChange}
-                    error={errors.email ? true : false}
-                    helperText={errors.email}
+                    error={errors.username ? true : false}
+                    helperText={errors.username}
                     InputProps={{ style: { color: "#0A3B7A" } }}
                     sx={{
                       "& .MuiFormLabel-root": {

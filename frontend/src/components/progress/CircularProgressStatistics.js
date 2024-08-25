@@ -28,6 +28,7 @@ export const CircularProgressStatistics = ({ progresses }) => {
   const theme = createTheme({
     palette: {
       first: {
+
         main: progresses[0]?.color ? progresses[0]?.color : "#0A3B7A",
       },
       second: {
@@ -35,6 +36,7 @@ export const CircularProgressStatistics = ({ progresses }) => {
       },
       third: {
         main: progresses[2]?.color ? progresses[2]?.color : "#000fff",
+
       },
     },
   });
