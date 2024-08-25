@@ -2,16 +2,19 @@ package domains
 
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
-	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished string) ([]Labs, error)
-	UserLanguageLabStats(userID string, language string) (ProgrammingLanguageStats, error)
-	UserGeneralLabStats(userID string) (GeneralStats, error)
+	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]Labs, error)
+	GetUserLanguageLabStats(userID string) (programmingLangugageStats []ProgrammingLanguageStats, err error)
+	GetUserLabDifficultyStats(userID string) (userLabDifficultyStats UserLabDifficultyStats, err error)
 }
 
 // ProgrammingLanguageStats represents the statistics for a specific language lab.
 type ProgrammingLanguageStats struct {
+	id            int
+	name          string
+	iconPath      string
 	totalLabs     int
 	completedLabs int
-	percentage    float64
+	percentage    float32
 }
 
 // Getter and Setter methods for ProgrammingLanguageStats
@@ -23,6 +26,30 @@ func (p *ProgrammingLanguageStats) SetTotalLabs(totalLabs int) {
 	p.totalLabs = totalLabs
 }
 
+func (p *ProgrammingLanguageStats) GetID() int {
+	return p.id
+}
+
+func (p *ProgrammingLanguageStats) SetID(id int) {
+	p.id = id
+}
+
+func (p *ProgrammingLanguageStats) GetName() string {
+	return p.name
+}
+
+func (p *ProgrammingLanguageStats) SetName(name string) {
+	p.name = name
+}
+
+func (p *ProgrammingLanguageStats) GetIconPath() string {
+	return p.iconPath
+}
+
+func (p *ProgrammingLanguageStats) SetIconPath(iconPath string) {
+	p.iconPath = iconPath
+}
+
 func (p *ProgrammingLanguageStats) GetCompletedLabs() int {
 	return p.completedLabs
 }
@@ -31,88 +58,43 @@ func (p *ProgrammingLanguageStats) SetCompletedLabs(completedLabs int) {
 	p.completedLabs = completedLabs
 }
 
-func (p *ProgrammingLanguageStats) GetPercentage() float64 {
+func (p *ProgrammingLanguageStats) GetPercentage() float32 {
 	return p.percentage
 }
 
-func (p *ProgrammingLanguageStats) SetPercentage(percentage float64) {
+func (p *ProgrammingLanguageStats) SetPercentage(percentage float32) {
 	p.percentage = percentage
 }
 
-// GeneralStats represents the DTO for user general lab statistics
-type GeneralStats struct {
-	totalLabs        int
-	totalPercentage  float64
-	easyLabs         int
-	easyPercentage   float64
-	mediumLabs       int
-	mediumPercentage float64
-	hardLabs         int
-	hardPercentage   float64
+// UserLabDifficultyStats represents the DTO for user general lab statistics
+type UserLabDifficultyStats struct {
+	easyPercentage   float32
+	mediumPercentage float32
+	hardPercentage   float32
 }
 
 // Getter and Setter methods for GeneralStats
-func (g *GeneralStats) GetTotalLabs() int {
-	return g.totalLabs
-}
-
-func (g *GeneralStats) SetTotalLabs(totalLabs int) {
-	g.totalLabs = totalLabs
-}
-
-func (g *GeneralStats) GetTotalPercentage() float64 {
-	return g.totalPercentage
-}
-
-func (g *GeneralStats) SetTotalPercentage(totalPercentage float64) {
-	g.totalPercentage = totalPercentage
-}
-
-func (g *GeneralStats) GetEasyLabs() int {
-	return g.easyLabs
-}
-
-func (g *GeneralStats) SetEasyLabs(easyLabs int) {
-	g.easyLabs = easyLabs
-}
-
-func (g *GeneralStats) GetEasyPercentage() float64 {
+func (g *UserLabDifficultyStats) GetEasyPercentage() float32 {
 	return g.easyPercentage
 }
 
-func (g *GeneralStats) SetEasyPercentage(easyPercentage float64) {
+func (g *UserLabDifficultyStats) SetEasyPercentage(easyPercentage float32) {
 	g.easyPercentage = easyPercentage
 }
 
-func (g *GeneralStats) GetMediumLabs() int {
-	return g.mediumLabs
-}
-
-func (g *GeneralStats) SetMediumLabs(mediumLabs int) {
-	g.mediumLabs = mediumLabs
-}
-
-func (g *GeneralStats) GetMediumPercentage() float64 {
+func (g *UserLabDifficultyStats) GetMediumPercentage() float32 {
 	return g.mediumPercentage
 }
 
-func (g *GeneralStats) SetMediumPercentage(mediumPercentage float64) {
+func (g *UserLabDifficultyStats) SetMediumPercentage(mediumPercentage float32) {
 	g.mediumPercentage = mediumPercentage
 }
 
-func (g *GeneralStats) GetHardLabs() int {
-	return g.hardLabs
-}
-
-func (g *GeneralStats) SetHardLabs(hardLabs int) {
-	g.hardLabs = hardLabs
-}
-
-func (g *GeneralStats) GetHardPercentage() float64 {
+func (g *UserLabDifficultyStats) GetHardPercentage() float32 {
 	return g.hardPercentage
 }
 
-func (g *GeneralStats) SetHardPercentage(hardPercentage float64) {
+func (g *UserLabDifficultyStats) SetHardPercentage(hardPercentage float32) {
 	g.hardPercentage = hardPercentage
 }
 
@@ -354,8 +336,11 @@ func (l *Labs) SetLabs(labs []Lab) {
 }
 
 // NewProgrammingLanguageStats creates a new instance of ProgrammingLanguageStats
-func NewProgrammingLanguageStats(totalLabs, completedLabs int, percentage float64) *ProgrammingLanguageStats {
+func NewProgrammingLanguageStats(id int, name, iconPath string, totalLabs, completedLabs int, percentage float32) *ProgrammingLanguageStats {
 	return &ProgrammingLanguageStats{
+		id:            id,
+		name:          name,
+		iconPath:      iconPath,
 		totalLabs:     totalLabs,
 		completedLabs: completedLabs,
 		percentage:    percentage,
@@ -363,15 +348,10 @@ func NewProgrammingLanguageStats(totalLabs, completedLabs int, percentage float6
 }
 
 // NewGeneralStats creates a new instance of GeneralStats
-func NewGeneralStats(totalLabs int, totalPercentage, easyPercentage, mediumPercentage, hardPercentage float64, easyLabs, mediumLabs, hardLabs int) *GeneralStats {
-	return &GeneralStats{
-		totalLabs:        totalLabs,
-		totalPercentage:  totalPercentage,
-		easyLabs:         easyLabs,
+func NewserLabLevelStats(easyPercentage, mediumPercentage, hardPercentage float32) *UserLabDifficultyStats {
+	return &UserLabDifficultyStats{
 		easyPercentage:   easyPercentage,
-		mediumLabs:       mediumLabs,
 		mediumPercentage: mediumPercentage,
-		hardLabs:         hardLabs,
 		hardPercentage:   hardPercentage,
 	}
 }

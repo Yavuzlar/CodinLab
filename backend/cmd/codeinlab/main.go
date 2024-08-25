@@ -8,7 +8,7 @@ import (
 // @title API Service
 // @description API Service for CodinLab
 // @version v1
-// @host localhost:8080
+// @host localhost
 // @BasePath /api/v1
 // @securityDefinitions.apikey ApiKeyAuth
 // @in cookie
