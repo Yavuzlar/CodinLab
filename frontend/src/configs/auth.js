@@ -1,10 +1,10 @@
-let baseUrl = "/api"
+let baseUrl = "/api/v1"
 
 const authConfig = {
-  account: baseUrl + '/session',
-  login: baseUrl + '/v1/public/login',
-  logout: baseUrl + '/session',
-  register: baseUrl + '/v1/public/register',
+  account: baseUrl + '/private/user',
+  login: baseUrl + '/public/login',
+  logout: baseUrl + '/public/logout',
+  register: baseUrl + '/public/register',
   sessionCookieName: 'sessionID',
 
   userDataName: 'userData',

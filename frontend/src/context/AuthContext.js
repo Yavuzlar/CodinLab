@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import authConfig from "src/configs/auth";
 import axios from "axios";
 import { showToast } from "src/utils/showToast";
+import { t } from "i18next";
 
 // ** Defaults
 const defaultProvider = {
@@ -37,25 +38,65 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     setLoading(false);
     setIsInitialized(false);
+    window.localStorage.removeItem(authConfig.userDataName)
 
-    // const firstPath = router.pathname.split('/')[1]
-    // if (firstPath != 'login') window.location.href = '/login'
+    const firstPath = router.pathname.split('/')[1]
+    if (firstPath != 'login') router.replace("/login")
   };
 
-  const handleLogout = () => {
-    deleteStorage();
+  const handleLogout = async () => {
+    try {
+      const response = await axios({
+        url: authConfig.logout,
+        method: "GET",
+      });
+      if (response.status == 200) {
+        deleteStorage();
+      } else {
+        showToast("dismiss");
+        showToast("error", response.data.message);
+      }
+    } catch (error) {
+      showToast("dismiss");
+      showToast("error", t(error.response.data.message));
+    }
   };
 
   const initAuth = async () => {
     setIsInitialized(true);
-    const userData = window.localStorage.getItem(authConfig.userDataName);
+    const userData = JSON.parse(window.localStorage.getItem(authConfig.userDataName));
 
-    if (userData) {
+    if (userData && userData?.role) {
       setUser(userData);
-      console.log("deneme",userData);
+
+      if (router.pathname == "/login" || router.pathname == "/register") {
+        router.replace("/")
+      }
     } else {
-      const user = { id: 1, name: "John Doe", role: "user" };
-      setUser(user);
+      try {
+        const response = await axios({
+          url: authConfig.account,
+          method: "GET",
+        });
+        if (response.status === 200) {
+          const user = response?.data?.data;
+
+          if (user && user?.role) {
+            window.localStorage.setItem(authConfig.userDataName, JSON.stringify(user));
+            setUser(user);
+
+            router.push("/")
+          } else handleLogout()
+        } else {
+          showToast("dismiss");
+          showToast("error", response.data.message);
+          handleLogout()
+        }
+      } catch (error) {
+        showToast("dismiss");
+        showToast("error", t(error.response.data.message));
+        handleLogout()
+      }
     }
 
     setLoading(false);
@@ -76,10 +117,14 @@ const AuthProvider = ({ children }) => {
       } else {
         showToast("dismiss");
         showToast("error", response.data.message);
+
+        handleLogout();
       }
     } catch (error) {
       showToast("dismiss");
-      showToast("error", error.message);
+      showToast("error", t(error.response.data.message));
+
+      handleLogout();
     }
   };
 
@@ -91,7 +136,8 @@ const AuthProvider = ({ children }) => {
         data: formData,
       });
       if (response.status === 200) {
-        const user = response.data;
+        const user = response?.data?.data;
+
         window.localStorage.setItem(authConfig.userDataName, JSON.stringify(user));
         setUser(user);
         router.push("/home");
@@ -101,7 +147,7 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       showToast("dismiss");
-      showToast("error", error.message);
+      showToast("error", t(error.response.data.message));
     }
   }
 
