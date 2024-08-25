@@ -1147,6 +1147,9 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "role": {
+                    "type": "string"
+                },
                 "surname": {
                     "type": "string"
                 },

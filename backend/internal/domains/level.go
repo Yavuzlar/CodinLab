@@ -6,7 +6,6 @@ import (
 
 type ILevelService interface {
 	GetUserLevel(ctx context.Context, userID string) (*UserLevel, error)
-	UpdateUserPoint(ctx context.Context, userID string, difficulty int32) error
 }
 
 type UserLevel struct {
@@ -59,4 +58,18 @@ func (l *UserLevel) LevelPercentage() int32 {
 
 func (l *UserLevel) Languages() []LanguageLevel {
 	return l.languages
+}
+
+// Setters
+func (l *UserLevel) SetLevel(level int) {
+	l.level = level
+}
+func (l *UserLevel) SetTotalPoints(totalPoints int32) {
+	l.totalPoints = totalPoints
+}
+func (l *UserLevel) SetLevelPercentage(levelPercentage int32) {
+	l.levelPercentage = levelPercentage
+}
+func (l *UserLevel) SetLanguages(languages []LanguageLevel) {
+	l.languages = languages
 }

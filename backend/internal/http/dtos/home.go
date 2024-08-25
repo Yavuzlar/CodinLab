@@ -10,10 +10,9 @@ func NewHomeDTOManager() HomeDTOManager {
 }
 
 type UserLevelDTO struct {
-	Level           int                     `json:"level"`
-	TotalPoints     int32                   `json:"totalPoints"`
-	LevelPercentage int32                   `json:"levelPercentage"`
-	Languages       []domains.LanguageLevel `json:"languages"`
+	Level           int   `json:"level"`
+	TotalPoints     int32 `json:"totalPoints"`
+	LevelPercentage int32 `json:"levelPercentage"`
 }
 
 func (m *HomeDTOManager) ToUserLevelDTO(userLevel *domains.UserLevel) UserLevelDTO {
@@ -21,7 +20,6 @@ func (m *HomeDTOManager) ToUserLevelDTO(userLevel *domains.UserLevel) UserLevelD
 		Level:           userLevel.Level(),
 		TotalPoints:     userLevel.TotalPoints(),
 		LevelPercentage: userLevel.LevelPercentage(),
-		Languages:       userLevel.Languages(),
 	}
 }
 

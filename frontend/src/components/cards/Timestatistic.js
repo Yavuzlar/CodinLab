@@ -2,13 +2,31 @@ import {
   Box,
   Card,
   CardContent,
+  Stack,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
+import GraphicalStatistics from "../graphical-statistics/GraphicalStatistics";
+import cImg from "../../assets/icons/c.png";
+import cppImg from "../../assets/icons/cpp.png";
+import goImg from "../../assets/icons/go.png";
+import jsImg from "../../assets/icons/javascript.png";
+import pyImg from "../../assets/icons/python.png";
+import Image from "next/image";
+import { useTheme } from "@emotion/react";
+import Translations from "../Translations";
 
-const Timestatistic = ({ title = "", description = ""}) => {
+const langData = [
+  { name: "C", image: { cImg }, Roads: 2, Labs: 8 },
+  { name: "C++", image: { cppImg }, Roads: 8, Labs: 6 },
+  { name: "Go", image: { goImg }, Roads: 7, Labs: 4 },
+  { name: "JavaScript", image: { jsImg }, Roads: 12, Labs: 10 },
+  { name: "Python", image: { pyImg }, Roads: 3, Labs: 8 },
+];
+
+const Timestatistic = () => {
   const _smd = useMediaQuery((theme) => theme.breakpoints.down("smd"));
-
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -31,12 +49,12 @@ const Timestatistic = ({ title = "", description = ""}) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              height: "100%",
+              // height: "100%",
               marginBottom: "1rem",
             }}
           >
             <Typography variant="title" sx={{ fontWeight: "bold" }}>
-              {title}
+              <Translations text="admin.time.title" />
             </Typography>
             <Typography
               sx={{
@@ -46,8 +64,85 @@ const Timestatistic = ({ title = "", description = ""}) => {
                 ...(_smd && { maxWidth: "60ch" }),
               }}
             >
-              {description}
+              <Translations text="admin.time.content" />
             </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 15,
+                mr: "3rem",
+              }}
+            >
+              <Box>
+                {/* Week */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ mr: "5px" }}>
+                      <Image src={goImg} width={30} height={30} />
+                    </Box>
+                    <Box>
+                      <Typography
+                        sx={{ font: "normal normal bold 18px/23px Outfit;" }}
+                      >
+                        Week
+                      </Typography>
+                      <Typography
+                        sx={{
+                          font: "normal normal normal 16px/20px Outfit;",
+                        }}
+                      >
+                        8 Apr - 14 Apr
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+              <Box>
+                {/* Labs and Roads */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <Box
+                    sx={{
+                      width: "15px",
+                      height: "15px",
+                      backgroundColor: theme.palette.primary.light,
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <Typography>Labs</Typography>
+                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <Box
+                    sx={{
+                      width: "15px",
+                      height: "15px",
+                      backgroundColor: theme.palette.primary.dark,
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <Typography>Roads</Typography>
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ flexGrow: 1 }}>
+              <GraphicalStatistics data={langData} />
+            </Box>
           </Box>
         </CardContent>
       </Card>
