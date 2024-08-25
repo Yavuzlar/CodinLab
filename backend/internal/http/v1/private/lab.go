@@ -3,6 +3,7 @@ package private
 import (
 	"strconv"
 
+	"github.com/Yavuzlar/CodinLab/internal/domains"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -14,8 +15,8 @@ import (
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/:ID", h.GetLabsByID)
 	root.Get("/lab/:programmingID/:labID", h.GetLabByID)
-	root.Get("/labs/stats/:language/:userID", h.GetUserLanguageLabStats)
-	root.Get("/labs/stats/:userID", h.GetUserGeneralLabStats)
+	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
+	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 }
 
 // @Tags Lab
@@ -23,40 +24,38 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 // @Description Get User Programming Language Lab Statistics
 // @Accept json
 // @Produce json
-// @Param userID path string true "User ID"
-// @Param language path string true "Language"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/stats/{language}/{userID} [get]
+// @Router /private/labs/general/stats [get]
 func (h *PrivateHandler) GetUserLanguageLabStats(c *fiber.Ctx) error {
-	userID := c.Params("userID")
-	language := c.Params("language")
+	userSession := session_store.GetSessionData(c)
 
-	stats, err := h.services.LabService.UserLanguageLabStats(userID, language)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 2, 3)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 2)
+
+	stats, err := h.services.LabService.GetUserLanguageLabStats(userSession.UserID)
 	if err != nil {
 		return err
 	}
-	labStatsDTO := h.dtoManager.LabDTOManager.ToUserProgrammingLanguageLabStatsDTO(stats)
-
+	labStatsDTO := h.dtoManager.LabDTOManager.ToUserProgrammingLanguageStatsDTO(stats)
 	return response.Response(200, "GetUserLanguageLabStats successful", labStatsDTO)
 }
 
 // @Tags Lab
-// @Summary GetUserGeneralLabStats
-// @Description Get User General Lab Statistics
+// @Summary GetUserLabDifficultyStats
+// @Description Get User Lab Difficulty Statistics
 // @Accept json
 // @Produce json
-// @Param userID path string true "User ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/stats/{userID} [get]
-func (h *PrivateHandler) GetUserGeneralLabStats(c *fiber.Ctx) error {
-	userID := c.Params("userID")
-	stats, err := h.services.LabService.UserGeneralLabStats(userID)
+// @Router /private/labs/difficulty/stats [get]
+func (h *PrivateHandler) GetUserLabDifficultyStats(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+	stats, err := h.services.LabService.GetUserLabDifficultyStats(userSession.UserID)
 	if err != nil {
 		return err
 	}
-	dto := h.dtoManager.LabDTOManager.ToUserGeneralLabStatsDTO(stats)
+	dto := h.dtoManager.LabDTOManager.ToUserLabDifficultyStatsDto(stats)
 
-	return response.Response(200, "GetUserGeneralLabStats successful", dto)
+	return response.Response(200, "GetUserLabDifficultyStats successful", dto)
 }
 
 // @Tags Lab
@@ -75,11 +74,10 @@ func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
 	}
 	userSession := session_store.GetSessionData(c)
 
-	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, indID, 0, "", "") //buraya bakilsin (false tan dolayi veriler gelmeyebilir) !!11!1!!11
+	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, indID, 0, nil, nil)
 	if err != nil {
 		return err
 	}
-
 	var labsDtoList []dto.LabsDTO
 	for _, labCollection := range filteredLabs {
 		var labDTOList []dto.LabDTO
@@ -93,7 +91,6 @@ func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
 	if len(labsDtoList) == 0 {
 		return response.Response(404, "Labs not found", labsDtoList)
 	}
-
 	return response.Response(200, "GetLabs successful", labsDtoList)
 }
 
@@ -121,13 +118,24 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	}
 
 	userSession := session_store.GetSessionData(c)
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, "", "")
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, nil, nil)
 	if err != nil {
 		return err
 	}
 	if len(labData) == 0 {
-		return response.Response(404, "Lab not found", labData)
+		return response.Response(404, "Lab not found", nil)
 	}
 
-	return response.Response(200, "GetLab successful", labData)
+	var labsDtoList []dto.LabsDTO
+	for _, labCollection := range labData {
+		var labDTOList []dto.LabDTO
+		for _, lab := range labCollection.GetLabs() {
+			languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(lab.GetLanguages())
+			labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(lab, languageDTOs))
+
+		}
+		labsDtoList = append(labsDtoList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, labDTOList))
+	}
+
+	return response.Response(200, "GetLab successful", labsDtoList)
 }

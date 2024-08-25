@@ -328,7 +328,30 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/labs/stats/{language}/{userID}": {
+        "/private/labs/difficulty/stats": {
+            "get": {
+                "description": "Get User Lab Difficulty Statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GetUserLabDifficultyStats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/labs/general/stats": {
             "get": {
                 "description": "Get User Programming Language Lab Statistics",
                 "consumes": [
@@ -341,54 +364,6 @@ const docTemplate = `{
                     "Lab"
                 ],
                 "summary": "GetUserProgrammingLanguageLabStats",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "userID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Language",
-                        "name": "language",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/labs/stats/{userID}": {
-            "get": {
-                "description": "Get User General Lab Statistics",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Lab"
-                ],
-                "summary": "GetUserGeneralLabStats",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "userID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -611,7 +586,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/road/{roadID}": {
+        "/private/road/{programmingID}": {
             "get": {
                 "description": "Get Road with Paths",
                 "consumes": [
@@ -627,8 +602,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "roadID",
-                        "name": "roadID",
+                        "description": "programmingID",
+                        "name": "programmingID",
                         "in": "path",
                         "required": true
                     }
@@ -655,7 +630,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/road/{roadID}/{pathID}": {
+        "/private/road/{programmingID}/{pathID}": {
             "get": {
                 "description": "Get Path By ID",
                 "consumes": [
@@ -671,8 +646,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Road ID",
-                        "name": "roadID",
+                        "description": "Programming ID",
+                        "name": "programmingID",
                         "in": "path",
                         "required": true
                     },
@@ -1187,7 +1162,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "v1",
-	Host:             "localhost:8080",
+	Host:             "localhost",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "API Service",
