@@ -5,7 +5,7 @@ import Translations from "src/components/Translations";
 
 export const loginValidation = async (values) => {
     const schema = yup.object().shape({
-      email: yup.string().email(<Translations text="login.invalidError" />).nullable().required(<Translations text="login.emailError" />),
+      username: yup.string().nullable().required(<Translations text="login.usernameError" />),
       password: yup.string().nullable().required(<Translations text="login.passwordError" />),
     });
   

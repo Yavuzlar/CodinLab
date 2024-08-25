@@ -9,7 +9,7 @@
   "home.roads.content": "Lay the basics of programming (software) languages firmly and move step by step through the coding universe with Roads!",
   "home.labs.title": "Labs",
   "home.labs.content": "Improve your algorithm and programming skills, get practical experience and put your coding knowledge into practice with Labs!",
-  "login.email": "Email",
+  "login.username": "Username",
   "login.password": "Password",
   "login.remember.me": "Remember Me",
   "login.forget.password": "Forgot Password?",
@@ -82,13 +82,10 @@
   "changePassword.confirmPasswordError": "Passwords do not match",
   "settings.change.name" : "Name",
   "settings.change.surname" : "Surname",
-  "lab.search.placeholder": "Search Language labs",
-  "lab.sort_the_labs" : "Sorth the labs",
-  "lab.button.solve" : "Solve",
   "labs.question.completed" : "Successfully completed!",
   "labs.question.failed" : "Failed!",
   "labs.question.output" : "Output:",
   "labs.question.expected" : "Expected:",
   "labs.question.hint" : "Hint"
-
 }
+
