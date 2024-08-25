@@ -733,6 +733,21 @@ paths:
       summary: Login
       tags:
       - Auth
+  /public/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Logout
+      tags:
+      - Auth
   /public/register:
     post:
       consumes:

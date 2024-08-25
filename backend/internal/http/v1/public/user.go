@@ -9,6 +9,7 @@ import (
 
 func (h *PublicHandler) initUserRoutes(root fiber.Router) {
 	root.Post("/login", h.Login)
+	root.Post("/logout", h.Logout)
 	root.Post("/register", h.Register)
 }
 
@@ -69,4 +70,22 @@ func (h *PublicHandler) Register(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "Register successful", nil)
+}
+
+// @Tags Auth
+// @Summary Logout
+// @Description Logout
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{}
+// @Router /public/logout [post]
+func (h *PublicHandler) Logout(c *fiber.Ctx) error {
+	sess, err := h.session_store.Get(c)
+	if err != nil {
+		return response.Response(500, "Failed to get session", err)
+	}
+	if err := sess.Destroy(); err != nil {
+		return response.Response(500, "Failed to destroy session", err)
+	}
+	return response.Response(200, "Logout successful", nil)
 }
