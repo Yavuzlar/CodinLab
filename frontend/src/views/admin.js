@@ -1,6 +1,5 @@
 import { Box, Card, Grid, Typography, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
 import Translations from "src/components/Translations";
 import Timestatistic from "src/components/cards/Timestatistic";
 import Activity from "src/components/cards/Activity";
@@ -11,8 +10,6 @@ import { CircularProgressStatistics } from "src/components/progress/CircularProg
 import cImg from "../assets/icons/c.png";
 import cppImg from "../assets/icons/cpp.png";
 import goImg from "../assets/icons/go.png";
-import jsImg from "../assets/icons/javascript.png";
-import pyImg from "../assets/icons/python.png";
 
 const languageStatistics = [
   {
@@ -59,7 +56,7 @@ const Admin = () => {
         </Grid>
 
         {/* right */}
-        <Grid item xs={12} md={5}>
+        <Grid item container xs={12} md={5}>
           <Grid item xs={12}>
             <Box
               sx={{
@@ -68,17 +65,18 @@ const Admin = () => {
                 alignItems: "center",
                 flexDirection: "row",
                 mb: "0.5rem",
+                gap: '16px'
               }}
             >
               <Button
                 variant="dark"
                 sx={{
                   textTransform: "none",
-                  width: "250px",
+                  width: '100%',
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  gap: "10px",
+                  gap: "16px",
                   borderRadius: "10px",
                 }}
               >
@@ -93,15 +91,16 @@ const Admin = () => {
                   <Translations text="admin.profile.button" />
                 </Typography>
               </Button>
+
               <Button
                 variant="dark"
                 sx={{
                   textTransform: "none",
-                  width: "250px",
+                  width: "100%",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  gap: "10px",
+                  gap: "16px",
                   borderRadius: "10px",
                 }}
               >
