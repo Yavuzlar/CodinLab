@@ -1,11 +1,9 @@
 import {
-  Box,
   Button,
   Card,
   Typography,
-  Grid,
   CardContent,
-  useMediaQuery,
+  useMediaQuery
 } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
@@ -19,90 +17,123 @@ const Languages = ({ language }) => {
 
   return (
     <Card
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      // onMouseEnter={() => setHovered(true)}
+      // onMouseLeave={() => setHovered(false)}
       sx={{
         display: "flex",
         flexDirection: "row",
         justifyContent: "start",
         alignItems: "center",
+        position: "relative",
         gap: "1.5rem",
         width: "100%",
         height: "6.5rem",
         ...(_md && { justifyContent: "center" }),
         ...(_xl && { justifyContent: "center" }),
+        ".LanguageNameBox, .RoadsButton, .LabsButton": {
+          transition: "opacity 600ms, width 400ms, left 200ms, right 200ms",
+        },
+        "&:hover": {
+          ".LanguageNameBox": {
+            opacity: 0
+          },
+          ".RoadsButton, .LabsButton": {
+            width: "50%",
+            zIndex: 11,
+            opacity: 1,
+            "& .languageButtonIcon": {
+              opacity: "1 !important",
+              // display: 'block !important'
+            }
+          },
+          ".RoadsButton": {
+            left: 0
+          },
+          ".LabsButton": {
+            right: 0
+          }
+        }
       }}
     >
-      {!hovered ? (
-        <CardContent
+      <CardContent
+        className="LanguageNameBox"
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "start",
+          alignItems: "center",
+          gap: "0.5rem",
+          zIndex: 10,
+          opacity: 1,
+        }}
+      >
+        <Image
+          src={language.image}
+          alt={language.name}
+          width={50}
+          height={50}
+        />
+        <Typography
+          variant="title"
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "start",
-            alignItems: "center",
-            gap: "0.5rem",
+            fontWeight: "bold",
+            fontSize: "1.5rem",
           }}
         >
-          <Image
-            src={language.image}
-            alt={language.name}
-            width={50}
-            height={50}
-          />
-          <Typography
-            variant="title"
-            sx={{
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-            }}
-          >
-            {language.name}
-          </Typography>
-        </CardContent>
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <Button
-            variant="dark"
-            color="primary"
-            sx={{
-              height: "100%",
-              width: "100%",
-              backgroundColor: "primary.main",
-              ":hover": {
-                zIndex: 1,
-                width: "100vh",
-                transition: "width 1.5s",
-              },
-            }}
-          >
-            <Image src={roadsIcon} alt={"roadsIcon"} width={60} height={60} />
-          </Button>
+          {language.name}
+        </Typography>
+      </CardContent>
 
-          <Button
-            variant="dark"
-            sx={{
-              height: "100%",
-              width: "100%",
-              backgroundColor: "primary.main",
-              ":hover": {
-                zIndex: 1,
-                width: "100vh",
-                transition: "width 1.5s",
-              },
-            }}
-          >
-            <Image src={labsIcon} alt={"labsIcon"} width={60} height={60} />
-          </Button>
-        </Box>
-      )}
+      {/* <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: hovered ? "100%" : "0%",
+          height: "100%",
+        }}
+      > */}
+      <Button
+        className="RoadsButton"
+        variant="dark"
+        color="primary"
+        sx={{
+          position: 'absolute',
+          left: "-100%",
+          height: "100%",
+          opacity: 0,
+          width: "0%",
+          backgroundColor: "primary.main",
+          // transition: "width 300ms",
+          "&:hover": {
+            zIndex: 1,
+            width: "60% !important",
+          },
+        }}
+      >
+        <Image className="languageButtonIcon" src={roadsIcon} alt={"roadsIcon"} width={60} height={60} style={{ opacity: 0 }} />
+      </Button>
+
+      <Button
+        className="LabsButton"
+        variant="dark"
+        sx={{
+          position: 'absolute',
+          right: "-100%",
+          height: "100%",
+          opacity: 0,
+          // width: "0%",
+          backgroundColor: "primary.main",
+          // transition: "width 300ms",
+          "&:hover": {
+            zIndex: 1,
+            width: "60% !important",
+          },
+        }}
+      >
+        <Image className="languageButtonIcon" src={labsIcon} alt={"labsIcon"} width={60} height={60} style={{ opacity: 0 }} />
+      </Button>
+      {/* </Box> */}
     </Card>
   );
 };
