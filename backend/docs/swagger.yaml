@@ -464,6 +464,21 @@ paths:
       summary: GetUserProgrammingLanguageLabStats
       tags:
       - Lab
+  /private/labs/progress/stats:
+    get:
+      consumes:
+      - application/json
+      description: Get User Lab Progress Statistics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserLabProgressStats
+      tags:
+      - Lab
   /private/log:
     get:
       consumes:

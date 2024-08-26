@@ -16,6 +16,7 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/lab/:programmingID/:labID", h.GetLabByID)
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
+	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
 }
 
 // @Tags Lab
@@ -50,6 +51,24 @@ func (h *PrivateHandler) GetUserLabDifficultyStats(c *fiber.Ctx) error {
 		return err
 	}
 	dto := h.dtoManager.LabDTOManager.ToUserLabDifficultyStatsDto(stats)
+
+	return response.Response(200, "GetUserLabDifficultyStats successful", dto)
+}
+
+// @Tags Lab
+// @Summary GetUserLabProgressStats
+// @Description Get User Lab Progress Statistics
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/labs/progress/stats [get]
+func (h *PrivateHandler) GetUserLabProgressStats(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+	stats, err := h.services.LabService.GetUserLabProgressStats(userSession.UserID)
+	if err != nil {
+		return err
+	}
+	dto := h.dtoManager.LabDTOManager.ToUserLabProgressStatsDto(stats)
 
 	return response.Response(200, "GetUserLabDifficultyStats successful", dto)
 }

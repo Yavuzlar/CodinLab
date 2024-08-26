@@ -56,7 +56,8 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 			newLab := domains.NewLab(lab.ID, languages, *quest, false, false)
 
 			labIDString := strconv.Itoa(lab.ID)
-			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", labIDString, domains.TypeLab, domains.ContentStarted)
+			labCollectionIDString := strconv.Itoa(labCollection.ID)
+			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, labCollectionIDString, labIDString, domains.TypeLab, domains.ContentStarted)
 			if err != nil {
 				return nil, err
 			}
@@ -64,7 +65,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 				newLab.SetIsStarted(true)
 			}
 
-			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", labIDString, domains.TypeLab, domains.ContentCompleted)
+			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, labCollectionIDString, labIDString, domains.TypeLab, domains.ContentCompleted)
 			if err != nil {
 				return nil, err
 			}
@@ -126,6 +127,40 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 	return filteredLabs, nil
 }
 
+// Fetch labs by filters
+func (s *labService) CountLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) (counter int, err error) {
+	allLabs, err := s.getAllLabs(userID)
+	if err != nil {
+		return 0, err
+	}
+
+	if userID == "" && labsId == 0 && labId == 0 && isStarted == nil && isFinished == nil {
+		return 0, nil
+	}
+
+	for _, labCollection := range allLabs {
+		if labsId != 0 && labCollection.GetID() != labsId {
+			continue
+		}
+
+		for _, lab := range labCollection.GetLabs() {
+
+			if labId != 0 && lab.GetID() != labId {
+				continue
+			}
+			if isStarted != nil && lab.GetIsStarted() != *isStarted {
+				continue
+			}
+			if isFinished != nil && lab.GetIsFinished() != *isFinished {
+				continue
+			}
+			counter++
+		}
+	}
+
+	return counter, nil
+}
+
 // User lab level stats by programming language
 func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugageStats []domains.ProgrammingLanguageStats, err error) {
 	allLabs, err := s.getAllLabs(userID)
@@ -157,6 +192,33 @@ func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugag
 		programmingLangugageStats = append(programmingLangugageStats, *newProgrammingLanguageStats)
 
 	}
+
+	return
+}
+
+// User lab progress Statistics
+func (s *labService) GetUserLabProgressStats(userID string) (userLabProgressStats domains.UserLabProgressStats, err error) {
+	trueValue := true
+	falseValue := false
+
+	progressLabs, err := s.CountLabsFilter(userID, 0, 0, &trueValue, &falseValue)
+	if err != nil {
+		return
+	}
+	completedLabs, err := s.CountLabsFilter(userID, 0, 0, &trueValue, &trueValue)
+	if err != nil {
+		return
+	}
+
+	totalLabs, err := s.CountLabsFilter(userID, 0, 0, nil, nil)
+	if err != nil {
+		return
+	}
+
+	progressPercentage := float32(float32(progressLabs) / float32(totalLabs) * 100)
+	completedPercentage := float32(float32(completedLabs) / float32(totalLabs) * 100)
+
+	userLabProgressStats = *domains.NewsUserLabProgressStats(progressPercentage, completedPercentage)
 
 	return
 }
