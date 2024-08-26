@@ -1,5 +1,3 @@
-//Change Password, Update Profile
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { showToast } from "src/utils/showToast";
@@ -7,10 +5,10 @@ import { showToast } from "src/utils/showToast";
 const initialState = {
   data: [],
   loading: false,
-  error: false,
+  error: null,
 };
 
-//Profile Change API
+// Profile Change API
 export const changeProfile = createAsyncThunk(
   "auth/changeProfile",
   async (data, { rejectWithValue }) => {
@@ -23,22 +21,17 @@ export const changeProfile = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
-      console.log("deneme", response);
-      if (!response.ok) {
-        return rejectWithValue(response.data);
-      }
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response.data.message || error.message);
     }
   }
 );
 
-//Change Password API
-
+// Change Password API
 export const changePassword = createAsyncThunk(
   "changePassword",
-  async (data, rejectWithValue) => {
+  async (data, { rejectWithValue }) => {
     try {
       const response = await axios({
         method: "PUT",
@@ -48,16 +41,9 @@ export const changePassword = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
-      console.log("deneme", response.message);
-
-      if (!response.ok || response.status !== 200) {
-        router.push("/");
-        return rejectWithValue(response.data);
-      }
       return response.data;
-
     } catch (error) {
-      return rejectWithValue(response.message);
+      return rejectWithValue(error.response.data.message || error.message);
     }
   }
 );
@@ -70,36 +56,37 @@ const authSlice = createSlice({
     builder
       .addCase(changeProfile.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(changeProfile.fulfilled, (state, action) => {
         state.data = action.payload;
         state.loading = false;
         showToast("dismiss");
-        showToast("succsess", state.message);
+        showToast("success", state.data.message);
       })
       .addCase(changeProfile.rejected, (state, action) => {
-        state.error = action.payload;
         state.loading = false;
+        state.error = action.payload;
         showToast("dismiss");
-        showToast("error", state.message);
+        showToast("error", state.error);
       });
 
     builder
       .addCase(changePassword.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(changePassword.fulfilled, (state, action) => {
         state.data = action.payload;
         state.loading = false;
         showToast("dismiss");
-        showToast("succsess", state.message);
+        showToast("success", state.data.message);
       })
       .addCase(changePassword.rejected, (state, action) => {
-        state.error = action.payload;
         state.loading = false;
+        state.error = action.payload;
         showToast("dismiss");
-        showToast("error");
-        console.log (showToast());
+        showToast("error", state.error);
       });
   },
 });
