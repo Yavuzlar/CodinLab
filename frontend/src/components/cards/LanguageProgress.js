@@ -11,7 +11,7 @@ import Image from "next/image";
 import LinearProgess from "../progress/LinearProgess";
 import labsIcon from "../../assets/icons/icons8-test-tube-100.png";
 
-const LanguageProgress = ({ language }) => {
+const LanguageProgress = ({ language, icon, map }) => {
   const _md = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const _sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
@@ -47,7 +47,7 @@ const LanguageProgress = ({ language }) => {
               </Typography>
 
               <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <Image src={labsIcon} alt={"labsIcon"} width={24} height={24} />
+                <Image src={icon} alt={"icon"} width={24} height={24} />
 
                 <Typography variant="infoText">20 Lab</Typography>
               </Box>
@@ -72,9 +72,9 @@ const LanguageProgress = ({ language }) => {
 
               <Grid item xs={12}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <Image src={labsIcon} alt={"labsIcon"} width={24} height={24} />
+                  <Image src={icon} alt={"icon"} width={24} height={24} />
 
-                  <Typography variant="infoText">20 / 40 Lab</Typography>
+                  <Typography variant="infoText">{map}</Typography>
                 </Box>
               </Grid>
             </Grid>
