@@ -204,7 +204,7 @@ definitions:
       status_code:
         type: integer
     type: object
-host: localhost:8080
+host: localhost
 info:
   contact: {}
   description: API Service for CodinLab
@@ -434,22 +434,26 @@ paths:
       summary: GetLabsById
       tags:
       - Lab
-  /private/labs/stats/{language}/{userID}:
+  /private/labs/difficulty/stats:
+    get:
+      consumes:
+      - application/json
+      description: Get User Lab Difficulty Statistics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserLabDifficultyStats
+      tags:
+      - Lab
+  /private/labs/general/stats:
     get:
       consumes:
       - application/json
       description: Get User Programming Language Lab Statistics
-      parameters:
-      - description: User ID
-        in: path
-        name: userID
-        required: true
-        type: string
-      - description: Language
-        in: path
-        name: language
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -458,27 +462,6 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: GetUserProgrammingLanguageLabStats
-      tags:
-      - Lab
-  /private/labs/stats/{userID}:
-    get:
-      consumes:
-      - application/json
-      description: Get User General Lab Statistics
-      parameters:
-      - description: User ID
-        in: path
-        name: userID
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: GetUserGeneralLabStats
       tags:
       - Lab
   /private/log:
@@ -569,15 +552,15 @@ paths:
       summary: GetSolutionsHoursByProgramming
       tags:
       - Log
-  /private/road/{roadID}:
+  /private/road/{programmingID}:
     get:
       consumes:
       - application/json
       description: Get Road with Paths
       parameters:
-      - description: roadID
+      - description: programmingID
         in: path
-        name: roadID
+        name: programmingID
         required: true
         type: string
       produces:
@@ -595,15 +578,15 @@ paths:
       summary: GetRoads
       tags:
       - Road
-  /private/road/{roadID}/{pathID}:
+  /private/road/{programmingID}/{pathID}:
     get:
       consumes:
       - application/json
       description: Get Path By ID
       parameters:
-      - description: Road ID
+      - description: Programming ID
         in: path
-        name: roadID
+        name: programmingID
         required: true
         type: string
       - description: Path ID
@@ -731,6 +714,21 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: Login
+      tags:
+      - Auth
+  /public/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Logout
       tags:
       - Auth
   /public/register:

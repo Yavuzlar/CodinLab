@@ -81,33 +81,14 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStartedStr, isFinishedStr string) ([]domains.Labs, error) {
+func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]domains.Labs, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStartedStr == "" && isFinishedStr == "" {
+	if userID == "" && labsId == 0 && labId == 0 && isStarted == nil && isFinished == nil {
 		return allLabs, nil
-	}
-
-	// Converting string to a bool
-	var isStarted bool
-	var isFinished bool
-	if isStartedStr != "" {
-		b, err := strconv.ParseBool(isStartedStr)
-		if err != nil {
-			return nil, err // Handle the error if conversion fails
-		}
-		isStarted = b
-	}
-
-	if isFinishedStr != "" {
-		b, err := strconv.ParseBool(isFinishedStr)
-		if err != nil {
-			return nil, err // Handle the error if conversion fails
-		}
-		isFinished = b
 	}
 
 	var filteredLabs []domains.Labs
@@ -122,10 +103,10 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStartedSt
 			if labId != 0 && lab.GetID() != labId {
 				continue
 			}
-			if lab.GetIsStarted() != isStarted {
+			if isStarted != nil && lab.GetIsStarted() != *isStarted {
 				continue
 			}
-			if lab.GetIsFinished() != isFinished {
+			if isFinished != nil && lab.GetIsFinished() != *isFinished {
 				continue
 			}
 			newLabList = append(newLabList, lab)
@@ -145,80 +126,77 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStartedSt
 	return filteredLabs, nil
 }
 
-// Lab Sayfasindaki Dil bazli lab istatistikleri
-func (s *labService) UserLanguageLabStats(userID string, language string) (domains.ProgrammingLanguageStats, error) {
+// User lab level stats by programming language
+func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugageStats []domains.ProgrammingLanguageStats, err error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
-		return domains.ProgrammingLanguageStats{}, err
+		return
 	}
 
 	totalLabs := 0
-	solvedLabs := 0
+	completedLabs := 0
+
 	for _, labCollection := range allLabs {
+		totalLabs = 0
+		completedLabs = 0
 		for _, lab := range labCollection.GetLabs() {
-			for _, lang := range lab.GetLanguages() {
-				if lang.GetLang() == language {
-					totalLabs++
-					if lab.GetIsFinished() {
-						solvedLabs++
-					}
-					break
-				}
+			totalLabs++
+			if lab.GetIsFinished() {
+				completedLabs++
 			}
 		}
-	}
-	returnval := *domains.NewProgrammingLanguageStats(
-		totalLabs,
-		solvedLabs,
-		float64(solvedLabs)/float64(totalLabs)*100,
-	)
 
-	return returnval, nil
+		newProgrammingLanguageStats := domains.NewProgrammingLanguageStats(
+			labCollection.GetID(),
+			labCollection.GetName(),
+			labCollection.GetIconPath(),
+			totalLabs,
+			completedLabs,
+			float32((float32(completedLabs)/float32(totalLabs))*100),
+		)
+		programmingLangugageStats = append(programmingLangugageStats, *newProgrammingLanguageStats)
+
+	}
+
+	return
 }
 
-// Labs sayfasindaki genel lab istatistikleri
-func (s *labService) UserGeneralLabStats(userID string) (domains.GeneralStats, error) {
+// User lab difficulty Statistics
+func (s *labService) GetUserLabDifficultyStats(userID string) (userLabDifficultyStats domains.UserLabDifficultyStats, err error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
-		return domains.GeneralStats{}, err
+		return
 	}
 
 	totalLabs := 0
-	solvedLabs := 0
 	easyLabs := 0
 	mediumLabs := 0
 	hardLabs := 0
+
 	for _, labCollection := range allLabs {
 		for _, lab := range labCollection.GetLabs() {
 			totalLabs++
 			if lab.GetIsFinished() {
-				solvedLabs++
-			}
-			switch lab.GetQuest().GetDifficulty() {
-			case 1:
-				easyLabs++
-			case 2:
-				mediumLabs++
-			case 3:
-				hardLabs++
+				switch lab.GetQuest().GetDifficulty() {
+				case 1:
+					easyLabs++
+				case 2:
+					mediumLabs++
+				case 3:
+					hardLabs++
+				}
 			}
 		}
 	}
 
-	totalPercentage := float64(solvedLabs) / float64(totalLabs) * 100
-	easyPercentage := float64(easyLabs) / float64(totalLabs) * 100
-	mediumPercentage := float64(mediumLabs) / float64(totalLabs) * 100
-	hardPercentage := float64(hardLabs) / float64(totalLabs) * 100
-	returnVal := *domains.NewGeneralStats(
-		totalLabs,
-		totalPercentage,
+	easyPercentage := float32(float32(easyLabs) / float32(totalLabs) * 100)
+	mediumPercentage := float32(float32(mediumLabs) / float32(totalLabs) * 100)
+	hardPercentage := float32(float32(hardLabs) / float32(totalLabs) * 100)
+
+	userLabDifficultyStats = *domains.NewserLabLevelStats(
 		easyPercentage,
 		mediumPercentage,
 		hardPercentage,
-		easyLabs,
-		mediumLabs,
-		hardLabs,
 	)
-	return returnVal, nil
-
+	return
 }

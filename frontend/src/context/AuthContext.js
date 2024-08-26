@@ -38,17 +38,17 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     setLoading(false);
     setIsInitialized(false);
-    window.localStorage.removeItem(authConfig.userDataName)
+    window.localStorage.removeItem(authConfig.userDataName);
 
-    const firstPath = router.pathname.split('/')[1]
-    if (firstPath != 'login') router.replace("/login")
+    const firstPath = router.pathname.split("/")[1];
+    if (firstPath != "login") router.replace("/login");
   };
 
   const handleLogout = async () => {
     try {
       const response = await axios({
         url: authConfig.logout,
-        method: "GET",
+        method: "POST",
       });
       if (response.status == 200) {
         deleteStorage();
@@ -64,13 +64,15 @@ const AuthProvider = ({ children }) => {
 
   const initAuth = async () => {
     setIsInitialized(true);
-    const userData = JSON.parse(window.localStorage.getItem(authConfig.userDataName));
+    const userData = JSON.parse(
+      window.localStorage.getItem(authConfig.userDataName)
+    );
 
     if (userData && userData?.role) {
       setUser(userData);
 
       if (router.pathname == "/login" || router.pathname == "/register") {
-        router.replace("/")
+        router.replace("/");
       }
     } else {
       try {
@@ -82,26 +84,28 @@ const AuthProvider = ({ children }) => {
           const user = response?.data?.data;
 
           if (user && user?.role) {
-            window.localStorage.setItem(authConfig.userDataName, JSON.stringify(user));
+            window.localStorage.setItem(
+              authConfig.userDataName,
+              JSON.stringify(user)
+            );
             setUser(user);
 
-            router.push("/")
-          } else handleLogout()
+            router.push("/");
+          } else handleLogout();
         } else {
           showToast("dismiss");
           showToast("error", response.data.message);
-          handleLogout()
+          handleLogout();
         }
       } catch (error) {
         showToast("dismiss");
         showToast("error", t(error.response.data.message));
-        handleLogout()
+        handleLogout();
       }
     }
 
     setLoading(false);
   };
-
 
   const handleRegister = async (formData) => {
     try {
@@ -138,7 +142,10 @@ const AuthProvider = ({ children }) => {
       if (response.status === 200) {
         const user = response?.data?.data;
 
-        window.localStorage.setItem(authConfig.userDataName, JSON.stringify(user));
+        window.localStorage.setItem(
+          authConfig.userDataName,
+          JSON.stringify(user)
+        );
         setUser(user);
         router.push("/home");
       } else {
@@ -149,8 +156,7 @@ const AuthProvider = ({ children }) => {
       showToast("dismiss");
       showToast("error", t(error.response.data.message));
     }
-  }
-
+  };
 
   useEffect(() => {
     initAuth();

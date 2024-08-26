@@ -43,26 +43,16 @@ func (m *LabDTOManager) ToLabsDTO(labs domains.Labs, labDTOs []LabDTO) LabsDTO {
 	}
 }
 
-type UserGeneralLabStatsDTO struct {
-	TotalLabs        int     `json:"totalLabs"`
-	TotalPercentage  float64 `json:"TotalPercentage"`
-	EasyLabs         int     `json:"easyLabs"`
-	EasyPercentage   float64 `json:"easyPercentage"`
-	MediumLabs       int     `json:"mediumlabs"`
-	MediumPercentage float64 `json:"mediumPercentage"`
-	HardLabs         int     `json:"hardLabs"`
-	HardPercentage   float64 `json:"hardPercentage"`
+type UserLabDifficultyStatsDTO struct {
+	EasyPercentage   float32 `json:"easyPercentage"`
+	MediumPercentage float32 `json:"mediumPercentage"`
+	HardPercentage   float32 `json:"hardPercentage"`
 }
 
-func (m *LabDTOManager) ToUserGeneralLabStatsDTO(stats domains.GeneralStats) UserGeneralLabStatsDTO {
-	return UserGeneralLabStatsDTO{
-		TotalLabs:        stats.GetTotalLabs(),
-		TotalPercentage:  stats.GetTotalPercentage(),
-		EasyLabs:         stats.GetEasyLabs(),
+func (m *LabDTOManager) ToUserLabDifficultyStatsDto(stats domains.UserLabDifficultyStats) UserLabDifficultyStatsDTO {
+	return UserLabDifficultyStatsDTO{
 		EasyPercentage:   stats.GetEasyPercentage(),
-		MediumLabs:       stats.GetMediumLabs(),
 		MediumPercentage: stats.GetMediumPercentage(),
-		HardLabs:         stats.GetHardLabs(),
 		HardPercentage:   stats.GetHardPercentage(),
 	}
 }
@@ -94,15 +84,26 @@ func (m *LabDTOManager) ToLanguageDTOs(languages []domains.LanguageLab) []LabLan
 }
 
 type UserProgrammingLanguageLabStatsDTO struct {
+	ID            int     `json:"id"`
+	Name          string  `json:"name"`
+	IconPath      string  `json:"iconPath"`
 	TotalLabs     int     `json:"totalLabs"`
 	CompletedLabs int     `json:"completedLabs"`
-	Percentage    float64 `json:"percentage"`
+	Percentage    float32 `json:"percentage"`
 }
 
-func (m *LabDTOManager) ToUserProgrammingLanguageLabStatsDTO(stats domains.ProgrammingLanguageStats) UserProgrammingLanguageLabStatsDTO {
-	return UserProgrammingLanguageLabStatsDTO{
-		TotalLabs:     stats.GetTotalLabs(),
-		CompletedLabs: stats.GetCompletedLabs(),
-		Percentage:    stats.GetPercentage(),
+func (m *LabDTOManager) ToUserProgrammingLanguageStatsDTO(stats []domains.ProgrammingLanguageStats) []UserProgrammingLanguageLabStatsDTO {
+	var userProgrammingLanguageLabStatsDTO []UserProgrammingLanguageLabStatsDTO
+	for _, stat := range stats {
+		newStatDto := UserProgrammingLanguageLabStatsDTO{
+			ID:            stat.GetID(),
+			Name:          stat.GetName(),
+			IconPath:      stat.GetIconPath(),
+			TotalLabs:     stat.GetTotalLabs(),
+			CompletedLabs: stat.GetCompletedLabs(),
+			Percentage:    stat.GetPercentage(),
+		}
+		userProgrammingLanguageLabStatsDTO = append(userProgrammingLanguageLabStatsDTO, newStatDto)
 	}
+	return userProgrammingLanguageLabStatsDTO
 }

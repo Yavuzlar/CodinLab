@@ -12,8 +12,12 @@ import themeConfig from "src/configs/themeConfig";
 import navigation from "src/navigation";
 import NavItem from "./navigation/item/NavItem";
 import LanguageSelector from "./navigation/item/LanguageSelector";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Button } from "@mui/material";
+import { useAuth } from "src/hooks/useAuth";
 
 function ResponsiveAppBar() {
+  const { logout } = useAuth();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -24,10 +28,19 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <AppBar
       // position="static" // removed due to incorrect appreance
-      sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}>
+      sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}
+    >
       <Container maxWidth="lgPlus">
         <Toolbar disableGutters variant="dense">
           <CircleIcon
@@ -49,7 +62,8 @@ function ResponsiveAppBar() {
               fontWeight: 700,
               color: "inherit",
               textDecoration: "none",
-            }}>
+            }}
+          >
             {themeConfig.projectName}
           </Typography>
 
@@ -73,16 +87,22 @@ function ResponsiveAppBar() {
               fontWeight: 700,
               color: "inherit",
               textDecoration: "none",
-            }}>
+            }}
+          >
             {themeConfig.projectName}
           </Typography>
-
+          <Box>
+            <Button variant="dark" onClick={handleLogout}>
+              <LogoutIcon />
+            </Button>
+          </Box>
           <Box
             sx={{
               flexGrow: 0,
               display: { xs: "flex", mdlg: "none" },
               flexDirection: "column",
-            }}>
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -90,7 +110,8 @@ function ResponsiveAppBar() {
               aria-haspopup="true"
               s
               onClick={handleOpenNavMenu}
-              color="inherit">
+              color="inherit"
+            >
               <MenuIcon />
             </IconButton>
             <Menu
@@ -111,12 +132,14 @@ function ResponsiveAppBar() {
                 display: { xs: "block", mdlg: "none" },
                 mt: "1px",
                 "& .MuiMenu-paper": { backgroundColor: "#0A3B7A" },
-              }}>
+              }}
+            >
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 {navigation.map((item, index) => (
                   <NavItem key={index} {...item} />
                 ))}
               </Box>
+
               <LanguageSelector isMenu={true} />
             </Menu>
           </Box>
@@ -127,10 +150,14 @@ function ResponsiveAppBar() {
               display: { xs: "none", mdlg: "flex" },
               ml: "auto",
               gap: 13,
-            }}>
+            }}
+          >
             {navigation.map((item, index) => (
               <NavItem key={index} {...item} />
             ))}
+            <Button variant="dark" onClick={handleLogout}>
+              <LogoutIcon />
+            </Button>
             <LanguageSelector />
           </Box>
         </Toolbar>

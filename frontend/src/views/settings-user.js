@@ -29,7 +29,13 @@ const settings = () => {
   const dispatch = useDispatch();
 
   const [infoSettingsData, setInfoSettingsData] = useState();
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProfileUser } from "src/store/user/userSlice";
+
+const settings = () => {
+
   const [passwordSettingsData, setPasswordSettingsData] = useState();
+  const [infoSettingsData, setInfoSettingsData] = useState({});
 
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -62,7 +68,14 @@ const settings = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const dispatch = useDispatch();
+  const {
+    user: stateUser,
+  } = useSelector((state) => state);
+
+
   const handleInfoSettings = (e) => {
+
     setInfoSettingsData({
       ...infoSettingsData,
       [e.target.name]: e.target.value,
@@ -200,6 +213,24 @@ const settings = () => {
     };
     validatePasswordSettings();
   }, [passwordSettingsData, passwordSettingsSubmitted]);
+
+  useEffect(() => {  //this is for the api call
+    dispatch(fetchProfileUser());
+  }, []);
+
+  useEffect(() => { //this is the  data for the user in api
+    if (stateUser.data) { //this is checking if the data is available
+      setInfoSettingsData({
+        name: stateUser.data.data?.name,
+        surname: stateUser.data.data?.surname,
+        username: stateUser.data.data?.username,
+        github: stateUser.data.data?.githubProfile,
+      });
+    }
+  }, [stateUser.data]);
+
+
+
 
   return (
     <div>
@@ -343,6 +374,7 @@ const settings = () => {
                       placeholder="Jhon"
                       variant="outlined"
                       name="name"
+                      value={infoSettingsData?.name}
                       error = {errorInfo.name ? true : false}
                       helperText={errorInfo.name}
                       onChange={handleInfoSettings}
@@ -388,6 +420,7 @@ const settings = () => {
                       placeholder="Doe"
                       variant="outlined"
                       name="surname"
+                      value={infoSettingsData?.surname}
                       onChange={handleInfoSettings}
                       error = {errorInfo.surname ? true : false}
                       helperText={errorInfo.surname}
@@ -433,6 +466,7 @@ const settings = () => {
                       placeholder="JhonDoe"
                       variant="outlined"
                       name="username"
+                      value={infoSettingsData?.username}
                       onChange={handleInfoSettings}
                       error = {errorInfo.username ? true : false}
                       helperText={errorInfo.username}
@@ -478,6 +512,7 @@ const settings = () => {
                       placeholder="jhondoe"
                       variant="outlined"
                       name="github"
+                      value={infoSettingsData?.github}
                       onChange={handleInfoSettings}
                       error = {errorInfo.github ? true : false}
                       helperText={errorInfo.github}

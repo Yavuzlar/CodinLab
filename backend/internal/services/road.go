@@ -80,17 +80,21 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Roads, error) {
 	return roads, nil
 }
 
-func (s *roadService) GetRoadFilter(userID string, roadId, pathId int, isStarted, isFinished bool) ([]domains.Roads, error) {
+func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, isStarted, isFinished *bool) ([]domains.Roads, error) {
 	allRoads, err := s.getAllRoads(userID)
 
 	if err != nil {
 		return nil, err
 	}
 
+	if userID == "" && programmingID == 0 && pathId == 0 && isStarted == nil && isFinished == nil {
+		return allRoads, nil
+	}
+
 	var filteredRoads []domains.Roads
 	for _, roadCollection := range allRoads {
 
-		if roadCollection.GetID() != roadId {
+		if roadCollection.GetID() != programmingID {
 			continue
 		}
 
@@ -101,11 +105,11 @@ func (s *roadService) GetRoadFilter(userID string, roadId, pathId int, isStarted
 				continue
 			}
 
-			if isStarted && !road.GetIsStarted() {
+			if isStarted != nil && road.GetIsStarted() != *isStarted {
 				continue
 			}
 
-			if isFinished && !road.GetIsFinished() {
+			if isFinished != nil && road.GetIsFinished() != *isFinished {
 				continue
 			}
 
