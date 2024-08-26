@@ -3,7 +3,6 @@ import { validation } from "src/utils/validation";
 import Translations from "src/components/Translations";
 
 export const changePasswordValidation = async (values) => {
-  console.log(values);
     const schema = yup.object().shape({
       password: yup.string().required(<Translations text="changePassword.oldPasswordError" />),
       newPassword: yup.string()

@@ -20,7 +20,6 @@ import { useState, useEffect } from "react";
 import MauseImage from "../assets/3d/casual-life-3d-cursor.png";
 import { profileSettingsValidation } from "src/configs/validation/profileSettingsSchema";
 import { changePasswordValidation } from "src/configs/validation/changePassSchema";
-import { useDispatch } from "react-redux";
 import { changePassword, changeProfile } from "src/store/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfileUser } from "src/store/user/userSlice";
@@ -171,9 +170,9 @@ import { fetchProfileUser } from "src/store/user/userSlice";
         return;
       }
       try {
-        console.log("deneme", passwordSettingsData);
+        console.log("TryGönderilenVeri", passwordSettingsData);
       } catch (error) {
-        console.log(error);
+        console.log("Catch Hatası", error);
       }
     };
 

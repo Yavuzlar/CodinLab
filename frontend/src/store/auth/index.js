@@ -27,7 +27,6 @@ export const changeProfile = createAsyncThunk(
       if (!response.ok) {
         return rejectWithValue(response.data);
       }
-      console.log("deneme", response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -49,6 +48,7 @@ export const changePassword = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
+      console.log("deneme", response.message);
 
       if (!response.ok || response.status !== 200) {
         router.push("/");
@@ -57,9 +57,6 @@ export const changePassword = createAsyncThunk(
       return response.data;
 
     } catch (error) {
-      console.log("deneme", response.message);
-
-
       return rejectWithValue(response.message);
     }
   }
@@ -95,16 +92,14 @@ const authSlice = createSlice({
         state.data = action.payload;
         state.loading = false;
         showToast("dismiss");
-        showToast("succsess", state.data);
+        showToast("succsess", state.message);
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.error = action.payload;
-        // console.log("action", action);
-        // console.log("state", state);
-        // console.log("state.error", state.error);
         state.loading = false;
         showToast("dismiss");
-        showToast("error", action.error.message);
+        showToast("error");
+        console.log (showToast());
       });
   },
 });
