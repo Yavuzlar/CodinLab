@@ -91,5 +91,14 @@
   "labs.question.failed": "Failed!",
   "labs.question.output": "Output:",
   "labs.question.expected": "Expected:",
-  "labs.question.hint": "Hint"
+  "labs.question.hint": "Hint",
+  "logout": "Logout",
+  "languages.tr": "Turkish",
+  "languages.en": "English",
+  "nav.home": "Home",
+  "nav.roads": "Roads",
+  "nav.labs": "Labs",
+  "nav.admin": "Admin"
+
+
 }

@@ -15,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import Spinner from "src/components/spinner";
 // ** Contexts
 import { AuthProvider } from "src/context/AuthContext";
+import { NavProvider } from "src/context/NavContext";
 // ** Styled Components
 import ReactHotToast from "src/components/react-hot-toast";
 // ** Component Imports

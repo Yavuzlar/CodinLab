@@ -13,20 +13,17 @@ import navigation from "src/navigation";
 import NavItem from "./navigation/item/NavItem";
 import LanguageSelector from "./navigation/item/LanguageSelector";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import { useAuth } from "src/hooks/useAuth";
+import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
+import { useNav } from "src/hooks/useNav";
+
+
 
 function ResponsiveAppBar() {
   const { logout } = useAuth();
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  const { anchorElNav, OpenNavMenu, CloseNavMenu } = useNav();
 
   const handleLogout = async () => {
     try {
@@ -36,13 +33,33 @@ function ResponsiveAppBar() {
     }
   };
 
+
+  const { t } = useTranslation();
+
+  const logoutText = t("logout");
+
+  const router = useRouter();
+
+  const handleLogoClick = () => {
+    router.push("/");
+  }
+
+
   return (
-    <AppBar
-      // position="static" // removed due to incorrect appreance
-      sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}
-    >
+    <AppBar sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}>
       <Container maxWidth="lgPlus">
         <Toolbar disableGutters variant="dense">
+          <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
+
+          onClick={handleLogoClick}
+          >
+
+        
           <CircleIcon
             sx={{
               display: { xs: "none", mdlg: "flex" },
@@ -55,7 +72,6 @@ function ResponsiveAppBar() {
             variant="h3"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "none", mdlg: "flex" },
@@ -66,6 +82,17 @@ function ResponsiveAppBar() {
           >
             {themeConfig.projectName}
           </Typography>
+          </Box>
+
+         <Box
+         onClick={handleLogoClick}
+         sx={{
+            display: "flex",
+            alignItems: "center",
+            flexGrow: 1,
+         }}
+         
+         >
 
           <CircleIcon
             sx={{
@@ -79,7 +106,6 @@ function ResponsiveAppBar() {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "flex", mdlg: "none" },
@@ -91,57 +117,18 @@ function ResponsiveAppBar() {
           >
             {themeConfig.projectName}
           </Typography>
-          <Box>
-            <Button variant="dark" onClick={handleLogout}>
-              <LogoutIcon />
-            </Button>
           </Box>
+
           <Box
             sx={{
-              flexGrow: 0,
               display: { xs: "flex", mdlg: "none" },
-              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              s
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
+            <LanguageSelector isMenu={true} />
+            <IconButton onClick={OpenNavMenu}>
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", mdlg: "none" },
-                mt: "1px",
-                "& .MuiMenu-paper": { backgroundColor: "#0A3B7A" },
-              }}
-            >
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                {navigation.map((item, index) => (
-                  <NavItem key={index} {...item} />
-                ))}
-              </Box>
-
-              <LanguageSelector isMenu={true} />
-            </Menu>
           </Box>
 
           <Box
@@ -149,20 +136,108 @@ function ResponsiveAppBar() {
               flexGrow: 0,
               display: { xs: "none", mdlg: "flex" },
               ml: "auto",
-              gap: 13,
+              gap: "1.5rem",
+              alignItems: "center",
             }}
           >
             {navigation.map((item, index) => (
-              <NavItem key={index} {...item} />
+              <NavItem key={index} {...item} onClick={CloseNavMenu}
+              />
             ))}
-            <Button variant="dark" onClick={handleLogout}>
-              <LogoutIcon />
-            </Button>
             <LanguageSelector />
+            <IconButton
+              onClick={handleLogout}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "0.5rem",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.3)",
+                  borderRadius: "5px",
+                },
+              }}
+            >
+              <LogoutIcon
+                sx={{
+                  width: 24,
+                  height: 24,
+                }}
+              />
+              <Typography
+                sx={{
+                  fontWeight: 300,
+                  textTransform: "capitalize",
+                  fontFamily: "Outfit",
+                  textAlign: "center",
+                }}
+              >
+                {logoutText}
+              </Typography>
+            </IconButton>
           </Box>
+
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorElNav}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            open={Boolean(anchorElNav)}
+            onClose={CloseNavMenu}
+            sx={{
+              display: { xs: "block", mdlg: "none" },
+              mt: "1px",
+              "& .MuiMenu-paper": {
+                backgroundColor: "#0A3B7A",
+              },
+            }}
+          >
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+              {navigation.map((item, index) => (
+                <NavItem
+                onClick={CloseNavMenu}
+                  key={index}
+                  {...item}
+                  sx={{
+                    "&:hover": {
+                      borderRadius: "0.938rem",
+                      backgroundColor: "rgba(255, 255, 255, 0.1)", // hover effect
+                    },
+                  }}
+                />
+              ))}
+              <Divider sx={{ borderColor: "white" }} />
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <IconButton
+                  onClick={handleLogout}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    "&:hover": {
+                      backgroundColor: "rgba(255, 255, 255, 0.3)",
+                      borderRadius: "5px",
+                    },
+                  }}
+                >
+                  <LogoutIcon />
+                  <Typography>Logout</Typography>
+                </IconButton>
+              </Box>
+            </Box>
+          </Menu>
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;

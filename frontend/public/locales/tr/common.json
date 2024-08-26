@@ -91,5 +91,8 @@
   "labs.question.output": "Çıktı:",
   "labs.question.expected": "Beklenen:",
   "labs.question.hint": "İpucu",
-  "roads.path.start_road": "Yola Başla"
+  "roads.path.start_road": "Yola Başla",
+  "logout": "Çıkış Yap",
+  "languages.tr": "Türkçe",
+  "languages.en": "İngilizce"
 }

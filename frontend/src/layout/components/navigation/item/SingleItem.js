@@ -16,8 +16,13 @@ const SingleItem = (props) => {
   };
 
   const style = {
-    borderRadius: 0,
+    borderRadius: "50%",
     backgroundColor: "transparent",
+
+    "&:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.3)",
+      borderRadius: "0.938rem",
+    },
   };
 
   return (
