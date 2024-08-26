@@ -4,6 +4,8 @@ import InfoCard from "src/components/cards/Info";
 import LanguageProgress from "src/components/cards/LanguageProgress";
 import Filter from "src/components/filter/Filter";
 import { labs, languages } from "src/data/home";
+import labsIcon from "src/assets/icons/icons8-test-tube-100.png";
+import { useTranslation } from "react-i18next";
 
 const Labs = () => {
   const [filters, setFilters] = useState({
@@ -11,6 +13,8 @@ const Labs = () => {
     search: "",
     sort: "", // "", asc, desc
   });
+  const { t } = useTranslation();
+  const searchPlaceholder = t("labs.search.placeholder")
 
   return (
     <>
@@ -25,7 +29,7 @@ const Labs = () => {
                 height: "100%",
               }}
             >
-              <Filter filters={filters} setFilters={setFilters} />
+              <Filter filters={filters} setFilters={setFilters} searchPlaceholder={searchPlaceholder}  />
 
               <InfoCard {...labs} />
 
@@ -56,7 +60,7 @@ const Labs = () => {
         >
           {languages.map((language, index) => (
             <Grid item xs={12} md={12} key={index}>
-              <LanguageProgress language={language} />
+              <LanguageProgress language={language} icon={labsIcon} map={"20 Lab"} />
             </Grid>
           ))}
           <Box sx={{ width: "100%", height: "2px" }}></Box>
