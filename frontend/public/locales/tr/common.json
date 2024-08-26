@@ -91,5 +91,9 @@
   "labs.question.output": "Çıktı:",
   "labs.question.expected": "Beklenen:",
   "labs.question.hint": "İpucu",
-  "roads.path.start_road": "Yola Başla"
+  "roads.path.start_road": "Yola Başla",
+  "dialog.title.password" : "Onayla",
+  "dialog.content.password" : "Verilerinizi güncellemek için lütfen şifrenizi giriniz.",
+  "dialog.button.submit" : "Onayla",
+  "dialog.button.cancel" : "İptal Et"
 }
