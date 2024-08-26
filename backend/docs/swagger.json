@@ -299,6 +299,29 @@
                 }
             }
         },
+        "/private/labs/progress/stats": {
+            "get": {
+                "description": "Get User Lab Progress Statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GetUserLabProgressStats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/labs/{ID}": {
             "get": {
                 "description": "Get Labs By Programming Language ID",
