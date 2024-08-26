@@ -5,7 +5,7 @@ import Translations from "src/components/Translations";
 export const changePasswordValidation = async (values) => {
   console.log(values);
     const schema = yup.object().shape({
-      oldPassword: yup.string().required(<Translations text="changePassword.oldPasswordError" />),
+      password: yup.string().required(<Translations text="changePassword.oldPasswordError" />),
       newPassword: yup.string()
         .required(<Translations text="changePassword.newPasswordError" />)
         .min(8, <Translations text="changePassword.passwordMinError" />),

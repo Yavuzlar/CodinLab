@@ -164,12 +164,17 @@ const settings = () => {
       passwordSettingsData
     );
     setErrorPassword(validationPasswordErrors);
+    dispatch(changePassword(passwordSettingsData));
 
     if (validationPasswordErrors) {
       return;
     }
-
-    dispatch(changePassword(passwordSettingsData));
+    try {
+      console.log("deneme", passwordSettingsData);
+    }
+    catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -539,7 +544,7 @@ const settings = () => {
                       id="outlined-basic"
                       placeholder="********"
                       variant="outlined"
-                      name="oldPassword"
+                      name="password"
                       type={showOldPassword ? "text" : "password"}
                       onChange={handlePasswordSettings}
                       error = {errorPassword.oldPassword ? true : false}
