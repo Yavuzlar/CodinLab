@@ -12,9 +12,9 @@ func (h *PrivateHandler) initHomeRoutes(root fiber.Router) {
 	homeRoute.Get("/level", h.GetUserLevel)
 	homeRoute.Get("/development", h.GetUserDevelopment)
 	homeRoute.Get("/advancement", h.GetUserAdvancement)
-	homeRoute.Get("/welcome", h.GetWelcomeContent)
-	homeRoute.Get("/road", h.GetRoadContent)
-	homeRoute.Get("/lab", h.GetLabContent)
+	//homeRoute.Get("/welcome", h.GetWelcomeContent)
+	//homeRoute.Get("/road", h.GetRoadContent)
+	//homeRoute.Get("/lab", h.GetLabContent)
 	// initialize routes
 }
 
@@ -32,7 +32,8 @@ func (h *PrivateHandler) GetUserLevel(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	userLevelDto := h.dtoManager.HomeDTOManager.ToUserLevelDTO(userLevel)
+	languageLevelDto := h.dtoManager.HomeDTOManager.ToLanguageLevelDTO(userLevel.Languages())
+	userLevelDto := h.dtoManager.HomeDTOManager.ToUserLevelDTO(userLevel, languageLevelDto)
 
 	return response.Response(200, "GetUserLevel successful", userLevelDto)
 }
@@ -93,7 +94,7 @@ func (h *PrivateHandler) GetUserAdvancement(c *fiber.Ctx) error {
 	return response.Response(200, "GetUserAdvancement successful", advancementDTOs)
 }
 
-// @Tags Home
+/* // @Tags Home
 // @Summary GetWelcomeContent
 // @Description Get Welcome Content
 // @Accept json
@@ -107,9 +108,9 @@ func (h *PrivateHandler) GetWelcomeContent(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "GetWelcomeContent successful", content)
-}
+} */
 
-// @Tags Home
+/* // @Tags Home
 // @Summary GetLabContent
 // @Description Get Lab Content
 // @Accept json
@@ -139,4 +140,4 @@ func (h *PrivateHandler) GetRoadContent(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "GetRoadContent successful", content)
-}
+} */

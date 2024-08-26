@@ -197,29 +197,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/home/lab": {
-            "get": {
-                "description": "Get Lab Content",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Home"
-                ],
-                "summary": "GetLabContent",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/private/home/level": {
             "get": {
                 "description": "Get User Level",
@@ -233,52 +210,6 @@ const docTemplate = `{
                     "Home"
                 ],
                 "summary": "GetUserLevel",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/home/road": {
-            "get": {
-                "description": "Get Road Content",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Home"
-                ],
-                "summary": "GetRoadContent",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/home/welcome": {
-            "get": {
-                "description": "Get Welcome Content",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Home"
-                ],
-                "summary": "GetWelcomeContent",
                 "responses": {
                     "200": {
                         "description": "OK",
