@@ -327,21 +327,6 @@ paths:
       summary: GetInventories
       tags:
       - Home
-  /private/home/lab:
-    get:
-      consumes:
-      - application/json
-      description: Get Lab Content
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: GetLabContent
-      tags:
-      - Home
   /private/home/level:
     get:
       consumes:
@@ -355,36 +340,6 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: GetUserLevel
-      tags:
-      - Home
-  /private/home/road:
-    get:
-      consumes:
-      - application/json
-      description: Get Road Content
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: GetRoadContent
-      tags:
-      - Home
-  /private/home/welcome:
-    get:
-      consumes:
-      - application/json
-      description: Get Welcome Content
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: GetWelcomeContent
       tags:
       - Home
   /private/lab/{programmingID}/{labID}:

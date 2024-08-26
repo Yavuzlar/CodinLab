@@ -10,17 +10,35 @@ func NewHomeDTOManager() HomeDTOManager {
 }
 
 type UserLevelDTO struct {
-	Level           int   `json:"level"`
-	TotalPoints     int32 `json:"totalPoints"`
-	LevelPercentage int32 `json:"levelPercentage"`
+	Level           int                `json:"level"`
+	TotalPoints     int32              `json:"totalPoints"`
+	LevelPercentage int32              `json:"levelPercentage"`
+	Languages       []LanguageLevelDTO `json:"languages"`
 }
 
-func (m *HomeDTOManager) ToUserLevelDTO(userLevel *domains.UserLevel) UserLevelDTO {
+type LanguageLevelDTO struct {
+	Lang        string `json:"lang"`
+	Description string `json:"description"`
+}
+
+func (m *HomeDTOManager) ToUserLevelDTO(userLevel *domains.UserLevel, languagesDTOs []LanguageLevelDTO) UserLevelDTO {
 	return UserLevelDTO{
 		Level:           userLevel.Level(),
 		TotalPoints:     userLevel.TotalPoints(),
 		LevelPercentage: userLevel.LevelPercentage(),
+		Languages:       languagesDTOs,
 	}
+}
+
+func (m *HomeDTOManager) ToLanguageLevelDTO(languageLevel []domains.LanguageLevel) []LanguageLevelDTO {
+	var languageLevelDTOs []LanguageLevelDTO
+	for _, lang := range languageLevel {
+		languageLevelDTOs = append(languageLevelDTOs, LanguageLevelDTO{
+			Lang:        lang.Lang(),
+			Description: lang.Description(),
+		})
+	}
+	return languageLevelDTOs
 }
 
 type InventoryDTO struct {
