@@ -39,8 +39,8 @@ const Welcome = ({ title = "", description = "", image = null }) => {
                 paddingTop: "1.8rem",
 
                 ...(_mdlg
-                  ? { maxWidth: "40ch" }
-                  : _xxxl && { maxWidth: "60ch" }
+                  ? { maxWidth: "35ch" }
+                  :{ maxWidth: "calc(100% - 360px)" }
                   
                 ),
               }}
