@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
       <Navbar />
 
       <Box sx={{ mt: "68px" }}>
-        <Container maxWidth="lgPlus">
+        <Container maxWidth="lgPlus" fixed>
           <CustomBreadcrumbs titles={titles} />
         </Container>
       </Box>
@@ -61,11 +61,11 @@ const Layout = ({ children }) => {
           pb: "48px",
         }}
       >
-        <Container maxWidth="lgPlus">
-          <Box sx={{ mt: '27px' }}>
+        <Box sx={{ mt: '27px' }}>
+          <Container maxWidth="lgPlus" fixed>
             {children}
-          </Box>
-        </Container>
+          </Container>
+        </Box>
       </Box>
 
       <Footer />

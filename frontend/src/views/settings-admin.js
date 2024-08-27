@@ -23,14 +23,20 @@ import { changePasswordValidation } from "src/configs/validation/changePassSchem
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfileUser } from "src/store/user/userSlice";
 
-const settings = () => {
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
+const settings = () => {
   const [passwordSettingsData, setPasswordSettingsData] = useState();
   const [infoSettingsData, setInfoSettingsData] = useState({});
 
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [visibleUsernameLabel, setVisibleUsernameLabel] = useState(false);
   const [visibleGithubLabel, setVisibleGithubLabel] = useState(false);
@@ -46,8 +52,11 @@ const settings = () => {
   const [passwordSettingsSubmitted, setPasswordSettingsSubmitted] =
     useState(false);
 
-  const [errorInfo, setErrorInfo] = useState({});
+  const [errorInfo, setErrorInfo] = useState();
   const [errorPassword, setErrorPassword] = useState({});
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [password, setPassword] = useState("");
 
   const hanldeClickShowOldPassword = () => {
     setShowOldPassword(!showOldPassword);
@@ -59,14 +68,18 @@ const settings = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const dispatch = useDispatch();
-  const {
-    user: stateUser,
-  } = useSelector((state) => state);
+  const hanldeClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
+
+  const dispatch = useDispatch();
+  const { user: stateUser } = useSelector((state) => state);
 
   const handleInfoSettings = (e) => {
-
     setInfoSettingsData({
       ...infoSettingsData,
       [e.target.name]: e.target.value,
@@ -146,13 +159,24 @@ const settings = () => {
       infoSettingsData
     );
     setErrorInfo(validationInfoErrors);
-
-    if (validationInfoErrors) {
-      return;
+    console.log("validationInfoErrors", validationInfoErrors);
+    if(!validationInfoErrors || Object.keys(validationInfoErrors).length === 0
+    ){
+      setOpenDialog(true);
     }
 
-    // when the api ready, the api call will be added here
-    
+  };
+
+  
+  const handleDialogSubmit = () => {
+    const dataToSend = {
+      ...infoSettingsData,
+      password,
+    };
+
+    console.log("Gönderilen veriler:", dataToSend);
+
+    setOpenDialog(false);
   };
 
   const handleSubmitPasswordSettings = async (e) => {
@@ -184,23 +208,30 @@ const settings = () => {
   }, [infoSettingsData, infoSettingsSubmitted]);
 
   useEffect(() => {
-    const validatePasswordSettings = async () => {
-      if (passwordSettingsSubmitted) {
-        const validationPasswordErrors = await changePasswordValidation(
-          passwordSettingsData
+    const validateInfoSettings = async () => {
+      if (infoSettingsSubmitted) {
+        const validationInfoErrors = await profileSettingsValidation(
+          infoSettingsData
         );
-        setErrorPassword(validationPasswordErrors);
+        setErrorInfo(validationInfoErrors);
       }
     };
-    validatePasswordSettings();
-  }, [passwordSettingsData, passwordSettingsSubmitted]);
+    validateInfoSettings();
+  }, [infoSettingsData, infoSettingsSubmitted]);
 
-  useEffect(() => { 
+  useEffect(() => {
     dispatch(fetchProfileUser());
   }, []);
 
   useEffect(() => {
+    //this is for the api call
+    dispatch(fetchProfileUser());
+  }, []);
+
+  useEffect(() => {
+    //this is the  data for the user in api
     if (stateUser.data) {
+      //this is checking if the data is available
       setInfoSettingsData({
         name: stateUser.data.data?.name,
         surname: stateUser.data.data?.surname,
@@ -209,11 +240,6 @@ const settings = () => {
       });
     }
   }, [stateUser.data]);
-
-  console.log(stateUser)
-  console.log(infoSettingsData)
-
-
 
   return (
     <div>
@@ -358,8 +384,8 @@ const settings = () => {
                       variant="outlined"
                       name="name"
                       value={infoSettingsData?.name}
-                      error = {errorInfo.name ? true : false}
-                      helperText={errorInfo.name}
+                      error={errorInfo?.name ? true : false}
+                      helperText={errorInfo?.name}
                       onChange={handleInfoSettings}
                       fullWidth
                       sx={{
@@ -405,8 +431,8 @@ const settings = () => {
                       name="surname"
                       value={infoSettingsData?.surname}
                       onChange={handleInfoSettings}
-                      error = {errorInfo.surname ? true : false}
-                      helperText={errorInfo.surname}
+                      error={errorInfo?.surname ? true : false}
+                      helperText={errorInfo?.surname}
                       fullWidth
                       sx={{
                         height: "52px",
@@ -451,8 +477,8 @@ const settings = () => {
                       name="username"
                       value={infoSettingsData?.username}
                       onChange={handleInfoSettings}
-                      error = {errorInfo.username ? true : false}
-                      helperText={errorInfo.username}
+                      error={errorInfo?.username ? true : false}
+                      helperText={errorInfo?.username}
                       fullWidth
                       sx={{
                         height: "52px",
@@ -497,8 +523,8 @@ const settings = () => {
                       name="github"
                       value={infoSettingsData?.github}
                       onChange={handleInfoSettings}
-                      error = {errorInfo.github ? true : false}
-                      helperText={errorInfo.github}
+                      error={errorInfo?.github ? true : false}
+                      helperText={errorInfo?.github}
                       fullWidth
                       sx={{
                         height: "52px",
@@ -516,7 +542,7 @@ const settings = () => {
                   </FormControl>
 
                   <Button
-                    onClick={handleSubmitInfoSettings}
+                   onClick={handleSubmitInfoSettings}
                     variant="dark"
                     sx={{
                       marginTop: 4,
@@ -565,8 +591,8 @@ const settings = () => {
                       name="oldPassword"
                       type={showOldPassword ? "text" : "password"}
                       onChange={handlePasswordSettings}
-                      error = {errorPassword.oldPassword ? true : false}
-                      helperText={errorPassword.oldPassword}
+                      error={errorPassword?.oldPassword ? true : false}
+                      helperText={errorPassword?.oldPassword}
                       InputProps={{
                         endAdornment: (
                           <IconButton
@@ -635,8 +661,8 @@ const settings = () => {
                       name="newPassword"
                       type={showNewPassword ? "text" : "password"}
                       onChange={handlePasswordSettings}
-                      error = {errorPassword.newPassword ? true : false}
-                      helperText={errorPassword.newPassword}
+                      error={errorPassword?.newPassword ? true : false}
+                      helperText={errorPassword?.newPassword}
                       fullWidth
                       InputProps={{
                         endAdornment: (
@@ -705,8 +731,8 @@ const settings = () => {
                       name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       onChange={handlePasswordSettings}
-                      error = {errorPassword.confirmPassword ? true : false}
-                      helperText={errorPassword.confirmPassword}
+                      error={errorPassword?.confirmPassword ? true : false}
+                      helperText={errorPassword?.confirmPassword}
                       fullWidth
                       InputProps={{
                         endAdornment: (
@@ -756,7 +782,6 @@ const settings = () => {
                       left: "55%",
                       height: "52px",
                       textTransform: "none",
-                      
                     }}
                   >
                     <Typography
@@ -773,6 +798,121 @@ const settings = () => {
           </Card>
         </Box>
       </Box>
+
+      <Dialog open={openDialog} onClose={handleClose}
+        sx={{
+        "& .MuiDialog-paper": {
+          color: (theme) => `${theme.palette.text.primary} !important`,
+          borderRadius: "16px",
+          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+          width: "100%",
+          maxWidth: "500px",
+          padding: "20px",
+        },
+        }}
+      >
+  <DialogTitle>
+    <Translations text={"dialog.title.password"} />
+  </DialogTitle>
+  <DialogContent>
+    <DialogContentText
+      sx={{
+        color: (theme) =>
+          `${theme.palette.text.primary} !important`,
+      }}
+    >
+      <Translations text={"dialog.content.password"} />
+    </DialogContentText>
+    <TextField
+      sx={{
+        marginTop: "20px",
+        borderRadius: "15px",
+        border : "2px solid #0A3B7A",
+
+        "& .MuiInputBase-root" :{
+          backgroundColor: (theme) =>
+            `${theme.palette.background.default} !important`,
+        },
+
+        "& .MuiOutlinedInput-root": {
+          borderRadius: "15px",
+          "&.Mui-focused fieldset": {
+            borderColor: (theme) =>
+              `${theme.palette.primary.dark} !important`,
+          },
+        },
+
+        "& .MuiInputBase-input": {
+          color: "#0A3B7A",
+          fontWeight: "bold",
+          marginTop: "5px",
+        },
+
+        "& .MuiInputLabel-root": {
+          color: (theme) =>
+            `${theme.palette.primary.dark} !important`,
+            fontWeight: "bold",
+        },
+
+        "& .Mui-focused": {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#0A3B7A",
+          },
+        },
+
+       
+
+      }}
+
+      autoFocus
+      margin="dense"
+      label={<Translations text={"settings.old.password"} />}
+      type={showPassword ? "text" : "password"}
+      variant="filled"
+      fullWidth
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      InputProps={{
+        endAdornment: (
+          <IconButton
+            onClick={hanldeClickShowPassword}
+            edge="end"
+          >
+            <Image
+              style={{ zIndex: 99 }}
+              src={
+                showPassword
+                  ? visibilityOnIcon
+                  : visibilityOffIcon
+              }
+              alt={
+                showPassword
+                  ? "visibilityOnIcon"
+                  : "visibilityOffIcon"
+              }
+              width={30}
+              height={30}
+            />
+          </IconButton>
+        ),
+      }}
+    />
+  </DialogContent>
+  <DialogActions
+    sx={{
+      display: "flex",
+      justifyContent: "space-between",
+      padding: "20px",
+    }}
+  >
+    <Button  onClick={handleClose}  variant="dark">
+    <Translations text={"dialog.button.cancel"} />
+    </Button>
+    <Button onClick={handleDialogSubmit} variant="dark">
+    <Translations text={"dialog.button.submit"} />
+    </Button>
+  </DialogActions>
+</Dialog>
     </div>
   );
 };

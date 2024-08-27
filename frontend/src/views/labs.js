@@ -29,7 +29,10 @@ const Labs = () => {
                 height: "100%",
               }}
             >
-              <Filter filters={filters} setFilters={setFilters} searchPlaceholder={searchPlaceholder}  />
+              <Box>
+                <Filter filters={filters} setFilters={setFilters} searchPlaceholder={searchPlaceholder} />
+              </Box>
+
 
               <InfoCard {...labs} />
 
@@ -60,7 +63,7 @@ const Labs = () => {
         >
           {languages.map((language, index) => (
             <Grid item xs={12} md={12} key={index}>
-              <LanguageProgress language={language} icon={labsIcon} map={"20 Lab"} />
+              <LanguageProgress language={language} icon={labsIcon} map={"20 Labs"} />
             </Grid>
           ))}
           <Box sx={{ width: "100%", height: "2px" }}></Box>
