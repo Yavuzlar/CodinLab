@@ -28,6 +28,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { data } from "src/data/activityDataExample";
+import { changePassword, changeProfile } from "src/store/auth";
 
 const settings = () => {
   const [passwordSettingsData, setPasswordSettingsData] = useState();
@@ -93,7 +95,7 @@ const settings = () => {
       }
     }
 
-    if (e.target.name === "github") {
+    if (e.target.name === "githubProfile") {
       if (e.target.value.length > 0) {
         setVisibleGithubLabel(true);
       } else {
@@ -174,7 +176,7 @@ const settings = () => {
       password,
     };
 
-    console.log("Gönderilen veriler:", dataToSend);
+    dispatch(changeProfile(dataToSend));
 
     setOpenDialog(false);
   };
@@ -187,12 +189,16 @@ const settings = () => {
       passwordSettingsData
     );
     setErrorPassword(validationPasswordErrors);
+    dispatch(changePassword(passwordSettingsData));
 
     if (validationPasswordErrors) {
       return;
     }
-
-    // when the api ready, the api call will be added here
+    try {
+      console.log("TryGönderilenVeri", passwordSettingsData);
+    } catch (error) {
+      console.log("Catch Hatası", error);
+    }
   };
 
   useEffect(() => {
@@ -236,7 +242,7 @@ const settings = () => {
         name: stateUser.data.data?.name,
         surname: stateUser.data.data?.surname,
         username: stateUser.data.data?.username,
-        github: stateUser.data.data?.githubProfile,
+        githubProfile: stateUser.data.data?.githubProfile,
       });
     }
   }, [stateUser.data]);
@@ -520,8 +526,8 @@ const settings = () => {
                       id="outlined-basic"
                       placeholder="jhondoe"
                       variant="outlined"
-                      name="github"
-                      value={infoSettingsData?.github}
+                      name="githubProfile"
+                      value={infoSettingsData?.githubProfile}
                       onChange={handleInfoSettings}
                       error={errorInfo?.github ? true : false}
                       helperText={errorInfo?.github}
@@ -588,7 +594,7 @@ const settings = () => {
                       id="outlined-basic"
                       placeholder="********"
                       variant="outlined"
-                      name="oldPassword"
+                      name="password"
                       type={showOldPassword ? "text" : "password"}
                       onChange={handlePasswordSettings}
                       error={errorPassword?.oldPassword ? true : false}

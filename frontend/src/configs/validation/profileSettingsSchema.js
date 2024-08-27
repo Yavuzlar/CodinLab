@@ -7,7 +7,7 @@ export const profileSettingsValidation = async (values) => {
     username : yup.string().required(<Translations text="settings.usernameError" />),
     name : yup.string().required(<Translations text="settings.nameError" />),
     surname : yup.string().required(<Translations text="settings.surnameError" />),
-    github : yup.string().required(<Translations text="settings.githubError" />),
+    githubProfile : yup.string().required(<Translations text="settings.githubError" />),
   });
 
   return await validation(schema, values);
