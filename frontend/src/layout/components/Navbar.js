@@ -19,11 +19,10 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { useNav } from "src/hooks/useNav";
 
-
-
 function ResponsiveAppBar() {
   const { logout } = useAuth();
-  const { anchorElNav, OpenNavMenu, CloseNavMenu } = useNav();
+  const { anchorElNav, OpenNavMenu, CloseNavMenu, LogoClick, ChangePage } =
+    useNav();
 
   const handleLogout = async () => {
     try {
@@ -33,90 +32,78 @@ function ResponsiveAppBar() {
     }
   };
 
-
   const { t } = useTranslation();
 
   const logoutText = t("logout");
-
-  const router = useRouter();
-
-  const handleLogoClick = () => {
-    router.push("/");
-  }
-
 
   return (
     <AppBar sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}>
       <Container maxWidth="lgPlus">
         <Toolbar disableGutters variant="dense">
           <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-
-          onClick={handleLogoClick}
-          >
-
-        
-          <CircleIcon
             sx={{
-              display: { xs: "none", mdlg: "flex" },
-              height: 40,
-              width: 40,
-              mr: 1,
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
             }}
-          />
-          <Typography
-            variant="h3"
-            noWrap
-            component="a"
-            sx={{
-              mr: 2,
-              display: { xs: "none", mdlg: "flex" },
-              fontWeight: 700,
-              color: "inherit",
-              textDecoration: "none",
-            }}
+            onClick={LogoClick}
           >
-            {themeConfig.projectName}
-          </Typography>
+            <CircleIcon
+              sx={{
+                display: { xs: "none", mdlg: "flex" },
+                height: 40,
+                width: 40,
+                mr: 1,
+              }}
+            />
+            <Typography
+              variant="h3"
+              noWrap
+              component="a"
+              sx={{
+                mr: 2,
+                display: { xs: "none", mdlg: "flex" },
+                fontWeight: 700,
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              {themeConfig.projectName}
+            </Typography>
           </Box>
 
-         <Box
-         onClick={handleLogoClick}
-         sx={{
-            display: "flex",
-            alignItems: "center",
-            flexGrow: 1,
-         }}
-         
-         >
-
-          <CircleIcon
+          <Box
+            onClick={LogoClick}
             sx={{
-              display: { xs: "flex", mdlg: "none" },
-              height: 40,
-              width: 40,
-              mr: 1,
-            }}
-          />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", mdlg: "none" },
+              display: "flex",
+              alignItems: "center",
               flexGrow: 1,
-              fontWeight: 700,
-              color: "inherit",
-              textDecoration: "none",
+              cursor: "pointer",
             }}
           >
-            {themeConfig.projectName}
-          </Typography>
+            <CircleIcon
+              sx={{
+                display: { xs: "flex", mdlg: "none" },
+                height: 40,
+                width: 40,
+                mr: 1,
+              }}
+            />
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              sx={{
+                mr: 2,
+                display: { xs: "flex", mdlg: "none" },
+                flexGrow: 1,
+                fontWeight: 700,
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              {themeConfig.projectName}
+            </Typography>
           </Box>
 
           <Box
@@ -141,8 +128,7 @@ function ResponsiveAppBar() {
             }}
           >
             {navigation.map((item, index) => (
-              <NavItem key={index} {...item} onClick={CloseNavMenu}
-              />
+              <NavItem key={index} {...item} />
             ))}
             <LanguageSelector />
             <IconButton
@@ -202,7 +188,6 @@ function ResponsiveAppBar() {
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
               {navigation.map((item, index) => (
                 <NavItem
-                onClick={CloseNavMenu}
                   key={index}
                   {...item}
                   sx={{

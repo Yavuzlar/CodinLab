@@ -84,6 +84,7 @@ const App = (props) => {
       </Head>
 
       <AuthProvider>
+        <NavProvider>
         <ThemeComponent>
           <WindowWrapper>
             <Guard authGuard={authGuard} guestGuard={guestGuard}>
@@ -100,6 +101,7 @@ const App = (props) => {
             />
           </ReactHotToast>
         </ThemeComponent>
+        </NavProvider>
       </AuthProvider>
     </Provider>
   );
