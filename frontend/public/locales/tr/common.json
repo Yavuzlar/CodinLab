@@ -1,6 +1,7 @@
 {
   "unauthorized": "Yetkisiz erişim",
   "all": "Hepsi",
+  "start": "Başla",
   "in_progress": "Devam ediyor",
   "completed": "Tamamlandı",
   "home.title": "CodinLab'a Hoşgeldiniz",
@@ -92,8 +93,8 @@
   "labs.question.expected": "Beklenen:",
   "labs.question.hint": "İpucu",
   "roads.path.start_road": "Yola Başla",
-  "dialog.title.password" : "Onayla",
-  "dialog.content.password" : "Verilerinizi güncellemek için lütfen şifrenizi giriniz.",
-  "dialog.button.submit" : "Onayla",
-  "dialog.button.cancel" : "İptal Et"
+  "dialog.title.password": "Onayla",
+  "dialog.content.password": "Verilerinizi güncellemek için lütfen şifrenizi giriniz.",
+  "dialog.button.submit": "Onayla",
+  "dialog.button.cancel": "İptal Et"
 }
