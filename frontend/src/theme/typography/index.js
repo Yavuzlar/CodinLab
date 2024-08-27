@@ -61,6 +61,10 @@ const typography = (theme) => {
       color: theme.palette.primary.main,
       fontSize: "1rem",
     },
+    infoText2: {
+      color: theme.palette.primary.main,
+      fontSize: "0.875rem",
+    },
   };
 };
 

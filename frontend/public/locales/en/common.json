@@ -1,6 +1,7 @@
 {
   "unauthorized": "Unauthorized",
   "all": "All",
+  "start": "Start",
   "in_progress": "In Progress",
   "completed": "Completed",
   "home.title": "Welcome to CodinLab",
@@ -92,13 +93,9 @@
   "labs.question.output": "Output:",
   "labs.question.expected": "Expected:",
   "labs.question.hint": "Hint",
-  "logout": "Logout",
-  "languages.tr": "Turkish",
-  "languages.en": "English",
-  "nav.home": "Home",
-  "nav.roads": "Roads",
-  "nav.labs": "Labs",
-  "nav.admin": "Admin"
-
-
+  "dialog.title.password": "Subscribe",
+  "dialog.content.password": "Please enter your password to update your data.",
+  "dialog.button.submit": "Submit",
+  "dialog.button.cancel": "Cancel",
+  "logout": "Logout"
 }

@@ -5,6 +5,8 @@ type ILabService interface {
 	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]Labs, error)
 	GetUserLanguageLabStats(userID string) (programmingLangugageStats []ProgrammingLanguageStats, err error)
 	GetUserLabDifficultyStats(userID string) (userLabDifficultyStats UserLabDifficultyStats, err error)
+	GetUserLabProgressStats(userID string) (userLabProgressStats UserLabProgressStats, err error)
+	CountLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) (counter int, err error)
 }
 
 // ProgrammingLanguageStats represents the statistics for a specific language lab.
@@ -71,6 +73,28 @@ type UserLabDifficultyStats struct {
 	easyPercentage   float32
 	mediumPercentage float32
 	hardPercentage   float32
+}
+
+// UserLabProgressStats  for user general lab progresss statistics
+type UserLabProgressStats struct {
+	progress  float32
+	completed float32
+}
+
+func (ps *UserLabProgressStats) GetProgress() float32 {
+	return ps.progress
+}
+
+func (ps *UserLabProgressStats) SetProgress(progress float32) {
+	ps.progress = progress
+}
+
+func (ps *UserLabProgressStats) GetCompleted() float32 {
+	return ps.completed
+}
+
+func (ps *UserLabProgressStats) SetCompleted(completed float32) {
+	ps.completed = completed
 }
 
 // Getter and Setter methods for GeneralStats
@@ -353,6 +377,14 @@ func NewserLabLevelStats(easyPercentage, mediumPercentage, hardPercentage float3
 		easyPercentage:   easyPercentage,
 		mediumPercentage: mediumPercentage,
 		hardPercentage:   hardPercentage,
+	}
+}
+
+// NewsUserLabProgressStats creates a new instance of GeneralStats
+func NewsUserLabProgressStats(progress, completed float32) *UserLabProgressStats {
+	return &UserLabProgressStats{
+		progress:  progress,
+		completed: completed,
 	}
 }
 

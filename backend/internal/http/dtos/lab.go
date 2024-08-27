@@ -1,6 +1,8 @@
 package dto
 
-import "github.com/Yavuzlar/CodinLab/internal/domains"
+import (
+	"github.com/Yavuzlar/CodinLab/internal/domains"
+)
 
 type LabDTOManager struct{}
 
@@ -54,6 +56,18 @@ func (m *LabDTOManager) ToUserLabDifficultyStatsDto(stats domains.UserLabDifficu
 		EasyPercentage:   stats.GetEasyPercentage(),
 		MediumPercentage: stats.GetMediumPercentage(),
 		HardPercentage:   stats.GetHardPercentage(),
+	}
+}
+
+type UserLabProgressStatsDto struct {
+	Progress  float32 `json:"progress"`
+	Completed float32 `json:"completed"`
+}
+
+func (m *LabDTOManager) ToUserLabProgressStatsDto(stats domains.UserLabProgressStats) UserLabProgressStatsDto {
+	return UserLabProgressStatsDto{
+		Completed: stats.GetCompleted(),
+		Progress:  stats.GetProgress(),
 	}
 }
 
