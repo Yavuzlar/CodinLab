@@ -6,19 +6,22 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
+import SettingsIcon from "@mui/icons-material/Settings";
 import Container from "@mui/material/Container";
 import CircleIcon from "@mui/icons-material/Circle";
+import LogoutIcon from "@mui/icons-material/Logout";
+import Button from "@mui/material/Button";
 import themeConfig from "src/configs/themeConfig";
 import navigation from "src/navigation";
 import NavItem from "./navigation/item/NavItem";
 import LanguageSelector from "./navigation/item/LanguageSelector";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { Button } from "@mui/material";
 import { useAuth } from "src/hooks/useAuth";
+import { useEffect } from "react";
 
 function ResponsiveAppBar() {
   const { logout } = useAuth();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElSettings, setAnchorElSettings] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -28,6 +31,27 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
+  const handleOpenSettingsMenu = (event) => {
+    setAnchorElSettings(event.currentTarget);
+  };
+
+  const handleCloseSettingsMenu = () => {
+    setAnchorElSettings(null);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setAnchorElNav(null);
+      setAnchorElSettings(null);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+
+  }, [ 
+    setAnchorElNav,
+    setAnchorElSettings,
+  ]);
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -36,9 +60,35 @@ function ResponsiveAppBar() {
     }
   };
 
+  const SettingsMenu = (
+    <Menu
+      anchorEl={anchorElSettings}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={Boolean(anchorElSettings)}
+      onClose={handleCloseSettingsMenu}
+      sx={{ "& .MuiMenu-paper": { backgroundColor: "#0A3B7A" } }}
+    >
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <IconButton onClick={handleLogout} color="inherit"
+       sx={{ color: "inherit" , borderRadius: "0" }}
+         >
+          <LogoutIcon />
+        </IconButton>
+        <LanguageSelector isMenu={true} />
+      </Box>
+    </Menu>
+  );
+
   return (
     <AppBar
-      // position="static" // removed due to incorrect appreance
       sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}
     >
       <Container maxWidth="lgPlus">
@@ -91,16 +141,28 @@ function ResponsiveAppBar() {
           >
             {themeConfig.projectName}
           </Typography>
-          <Box>
-            <Button variant="dark" onClick={handleLogout}>
-              <LogoutIcon />
-            </Button>
+
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: { xs: "none", mdlg: "flex" },
+              ml: "auto",
+              gap: 2,
+            }}
+          >
+            {navigation.map((item, index) => (
+              <NavItem key={index} {...item} />
+            ))}
+            <IconButton onClick={handleOpenSettingsMenu} >
+              <SettingsIcon />
+            </IconButton>
+            {SettingsMenu}
           </Box>
+
           <Box
             sx={{
               flexGrow: 0,
               display: { xs: "flex", mdlg: "none" },
-              flexDirection: "column",
             }}
           >
             <IconButton
@@ -108,7 +170,6 @@ function ResponsiveAppBar() {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              s
               onClick={handleOpenNavMenu}
               color="inherit"
             >
@@ -138,31 +199,17 @@ function ResponsiveAppBar() {
                 {navigation.map((item, index) => (
                   <NavItem key={index} {...item} />
                 ))}
+                <IconButton onClick={handleOpenSettingsMenu} color="inherit">
+                  <SettingsIcon />
+                </IconButton>
               </Box>
-
-              <LanguageSelector isMenu={true} />
+              {SettingsMenu}
             </Menu>
-          </Box>
-
-          <Box
-            sx={{
-              flexGrow: 0,
-              display: { xs: "none", mdlg: "flex" },
-              ml: "auto",
-              gap: 13,
-            }}
-          >
-            {navigation.map((item, index) => (
-              <NavItem key={index} {...item} />
-            ))}
-            <Button variant="dark" onClick={handleLogout}>
-              <LogoutIcon />
-            </Button>
-            <LanguageSelector />
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;

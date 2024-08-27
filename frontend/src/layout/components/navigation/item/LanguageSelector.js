@@ -34,6 +34,14 @@ const LanguageSelector = () => {
     }
   }, [language])
 
+  useEffect(() => {
+    const handleResize = () => {
+      setAnchorEl(null);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [setAnchorEl]);
+  
   return (
     <>
       <Button
