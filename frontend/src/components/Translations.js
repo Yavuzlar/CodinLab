@@ -1,5 +1,4 @@
-import { Typography } from "@mui/material";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "react-i18next";
 
 const Translations = ({ text }) => {
   const { t } = useTranslation();

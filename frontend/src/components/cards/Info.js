@@ -1,10 +1,9 @@
-import React from "react";
 import {
   Box,
   Card,
   CardContent,
   Typography,
-  useMediaQuery,
+  useMediaQuery
 } from "@mui/material";
 import Image from "next/image";
 
@@ -54,6 +53,7 @@ const Info = ({ title = "", description = "", image = null }) => {
           </Box>
         </CardContent>
       </Card>
+
       {image && (
         <Image
           style={{
