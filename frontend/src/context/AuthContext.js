@@ -1,14 +1,10 @@
-// ** React Imports
 import { createContext, useEffect, useState } from "react";
-// ** Next Import
 import { useRouter } from "next/router";
-// ** Axios
 import authConfig from "src/configs/auth";
 import axios from "axios";
 import { showToast } from "src/utils/showToast";
 import { t } from "i18next";
 
-// ** Defaults
 const defaultProvider = {
   user: null,
   loading: true,
@@ -19,19 +15,18 @@ const defaultProvider = {
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
   initAuth: () => Promise.resolve(),
+  login: () => Promise.resolve(),
 };
 
 const AuthContext = createContext(defaultProvider);
 
 const AuthProvider = ({ children }) => {
-  // ** States
   const [user, setUser] = useState(defaultProvider.user);
   const [loading, setLoading] = useState(defaultProvider.loading);
   const [isInitialized, setIsInitialized] = useState(
     defaultProvider.isInitialized
   );
 
-  // ** Hooks
   const router = useRouter();
 
   const deleteStorage = () => {
@@ -41,7 +36,7 @@ const AuthProvider = ({ children }) => {
     window.localStorage.removeItem(authConfig.userDataName);
 
     const firstPath = router.pathname.split("/")[1];
-    if (firstPath != "login") router.replace("/login");
+    if (firstPath !== "login") router.replace("/login");
   };
 
   const handleLogout = async () => {
@@ -50,7 +45,7 @@ const AuthProvider = ({ children }) => {
         url: authConfig.logout,
         method: "POST",
       });
-      if (response.status == 200) {
+      if (response.status === 200) {
         deleteStorage();
       } else {
         showToast("dismiss");
@@ -63,23 +58,22 @@ const AuthProvider = ({ children }) => {
   };
 
   const initAuth = async () => {
-    setIsInitialized(true);
-    const userData = JSON.parse(
-      window.localStorage.getItem(authConfig.userDataName)
-    );
+    let userData = window.localStorage.getItem(authConfig.userDataName);
+    userData = userData ? JSON.parse(userData) : null;
 
-    if (userData && userData?.role) {
+    if (userData) {
       setUser(userData);
-
-      if (router.pathname == "/login" || router.pathname == "/register") {
+      if (router.pathname === "/login" || router.pathname === "/register") {
         router.replace("/");
+        setLoading(false);
       }
-    } else {
+    } else if (router.pathname !== "/login" && router.pathname !== "/register") {
       try {
         const response = await axios({
           url: authConfig.account,
           method: "GET",
         });
+
         if (response.status === 200) {
           const user = response?.data?.data;
 
@@ -89,9 +83,10 @@ const AuthProvider = ({ children }) => {
               JSON.stringify(user)
             );
             setUser(user);
-
             router.push("/");
-          } else handleLogout();
+          } else {
+            handleLogout();
+          }
         } else {
           showToast("dismiss");
           showToast("error", response.data.message);
@@ -105,6 +100,7 @@ const AuthProvider = ({ children }) => {
     }
 
     setLoading(false);
+    setIsInitialized(true);
   };
 
   const handleRegister = async (formData) => {
@@ -121,13 +117,11 @@ const AuthProvider = ({ children }) => {
       } else {
         showToast("dismiss");
         showToast("error", response.data.message);
-
         handleLogout();
       }
     } catch (error) {
       showToast("dismiss");
       showToast("error", t(error.response.data.message));
-
       handleLogout();
     }
   };
@@ -141,7 +135,6 @@ const AuthProvider = ({ children }) => {
       });
       if (response.status === 200) {
         const user = response?.data?.data;
-
         window.localStorage.setItem(
           authConfig.userDataName,
           JSON.stringify(user)
