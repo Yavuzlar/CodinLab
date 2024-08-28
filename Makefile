@@ -24,6 +24,23 @@ down:
 
 build:
 	@echo "[i] Production mode is not active for now.\n"
+	@if command -v docker-compose > /dev/null; then \
+		echo "[i] Using docker-compose..."; \
+		docker-compose -f docker/prod.docker-compose.yaml -p codinlab build; \
+	else \
+		echo "[i] Using docker compose..."; \
+		docker compose -f docker/prod.docker-compose.yaml -p codinlab build; \
+	fi
+
+dev-build:
+	@echo "[i] Production mode is not active for now.\n"
+	@if command -v docker-compose > /dev/null; then \
+		echo "[i] Using docker-compose..."; \
+		docker-compose -f docker/dev.docker-compose.yaml -p codinlab build; \
+	else \
+		echo "[i] Using docker compose..."; \
+		docker compose -f docker/dev.docker-compose.yaml -p codinlab build; \
+	fi
 
 help:
 	@echo "[i] Usage: make <target>"
@@ -32,4 +49,5 @@ help:
 	@echo "  dev      	start project in development mode"
 	@echo "  down     	stop and remove containers"
 	@echo "  build    	build project in production mode"
+	@echo "  dev-build	build project in development mode"
 	@echo "  help		Show this help"
