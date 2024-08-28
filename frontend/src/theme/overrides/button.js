@@ -17,7 +17,7 @@ const button = (theme) => {
           ...(ownerState.variant == "dark" && {
             backgroundColor: theme.palette.primary.dark,
             "&:hover": {
-              boxShadow: `0px 3px 12px ${theme.palette.common.black}`,
+              boxShadow: `0px 2px 6px ${theme.palette.common.black}`,
               backgroundColor: theme.palette.primary.dark,
               color: theme.palette.text.primary,
             },
@@ -26,7 +26,7 @@ const button = (theme) => {
           ...(ownerState.variant == "light" && {
             backgroundColor: theme.palette.divider,
             "&:hover": {
-              boxShadow: `0px 3px 12px ${theme.palette.primary.dark}`,
+              boxShadow: `0px 2px 6px ${theme.palette.primary.dark}`,
               backgroundColor: theme.palette.divider,
               color: theme.palette.primary.dark,
             },
