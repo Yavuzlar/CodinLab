@@ -8,7 +8,7 @@ import Js from "../assets/language/javascript.png";
 import Python from "../assets/language/python.png";
 import LabInfo from "../components/cards/LabInfo";
 import SortFilter from "src/components/filter/SortFilter";
-import SearchFilter from "src/components/filter/SearchFilter";
+import SearchFilter from "src/components/filter/FilterLab";
 import PrgoressStatutesLabs from "src/components/filter/PrgoressStatutesLabs";
 
 const languages = {
