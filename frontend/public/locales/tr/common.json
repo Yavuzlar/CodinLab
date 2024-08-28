@@ -96,5 +96,8 @@
   "dialog.title.password": "Onayla",
   "dialog.content.password": "Verilerinizi güncellemek için lütfen şifrenizi giriniz.",
   "dialog.button.submit": "Onayla",
-  "dialog.button.cancel": "İptal Et"
+  "dialog.button.cancel": "İptal Et",
+  "logout": "Çıkış Yap",
+  "languages.tr": "Türkçe",
+  "languages.en": "İngilizce"
 }

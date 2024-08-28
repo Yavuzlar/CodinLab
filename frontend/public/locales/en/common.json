@@ -96,5 +96,8 @@
   "dialog.title.password": "Subscribe",
   "dialog.content.password": "Please enter your password to update your data.",
   "dialog.button.submit": "Submit",
-  "dialog.button.cancel": "Cancel"
+  "dialog.button.cancel": "Cancel",
+  "logout": "Logout",
+  "languages.tr": "Turkish",
+  "languages.en": "English"
 }

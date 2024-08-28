@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ListItemButton,
   ListItemIcon,
@@ -6,18 +7,30 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { useNav } from "src/hooks/useNav";
 
 const SingleItem = (props) => {
   const { title = "", path = null } = props;
+  const { ChangePage } = useNav();
 
   const router = useRouter();
   const handleLocate = (p) => {
-    if (p) return () => router.replace(p);
+    return () => {
+      if (p) {
+        router.replace(p);
+      }
+      ChangePage(); 
+    };
   };
 
   const style = {
-    borderRadius: 0,
+    borderRadius: "50%",
     backgroundColor: "transparent",
+
+    "&:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.3)",
+      borderRadius: "0.938rem",
+    },
   };
 
   return (
