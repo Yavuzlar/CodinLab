@@ -13,15 +13,14 @@ import navigation from "src/navigation";
 import NavItem from "./navigation/item/NavItem";
 import LanguageSelector from "./navigation/item/LanguageSelector";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import { useAuth } from "src/hooks/useAuth";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/router";
 import { useNav } from "src/hooks/useNav";
 
 function ResponsiveAppBar() {
   const { logout } = useAuth();
-  const { anchorElNav, OpenNavMenu, CloseNavMenu, LogoClick, ChangePage } =
+  const { anchorElNav, OpenNavMenu, CloseNavMenu, LogoClick} =
     useNav();
 
   const handleLogout = async () => {

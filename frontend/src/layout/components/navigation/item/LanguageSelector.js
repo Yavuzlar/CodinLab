@@ -46,6 +46,14 @@ const LanguageSelector = () => {
   const tr = t("languages.tr");
   const en = t("languages.en");
 
+  useEffect(() => {
+    const handleResize = () => {
+      setAnchorEl(null);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [setAnchorEl]);
+  
   return (
     <>
       <Button
