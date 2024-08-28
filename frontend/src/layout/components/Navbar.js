@@ -13,15 +13,17 @@ import navigation from "src/navigation";
 import NavItem from "./navigation/item/NavItem";
 import LanguageSelector from "./navigation/item/LanguageSelector";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Divider } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import { useAuth } from "src/hooks/useAuth";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
 import { useNav } from "src/hooks/useNav";
+import Logo from "../../assets/logo/codinlab-logo-light.png";
+import Image from "next/image";
 
 function ResponsiveAppBar() {
   const { logout } = useAuth();
-  const { anchorElNav, OpenNavMenu, CloseNavMenu, LogoClick} =
-    useNav();
+  const { anchorElNav, OpenNavMenu, CloseNavMenu, LogoClick } = useNav();
 
   const handleLogout = async () => {
     try {
@@ -36,7 +38,7 @@ function ResponsiveAppBar() {
   const logoutText = t("logout");
 
   return (
-    <AppBar sx={{ backgroundColor: "#0A3B7A", boxShadow: "none" }}>
+    <AppBar sx={{ backgroundColor: "#0A3B7A", boxShadow: "none", py:"0.5rem" }}>
       <Container maxWidth="lgPlus">
         <Toolbar disableGutters variant="dense">
           <Box
@@ -44,17 +46,18 @@ function ResponsiveAppBar() {
               display: "flex",
               alignItems: "center",
               cursor: "pointer",
+              gap: "1rem",
             }}
             onClick={LogoClick}
           >
-            <CircleIcon
-              sx={{
-                display: { xs: "none", mdlg: "flex" },
-                height: 40,
-                width: 40,
-                mr: 1,
-              }}
-            />
+            <Box
+            sx={{
+              display: { xs: "none", mdlg: "flex" },
+            }}
+            >
+              
+            <Image src={Logo} alt="CodinLab-Logo" width={"auto"} height={64} />
+            </Box>
             <Typography
               variant="h3"
               noWrap
@@ -78,16 +81,22 @@ function ResponsiveAppBar() {
               alignItems: "center",
               flexGrow: 1,
               cursor: "pointer",
+              gap: "0.5rem",
             }}
           >
-            <CircleIcon
+            <Box
               sx={{
                 display: { xs: "flex", mdlg: "none" },
-                height: 40,
-                width: 40,
-                mr: 1,
               }}
-            />
+            >
+              <Image
+                src={Logo}
+                alt="CodinLab-Logo"
+                width={"auto"}
+                height={40}
+              />
+            </Box>
+
             <Typography
               variant="h5"
               noWrap
