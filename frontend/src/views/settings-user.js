@@ -29,7 +29,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { data } from "src/data/activityDataExample";
-import { changePassword, changeProfile } from "src/store/auth";
+import { changePassword, changeProfile } from "src/store/user/userSlice";
 
 const settings = () => {
   const [passwordSettingsData, setPasswordSettingsData] = useState();
