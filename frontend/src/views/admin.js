@@ -10,6 +10,7 @@ import { CircularProgressStatistics } from "src/components/progress/CircularProg
 import cImg from "../assets/icons/c.png";
 import cppImg from "../assets/icons/cpp.png";
 import goImg from "../assets/icons/go.png";
+import { useRouter } from "next/router";
 
 const languageStatistics = [
   {
@@ -35,6 +36,9 @@ const Admin = () => {
       color: "#0A3B7A", // String
     },
   ];
+
+  const router = useRouter();
+
 
   return (
     <>
@@ -70,6 +74,7 @@ const Admin = () => {
             >
               <Button
                 variant="dark"
+                onClick={() => router.push("admin/users")}
                 sx={{
                   textTransform: "none",
                   width: '100%',
@@ -93,6 +98,7 @@ const Admin = () => {
               </Button>
 
               <Button
+              onClick={() => router.push("admin/settings")}
                 variant="dark"
                 sx={{
                   textTransform: "none",
