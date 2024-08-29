@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
 
       <Navbar />
 
-      <Box sx={{ mt: "68px" }}>
+      <Box sx={{ mt: "88px"}}>
         <Container maxWidth="lgPlus" fixed>
           <CustomBreadcrumbs titles={titles} />
         </Container>
@@ -57,7 +57,7 @@ const Layout = ({ children }) => {
       <Box
         sx={{
           width: "100%",
-          minHeight: `calc(100vh - 192px)`,
+          minHeight: `calc(100vh - 212px)`,
           pb: "48px",
         }}
       >
