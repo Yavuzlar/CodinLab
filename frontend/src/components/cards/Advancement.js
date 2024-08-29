@@ -68,7 +68,7 @@ const Advancement = () => {
                 key={index}
               >
                 <Box sx={{ mr: "1rem" }}>
-                  <Image src={goImg} width={50} height={50} />
+                <img src={"/api/v1/" + languages.iconPath} width={50} height={50} />
                 </Box>
                 <Box sx={{ width: "100%" }}>
                   <Typography  sx={{ mt: "1rem",  }}>{languages.name}</Typography>
