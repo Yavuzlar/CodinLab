@@ -31,8 +31,9 @@ const Home = () => {
       const homeRoute = getHomeRoute(auth.user?.role);
 
       // Redirect user to Home URL
+      auth.setLoading(false)
       router.replace(homeRoute);
-    } else {
+    } else if (!auth?.loading) {
       // Redirect user to Login URL
       router.replace("/login");
     }
