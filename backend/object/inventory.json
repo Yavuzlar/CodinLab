@@ -1,11 +1,11 @@
 [
     {
         "id": 1,
-        "name": "c++",
+        "name": "C++",
         "dockerImage": "gcc:latest",
         "labDir": "object/labs/c++",
         "pathDir": "object/paths/c++",
-        "iconPath": "object/icons/c++.png",
+        "iconPath": "images/c++.png",
         "language": [
             {
                 "lang": "en",
@@ -21,11 +21,11 @@
     },
     {
         "id": 2,
-        "name": "go",
+        "name": "GO",
         "dockerImage": "golang:latest",
         "labDir": "object/labs/golang",
         "pathDir": "object/paths/golang",
-        "iconPath": "object/icons/go.png",
+        "iconPath": "images/go.png",
         "language": [
             {
                 "lang": "en",
