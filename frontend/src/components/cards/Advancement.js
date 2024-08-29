@@ -9,6 +9,7 @@ import { useTheme } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchAdvancement } from "src/store/statistics/statisticsSlice";
+import { languages } from "src/data/home";
 
 const Advancement = () => {
 
@@ -19,10 +20,8 @@ const Advancement = () => {
 
   useEffect(() => {
     dispatch(fetchAdvancement());
-    console.log("datam geliyor mu ?",advancementData);
   }
   , [dispatch]);
-
 
   const theme = useTheme();
   return (
@@ -72,7 +71,7 @@ const Advancement = () => {
                   <Image src={goImg} width={50} height={50} />
                 </Box>
                 <Box sx={{ width: "100%" }}>
-                  <Typography  sx={{ mt: "1rem", textTransform: "capitalize"  }}>{languages.name}</Typography>
+                  <Typography  sx={{ mt: "1rem",  }}>{languages.name}</Typography>
                   <LinearProgess
                     progress={languages.roadPercentage}
                     backgroundColor={theme.palette.primary.dark}
