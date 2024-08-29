@@ -24,6 +24,7 @@ func NewV1Handler(services *services.Services, dtoManager *dto.DTOManager) *V1Ha
 
 func (h *V1Handler) Init(router fiber.Router, sessionStore *session.Store) {
 	root := router.Group("/v1")
+	root.Static("/images", "./object/icons")
 	root.Get("/", func(c *fiber.Ctx) error {
 		return response.Response(200, "Welcome to CodinLab API (Root Zone)", nil)
 	})
