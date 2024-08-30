@@ -56,7 +56,8 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Roads, error) {
 			newPath := domains.NewPath(path.ID, languages, *quest, false, false)
 
 			pathIDString := strconv.Itoa(path.ID)
-			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", pathIDString, domains.TypePath, domains.ContentStarted)
+			programmingLanguageIDString := strconv.Itoa(roadCollection.ID)
+			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingLanguageIDString, pathIDString, domains.TypePath, domains.ContentStarted)
 			if err != nil {
 				return nil, err
 			}
@@ -64,7 +65,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Roads, error) {
 				newPath.SetIsStarted(true)
 			}
 
-			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", pathIDString, domains.TypePath, domains.ContentCompleted)
+			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingLanguageIDString, pathIDString, domains.TypePath, domains.ContentCompleted)
 			if err != nil {
 				return nil, err
 			}
@@ -123,4 +124,58 @@ func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, is
 
 	return filteredRoads, nil
 
+}
+
+func (s *roadService) GetUserLanguageRoadStats(userID string) (programmingLangugageStats []domains.RoadStats, err error) {
+	allRoads, err := s.getAllRoads(userID)
+	if err != nil {
+		return nil, err
+	}
+	for _, road := range allRoads {
+		totalRoads := 0
+		finishedRoads := 0
+		for _, path := range road.GetPaths() {
+			if path.GetIsFinished() {
+				finishedRoads++
+			}
+			totalRoads++
+		}
+		newRoadStats := domains.NewRoadStats(
+			road.GetID(),
+			road.GetName(),
+			road.GetIconPath(),
+			totalRoads,
+			finishedRoads,
+			float32(finishedRoads)/float32(totalRoads)*100,
+		)
+		programmingLangugageStats = append(programmingLangugageStats, *newRoadStats)
+	}
+
+	return
+}
+
+func (s *roadService) GetUserRoadProgressStats(userID string) (progressStats *domains.RoadProgressStats, err error) {
+	progress := 0
+	completed := 0
+	totalRoads := 0
+	allRoads, err := s.getAllRoads(userID)
+	if err != nil {
+		return nil, err
+	}
+	for _, road := range allRoads {
+		for _, path := range road.GetPaths() {
+			if path.GetIsStarted() && !path.GetIsFinished() {
+				progress++
+			}
+			if path.GetIsFinished() && path.GetIsStarted() {
+				completed++
+			}
+			totalRoads++
+		}
+	}
+	progressStats = domains.NewRoadProgressStats(
+		float32(progress)/float32(totalRoads)*100,
+		float32(completed)/float32(totalRoads)*100,
+	)
+	return
 }
