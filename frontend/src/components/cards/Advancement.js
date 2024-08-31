@@ -6,25 +6,23 @@ import goImg from "../../assets/icons/go.png";
 import cImg from "../../assets/icons/c.png";
 import pythonImg from "../../assets/icons/python.png";
 import { useTheme } from "@emotion/react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchAdvancement } from "src/store/statistics/statisticsSlice";
+import { languages } from "src/data/home";
 
-const advancementLanguages = [
-  {
-    name: "Go",
-    progress: 50,
-    image: goImg,
-  },
-  {
-    name: "C++",
-    progress: 70,
-    image: cImg,
-  },
-  {
-    name: "Python",
-    progress: 15,
-    image: pythonImg,
-  },
-];
 const Advancement = () => {
+
+  const dispatch = useDispatch();   
+  const { data: advancementData} = useSelector(
+    (state) => state.statistics
+  );
+
+  useEffect(() => {
+    dispatch(fetchAdvancement());
+  }
+  , [dispatch]);
+
   const theme = useTheme();
   return (
     <Box
@@ -55,7 +53,7 @@ const Advancement = () => {
               flexGrow: 1,
             }}
           >
-            {advancementLanguages.map((languages, index) => (
+            {advancementData.map((languages, index) => (
               <Box
                 sx={{
                   display: "flex",
@@ -70,16 +68,16 @@ const Advancement = () => {
                 key={index}
               >
                 <Box sx={{ mr: "1rem" }}>
-                  <Image src={languages.image} width={50} height={50} />
+                <img src={"/api/v1/" + languages.iconPath} width={50} height={50} />
                 </Box>
                 <Box sx={{ width: "100%" }}>
-                  <Typography sx={{ mt: "1rem" }}>{languages.name}</Typography>
+                  <Typography  sx={{ mt: "1rem",  }}>{languages.name}</Typography>
                   <LinearProgess
-                    progress={languages.progress}
+                    progress={languages.roadPercentage}
                     backgroundColor={theme.palette.primary.dark}
                   />
                   <LinearProgess
-                    progress={languages.progress}
+                    progress={languages.labPercentage}
                     backgroundColor={theme.palette.primary.light}
                   />
                 </Box>
