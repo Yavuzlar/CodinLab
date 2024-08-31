@@ -53,7 +53,6 @@ const Register = () => {
       return;
     }
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
   };
 
   const handleSubmit = async (e) => {
@@ -73,7 +72,6 @@ const Register = () => {
     }
     // Call API
     try {
-      console.log(formData);
       await register(formData);
     } catch (error) {
       console.log(error);

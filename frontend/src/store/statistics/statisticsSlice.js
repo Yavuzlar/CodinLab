@@ -25,6 +25,23 @@ export const fetchAdvancement = createAsyncThunk(
   }
 );
 
+export const getUserDevelopment = createAsyncThunk(
+  "statistics/getUserDevelopment",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        url: "/api/v1/private/home/development",
+        method: "GET",
+      });
+      if (response.status === 200) {
+        return response.data; 
+      }
+    } catch (error) {
+      return rejectWithValue(response.message); 
+    }
+  }
+); 
+
 const statisticsSlice = createSlice({
   name: "statistics",
   initialState: initialState,
@@ -39,6 +56,18 @@ const statisticsSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchAdvancement.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getUserDevelopment.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUserDevelopment.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.loading = false;
+      })
+      .addCase(getUserDevelopment.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

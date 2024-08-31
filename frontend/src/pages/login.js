@@ -7,17 +7,12 @@ import {
   Typography,
   Box,
   Checkbox,
-  FormGroup,
   FormControlLabel,
   Divider,
   IconButton,
-  InputLabel,
-  FilledInput,
   InputAdornment,
-  OutlinedInput,
-  CardMedia,
   Grid,
-  useMediaQuery,
+  useMediaQuery
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import Translations from "src/components/Translations";
@@ -83,7 +78,6 @@ const Login = () => {
     }
     // Call API
     try {
-      console.log(formData);
       await login(formData);
     } catch (error) {
       console.log(error);

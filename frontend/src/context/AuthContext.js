@@ -147,7 +147,6 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log(router);
 
     initAuth();
   }, []);
