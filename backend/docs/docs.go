@@ -220,6 +220,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/lab/data": {
+            "get": {
+                "description": "Add dummy data for testing",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "DummyLogData",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/lab/{programmingID}/{labID}": {
             "get": {
                 "description": "Get Lab By Programming Language ID \u0026 Lab ID",
@@ -506,6 +529,126 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/path/{programmingID}/{pathID}": {
+            "get": {
+                "description": "Get Path By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "GetPathByID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Programming ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Path ID",
+                        "name": "pathID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.PathDTO"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/general/stats": {
+            "get": {
+                "description": "Gets users language road stats",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "GetUserLanguageRoadStats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/path/data": {
+            "get": {
+                "description": "Add dummy data for testing",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "DummyLogData",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/progress/stats": {
+            "get": {
+                "description": "Gets users road progress stats",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "GetUserRoadProgressStats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/road/start": {
             "post": {
                 "description": "Start",
@@ -574,58 +717,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.RoadDTO"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/private/road/{programmingID}/{pathID}": {
-            "get": {
-                "description": "Get Path By ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Road"
-                ],
-                "summary": "GetPathByID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Programming ID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Path ID",
-                        "name": "pathID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.BaseResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.PathDTO"
+                                            "$ref": "#/definitions/dto.GetRoadDTO"
                                         }
                                     }
                                 }
@@ -867,6 +959,49 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.GetRoadDTO": {
+            "type": "object",
+            "properties": {
+                "iconPath": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "paths": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.GetRoadPathDTO"
+                    }
+                }
+            }
+        },
+        "dto.GetRoadPathDTO": {
+            "type": "object",
+            "properties": {
+                "difficulty": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isFinished": {
+                    "type": "boolean"
+                },
+                "isStarted": {
+                    "type": "boolean"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.LanguageRoadDTO"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.LanguageDTO": {
             "type": "object",
             "properties": {
@@ -880,6 +1015,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "note": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LanguageRoadDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "lang": {
                     "type": "string"
                 },
                 "title": {
@@ -981,23 +1130,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 30,
                     "minLength": 3
-                }
-            }
-        },
-        "dto.RoadDTO": {
-            "type": "object",
-            "properties": {
-                "iconPath": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "paths": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.PathDTO"
-                    }
                 }
             }
         },
