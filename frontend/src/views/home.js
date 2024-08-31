@@ -2,13 +2,25 @@ import { Grid } from "@mui/material";
 import Welcome from "src/components/cards/Welcome";
 import Languages from "src/components/cards/Languages";
 import InfoCard from "src/components/cards/Info";
-import { welcomeCard, languages, roads, labs } from "src/data/home";
-import Level from "src/components/cards/Level";
+import { welcomeCard, roads, labs } from "src/data/home";
 import Development from "src/components/cards/Development";
 import Advancement from "src/components/cards/Advancement";
 import LevelStatistic from "src/components/statistics/LevelStatistic";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getInventories } from "src/store/language/languageSlice";
 
 const Home = () => {
+
+  const dispatch = useDispatch();
+  const { 
+    language : stateLanguage,
+   } = useSelector((state) => state);
+
+   useEffect(() => {
+    dispatch(getInventories());
+  }, [dispatch]);
+
   const progresses = [
     {
       name: "Easy",
@@ -44,7 +56,7 @@ const Home = () => {
             flexDirection: "row",
           }}
         >
-          {languages.map((language, index) => (
+          {stateLanguage.data?.data?.map((language, index) => (
             <Grid item xs={12} md={4} xl={2.4} key={index}>
               <Languages language={language} />
             </Grid>

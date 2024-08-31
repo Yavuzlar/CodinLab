@@ -16,6 +16,14 @@ const Languages = ({ language }) => {
   const _xl = useMediaQuery((theme) => theme.breakpoints.down("xl"));
 
   return (
+    console.log(language),
+
+  //   {
+  //     "id": 1,
+  //     "name": "c++",
+  //     "iconPath": "object/icons/c++.png"
+  // }
+
     <Card
       // onMouseEnter={() => setHovered(true)}
       // onMouseLeave={() => setHovered(false)}
@@ -67,8 +75,10 @@ const Languages = ({ language }) => {
           opacity: 1,
         }}
       >
-        <Image
-          src={language.image}
+        <img
+          src={"api/v1/"+
+          language.iconPath
+          }
           alt={language.name}
           width={50}
           height={50}
