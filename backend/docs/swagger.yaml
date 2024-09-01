@@ -29,6 +29,34 @@ definitions:
     - surname
     - username
     type: object
+  dto.GetRoadDTO:
+    properties:
+      iconPath:
+        type: string
+      name:
+        type: string
+      paths:
+        items:
+          $ref: '#/definitions/dto.GetRoadPathDTO'
+        type: array
+    type: object
+  dto.GetRoadPathDTO:
+    properties:
+      difficulty:
+        type: integer
+      id:
+        type: integer
+      isFinished:
+        type: boolean
+      isStarted:
+        type: boolean
+      languages:
+        items:
+          $ref: '#/definitions/dto.LanguageRoadDTO'
+        type: array
+      name:
+        type: string
+    type: object
   dto.LanguageDTO:
     properties:
       content:
@@ -38,6 +66,15 @@ definitions:
       lang:
         type: string
       note:
+        type: string
+      title:
+        type: string
+    type: object
+  dto.LanguageRoadDTO:
+    properties:
+      description:
+        type: string
+      lang:
         type: string
       title:
         type: string
@@ -108,17 +145,6 @@ definitions:
     - password
     - surname
     - username
-    type: object
-  dto.RoadDTO:
-    properties:
-      iconPath:
-        type: string
-      name:
-        type: string
-      paths:
-        items:
-          $ref: '#/definitions/dto.PathDTO'
-        type: array
     type: object
   dto.SolutionsByDayDTO:
     properties:
@@ -368,6 +394,21 @@ paths:
       summary: GetLabByID
       tags:
       - Lab
+  /private/lab/data:
+    get:
+      consumes:
+      - application/json
+      description: Add dummy data for testing
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: DummyLogData
+      tags:
+      - Lab
   /private/labs/{ID}:
     get:
       consumes:
@@ -522,33 +563,7 @@ paths:
       summary: GetSolutionsHoursByProgramming
       tags:
       - Log
-  /private/road/{programmingID}:
-    get:
-      consumes:
-      - application/json
-      description: Get Road with Paths
-      parameters:
-      - description: programmingID
-        in: path
-        name: programmingID
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.BaseResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.RoadDTO'
-              type: object
-      summary: GetRoads
-      tags:
-      - Road
-  /private/road/{programmingID}/{pathID}:
+  /private/path/{programmingID}/{pathID}:
     get:
       consumes:
       - application/json
@@ -577,6 +592,77 @@ paths:
                   $ref: '#/definitions/dto.PathDTO'
               type: object
       summary: GetPathByID
+      tags:
+      - Road
+  /private/road/{programmingID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Road with Paths
+      parameters:
+      - description: programmingID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.GetRoadDTO'
+              type: object
+      summary: GetRoads
+      tags:
+      - Road
+  /private/road/general/stats:
+    get:
+      consumes:
+      - application/json
+      description: Gets users language road stats
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserLanguageRoadStats
+      tags:
+      - Road
+  /private/road/path/data:
+    get:
+      consumes:
+      - application/json
+      description: Add dummy data for testing
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: DummyLogData
+      tags:
+      - Road
+  /private/road/progress/stats:
+    get:
+      consumes:
+      - application/json
+      description: Gets users road progress stats
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserRoadProgressStats
       tags:
       - Road
   /private/road/start:

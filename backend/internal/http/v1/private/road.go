@@ -14,7 +14,10 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
 	roadRoute.Post("/start", h.Start)
 	roadRoute.Get("/:programmingID", h.GetRoad)
-	roadRoute.Get("/:programmingID/:pathID", h.GetPath)
+	root.Get("/path/:programmingID/:pathID", h.GetPath)
+	roadRoute.Get("/general/stats", h.GetUserLanguageRoadStats)
+	roadRoute.Get("/path/data", h.AddDummyRoadData)
+	roadRoute.Get("/progress/stats", h.GetUserRoadProgressStats)
 }
 
 // @Tags Road
@@ -81,7 +84,7 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param programmingID path string true "programmingID"
-// @Success 200 {object} response.BaseResponse{data=dto.RoadDTO}
+// @Success 200 {object} response.BaseResponse{data=dto.GetRoadDTO}
 // @Router /private/road/{programmingID} [get]
 func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
@@ -100,14 +103,15 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	if len(roads) == 0 {
 		return response.Response(404, "Road not found", nil)
 	}
-	var pathDTOs []dto.PathDTO
-	var roadDTO dto.RoadDTO
+
+	var pathDTOs []dto.GetRoadPathDTO
+	var roadDTO dto.GetRoadDTO
 	for _, road := range roads {
 		for _, path := range road.GetPaths() {
-			languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageDTOs(path.GetLanguages())
-			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTOs))
+			languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageRoadDTOs(path.GetLanguages())
+			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToRoadPathDTO(path, languageDTOs))
 		}
-		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs)
+		roadDTO = h.dtoManager.RoadDTOManager.ToGetRoadDTO(road, pathDTOs)
 	}
 	return response.Response(200, "GetRoads successful", roadDTO)
 }
@@ -120,7 +124,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 // @Param programmingID path string true "Programming ID"
 // @Param pathID path string true "Path ID"
 // @Success 200 {object} response.BaseResponse{data=dto.PathDTO}
-// @Router /private/road/{programmingID}/{pathID} [get]
+// @Router /private/path/{programmingID}/{pathID} [get]
 func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 
 	programmingID := c.Params("programmingID")
@@ -159,4 +163,57 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "Path Retrieved Successfully", roadDTO)
+}
+
+// @Tags Road
+// @Summary GetUserLanguageRoadStats
+// @Description Gets users language road stats
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/general/stats [get]
+func (h *PrivateHandler) GetUserLanguageRoadStats(c *fiber.Ctx) error { //how many roads are there and how many of them are completed according to programming language
+	userSession := session_store.GetSessionData(c)
+	roadStats, err := h.services.RoadService.GetUserLanguageRoadStats(userSession.UserID)
+	if err != nil {
+		return err
+	}
+	roadDTO := h.dtoManager.RoadDTOManager.ToRoadStatsDTO(roadStats)
+	return response.Response(200, "Get User Language Road Stats", roadDTO)
+}
+
+// @Tags Road
+// @Summary DummyLogData
+// @Description Add dummy data for testing
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/path/data [get]
+func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+
+	// Dummy Data for testing
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, 1, 1)
+	return response.Response(200, "Dummy Data Added", nil)
+}
+
+// @Tags Road
+// @Summary GetUserRoadProgressStats
+// @Description Gets users road progress stats
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/progress/stats [get]
+func (h *PrivateHandler) GetUserRoadProgressStats(c *fiber.Ctx) error { //progress,completed
+	userSession := session_store.GetSessionData(c)
+	roadStats, err := h.services.RoadService.GetUserRoadProgressStats(userSession.UserID)
+	if err != nil {
+		return err
+	}
+	roadDTO := h.dtoManager.RoadDTOManager.ToRoadProgressDTO(*roadStats)
+	return response.Response(200, "Get User Road Progress Stats", roadDTO)
 }

@@ -3,6 +3,7 @@ package private
 import (
 	"strconv"
 
+	"github.com/Yavuzlar/CodinLab/internal/domains"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -17,6 +18,7 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
+	root.Get("/lab/data", h.AddDummyLabData)
 }
 
 // @Tags Lab
@@ -153,4 +155,22 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "GetLab successful", labsDtoList)
+}
+
+// @Tags Lab
+// @Summary DummyLogData
+// @Description Add dummy data for testing
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/lab/data [get]
+func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+
+	// Dummy Data for testing
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 1, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 2, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 2)
+
+	return response.Response(200, "Dummy Data Added", nil)
 }

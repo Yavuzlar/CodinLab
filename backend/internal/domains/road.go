@@ -3,6 +3,8 @@ package domains
 // IRoadService is the interface that provides the methods for the road service.
 type IRoadService interface {
 	GetRoadFilter(userID string, programmingID, pathId int, isStarted, isFinished *bool) ([]Roads, error)
+	GetUserLanguageRoadStats(userID string) ([]RoadStats, error)
+	GetUserRoadProgressStats(userID string) (progressStats *RoadProgressStats, err error)
 }
 
 // LanguageRoad represents the details of a programming language.
@@ -298,5 +300,71 @@ func NewRoads(id int, name, dockerImage, iconPath string, paths []Path) *Roads {
 		dockerImage: dockerImage,
 		iconPath:    iconPath,
 		paths:       paths,
+	}
+}
+
+// RoadStats represents the statistics for a specific language lab.
+type RoadStats struct {
+	id             int
+	name           string
+	iconPath       string
+	totalRoads     int
+	completedRoads int
+	percentage     float32
+}
+
+func (r *RoadStats) GetID() int {
+	return r.id
+}
+
+func (r *RoadStats) GetName() string {
+	return r.name
+}
+
+func (r *RoadStats) GetIconPath() string {
+	return r.iconPath
+}
+
+func (r *RoadStats) GetTotalRoads() int {
+	return r.totalRoads
+}
+
+func (r *RoadStats) GetCompletedRoads() int {
+	return r.completedRoads
+}
+
+func (r *RoadStats) GetPercentage() float32 {
+	return r.percentage
+}
+
+// NewRoadStats creates a new instance of RoadStats
+func NewRoadStats(id int, name, iconPath string, totalRoads, completedRoads int, percentage float32) *RoadStats {
+	return &RoadStats{
+		id:             id,
+		name:           name,
+		iconPath:       iconPath,
+		totalRoads:     totalRoads,
+		completedRoads: completedRoads,
+		percentage:     percentage,
+	}
+}
+
+type RoadProgressStats struct {
+	completed float32
+	progress  float32
+}
+
+func (r *RoadProgressStats) GetCompleted() float32 {
+	return r.completed
+}
+
+func (r *RoadProgressStats) GetProgress() float32 {
+	return r.progress
+}
+
+func NewRoadProgressStats(inProgressRoads, completedRoads float32) *RoadProgressStats {
+	return &RoadProgressStats{
+		completed: completedRoads,
+		progress:  inProgressRoads,
 	}
 }
