@@ -27,15 +27,15 @@ const LanguageProgress = ({ language, icon, map }) => {
           gap: "1rem",
         }}
       >
-        <Image
-          src={language.image}
+        <img
+          src={"api/v1/"+language.iconPath}
           alt={language.name}
           width={56}
           height={56}
         />
 
         {
-          language.progress == 0
+          language.percentage == 0
             ? _lg && !_md
               ? <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -54,7 +54,7 @@ const LanguageProgress = ({ language, icon, map }) => {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 'fit-content' }}>
                     <Image src={icon} alt={"icon"} width={20} height={20} />
 
-                    <Typography variant="infoText2">20 Labs</Typography>
+                    <Typography variant="infoText2">{language.totalLabs}</Typography>
                   </Box>
                 </Box>
 
@@ -99,7 +99,7 @@ const LanguageProgress = ({ language, icon, map }) => {
               </Grid>
 
               <Grid item xs={12}>
-                <LinearProgess progress={language.progress} />
+                <LinearProgess progress={language.percentage} />
               </Grid>
 
               <Grid item xs={12}>

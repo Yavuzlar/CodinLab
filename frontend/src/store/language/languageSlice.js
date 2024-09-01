@@ -25,7 +25,22 @@ export const getInventories = createAsyncThunk(
   }
 );
 
-
+export const getUserLanguageLabStats = createAsyncThunk(
+  "language/getUserLanguageLabStats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        url: "/api/v1/private/labs/general/stats",
+        method: "GET",
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      return rejectWithValue(response.message);
+    }
+  }
+);
 
 
 const languageSlice = createSlice({
@@ -45,6 +60,18 @@ const languageSlice = createSlice({
         state.loading = false; 
         state.error = action.payload; 
       }) 
+      .addCase(getUserLanguageLabStats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUserLanguageLabStats.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.loading = false;
+      })
+      .addCase(getUserLanguageLabStats.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
     }
 });
 
