@@ -15,6 +15,9 @@ progresses = [
 */
 
 export const CircularProgressStatistics = ({ progresses }) => {
+
+
+
   if (!progresses) {
     return (
       <Box>

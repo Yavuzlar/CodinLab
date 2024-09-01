@@ -16,7 +16,6 @@ const Languages = ({ language }) => {
   const _xl = useMediaQuery((theme) => theme.breakpoints.down("xl"));
 
   return (
-    console.log(language),
 
   //   {
   //     "id": 1,

@@ -4,14 +4,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import authSlice from './auth/index.js'
 import userSlice from './user/userSlice'
 import statisticsSlice from './statistics/statisticsSlice.js'
-import languageSlice from './language/languageSlice' // Import the language slice
+import languageSlice from './language/languageSlice' 
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
-    user : userSlice, // Include the user reducer
+    user : userSlice, 
     statistics: statisticsSlice, 
-    language : languageSlice // Include the language reducer
+    language : languageSlice 
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
