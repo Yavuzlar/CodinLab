@@ -63,7 +63,7 @@ func (m *UserDTOManager) ToLoginResponseDTO(user *domains.User) LoginResponseDTO
 }
 
 type UpdateUserDTO struct {
-	Username      string `json:"username" validate:"omitempty,alphanum,min=3,max=30" `
+	Username      string `json:"username" validate:"omitempty,alphanum,max=30" `
 	Name          string `json:"name"`
 	Surname       string `json:"surname" `
 	Password      string `json:"password" validate:"required"`

@@ -1,5 +1,20 @@
 basePath: /api/v1
 definitions:
+  dto.AdminUpdateUsersDTO:
+    properties:
+      githubProfile:
+        maxLength: 30
+        type: string
+      name:
+        type: string
+      newPassword:
+        type: string
+      surname:
+        type: string
+      username:
+        maxLength: 30
+        type: string
+    type: object
   dto.CreateUserDTO:
     properties:
       githubProfile:
@@ -199,7 +214,6 @@ definitions:
         type: string
       username:
         maxLength: 30
-        minLength: 3
         type: string
     required:
     - password
@@ -238,6 +252,24 @@ info:
   version: v1
 paths:
   /private/admin/user:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves All Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Users
+      tags:
+      - Admin
     post:
       consumes:
       - application/json
@@ -289,11 +321,23 @@ paths:
       summary: Get Profile
       tags:
       - Admin
-  /private/admin/users:
-    get:
+  /private/admin/user/{userID}:
+    post:
       consumes:
       - application/json
-      description: Retrieves All Users
+      description: Updates User
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: New User Creds
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AdminUpdateUsersDTO'
       produces:
       - application/json
       responses:
@@ -301,11 +345,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: Get Users
+      summary: Updates User
       tags:
       - Admin
   /private/home/advancement:

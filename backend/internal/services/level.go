@@ -75,7 +75,7 @@ func (s *levelService) updateUserPoint(ctx context.Context, userID string) (oldP
 		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
 	}
 
-	user, _, err := s.userRepository.Filter(ctx, domains.UserFilter{Id: userIDU}, 1, 1)
+	user, _, err := s.userRepository.Filter(ctx, domains.UserFilter{ID: userIDU}, 1, 1)
 	if err != nil {
 		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
 	}

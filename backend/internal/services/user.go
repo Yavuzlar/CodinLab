@@ -118,7 +118,7 @@ func (s *userService) GetProfile(ctx context.Context, userID string) (user *doma
 
 	//Checking if the user exists and retrieving user
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
-		Id: userIDU,
+		ID: userIDU,
 	}, 1, 1)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
@@ -225,7 +225,7 @@ func (s *userService) DeleteUser(ctx context.Context, userID string) (err error)
 		return service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
 	}
 
-	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Id: userIDU}, 1, 1)
+	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{ID: userIDU}, 1, 1)
 	if err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}

@@ -15,7 +15,7 @@ type UserRepository struct {
 
 // dbModelUsers is the struct that represents the user in the database.
 type dbModelUsers struct {
-	Id            sql.NullString `db:"id"`
+	ID            sql.NullString `db:"id"`
 	Username      sql.NullString `db:"username"`
 	Password      sql.NullString `db:"password"`
 	Name          sql.NullString `db:"name"`
@@ -29,7 +29,7 @@ type dbModelUsers struct {
 // dbModelToAppModel converts dbModelUsers to domains.User for application operations (e.g. return to client)
 func (r *UserRepository) dbModelToAppModel(dbModel dbModelUsers) (user domains.User) {
 	user.Unmarshal(
-		uuid.MustParse(dbModel.Id.String),
+		uuid.MustParse(dbModel.ID.String),
 		dbModel.Username.String,
 		dbModel.Password.String,
 		dbModel.Name.String,
@@ -45,8 +45,8 @@ func (r *UserRepository) dbModelToAppModel(dbModel dbModelUsers) (user domains.U
 // dbModelFromAppModel converts domains.User to dbModelUsers for database operations (e.g. insert, update)
 func (r *UserRepository) dbModelFromAppModel(domModel domains.User) (dbModel dbModelUsers) {
 	if domModel.ID() != uuid.Nil {
-		dbModel.Id.String = domModel.ID().String()
-		dbModel.Id.Valid = true
+		dbModel.ID.String = domModel.ID().String()
+		dbModel.ID.Valid = true
 	}
 	if domModel.Username() != "" {
 		dbModel.Username.String = domModel.Username()
@@ -85,9 +85,9 @@ func (r *UserRepository) dbModelFromAppModel(domModel domains.User) (dbModel dbM
 
 // dbModelFromAppFilter converts domains.UserFilter to dbModelUsers for database operations (e.g. select)
 func (r *UserRepository) dbModelFromAppFilter(filter domains.UserFilter) (dbFilter dbModelUsers) {
-	if filter.Id != uuid.Nil {
-		dbFilter.Id.String = filter.Id.String()
-		dbFilter.Id.Valid = true
+	if filter.ID != uuid.Nil {
+		dbFilter.ID.String = filter.ID.String()
+		dbFilter.ID.Valid = true
 	}
 	if filter.Username != "" {
 		dbFilter.Username.String = filter.Username
@@ -129,7 +129,7 @@ func (r *UserRepository) Filter(ctx context.Context, filter domains.UserFilter, 
 		ORDER BY created_at DESC
 		LIMIT ? OFFSET ?
 	`
-	err = r.db.SelectContext(ctx, &dbResult, query, dbFilter.Id, dbFilter.Id, dbFilter.Username, dbFilter.Username, dbFilter.Name, dbFilter.Name, dbFilter.Surname, dbFilter.Surname, dbFilter.Role, dbFilter.Role, limit, (page-1)*limit)
+	err = r.db.SelectContext(ctx, &dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.Username, dbFilter.Username, dbFilter.Name, dbFilter.Name, dbFilter.Surname, dbFilter.Surname, dbFilter.Role, dbFilter.Role, limit, (page-1)*limit)
 	if err != nil {
 		return
 	}
