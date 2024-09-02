@@ -34,7 +34,7 @@ type IUserService interface {
 
 // UserFilter is the struct that represents the user filter.
 type UserFilter struct {
-	Id       uuid.UUID
+	ID       uuid.UUID
 	Username string
 	Name     string
 	Surname  string

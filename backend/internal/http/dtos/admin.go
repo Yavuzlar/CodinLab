@@ -37,3 +37,11 @@ func (m *AdminDTOManager) ToUserAdminDTOs(users []domains.AdminUserDetail) []Adm
 	}
 	return usersDTOs
 }
+
+type AdminUpdateUsersDTO struct {
+	Username      string `json:"username" validate:"omitempty,max=30"`
+	Name          string `json:"name"`
+	Surname       string `json:"surname"`
+	Password      string `json:"newPassword"`
+	GithubProfile string `json:"githubProfile" validate:"omitempty,max=30"`
+}

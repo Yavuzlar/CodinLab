@@ -100,20 +100,20 @@ func (s *adminService) GetProfile(ctx context.Context, userID string) (user *dom
 
 	//Checking if the user exists and retrieving user
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
-		Id: userIDU,
+		ID: userIDU,
 	}, 1, 1)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}
 	if len(users) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid request")
+		return nil, service_errors.NewServiceErrorWithMessage(400, "user not found")
 	}
 	user = &users[0]
 
 	return
 }
 
-func (s *adminService) UpdateUser(ctx context.Context, userID, password, newPassword, username, githubProfile, name, surname string) (err error) {
+func (s *adminService) UpdateUser(ctx context.Context, userID, newPassword, username, githubProfile, name, surname string) (err error) {
 	user, err := s.GetProfile(ctx, userID)
 	if err != nil {
 		return err
@@ -169,7 +169,7 @@ func (s *adminService) DeleteUser(ctx context.Context, userID string) (err error
 		return service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
 	}
 
-	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Id: userIDU}, 1, 1)
+	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{ID: userIDU}, 1, 1)
 	if err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}

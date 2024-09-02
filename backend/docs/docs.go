@@ -16,6 +16,33 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/private/admin/user": {
+            "get": {
+                "description": "Retrieves All Users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get Users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Creates User",
                 "consumes": [
@@ -99,9 +126,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/admin/users": {
-            "get": {
-                "description": "Retrieves All Users",
+        "/private/admin/user/{userID}": {
+            "post": {
+                "description": "Updates User",
                 "consumes": [
                     "application/json"
                 ],
@@ -111,16 +138,28 @@ const docTemplate = `{
                 "tags": [
                     "Admin"
                 ],
-                "summary": "Get Users",
+                "summary": "Updates User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "New User Creds",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.AdminUpdateUsersDTO"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/response.BaseResponse"
                         }
@@ -921,6 +960,28 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.AdminUpdateUsersDTO": {
+            "type": "object",
+            "properties": {
+                "githubProfile": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "name": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 30
+                }
+            }
+        },
         "dto.CreateUserDTO": {
             "type": "object",
             "required": [
@@ -1214,8 +1275,7 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string",
-                    "maxLength": 30,
-                    "minLength": 3
+                    "maxLength": 30
                 }
             }
         },
