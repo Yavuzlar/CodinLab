@@ -2,7 +2,8 @@ package domains
 
 // IRoadService is the interface that provides the methods for the road service.
 type IRoadService interface {
-	GetRoadFilter(userID string, programmingID, pathId int, isStarted, isFinished *bool) ([]Roads, error)
+	GetRoadFilter(userID string, programmingID, pathId int, isStarted, isFinished *bool) ([]Road, error)
+	GetRoadInformation(programmingID int32) (*Road, error)
 	GetUserLanguageRoadStats(userID string) ([]RoadStats, error)
 	GetUserRoadProgressStats(userID string) (progressStats *RoadProgressStats, err error)
 }
@@ -242,64 +243,84 @@ func NewPath(id int, languages []LanguageRoad, quest QuestRoad, isStarted, isFin
 	}
 }
 
-// Roads represents a collection of roads grouped together.
-type Roads struct {
+// Road represents a collection of roads grouped together.
+type Road struct {
 	id          int
 	name        string
 	dockerImage string
 	iconPath    string
 	paths       []Path
+	isStarted   bool
+	isFinished  bool
 }
 
 // Getter and Setter methods for Roads
-func (r *Roads) GetID() int {
+func (r *Road) GetID() int {
 	return r.id
 }
 
-func (r *Roads) SetID(id int) {
+func (r *Road) SetID(id int) {
 	r.id = id
 }
 
-func (r *Roads) GetName() string {
+func (r *Road) GetName() string {
 	return r.name
 }
 
-func (r *Roads) SetName(name string) {
+func (r *Road) SetName(name string) {
 	r.name = name
 }
 
-func (r *Roads) GetDockerImage() string {
+func (r *Road) GetDockerImage() string {
 	return r.dockerImage
 }
 
-func (r *Roads) SetDockerImage(dockerImage string) {
+func (r *Road) SetDockerImage(dockerImage string) {
 	r.dockerImage = dockerImage
 }
 
-func (r *Roads) GetIconPath() string {
+func (r *Road) GetIconPath() string {
 	return r.iconPath
 }
 
-func (r *Roads) SetIconPath(iconPath string) {
+func (r *Road) SetIconPath(iconPath string) {
 	r.iconPath = iconPath
 }
 
-func (r *Roads) GetPaths() []Path {
+func (r *Road) GetPaths() []Path {
 	return r.paths
 }
 
-func (r *Roads) SetPaths(paths []Path) {
+func (r *Road) SetPaths(paths []Path) {
 	r.paths = paths
 }
 
+func (r *Road) GetIsStarted() bool {
+	return r.isStarted
+}
+
+func (r *Road) SetIsStarted(ok bool) {
+	r.isStarted = ok
+}
+
+func (r *Road) GetIsFinished() bool {
+	return r.isFinished
+}
+
+func (r *Road) SetIsFinished(ok bool) {
+	r.isFinished = ok
+}
+
 // NewRoads creates a new instance of Roads
-func NewRoads(id int, name, dockerImage, iconPath string, paths []Path) *Roads {
-	return &Roads{
+func NewRoads(id int, name, dockerImage, iconPath string, paths []Path, isStarted, isFinished bool) *Road {
+	return &Road{
 		id:          id,
 		name:        name,
 		dockerImage: dockerImage,
 		iconPath:    iconPath,
 		paths:       paths,
+		isStarted:   isStarted,
+		isFinished:  isFinished,
 	}
 }
 

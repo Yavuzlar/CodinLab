@@ -14,7 +14,7 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
 	roadRoute.Post("/start", h.Start)
 	roadRoute.Get("/:programmingID", h.GetRoad)
-	root.Get("/path/:programmingID/:pathID", h.GetPath)
+	roadRoute.Get("/path/:programmingID/:pathID", h.GetPath)
 	roadRoute.Get("/general/stats", h.GetUserLanguageRoadStats)
 	roadRoute.Get("/path/data", h.AddDummyRoadData)
 	roadRoute.Get("/progress/stats", h.GetUserRoadProgressStats)
@@ -34,26 +34,21 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 		return err
 	}
 
-	// NEED ROAD SERVICE FOR BOTTOM
-	// We have to get the road that will start according to the id
-	// In that road struct we will change isStarted to true.
-	// And we need road's docker image for DocerService
-
-	// Need Road Service For -> Road title & Docker Image For Log
-	// With road service we will get road by road id and recive docker image.
+	roadInformation, err := h.services.RoadService.GetRoadInformation(start.ProgrammingID)
+	if err != nil {
+		return err
+	}
 
 	// Recive user session from session_store
 	userSession := session_store.GetSessionData(c)
 
-	// Need Spesific imageReference for this. If it's wrong it wont work
-	isExsits, err := h.services.DockerService.IsImageExists(c.Context(), "golang:latest")
+	isExsits, err := h.services.DockerService.IsImageExists(c.Context(), roadInformation.GetDockerImage())
 	if err != nil {
 		return err
 	}
 
 	if !isExsits {
-		// Downloads Spesific Image. This golang fetched from road.json
-		if err := h.services.DockerService.Pull(c.Context(), "golang:latest"); err != nil {
+		if err := h.services.DockerService.Pull(c.Context(), roadInformation.GetDockerImage()); err != nil {
 			return err
 		}
 	}
@@ -74,7 +69,6 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 		}
 	}
 
-	// if the "Road Started Successfully" message recived. The frontend will redirect the user to the spesific road.
 	return response.Response(200, "Road Started Successfully", nil)
 }
 
@@ -93,7 +87,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	num, err := strconv.Atoi(programmingID)
 	if err != nil {
-		return response.Response(400, "Invalid ID", nil)
+		return response.Response(400, "Invalid Programming ID", nil)
 	}
 
 	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, num, 0, nil, nil)
@@ -126,18 +120,17 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{data=dto.PathDTO}
 // @Router /private/path/{programmingID}/{pathID} [get]
 func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
-
 	programmingID := c.Params("programmingID")
 	pathID := c.Params("pathID")
 
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
-		return response.Response(400, "Invalid ID", nil)
+		return response.Response(400, "Invalid Programming ID", nil)
 	}
 
 	intPathID, err := strconv.Atoi(pathID)
 	if err != nil {
-		return response.Response(400, "Invalid ID", nil)
+		return response.Response(400, "Invalid Path ID", nil)
 	}
 
 	session := session_store.GetSessionData(c)
@@ -152,7 +145,6 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	}
 
 	var roadDTO []dto.RoadDTO
-
 	for _, road := range roadData {
 		var pathsDTO []dto.PathDTO
 		for _, path := range road.GetPaths() {
@@ -172,13 +164,14 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/road/general/stats [get]
-func (h *PrivateHandler) GetUserLanguageRoadStats(c *fiber.Ctx) error { //how many roads are there and how many of them are completed according to programming language
+func (h *PrivateHandler) GetUserLanguageRoadStats(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	roadStats, err := h.services.RoadService.GetUserLanguageRoadStats(userSession.UserID)
 	if err != nil {
 		return err
 	}
 	roadDTO := h.dtoManager.RoadDTOManager.ToRoadStatsDTO(roadStats)
+
 	return response.Response(200, "Get User Language Road Stats", roadDTO)
 }
 
@@ -198,6 +191,7 @@ func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
 	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 2)
 	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 1)
 	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, 1, 1)
+
 	return response.Response(200, "Dummy Data Added", nil)
 }
 
@@ -208,12 +202,13 @@ func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/road/progress/stats [get]
-func (h *PrivateHandler) GetUserRoadProgressStats(c *fiber.Ctx) error { //progress,completed
+func (h *PrivateHandler) GetUserRoadProgressStats(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	roadStats, err := h.services.RoadService.GetUserRoadProgressStats(userSession.UserID)
 	if err != nil {
 		return err
 	}
 	roadDTO := h.dtoManager.RoadDTOManager.ToRoadProgressDTO(*roadStats)
+
 	return response.Response(200, "Get User Road Progress Stats", roadDTO)
 }

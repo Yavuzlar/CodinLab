@@ -2,7 +2,7 @@ package services
 
 import (
 	"context"
-	"strconv"
+	"fmt"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 )
@@ -25,14 +25,35 @@ func newRoadService(
 	}
 }
 
-func (s *roadService) getAllRoads(userID string) ([]domains.Roads, error) {
+// Retrieves name, dockerImage and icon path
+func (s *roadService) GetRoadInformation(programmingID int32) (*domains.Road, error) {
 	src, err := s.parserService.GetRoads()
 	if err != nil {
 		return nil, err
 	}
 
-	var roads []domains.Roads
+	var road domains.Road
+	for _, roadCollection := range src {
+		if roadCollection.ID == int(programmingID) {
+			road.SetID(int(programmingID))
+			road.SetName(roadCollection.Name)
+			road.SetDockerImage(roadCollection.DockerImage)
+			road.SetIconPath(roadCollection.IconPath)
 
+			break
+		}
+	}
+
+	return &road, err
+}
+
+func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
+	src, err := s.parserService.GetRoads()
+	if err != nil {
+		return nil, err
+	}
+
+	var roads []domains.Road
 	for _, roadCollection := range src {
 		var newPathList []domains.Path
 
@@ -55,33 +76,71 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Roads, error) {
 			quest := domains.NewQuestRoad(path.Quest.Difficulty, path.Quest.FuncName, tests, params)
 			newPath := domains.NewPath(path.ID, languages, *quest, false, false)
 
-			pathIDString := strconv.Itoa(path.ID)
-			programmingLanguageIDString := strconv.Itoa(roadCollection.ID)
-			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingLanguageIDString, pathIDString, domains.TypePath, domains.ContentStarted)
+			isStarted, isFinished, err := s.getPathStatuses(userID, fmt.Sprintf("%v", roadCollection.ID), fmt.Sprintf("%v", path.ID))
 			if err != nil {
 				return nil, err
-			}
-			if len(logStartedStatus) > 0 {
-				newPath.SetIsStarted(true)
 			}
 
-			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingLanguageIDString, pathIDString, domains.TypePath, domains.ContentCompleted)
-			if err != nil {
-				return nil, err
-			}
-			if len(logFinishedStatus) > 0 {
-				newPath.SetIsFinished(true)
-			}
+			newPath.SetIsStarted(*isStarted)
+			newPath.SetIsFinished(*isFinished)
 
 			newPathList = append(newPathList, *newPath)
 		}
-		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, newPathList))
+
+		isStarted, isFinished, err := s.getRoadStatuses(userID, fmt.Sprintf("%v", roadCollection.ID))
+		if err != nil {
+			return nil, err
+		}
+
+		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, newPathList, *isStarted, *isFinished))
 	}
 
 	return roads, nil
 }
 
-func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, isStarted, isFinished *bool) ([]domains.Roads, error) {
+func (s *roadService) getRoadStatuses(userID, programmingID string) (*bool, *bool, error) {
+	var isStarted, isFinished bool
+	logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingID, "", domains.TypeRoad, domains.ContentStarted)
+	if err != nil {
+		return nil, nil, err
+	}
+	if len(logStartedStatus) > 0 {
+		isStarted = true
+	}
+
+	logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingID, "", domains.TypeRoad, domains.ContentCompleted)
+	if err != nil {
+		return nil, nil, err
+	}
+	if len(logFinishedStatus) > 0 {
+		isFinished = true
+	}
+
+	return &isStarted, &isFinished, err
+}
+
+func (s *roadService) getPathStatuses(userID, programmingID, pathID string) (*bool, *bool, error) {
+	var isStarted, isFinished bool
+	logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingID, pathID, domains.TypePath, domains.ContentStarted)
+	if err != nil {
+		return nil, nil, err
+	}
+	if len(logStartedStatus) > 0 {
+		isStarted = true
+	}
+
+	logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingID, pathID, domains.TypePath, domains.ContentCompleted)
+	if err != nil {
+		return nil, nil, err
+	}
+	if len(logFinishedStatus) > 0 {
+		isFinished = true
+	}
+
+	return &isStarted, &isFinished, err
+}
+
+func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, isStarted, isFinished *bool) ([]domains.Road, error) {
 	allRoads, err := s.getAllRoads(userID)
 
 	if err != nil {
@@ -92,7 +151,7 @@ func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, is
 		return allRoads, nil
 	}
 
-	var filteredRoads []domains.Roads
+	var filteredRoads []domains.Road
 	for _, roadCollection := range allRoads {
 
 		if roadCollection.GetID() != programmingID {
@@ -100,30 +159,33 @@ func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, is
 		}
 
 		var newRoadList []domains.Path
-
-		for _, road := range roadCollection.GetPaths() {
-			if pathId != 0 && road.GetID() != pathId {
+		for _, path := range roadCollection.GetPaths() {
+			if pathId != 0 && path.GetID() != pathId {
 				continue
 			}
 
-			if isStarted != nil && road.GetIsStarted() != *isStarted {
+			if isStarted != nil && path.GetIsStarted() != *isStarted {
 				continue
 			}
 
-			if isFinished != nil && road.GetIsFinished() != *isFinished {
+			if isFinished != nil && path.GetIsFinished() != *isFinished {
 				continue
 			}
 
-			newRoadList = append(newRoadList, road)
+			newRoadList = append(newRoadList, path)
+		}
+
+		isStarted, isFinished, err := s.getRoadStatuses(userID, fmt.Sprintf("%v", roadCollection.GetID()))
+		if err != nil {
+			return nil, err
 		}
 
 		if len(newRoadList) > 0 {
-			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), newRoadList))
+			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), newRoadList, *isStarted, *isFinished))
 		}
 	}
 
 	return filteredRoads, nil
-
 }
 
 func (s *roadService) GetUserLanguageRoadStats(userID string) (programmingLangugageStats []domains.RoadStats, err error) {
