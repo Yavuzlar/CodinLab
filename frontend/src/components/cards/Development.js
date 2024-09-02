@@ -23,11 +23,11 @@ const Development = () => {
   const progresses = [
     {
       name: "Roads", //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.data.data.roadPercentage,
+      value: stateStatistics.data?.data?.roadPercentage,
     },
     {
       name: "Labs", //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.data.data.labPercantage,
+      value: stateStatistics.data?.data?.labPercantage,
     },
   ];
 
