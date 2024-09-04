@@ -92,7 +92,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 			return nil, err
 		}
 
-		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, newPathList, *isStarted, *isFinished))
+		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.Cmd, newPathList, *isStarted, *isFinished))
 	}
 
 	return roads, nil
@@ -181,7 +181,7 @@ func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, is
 		}
 
 		if len(newRoadList) > 0 {
-			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), newRoadList, *isStarted, *isFinished))
+			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetCmd(), newRoadList, *isStarted, *isFinished))
 		}
 	}
 

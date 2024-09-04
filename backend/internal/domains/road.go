@@ -249,6 +249,7 @@ type Road struct {
 	name        string
 	dockerImage string
 	iconPath    string
+	cmd         string
 	paths       []Path
 	isStarted   bool
 	isFinished  bool
@@ -287,6 +288,14 @@ func (r *Road) SetIconPath(iconPath string) {
 	r.iconPath = iconPath
 }
 
+func (r *Road) GetCmd() string {
+	return r.cmd
+}
+
+func (r *Road) SetCmd(cmd string) {
+	r.cmd = cmd
+}
+
 func (r *Road) GetPaths() []Path {
 	return r.paths
 }
@@ -312,12 +321,13 @@ func (r *Road) SetIsFinished(ok bool) {
 }
 
 // NewRoads creates a new instance of Roads
-func NewRoads(id int, name, dockerImage, iconPath string, paths []Path, isStarted, isFinished bool) *Road {
+func NewRoads(id int, name, dockerImage, iconPath, cmd string, paths []Path, isStarted, isFinished bool) *Road {
 	return &Road{
 		id:          id,
 		name:        name,
 		dockerImage: dockerImage,
 		iconPath:    iconPath,
+		cmd:         cmd,
 		paths:       paths,
 		isStarted:   isStarted,
 		isFinished:  isFinished,

@@ -75,7 +75,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 
 			newLabList = append(newLabList, *newLab)
 		}
-		labs = append(labs, *domains.NewLabs(labCollection.ID, labCollection.Name, labCollection.DockerImage, labCollection.IconPath, newLabList))
+		labs = append(labs, *domains.NewLabs(labCollection.ID, labCollection.Name, labCollection.DockerImage, labCollection.IconPath, labCollection.Cmd, newLabList))
 	}
 
 	return labs, nil
@@ -119,6 +119,7 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 				labCollection.GetName(),
 				labCollection.GetDockerImage(),
 				labCollection.GetIconPath(),
+				labCollection.GetCmd(),
 				newLabList,
 			))
 		}

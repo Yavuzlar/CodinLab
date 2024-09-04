@@ -6,6 +6,7 @@
         "labDir": "object/labs/c++",
         "pathDir": "object/paths/c++",
         "iconPath": "images/c++.png",
+        "cmd": "g++ -o main main.cpp && ./main",
         "language": [
             {
                 "lang": "en",
@@ -26,6 +27,7 @@
         "labDir": "object/labs/golang",
         "pathDir": "object/paths/golang",
         "iconPath": "images/go.png",
+        "cmd": "go run main.go",
         "language": [
             {
                 "lang": "en",
