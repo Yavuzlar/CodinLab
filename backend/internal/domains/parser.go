@@ -19,6 +19,7 @@ type InventoryP struct {
 	PathDir     string      `json:"pathDir"`
 	LabDir      string      `json:"labDir"`
 	IconPath    string      `json:"iconPath"`
+	Cmd         string      `json:"cmd"`
 	Languages   []LanguageP `json:"languages"`
 }
 
@@ -65,6 +66,7 @@ type LabsP struct {
 	Name        string
 	DockerImage string
 	IconPath    string
+	Cmd         string
 	Labs        []LabP
 }
 
@@ -81,6 +83,7 @@ type RoadP struct {
 	Name        string
 	DockerImage string
 	IconPath    string
+	Cmd         string
 	Paths       []PathP
 }
 
