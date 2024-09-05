@@ -14,7 +14,7 @@ import (
 // UserLanguageLabStatsDto represents the DTO for user language lab statistics
 
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
-	root.Get("/labs/:ID", h.GetLabsByID)
+	root.Get("/labs/:programmingID", h.GetLabsByID)
 	root.Get("/lab/:programmingID/:labID", h.GetLabByID)
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
@@ -78,20 +78,28 @@ func (h *PrivateHandler) GetUserLabProgressStats(c *fiber.Ctx) error {
 }
 
 // @Tags Lab
-// @Summary GetLabsById
+// @Summary GetLabs
 // @Description Get Labs By Programming Language ID
 // @Accept json
 // @Produce json
-// @Param ID path string true "Programming Language ID"
+// @Param programmingID path string true "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/{ID} [get]
+// @Router /private/labs/{programmingID} [get]
 func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
-	ID := c.Params("ID")
-	indID, err := strconv.Atoi(ID)
+	programmingID := c.Params("programmingID")
+	indID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return response.Response(400, "Invalid ID", nil)
 	}
 	userSession := session_store.GetSessionData(c)
+
+	isExist, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeProgrammingLanguage, domains.ContentStarted, int32(indID), 0)
+	if err != nil {
+		return response.Response(500, "Log Check Error", nil)
+	}
+	if !isExist {
+		return response.Response(500, "Programming Language could not started", nil)
+	}
 
 	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, indID, 0, nil, nil)
 	if err != nil {
