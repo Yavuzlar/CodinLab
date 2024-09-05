@@ -6,6 +6,7 @@ type IRoadService interface {
 	GetRoadInformation(programmingID int32) (*Road, error)
 	GetUserLanguageRoadStats(userID string) ([]RoadStats, error)
 	GetUserRoadProgressStats(userID string) (progressStats *RoadProgressStats, err error)
+	CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []TestRoad) (string, error)
 }
 
 // LanguageRoad represents the details of a programming language.
@@ -245,14 +246,16 @@ func NewPath(id int, languages []LanguageRoad, quest QuestRoad, isStarted, isFin
 
 // Road represents a collection of roads grouped together.
 type Road struct {
-	id          int
-	name        string
-	dockerImage string
-	iconPath    string
-	cmd         string
-	paths       []Path
-	isStarted   bool
-	isFinished  bool
+	id            int
+	name          string
+	dockerImage   string
+	iconPath      string
+	cmd           string
+	fileExtension string
+	templatePath  string
+	paths         []Path
+	isStarted     bool
+	isFinished    bool
 }
 
 // Getter and Setter methods for Roads
@@ -296,6 +299,22 @@ func (r *Road) SetCmd(cmd string) {
 	r.cmd = cmd
 }
 
+func (r *Road) GetFileExtension() string {
+	return r.fileExtension
+}
+
+func (r *Road) SetFileExtension(fileExtension string) {
+	r.fileExtension = fileExtension
+}
+
+func (r *Road) GetTemplatePath() string {
+	return r.templatePath
+}
+
+func (r *Road) SetTemplatePath(templatePath string) {
+	r.templatePath = templatePath
+}
+
 func (r *Road) GetPaths() []Path {
 	return r.paths
 }
@@ -321,16 +340,18 @@ func (r *Road) SetIsFinished(ok bool) {
 }
 
 // NewRoads creates a new instance of Roads
-func NewRoads(id int, name, dockerImage, iconPath, cmd string, paths []Path, isStarted, isFinished bool) *Road {
+func NewRoads(id int, name, dockerImage, iconPath, cmd, fileExtension, templatePath string, paths []Path, isStarted, isFinished bool) *Road {
 	return &Road{
-		id:          id,
-		name:        name,
-		dockerImage: dockerImage,
-		iconPath:    iconPath,
-		cmd:         cmd,
-		paths:       paths,
-		isStarted:   isStarted,
-		isFinished:  isFinished,
+		id:            id,
+		name:          name,
+		dockerImage:   dockerImage,
+		iconPath:      iconPath,
+		cmd:           cmd,
+		fileExtension: fileExtension,
+		templatePath:  templatePath,
+		paths:         paths,
+		isStarted:     isStarted,
+		isFinished:    isFinished,
 	}
 }
 

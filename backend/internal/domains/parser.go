@@ -13,14 +13,16 @@ type IParserService interface {
 
 // Inventory represents the information related to an item in inventory.
 type InventoryP struct {
-	ID          int         `json:"id"`
-	Name        string      `json:"name"`
-	DockerImage string      `json:"dockerImage"`
-	PathDir     string      `json:"pathDir"`
-	LabDir      string      `json:"labDir"`
-	IconPath    string      `json:"iconPath"`
-	Cmd         string      `json:"cmd"`
-	Languages   []LanguageP `json:"languages"`
+	ID            int         `json:"id"`
+	Name          string      `json:"name"`
+	DockerImage   string      `json:"dockerImage"`
+	PathDir       string      `json:"pathDir"`
+	LabDir        string      `json:"labDir"`
+	IconPath      string      `json:"iconPath"`
+	Cmd           string      `json:"cmd"`
+	FileExtension string      `json:"fileExtension"`
+	TemplatePath  string      `json:"templatePath"`
+	Languages     []LanguageP `json:"languages"`
 }
 
 // Language represents the details of a programming language.
@@ -62,12 +64,14 @@ type LabP struct {
 
 // Labs represents a collection of labs grouped together.
 type LabsP struct {
-	ID          int
-	Name        string
-	DockerImage string
-	IconPath    string
-	Cmd         string
-	Labs        []LabP
+	ID            int
+	Name          string
+	DockerImage   string
+	IconPath      string
+	Cmd           string
+	FileExtension string
+	TemplatePath  string
+	Labs          []LabP
 }
 
 // Path represents a coding learning path.
@@ -79,12 +83,14 @@ type PathP struct {
 
 // Road represents a collection of learning paths.
 type RoadP struct {
-	ID          int
-	Name        string
-	DockerImage string
-	IconPath    string
-	Cmd         string
-	Paths       []PathP
+	ID            int
+	Name          string
+	DockerImage   string
+	IconPath      string
+	Cmd           string
+	FileExtension string
+	TemplatePath  string
+	Paths         []PathP
 }
 
 type LevelP struct {

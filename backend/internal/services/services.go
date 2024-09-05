@@ -8,13 +8,13 @@ type Services struct {
 	UtilService   IUtilService
 	UserService   domains.IUserService
 	LogService    domains.ILogService
-	DockerService domains.IDockerService
 	ParserService domains.IParserService
 	LabService    domains.ILabService
 	RoadService   domains.IRoadService
 	LevelService  domains.ILevelService
 	HomeService   domains.IHomeService
 	AdminService  domains.IAdminService
+	CodeService   domains.ICodeService
 	// diğer servisler buraya eklenecek
 }
 
@@ -30,16 +30,15 @@ func CreateNewServices(
 	parserService := newParserService(utilsService)
 	levelService := newLevelService(utilsService, logService, parserService, userRepositories)
 	userService := newUserService(userRepositories, logService, parserService, utilsService)
-	dockerService := newDockerService(utilsService)
 	labService := newLabService(utilsService, logService, parserService)
 	roadService := newRoadService(utilsService, logService, parserService)
 	homeService := newHomeService(utilsService, logService, parserService, levelService)
 	adminService := newAdminService(userRepositories, logService, parserService, levelService, utilsService)
+	codeService := NewCodeService()
 	// diğer servisler buraya eklenecek
 
 	return &Services{
 		UtilService:   utilsService,
-		DockerService: dockerService,
 		UserService:   userService,
 		LogService:    logService,
 		ParserService: parserService,
@@ -48,6 +47,7 @@ func CreateNewServices(
 		LevelService:  levelService,
 		HomeService:   homeService,
 		AdminService:  adminService,
+		CodeService:   codeService,
 		// diğer servisler buraya eklenecek
 
 	}

@@ -259,6 +259,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/lab/answer": {
+            "get": {
+                "description": "If you are in frontend team. DO NOT LOOK AT THIS!",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TEST"
+                ],
+                "summary": "This is backend test",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/lab/data": {
             "get": {
                 "description": "Add dummy data for testing",
@@ -1025,6 +1048,12 @@ const docTemplate = `{
             "properties": {
                 "iconPath": {
                     "type": "string"
+                },
+                "isFinished": {
+                    "type": "boolean"
+                },
+                "isStarted": {
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"

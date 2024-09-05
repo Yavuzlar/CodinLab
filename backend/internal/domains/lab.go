@@ -7,6 +7,7 @@ type ILabService interface {
 	GetUserLabDifficultyStats(userID string) (userLabDifficultyStats UserLabDifficultyStats, err error)
 	GetUserLabProgressStats(userID string) (userLabProgressStats UserLabProgressStats, err error)
 	CountLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) (counter int, err error)
+	CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []TestLab) (string, error)
 }
 
 // ProgrammingLanguageStats represents the statistics for a specific language lab.
@@ -311,12 +312,14 @@ func (l *Lab) SetIsFinished(isFinished bool) {
 
 // Labs represents a collection of labs grouped together.
 type Labs struct {
-	id          int
-	name        string
-	dockerImage string
-	iconPath    string
-	cmd         string
-	labs        []Lab
+	id            int
+	name          string
+	dockerImage   string
+	iconPath      string
+	cmd           string
+	fileExtension string
+	templatePath  string
+	labs          []Lab
 }
 
 // Getter and Setter methods for Labs
@@ -358,6 +361,22 @@ func (l *Labs) GetCmd() string {
 
 func (l *Labs) SetCmd(cmd string) {
 	l.cmd = cmd
+}
+
+func (l *Labs) GetFileExtension() string {
+	return l.fileExtension
+}
+
+func (l *Labs) SetFileExtension(fileExtension string) {
+	l.fileExtension = fileExtension
+}
+
+func (l *Labs) GetTemplatePath() string {
+	return l.templatePath
+}
+
+func (l *Labs) SetTemplatePath(templatePath string) {
+	l.templatePath = templatePath
 }
 
 func (l *Labs) GetLabs() []Lab {
@@ -446,13 +465,15 @@ func NewLab(id int, languages []LanguageLab, quest QuestLab, isStarted, isFinish
 }
 
 // NewLabs creates a new instance of Labs
-func NewLabs(id int, name, dockerImage, iconPath, cmd string, labs []Lab) *Labs {
+func NewLabs(id int, name, dockerImage, iconPath, cmd, fileExtension, templatePath string, labs []Lab) *Labs {
 	return &Labs{
-		id:          id,
-		name:        name,
-		dockerImage: dockerImage,
-		iconPath:    iconPath,
-		cmd:         cmd,
-		labs:        labs,
+		id:            id,
+		name:          name,
+		dockerImage:   dockerImage,
+		iconPath:      iconPath,
+		cmd:           cmd,
+		fileExtension: fileExtension,
+		templatePath:  templatePath,
+		labs:          labs,
 	}
 }

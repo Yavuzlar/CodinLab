@@ -3,8 +3,12 @@ package services
 import (
 	"context"
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
+	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 )
 
 type roadService struct {
@@ -33,15 +37,22 @@ func (s *roadService) GetRoadInformation(programmingID int32) (*domains.Road, er
 	}
 
 	var road domains.Road
+	var isRoad bool
 	for _, roadCollection := range src {
 		if roadCollection.ID == int(programmingID) {
+			isRoad = true
 			road.SetID(int(programmingID))
 			road.SetName(roadCollection.Name)
 			road.SetDockerImage(roadCollection.DockerImage)
 			road.SetIconPath(roadCollection.IconPath)
-
+			road.SetCmd(roadCollection.Cmd)
+			road.SetFileExtension(roadCollection.FileExtension)
 			break
 		}
+	}
+
+	if !isRoad {
+		return nil, err
 	}
 
 	return &road, err
@@ -92,7 +103,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 			return nil, err
 		}
 
-		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.Cmd, newPathList, *isStarted, *isFinished))
+		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.Cmd, roadCollection.FileExtension, roadCollection.TemplatePath, newPathList, *isStarted, *isFinished))
 	}
 
 	return roads, nil
@@ -181,7 +192,7 @@ func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, is
 		}
 
 		if len(newRoadList) > 0 {
-			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetCmd(), newRoadList, *isStarted, *isFinished))
+			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetCmd(), roadCollection.GetFileExtension(), roadCollection.GetTemplatePath(), newRoadList, *isStarted, *isFinished))
 		}
 	}
 
@@ -240,4 +251,66 @@ func (s *roadService) GetUserRoadProgressStats(userID string) (progressStats *do
 		float32(completed)/float32(totalRoads)*100,
 	)
 	return
+}
+
+// this func choses the template according to the programming language
+func (s *roadService) CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []domains.TestRoad) (string, error) {
+	if programmingName == "GO" {
+		return s.goRoadTemplateWriter(templatePathObject, content, funcName, tests)
+	}
+
+	return "", service_errors.NewServiceErrorWithMessage(500, "Programming language not supported")
+
+}
+
+func (s *roadService) goRoadTemplateWriter(templatePathObject, content, funcName string, tests []domains.TestRoad) (string, error) {
+	temp, err := os.ReadFile(templatePathObject)
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while reading go template", err)
+	}
+
+	replace := strings.Replace(string(temp), "#funccall", funcName, -1)
+	imports := extractor.ExtractImports(content) //slice imports and code
+	replace = strings.Replace(replace, "#imports", imports, -1)
+	userfunc, err := extractor.ExtractFunction(content, funcName) // slice users code to get the function
+	if err != nil {
+		return "", err
+	}
+	replace = strings.Replace(replace, "#funcs", userfunc, -1)                         //replace the function with the user function
+	result := "var tests=[]struct{\n input []interface{}\n output []interface{}\n}{\n" // Test struct is created to add to the template
+
+	for _, test := range tests {
+		result = result + "\t{input:[]interface{} {"
+		for i, input := range test.GetInput() {
+			var myInterface interface{} = input
+			switch myInterface.(type) {
+			case string:
+				result = result + fmt.Sprintf("\t\"%v\"", input)
+			default:
+				result = result + fmt.Sprintf("\t%v", input)
+			}
+			if len(test.GetInput()) != i+1 {
+				result += ","
+			}
+
+		}
+		result = result + "}, output:[]interface{} {"
+		for i, output := range test.GetOutput() {
+			var myInterface interface{} = output
+			switch myInterface.(type) {
+			case string:
+				result = result + fmt.Sprintf("\t\"%v\"", output)
+			default:
+				result = result + fmt.Sprintf("\t%v", output)
+			}
+			if len(test.GetInput()) != i+1 {
+				result += ","
+			}
+		}
+		result += "}},\n"
+	}
+	result = result + "}"
+	replace = strings.Replace(replace, "#tests", result, -1)
+
+	return replace, nil
 }

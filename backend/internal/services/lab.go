@@ -2,9 +2,14 @@ package services
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"strconv"
+	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
+	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 )
 
 type labService struct {
@@ -75,7 +80,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 
 			newLabList = append(newLabList, *newLab)
 		}
-		labs = append(labs, *domains.NewLabs(labCollection.ID, labCollection.Name, labCollection.DockerImage, labCollection.IconPath, labCollection.Cmd, newLabList))
+		labs = append(labs, *domains.NewLabs(labCollection.ID, labCollection.Name, labCollection.DockerImage, labCollection.IconPath, labCollection.Cmd, labCollection.FileExtension, labCollection.TemplatePath, newLabList))
 	}
 
 	return labs, nil
@@ -120,6 +125,8 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 				labCollection.GetDockerImage(),
 				labCollection.GetIconPath(),
 				labCollection.GetCmd(),
+				labCollection.GetFileExtension(),
+				labCollection.GetTemplatePath(),
 				newLabList,
 			))
 		}
@@ -262,4 +269,65 @@ func (s *labService) GetUserLabDifficultyStats(userID string) (userLabDifficulty
 		hardPercentage,
 	)
 	return
+}
+
+// Bu kısımda bütün diller için template oluşturma kısmı gelicek.
+func (s *labService) CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []domains.TestLab) (string, error) {
+	if programmingName == "GO" {
+		return s.goLabTemplate(templatePathObject, content, funcName, tests)
+	}
+
+	return "", service_errors.NewServiceErrorWithMessage(500, "this programming language not supported")
+}
+
+func (s *labService) goLabTemplate(templatePathObject, content, funcName string, tests []domains.TestLab) (string, error) {
+	temp, err := os.ReadFile(templatePathObject)
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while reading go template", err)
+	}
+
+	replace := strings.Replace(string(temp), "#funccall", funcName, -1)
+	imports := extractor.ExtractImports(content) //slice imports and code
+	replace = strings.Replace(replace, "#imports", imports, -1)
+	userfunc, err := extractor.ExtractFunction(content, funcName) // slice users code to get the function
+	if err != nil {
+		return "", err
+	}
+	replace = strings.Replace(replace, "#funcs", userfunc, -1)                         //replace the function with the user function
+	result := "var tests=[]struct{\n input []interface{}\n output []interface{}\n}{\n" //Template içerisine eklemek için test structı oluşturulur
+
+	for _, test := range tests {
+		result = result + "\t{input:[]interface{} {"
+		for i, input := range test.GetInput() {
+			var myInterface interface{} = input
+			switch myInterface.(type) {
+			case string:
+				result = result + fmt.Sprintf("\t\"%v\"", input)
+			default:
+				result = result + fmt.Sprintf("\t%v", input)
+			}
+			if len(test.GetInput()) != i+1 {
+				result += ","
+			}
+
+		}
+		result = result + "}, output:[]interface{} {"
+		for i, output := range test.GetOutput() {
+			var myInterface interface{} = output
+			switch myInterface.(type) {
+			case string:
+				result = result + fmt.Sprintf("\t\"%v\"", output)
+			default:
+				result = result + fmt.Sprintf("\t%v", output)
+			}
+			if len(test.GetInput()) != i+1 {
+				result += ","
+			}
+		}
+		result += "}},\n"
+	}
+	result = result + "}"
+	replace = strings.Replace(replace, "#tests", result, -1)
+
+	return replace, nil
 }
