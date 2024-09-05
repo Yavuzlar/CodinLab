@@ -1,6 +1,7 @@
 package private
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -19,6 +20,7 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
 	root.Get("/lab/data", h.AddDummyLabData)
+	root.Get("/lab/answer", h.Answer)
 }
 
 // @Tags Lab
@@ -174,3 +176,54 @@ func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
 
 	return response.Response(200, "Dummy Data Added", nil)
 }
+
+// @Tags TEST
+// @Summary This is backend test
+// @Description If you are in frontend team. DO NOT LOOK AT THIS!
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/lab/answer [get]
+func (h *PrivateHandler) Answer(c *fiber.Ctx) error {
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), "1-2-3-4-5-6", 1, 1, domains.TypeLab, "go", "func palindrome()string{\n\treturn \"sela\"\n}")
+	if err != nil {
+		return err
+	}
+
+	tmpContent, err := h.services.LabService.CodeTemplateGenerator("GO", "object/template/go.txt", "func palindrome()string{\n\treturn \"sela\"\n}", "palindrome", []domains.TestLab{*domains.NewTestLab([]string{}, []string{"selam"})})
+	if err != nil {
+		return err
+	}
+
+	if err := h.services.CodeService.CreateFile(tmpPath, tmpContent); err != nil {
+		return err
+	}
+
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), "golang:latest", tmpPath, []string{"go", "run", "main.go"})
+	if err != nil {
+		return err
+	}
+	fmt.Println(logs)
+	return response.Response(200, logs, nil)
+}
+
+// func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error{
+// 	userSession := session_store.GetSessionData(c) userID alıyoruz.
+// labID, progrramingID, userCode buraya kullanıcıdan gelicek.
+
+// Bu kısımda alttaki kodları kullanmak için labID yi kullanarak istenilen lab'ı çekiyoruz. LabFilter ile.
+
+// tmpFilePath := UploadUserCode(content, extention)
+
+// ProgrammignID kullanarak programming Name'i çek
+// Burada lab servisteki CodeTemplateGenerator Çalıştırılıcak. Bu programming name alıcak parametre olarak
+// zaten lab servis yukarıda çekilde oradaki testler kullanılıcaktır.
+
+// templateContent, err := CodeTemplateGenerator(programmingName, templatePath, content, funcName string, tests []domains.TestLab)
+
+// Bu kullanılarak alttaki tmp ye yazma işlemi yapılıcak.
+//  s.codeService.CreateFile(tmpFilePath, templateContent)
+
+// Burada da pathi vericez template'in o template'i mount olarak ekliyeceğiz.
+// s.codeService.RunContainerWithMount(ctx context.Context, image string, cmd []string, relativePath string)
+// }

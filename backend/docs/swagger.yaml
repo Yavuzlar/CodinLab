@@ -48,6 +48,10 @@ definitions:
     properties:
       iconPath:
         type: string
+      isFinished:
+        type: boolean
+      isStarted:
+        type: boolean
       name:
         type: string
       paths:
@@ -434,6 +438,21 @@ paths:
       summary: GetLabByID
       tags:
       - Lab
+  /private/lab/answer:
+    get:
+      consumes:
+      - application/json
+      description: If you are in frontend team. DO NOT LOOK AT THIS!
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: This is backend test
+      tags:
+      - TEST
   /private/lab/data:
     get:
       consumes:

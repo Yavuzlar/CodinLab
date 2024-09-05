@@ -31,25 +31,28 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 	var start dto.StartDTO
 	if err := c.BodyParser(&start); err != nil {
-		return err
+		return response.Response(400, "Invalid Request", nil)
 	}
 
 	roadInformation, err := h.services.RoadService.GetRoadInformation(start.ProgrammingID)
 	if err != nil {
-		return err
+		return response.Response(500, "Road Information Error", nil)
+	}
+	if roadInformation == nil {
+		return response.Response(404, "Road Not Found", nil)
 	}
 
 	// Recive user session from session_store
 	userSession := session_store.GetSessionData(c)
 
-	isExsits, err := h.services.DockerService.IsImageExists(c.Context(), roadInformation.GetDockerImage())
+	isExsits, err := h.services.CodeService.IsImageExists(c.Context(), roadInformation.GetDockerImage())
 	if err != nil {
-		return err
+		return response.Response(500, "Docker Image Check Error", nil)
 	}
 
 	if !isExsits {
-		if err := h.services.DockerService.Pull(c.Context(), roadInformation.GetDockerImage()); err != nil {
-			return err
+		if err := h.services.CodeService.Pull(c.Context(), roadInformation.GetDockerImage()); err != nil {
+			return response.Response(500, "Docker Image Pull Error", nil)
 		}
 	}
 
@@ -57,7 +60,7 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 	// Log a road start event for the user
 	ok, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.ProgrammingID, 0)
 	if err != nil {
-		return err
+		return response.Response(500, "Log Check Error", nil)
 	}
 
 	if !ok {
