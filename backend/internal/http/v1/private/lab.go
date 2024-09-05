@@ -1,10 +1,11 @@
 package private
 
 import (
-	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -20,7 +21,7 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
 	root.Get("/lab/data", h.AddDummyLabData)
-	root.Get("/lab/answer", h.Answer)
+	root.Post("/lab/answer", h.AnswerLab)
 }
 
 // @Tags Lab
@@ -177,20 +178,43 @@ func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
 	return response.Response(200, "Dummy Data Added", nil)
 }
 
-// @Tags TEST
-// @Summary This is backend test
-// @Description If you are in frontend team. DO NOT LOOK AT THIS!
+// @Tags Lab
+// @Summary Answer
+// @Description This is for answering quests.
 // @Accept json
 // @Produce json
+// @Param answerLabDTO body dto.AnswerLabDTO true "Answer Lab DTO"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/lab/answer [get]
-func (h *PrivateHandler) Answer(c *fiber.Ctx) error {
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), "1-2-3-4-5-6", 1, 1, domains.TypeLab, "go", "func palindrome()string{\n\treturn \"sela\"\n}")
+// @Router /private/lab/answer [post]
+func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
+	var answerLabDTO dto.AnswerLabDTO
+	if err := c.BodyParser(&answerLabDTO); err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "Invalid Format", err)
+	}
+
+	userSession := session_store.GetSessionData(c)
+	roadInformation, err := h.services.RoadService.GetRoadInformation(int32(answerLabDTO.ProgrammingID))
+	if err != nil {
+		return response.Response(500, "Road Information Error", nil)
+	}
+	if roadInformation == nil {
+		return response.Response(404, "Road Not Found", nil)
+	}
+
+	lab, err := h.services.LabService.GetLabByID(userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID)
+	if err != nil {
+		return response.Response(404, "Error While Getting Lab", nil)
+	}
+	if lab == nil {
+		return response.Response(404, "Lab Not Found", nil)
+	}
+
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID, domains.TypeLab, roadInformation.GetFileExtension(), answerLabDTO.UserCode)
 	if err != nil {
 		return err
 	}
 
-	tmpContent, err := h.services.LabService.CodeTemplateGenerator("GO", "object/template/go.txt", "func palindrome()string{\n\treturn \"sela\"\n}", "palindrome", []domains.TestLab{*domains.NewTestLab([]string{}, []string{"selam"})})
+	tmpContent, err := h.services.LabService.CodeTemplateGenerator(roadInformation.GetName(), roadInformation.GetTemplatePath(), answerLabDTO.UserCode, lab.GetQuest().GetFuncName(), lab.GetQuest().GetTests())
 	if err != nil {
 		return err
 	}
@@ -199,31 +223,27 @@ func (h *PrivateHandler) Answer(c *fiber.Ctx) error {
 		return err
 	}
 
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), "golang:latest", tmpPath, []string{"go", "run", "main.go"})
+	// FIXME: Labs/C++ tıkaldığında get all yapıyor ya. Orada loglarda kontrol edelim. Eğer o c++ image'i yüklenmediyse dil başlamamıştır. Adamı geri başka yere yollarız.
+	isExsits, err := h.services.CodeService.IsImageExists(c.Context(), roadInformation.GetDockerImage())
+	if err != nil {
+		return response.Response(500, "Docker Image Check Error", nil)
+	}
+
+	if !isExsits {
+		if err := h.services.CodeService.Pull(c.Context(), roadInformation.GetDockerImage()); err != nil {
+			return response.Response(500, "Docker Image Pull Error", nil)
+		}
+	}
+	// FIXME: Şimdilik üst taraf kalıyor.
+
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), roadInformation.GetDockerImage(), tmpPath, strings.Split(roadInformation.GetCmd(), " "))
 	if err != nil {
 		return err
 	}
-	fmt.Println(logs)
+
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, int32(answerLabDTO.ProgrammingID), int32(answerLabDTO.LabID)); err != nil {
+		return response.Response(500, "Docker Image Pull Error", nil)
+	}
+
 	return response.Response(200, logs, nil)
 }
-
-// func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error{
-// 	userSession := session_store.GetSessionData(c) userID alıyoruz.
-// labID, progrramingID, userCode buraya kullanıcıdan gelicek.
-
-// Bu kısımda alttaki kodları kullanmak için labID yi kullanarak istenilen lab'ı çekiyoruz. LabFilter ile.
-
-// tmpFilePath := UploadUserCode(content, extention)
-
-// ProgrammignID kullanarak programming Name'i çek
-// Burada lab servisteki CodeTemplateGenerator Çalıştırılıcak. Bu programming name alıcak parametre olarak
-// zaten lab servis yukarıda çekilde oradaki testler kullanılıcaktır.
-
-// templateContent, err := CodeTemplateGenerator(programmingName, templatePath, content, funcName string, tests []domains.TestLab)
-
-// Bu kullanılarak alttaki tmp ye yazma işlemi yapılıcak.
-//  s.codeService.CreateFile(tmpFilePath, templateContent)
-
-// Burada da pathi vericez template'in o template'i mount olarak ekliyeceğiz.
-// s.codeService.RunContainerWithMount(ctx context.Context, image string, cmd []string, relativePath string)
-// }

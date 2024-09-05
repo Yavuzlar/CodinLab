@@ -15,6 +15,15 @@ definitions:
         maxLength: 30
         type: string
     type: object
+  dto.AnswerLabDTO:
+    properties:
+      labID:
+        type: integer
+      programmindID:
+        type: integer
+      userCode:
+        type: string
+    type: object
   dto.CreateUserDTO:
     properties:
       githubProfile:
@@ -439,10 +448,17 @@ paths:
       tags:
       - Lab
   /private/lab/answer:
-    get:
+    post:
       consumes:
       - application/json
-      description: If you are in frontend team. DO NOT LOOK AT THIS!
+      description: This is for answering quests.
+      parameters:
+      - description: Answer Lab DTO
+        in: body
+        name: answerLabDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AnswerLabDTO'
       produces:
       - application/json
       responses:
@@ -450,9 +466,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: This is backend test
+      summary: Answer
       tags:
-      - TEST
+      - Lab
   /private/lab/data:
     get:
       consumes:

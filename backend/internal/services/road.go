@@ -47,6 +47,7 @@ func (s *roadService) GetRoadInformation(programmingID int32) (*domains.Road, er
 			road.SetIconPath(roadCollection.IconPath)
 			road.SetCmd(roadCollection.Cmd)
 			road.SetFileExtension(roadCollection.FileExtension)
+			road.SetTemplatePath(roadCollection.TemplatePath)
 			break
 		}
 	}

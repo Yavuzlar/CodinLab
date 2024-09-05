@@ -38,7 +38,7 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 
 // Bunu Answer Kısmınlarında Kullanacaksın.
 func (s *codeService) UploadUserCode(ctx context.Context, userID string, programmingLanguageID, PathLabID int, codeType, fileExtention, content string) (string, error) {
-	if err := s.createCodeFile(ctx, userID); err != nil {
+	if err := s.createCodeFile(userID); err != nil {
 		return "", err
 	}
 
@@ -79,7 +79,7 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID string, program
 	return codeTmpPath, nil
 }
 
-func (s *codeService) createCodeFile(ctx context.Context, userID string) (err error) {
+func (s *codeService) createCodeFile(userID string) (err error) {
 	mainDir := "usercodes"
 	userDir := fmt.Sprintf("%v/%v", mainDir, userID)
 	labDir := fmt.Sprintf("%v/labs", userDir)

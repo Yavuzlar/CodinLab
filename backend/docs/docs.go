@@ -260,8 +260,8 @@ const docTemplate = `{
             }
         },
         "/private/lab/answer": {
-            "get": {
-                "description": "If you are in frontend team. DO NOT LOOK AT THIS!",
+            "post": {
+                "description": "This is for answering quests.",
                 "consumes": [
                     "application/json"
                 ],
@@ -269,9 +269,20 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "TEST"
+                    "Lab"
                 ],
-                "summary": "This is backend test",
+                "summary": "Answer",
+                "parameters": [
+                    {
+                        "description": "Answer Lab DTO",
+                        "name": "answerLabDTO",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.AnswerLabDTO"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1002,6 +1013,20 @@ const docTemplate = `{
                 "username": {
                     "type": "string",
                     "maxLength": 30
+                }
+            }
+        },
+        "dto.AnswerLabDTO": {
+            "type": "object",
+            "properties": {
+                "labID": {
+                    "type": "integer"
+                },
+                "programmindID": {
+                    "type": "integer"
+                },
+                "userCode": {
+                    "type": "string"
                 }
             }
         },

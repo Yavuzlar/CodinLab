@@ -2,12 +2,13 @@ package domains
 
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
-	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]Labs, error)
+	GetLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) ([]Labs, error)
 	GetUserLanguageLabStats(userID string) (programmingLangugageStats []ProgrammingLanguageStats, err error)
 	GetUserLabDifficultyStats(userID string) (userLabDifficultyStats UserLabDifficultyStats, err error)
 	GetUserLabProgressStats(userID string) (userLabProgressStats UserLabProgressStats, err error)
-	CountLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) (counter int, err error)
+	CountLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) (counter int, err error)
 	CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []TestLab) (string, error)
+	GetLabByID(userID string, programmingID, labID int) (lab *Lab, err error)
 }
 
 // ProgrammingLanguageStats represents the statistics for a specific language lab.
@@ -312,7 +313,7 @@ func (l *Lab) SetIsFinished(isFinished bool) {
 
 // Labs represents a collection of labs grouped together.
 type Labs struct {
-	id            int
+	id            int // programming ID
 	name          string
 	dockerImage   string
 	iconPath      string
