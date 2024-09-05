@@ -317,7 +317,7 @@ type Labs struct {
 	name          string
 	dockerImage   string
 	iconPath      string
-	cmd           string
+	cmd           []string
 	fileExtension string
 	templatePath  string
 	labs          []Lab
@@ -356,11 +356,11 @@ func (l *Labs) SetIconPath(iconPath string) {
 	l.iconPath = iconPath
 }
 
-func (l *Labs) GetCmd() string {
+func (l *Labs) GetCmd() []string {
 	return l.cmd
 }
 
-func (l *Labs) SetCmd(cmd string) {
+func (l *Labs) SetCmd(cmd []string) {
 	l.cmd = cmd
 }
 
@@ -466,7 +466,7 @@ func NewLab(id int, languages []LanguageLab, quest QuestLab, isStarted, isFinish
 }
 
 // NewLabs creates a new instance of Labs
-func NewLabs(id int, name, dockerImage, iconPath, cmd, fileExtension, templatePath string, labs []Lab) *Labs {
+func NewLabs(id int, name, dockerImage, iconPath, fileExtension, templatePath string, cmd []string, labs []Lab) *Labs {
 	return &Labs{
 		id:            id,
 		name:          name,
