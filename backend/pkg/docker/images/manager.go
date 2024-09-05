@@ -43,6 +43,7 @@ func (m *Manager) IsImageExists(ctx context.Context, imageReference string) (isE
 }
 
 func (m *Manager) Pull(ctx context.Context, imageReference string) error {
+	fmt.Println("Pulling image", imageReference)
 	out, err := m.cli.ImagePull(ctx, imageReference, image.PullOptions{})
 	if err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while pulling an image", err)

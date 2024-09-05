@@ -10,10 +10,6 @@ func NewRoadDTOManager() RoadDTOManager {
 	return RoadDTOManager{}
 }
 
-type StartDTO struct {
-	ProgrammingID int32 `json:"programmingID" validate:"required"`
-}
-
 type LanguageDTO struct {
 	Lang        string `json:"lang"`
 	Title       string `json:"title"`

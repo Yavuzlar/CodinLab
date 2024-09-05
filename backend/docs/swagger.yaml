@@ -192,13 +192,6 @@ definitions:
       roadHours:
         type: number
     type: object
-  dto.StartDTO:
-    properties:
-      programmingID:
-        type: integer
-    required:
-    - programmingID
-    type: object
   dto.UpdatePasswordDTO:
     properties:
       confirmPassword:
@@ -484,7 +477,7 @@ paths:
       summary: DummyLogData
       tags:
       - Lab
-  /private/labs/{ID}:
+  /private/labs/{programmingID}:
     get:
       consumes:
       - application/json
@@ -492,7 +485,7 @@ paths:
       parameters:
       - description: Programming Language ID
         in: path
-        name: ID
+        name: programmingID
         required: true
         type: string
       produces:
@@ -740,18 +733,17 @@ paths:
       summary: GetUserRoadProgressStats
       tags:
       - Road
-  /private/road/start:
-    post:
+  /private/start/{programmingID}:
+    get:
       consumes:
       - application/json
       description: Start
       parameters:
-      - description: Start
-        in: body
-        name: start
+      - description: programmingID
+        in: path
+        name: programmingID
         required: true
-        schema:
-          $ref: '#/definitions/dto.StartDTO'
+        type: string
       produces:
       - application/json
       responses:
@@ -761,7 +753,7 @@ paths:
             $ref: '#/definitions/response.BaseResponse'
       summary: Start
       tags:
-      - Road
+      - StartLabRoad
   /private/user/:
     get:
       consumes:

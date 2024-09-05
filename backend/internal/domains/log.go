@@ -138,10 +138,11 @@ func (l *Log) CreatedAt() time.Time {
 
 // Log Types
 var (
-	TypeRoad = "Road"
-	TypePath = "Path"
-	TypeLab  = "Lab"
-	TypeUser = "User"
+	TypeRoad                = "Road"
+	TypePath                = "Path"
+	TypeLab                 = "Lab"
+	TypeUser                = "User"
+	TypeProgrammingLanguage = "ProgrammingLanguage"
 )
 
 // Log Content

@@ -12,67 +12,11 @@ import (
 
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
-	roadRoute.Post("/start", h.Start)
 	roadRoute.Get("/:programmingID", h.GetRoad)
 	roadRoute.Get("/path/:programmingID/:pathID", h.GetPath)
 	roadRoute.Get("/general/stats", h.GetUserLanguageRoadStats)
 	roadRoute.Get("/path/data", h.AddDummyRoadData)
 	roadRoute.Get("/progress/stats", h.GetUserRoadProgressStats)
-}
-
-// @Tags Road
-// @Summary Start
-// @Description Start
-// @Accept json
-// @Produce json
-// @Param start body dto.StartDTO true "Start"
-// @Success 200 {object} response.BaseResponse{}
-// @Router /private/road/start [post]
-func (h *PrivateHandler) Start(c *fiber.Ctx) error {
-	var start dto.StartDTO
-	if err := c.BodyParser(&start); err != nil {
-		return response.Response(400, "Invalid Request", nil)
-	}
-
-	roadInformation, err := h.services.RoadService.GetRoadInformation(start.ProgrammingID)
-	if err != nil {
-		return response.Response(500, "Road Information Error", nil)
-	}
-	if roadInformation == nil {
-		return response.Response(404, "Road Not Found", nil)
-	}
-
-	// Recive user session from session_store
-	userSession := session_store.GetSessionData(c)
-
-	isExsits, err := h.services.CodeService.IsImageExists(c.Context(), roadInformation.GetDockerImage())
-	if err != nil {
-		return response.Response(500, "Docker Image Check Error", nil)
-	}
-
-	if !isExsits {
-		if err := h.services.CodeService.Pull(c.Context(), roadInformation.GetDockerImage()); err != nil {
-			return response.Response(500, "Docker Image Pull Error", nil)
-		}
-	}
-
-	// if the road has started. Log will not be created
-	// Log a road start event for the user
-	ok, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.ProgrammingID, 0)
-	if err != nil {
-		return response.Response(500, "Log Check Error", nil)
-	}
-
-	if !ok {
-		if start.ProgrammingID == 0 {
-			return response.Response(200, "Invalid Programming ID", nil)
-		}
-		if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeRoad, domains.ContentStarted, start.ProgrammingID, 0); err != nil {
-			return err
-		}
-	}
-
-	return response.Response(200, "Road Started Successfully", nil)
 }
 
 // @Tags Road
@@ -93,6 +37,14 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 		return response.Response(400, "Invalid Programming ID", nil)
 	}
 
+	isExist, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeProgrammingLanguage, domains.ContentStarted, int32(num), 0)
+	if err != nil {
+		return response.Response(500, "Log Check Error", nil)
+	}
+	if !isExist {
+		return response.Response(500, "Programming Language could not started", nil)
+	}
+
 	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, num, 0, nil, nil)
 	if err != nil {
 		return err
@@ -110,6 +62,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 		}
 		roadDTO = h.dtoManager.RoadDTOManager.ToGetRoadDTO(road, pathDTOs)
 	}
+
 	return response.Response(200, "GetRoads successful", roadDTO)
 }
 

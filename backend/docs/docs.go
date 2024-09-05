@@ -424,7 +424,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/labs/{ID}": {
+        "/private/labs/{programmingID}": {
             "get": {
                 "description": "Get Labs By Programming Language ID",
                 "consumes": [
@@ -441,7 +441,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Programming Language ID",
-                        "name": "ID",
+                        "name": "programmingID",
                         "in": "path",
                         "required": true
                     }
@@ -722,40 +722,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/road/start": {
-            "post": {
-                "description": "Start",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Road"
-                ],
-                "summary": "Start",
-                "parameters": [
-                    {
-                        "description": "Start",
-                        "name": "start",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.StartDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/private/road/{programmingID}": {
             "get": {
                 "description": "Get Road with Paths",
@@ -795,6 +761,38 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/private/start/{programmingID}": {
+            "get": {
+                "description": "Start",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "StartLabRoad"
+                ],
+                "summary": "Start",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
                         }
                     }
                 }
@@ -1273,17 +1271,6 @@ const docTemplate = `{
                 },
                 "roadHours": {
                     "type": "number"
-                }
-            }
-        },
-        "dto.StartDTO": {
-            "type": "object",
-            "required": [
-                "programmingID"
-            ],
-            "properties": {
-                "programmingID": {
-                    "type": "integer"
                 }
             }
         },
