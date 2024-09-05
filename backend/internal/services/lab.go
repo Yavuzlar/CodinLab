@@ -87,19 +87,19 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]domains.Labs, error) {
+func (s *labService) GetLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) ([]domains.Labs, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStarted == nil && isFinished == nil {
+	if userID == "" && programmingID == 0 && labId == 0 && isStarted == nil && isFinished == nil {
 		return allLabs, nil
 	}
 
 	var filteredLabs []domains.Labs
 	for _, labCollection := range allLabs {
-		if labsId != 0 && labCollection.GetID() != labsId {
+		if programmingID != 0 && labCollection.GetID() != programmingID {
 			continue
 		}
 
@@ -135,19 +135,38 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 	return filteredLabs, nil
 }
 
+func (s *labService) GetLabByID(userID string, programmingID, labID int) (lab *domains.Lab, err error) {
+	allLabs, err := s.getAllLabs(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, programmingLang := range allLabs {
+		if programmingLang.GetID() == programmingID {
+			for _, lab := range programmingLang.GetLabs() {
+				if lab.GetID() == labID {
+					return &lab, nil
+				}
+			}
+		}
+	}
+
+	return nil, err
+}
+
 // Fetch labs by filters
-func (s *labService) CountLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) (counter int, err error) {
+func (s *labService) CountLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) (counter int, err error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return 0, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStarted == nil && isFinished == nil {
+	if userID == "" && programmingID == 0 && labId == 0 && isStarted == nil && isFinished == nil {
 		return 0, nil
 	}
 
 	for _, labCollection := range allLabs {
-		if labsId != 0 && labCollection.GetID() != labsId {
+		if programmingID != 0 && labCollection.GetID() != programmingID {
 			continue
 		}
 
@@ -281,53 +300,71 @@ func (s *labService) CodeTemplateGenerator(programmingName, templatePathObject, 
 }
 
 func (s *labService) goLabTemplate(templatePathObject, content, funcName string, tests []domains.TestLab) (string, error) {
+	// Read the template file
 	temp, err := os.ReadFile(templatePathObject)
 	if err != nil {
 		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while reading go template", err)
 	}
 
+	// Replace placeholders with actual function names and imports
 	replace := strings.Replace(string(temp), "#funccall", funcName, -1)
-	imports := extractor.ExtractImports(content) //slice imports and code
+	imports := extractor.ExtractImports(content)
 	replace = strings.Replace(replace, "#imports", imports, -1)
-	userfunc, err := extractor.ExtractFunction(content, funcName) // slice users code to get the function
+
+	// Extract the user's function from the content
+	userfunc, err := extractor.ExtractFunction(content, funcName)
 	if err != nil {
 		return "", err
 	}
-	replace = strings.Replace(replace, "#funcs", userfunc, -1)                         //replace the function with the user function
-	result := "var tests=[]struct{\n input []interface{}\n output []interface{}\n}{\n" //Template içerisine eklemek için test structı oluşturulur
+	replace = strings.Replace(replace, "#funcs", userfunc, -1)
+
+	// Build the test cases
+	result := "var tests = []struct{\n input []interface{}\n output []interface{}\n}{\n"
 
 	for _, test := range tests {
-		result = result + "\t{input:[]interface{} {"
+		result += "\t{input:[]interface{}{"
 		for i, input := range test.GetInput() {
-			var myInterface interface{} = input
-			switch myInterface.(type) {
-			case string:
-				result = result + fmt.Sprintf("\t\"%v\"", input)
-			default:
-				result = result + fmt.Sprintf("\t%v", input)
-			}
+			result += formatInput(input)
 			if len(test.GetInput()) != i+1 {
 				result += ","
 			}
-
 		}
-		result = result + "}, output:[]interface{} {"
+		result += "}, output:[]interface{}{"
 		for i, output := range test.GetOutput() {
-			var myInterface interface{} = output
-			switch myInterface.(type) {
-			case string:
-				result = result + fmt.Sprintf("\t\"%v\"", output)
-			default:
-				result = result + fmt.Sprintf("\t%v", output)
-			}
-			if len(test.GetInput()) != i+1 {
+			result += formatInput(output)
+			if len(test.GetOutput()) != i+1 {
 				result += ","
 			}
 		}
 		result += "}},\n"
 	}
-	result = result + "}"
+	result += "}"
+
+	// Replace the test cases placeholder in the template
 	replace = strings.Replace(replace, "#tests", result, -1)
 
 	return replace, nil
+}
+
+// Helper function to format input and output values correctly
+func formatInput(value interface{}) string {
+	switch v := value.(type) {
+	case string:
+		// Convert "true" and "false" strings to their boolean representations
+		if strings.ToLower(v) == "true" || strings.ToLower(v) == "false" {
+			return v
+		}
+		// Convert numeric strings to integers
+		if num, err := strconv.Atoi(v); err == nil {
+			return fmt.Sprintf("%d", num)
+		}
+		// Otherwise, format as a string
+		return fmt.Sprintf("\"%s\"", v)
+	case bool:
+		return fmt.Sprintf("%v", v)
+	case int:
+		return fmt.Sprintf("%d", v)
+	default:
+		return fmt.Sprintf("%v", v)
+	}
 }
