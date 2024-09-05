@@ -230,19 +230,6 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	// FIXME: Labs/C++ tıkaldığında get all yapıyor ya. Orada loglarda kontrol edelim. Eğer o c++ image'i yüklenmediyse dil başlamamıştır. Adamı geri başka yere yollarız.
-	isExsits, err := h.services.CodeService.IsImageExists(c.Context(), roadInformation.GetDockerImage())
-	if err != nil {
-		return response.Response(500, "Docker Image Check Error", nil)
-	}
-
-	if !isExsits {
-		if err := h.services.CodeService.Pull(c.Context(), roadInformation.GetDockerImage()); err != nil {
-			return response.Response(500, "Docker Image Pull Error", nil)
-		}
-	}
-	// FIXME: Şimdilik üst taraf kalıyor.
-
 	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), roadInformation.GetDockerImage(), tmpPath, roadInformation.GetCmd())
 	if err != nil {
 		return err
