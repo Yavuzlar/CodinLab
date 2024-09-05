@@ -2,7 +2,6 @@ package private
 
 import (
 	"strconv"
-	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
@@ -236,7 +235,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	}
 	// FIXME: Şimdilik üst taraf kalıyor.
 
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), roadInformation.GetDockerImage(), tmpPath, strings.Split(roadInformation.GetCmd(), " "))
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), roadInformation.GetDockerImage(), tmpPath, roadInformation.GetCmd())
 	if err != nil {
 		return err
 	}
