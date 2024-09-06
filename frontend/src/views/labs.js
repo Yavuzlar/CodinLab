@@ -4,7 +4,6 @@ import InfoCard from "src/components/cards/Info";
 import LanguageProgress from "src/components/cards/LanguageProgress";
 import Filter from "src/components/filter/Filter";
 import { labs} from "src/data/home";
-import labsIcon from "src/assets/icons/icons8-test-tube-100.png";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserLanguageLabStats } from "src/store/language/languageSlice";
@@ -25,7 +24,6 @@ const Labs = () => {
     dispatch(getUserLanguageLabStats());
   }, [dispatch]);
 
-  console.log(stateLanguage.data.data);
 
   return (
     <>
@@ -79,8 +77,7 @@ const Labs = () => {
             <Grid item xs={12} md={12} key={index}>
               <LanguageProgress
                 language={language}
-                icon={labsIcon}
-                map={language.totalLabs}
+                type="lab"
               />
             </Grid>
           ))}

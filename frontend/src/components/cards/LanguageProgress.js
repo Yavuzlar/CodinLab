@@ -10,11 +10,24 @@ import {
 import Image from "next/image";
 import LinearProgess from "../progress/LinearProgess";
 import Translations from "../Translations";
+import labIcon from "src/assets/icons/icons8-test-tube-100.png";
+import roadIcon from "src/assets/icons/icons8-path-100.png";
 
-const LanguageProgress = ({ language, icon, map }) => {
+const LanguageProgress = ({ language,type }) => {
   const _lg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const _md = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const _sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
+  switch (type) {
+    case "road":
+      var icon = roadIcon;
+      var data = language.totalRoads;
+      break;
+    case "lab":
+      var icon = labIcon;
+      var data = language.totalLabs;
+      break;
+  }
 
   return (
     <Card>
@@ -51,11 +64,12 @@ const LanguageProgress = ({ language, icon, map }) => {
                     {language.name}
                   </Typography>
 
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 'fit-content' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 'fit-content' }}>
                     <Image src={icon} alt={"icon"} width={20} height={20} />
 
-                    <Typography variant="infoText2">{language.totalLabs}</Typography>
+                    <Typography variant="infoText2">{data}</Typography>
                   </Box>
+      
                 </Box>
 
                 <Button variant="dark" sx={{ textTransform: 'none', minWidth: '80px' }}>
@@ -80,7 +94,7 @@ const LanguageProgress = ({ language, icon, map }) => {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 'fit-content' }}>
                     <Image src={icon} alt={"icon"} width={24} height={24} />
 
-                    <Typography variant="infoText">{map}</Typography>
+                    <Typography variant="infoText">{data}</Typography>
                   </Box>
 
                   <Button variant="dark" sx={{ textTransform: 'none', minWidth: '80px' }}>
@@ -106,7 +120,7 @@ const LanguageProgress = ({ language, icon, map }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <Image src={icon} alt={"icon"} width={24} height={24} />
 
-                  <Typography variant="infoText">{map}</Typography>
+                  <Typography variant="infoText">{data}</Typography>
                 </Box>
               </Grid>
             </Grid>
