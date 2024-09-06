@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/pkg/docker"
@@ -132,15 +131,5 @@ func (s *codeService) createCodeFile(userID string) (err error) {
 }
 
 func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
-	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
-	if err != nil {
-		return err
-	}
-	if content != "" {
-		file.WriteString(content)
-	}
-
-	defer file.Close()
-
-	return nil
+	return file.CreateFileAndWrite(filePath, content)
 }

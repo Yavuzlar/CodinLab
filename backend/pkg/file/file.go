@@ -23,3 +23,17 @@ func CheckDir(dir string) (err error) {
 
 	return nil
 }
+
+func CreateFileAndWrite(filePath, content string) (err error) {
+	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	if err != nil {
+		return err
+	}
+	if content != "" {
+		file.WriteString(content)
+	}
+
+	defer file.Close()
+
+	return nil
+}
