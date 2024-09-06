@@ -226,7 +226,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := h.services.CodeService.CreateFile(tmpPath, tmpContent); err != nil {
+	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
 		return err
 	}
 

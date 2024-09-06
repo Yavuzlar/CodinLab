@@ -436,7 +436,7 @@ const docTemplate = `{
                 "tags": [
                     "Lab"
                 ],
-                "summary": "GetLabsById",
+                "summary": "GetLabs",
                 "parameters": [
                     {
                         "type": "string",
