@@ -7,6 +7,7 @@ import (
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/pkg/docker"
+	"github.com/Yavuzlar/CodinLab/pkg/file"
 )
 
 type codeService struct {
@@ -25,7 +26,21 @@ func NewCodeService() domains.ICodeService {
 }
 
 func (s *codeService) Pull(ctx context.Context, imageReference string) (err error) {
-	return s.dockerSDK.Images().Pull(ctx, imageReference)
+	resultChan := make(chan error)
+
+	// Asenkron olarak Docker image pull işlemini başlatın
+	go func() {
+		err := s.dockerSDK.Images().Pull(ctx, imageReference)
+		resultChan <- err
+	}()
+
+	// İndirme işlemi tamamlandığında kanaldan hata bilgisi alınır
+	select {
+	case err := <-resultChan:
+		return err
+	case <-ctx.Done():
+		return ctx.Err() // Eğer context iptal edilirse, bu hata döndürülür
+	}
 }
 
 func (s *codeService) IsImageExists(ctx context.Context, imageReference string) (isExsits bool, err error) {
@@ -59,19 +74,19 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID string, program
 	}
 
 	if codeType == domains.TypeLab {
-		if err := s.CreateFile(codePath, content); err != nil {
+		if err := s.CreateFileAndWrite(codePath, content); err != nil {
 			return "", err
 		}
-		if err := s.CreateFile(codeTmpPath, ""); err != nil {
+		if err := s.CreateFileAndWrite(codeTmpPath, ""); err != nil {
 			return "", err
 		}
 	}
 
 	if codeType == domains.TypePath {
-		if err := s.CreateFile(codePath, content); err != nil {
+		if err := s.CreateFileAndWrite(codePath, content); err != nil {
 			return "", err
 		}
-		if err := s.CreateFile(codeTmpPath, ""); err != nil {
+		if err := s.CreateFileAndWrite(codeTmpPath, ""); err != nil {
 			return "", err
 		}
 	}
@@ -86,29 +101,29 @@ func (s *codeService) createCodeFile(userID string) (err error) {
 	pathDir := fmt.Sprintf("%v/paths", userDir)
 
 	// Check and create mainDir if not exists
-	if err := s.checkDir(mainDir); err != nil {
-		if err = s.createDir(mainDir); err != nil {
+	if err := file.CheckDir(mainDir); err != nil {
+		if err = file.CreateDir(mainDir); err != nil {
 			return err
 		}
 	}
 
 	// Check and create userDir, labDir, pathDir
-	if err := s.checkDir(userDir); err != nil {
-		if err = s.createDir(userDir); err != nil {
+	if err := file.CheckDir(userDir); err != nil {
+		if err = file.CreateDir(userDir); err != nil {
 			return err
 		}
 	}
 
 	// Check and create labDir if not exists
-	if err := s.checkDir(labDir); err != nil {
-		if err = s.createDir(labDir); err != nil {
+	if err := file.CheckDir(labDir); err != nil {
+		if err = file.CreateDir(labDir); err != nil {
 			return err
 		}
 	}
 
 	// Check and create pathDir if not exists
-	if err := s.checkDir(pathDir); err != nil {
-		if err = s.createDir(pathDir); err != nil {
+	if err := file.CheckDir(pathDir); err != nil {
+		if err = file.CreateDir(pathDir); err != nil {
 			return err
 		}
 	}
@@ -116,29 +131,7 @@ func (s *codeService) createCodeFile(userID string) (err error) {
 	return nil
 }
 
-func (s *codeService) checkDir(dir string) (err error) {
-	fileInfo, err := os.Stat(dir)
-	if os.IsNotExist(err) {
-		return err
-	}
-
-	if !fileInfo.IsDir() {
-		return os.ErrNotExist
-	}
-
-	return nil
-}
-
-func (s *codeService) createDir(dir string) (err error) {
-	err = os.Mkdir(dir, 0755)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (s *codeService) CreateFile(filePath, content string) (err error) {
+func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
 		return err

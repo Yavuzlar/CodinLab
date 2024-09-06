@@ -495,7 +495,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: GetLabsById
+      summary: GetLabs
       tags:
       - Lab
   /private/labs/difficulty/stats:

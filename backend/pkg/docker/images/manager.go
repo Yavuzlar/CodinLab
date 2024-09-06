@@ -1,7 +1,6 @@
 package images
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 
@@ -50,15 +49,16 @@ func (m *Manager) Pull(ctx context.Context, imageReference string) error {
 	}
 	defer out.Close()
 
-	// Read from the stream until it closes
-	buf := new(bytes.Buffer)
-	_, err = buf.ReadFrom(out)
-	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while reading image pull output", err)
-	}
+	// İndirme işlemini görmek istiyorsan altı aç
+	// // Read from the stream until it closes
+	// buf := new(bytes.Buffer)
+	// _, err = buf.ReadFrom(out)
+	// if err != nil {
+	// 	return service_errors.NewServiceErrorWithMessageAndError(500, "error while reading image pull output", err)
+	// }
 
-	// Optionally, you can process the output if needed
-	fmt.Println(buf.String())
+	// // Optionally, you can process the output if needed
+	// fmt.Println(buf.String())
 
 	return nil
 }
