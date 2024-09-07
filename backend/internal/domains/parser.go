@@ -47,12 +47,19 @@ type ParamP struct {
 	Type string `json:"type"`
 }
 
+// Returns represents a parameter of a function.
+type ReturnP struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
 // Quest represents a coding challenge or task.
 type QuestP struct {
-	Difficulty int      `json:"difficulty"`
-	FuncName   string   `json:"funcName"`
-	Tests      []TestP  `json:"tests"`
-	Params     []ParamP `json:"params"`
+	Difficulty int       `json:"difficulty"`
+	FuncName   string    `json:"funcName"`
+	Tests      []TestP   `json:"tests"`
+	Params     []ParamP  `json:"params"`
+	Returns    []ReturnP `json:"returns"`
 }
 
 // Lab represents a specific coding lab exercise.

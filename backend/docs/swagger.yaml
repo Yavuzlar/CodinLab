@@ -631,37 +631,6 @@ paths:
       summary: GetSolutionsHoursByProgramming
       tags:
       - Log
-  /private/path/{programmingID}/{pathID}:
-    get:
-      consumes:
-      - application/json
-      description: Get Path By ID
-      parameters:
-      - description: Programming ID
-        in: path
-        name: programmingID
-        required: true
-        type: string
-      - description: Path ID
-        in: path
-        name: pathID
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.BaseResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.PathDTO'
-              type: object
-      summary: GetPathByID
-      tags:
-      - Road
   /private/road/{programmingID}:
     get:
       consumes:
@@ -701,6 +670,37 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: GetUserLanguageRoadStats
+      tags:
+      - Road
+  /private/road/path/{programmingID}/{pathID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Path By ID
+      parameters:
+      - description: Programming ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: Path ID
+        in: path
+        name: pathID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PathDTO'
+              type: object
+      summary: GetPathByID
       tags:
       - Road
   /private/road/path/data:

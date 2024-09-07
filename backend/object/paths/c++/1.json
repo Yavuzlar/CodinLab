@@ -25,6 +25,12 @@
 				"output": ["Hello, World!"]
 			}
 		],
-		"params": []
+		"params": [],
+		"returns": [
+			{
+				"name": "res",
+				"type": "string"
+			}
+		]
 	}
 }

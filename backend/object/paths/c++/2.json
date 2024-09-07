@@ -38,6 +38,12 @@
 				"name": "number",
 				"type": "int"
 			}
+		],
+		"returns": [
+			{
+				"name": "res",
+				"type": "bool"
+			}
 		]
 	}
 }

@@ -38,6 +38,12 @@
 				"name": "s",
 				"type": "string"
 			}
+		],
+		"returns": [
+			{
+				"name": "res",
+				"type": "bool"
+			}
 		]
 	}
 }

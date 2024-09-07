@@ -220,12 +220,36 @@ func (p *ParamLab) SetType(typ string) {
 	p.typ = typ
 }
 
+// ReturnLab represents a parameter of a function.
+type ReturnLab struct {
+	name string
+	typ  string
+}
+
+// Getter and Setter methods for Return
+func (p *ReturnLab) GetName() string {
+	return p.name
+}
+
+func (p *ReturnLab) SetName(name string) {
+	p.name = name
+}
+
+func (p *ReturnLab) GetType() string {
+	return p.typ
+}
+
+func (p *ReturnLab) SetType(typ string) {
+	p.typ = typ
+}
+
 // QuestLab represents a coding challenge or task.
 type QuestLab struct {
 	difficulty int
 	funcName   string
 	tests      []TestLab
 	params     []ParamLab
+	returns    []ReturnLab
 }
 
 // Getter and Setter methods for Quest
@@ -259,6 +283,14 @@ func (q *QuestLab) GetParams() []ParamLab {
 
 func (q *QuestLab) SetParams(params []ParamLab) {
 	q.params = params
+}
+
+func (q *QuestLab) GetReturns() []ReturnLab {
+	return q.returns
+}
+
+func (q *QuestLab) SetReturns(returns []ReturnLab) {
+	q.returns = returns
 }
 
 // Lab represents a specific coding lab exercise.
@@ -444,13 +476,22 @@ func NewParamLab(name, typ string) *ParamLab {
 	}
 }
 
+// NewReturnLab creates a new instance of Return
+func NewReturnLab(name, typ string) *ReturnLab {
+	return &ReturnLab{
+		name: name,
+		typ:  typ,
+	}
+}
+
 // NewQuestLab creates a new instance of Quest
-func NewQuestLab(difficulty int, funcName string, tests []TestLab, params []ParamLab) *QuestLab {
+func NewQuestLab(difficulty int, funcName string, tests []TestLab, params []ParamLab, returns []ReturnLab) *QuestLab {
 	return &QuestLab{
 		difficulty: difficulty,
 		funcName:   funcName,
 		tests:      tests,
 		params:     params,
+		returns:    returns,
 	}
 }
 
