@@ -2,14 +2,9 @@ package services
 
 import (
 	"context"
-	"fmt"
-	"os"
 	"strconv"
-	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
-	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
-	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 )
 
 type labService struct {
@@ -47,22 +42,27 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 				languages = append(languages, *domains.NewLanguageLab(lang.Lang, lang.Title, lang.Description, lang.Note, lang.Hint))
 			}
 
-			var tests []domains.TestLab
+			var tests []domains.Test
 			for _, test := range lab.Quest.Tests {
-				tests = append(tests, *domains.NewTestLab(test.Input, test.Output))
+				tests = append(tests, *domains.NewTest(test.Input, test.Output))
 			}
 
-			var params []domains.ParamLab
+			var params []domains.Param
 			for _, param := range lab.Quest.Params {
-				params = append(params, *domains.NewParamLab(param.Name, param.Type))
+				params = append(params, *domains.NewParam(param.Name, param.Type))
 			}
 
-			var returns []domains.ReturnLab
+			var returns []domains.Returns
 			for _, returnedParam := range lab.Quest.Returns {
-				returns = append(returns, *domains.NewReturnLab(returnedParam.Name, returnedParam.Type))
+				returns = append(returns, *domains.NewReturn(returnedParam.Name, returnedParam.Type))
 			}
 
-			quest := domains.NewQuestLab(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params, returns)
+			var questImports []string
+			for _, imp := range lab.Quest.QuestImports {
+				questImports = append(questImports, imp)
+			}
+
+			quest := domains.NewQuest(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params, returns, questImports)
 			newLab := domains.NewLab(lab.ID, languages, *quest, false, false)
 
 			labIDString := strconv.Itoa(lab.ID)
@@ -293,83 +293,4 @@ func (s *labService) GetUserLabDifficultyStats(userID string) (userLabDifficulty
 		hardPercentage,
 	)
 	return
-}
-
-// Bu kısımda bütün diller için template oluşturma kısmı gelicek.
-func (s *labService) CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []domains.TestLab) (string, error) {
-	if programmingName == "GO" {
-		return s.goLabTemplate(templatePathObject, content, funcName, tests)
-	}
-
-	return "", service_errors.NewServiceErrorWithMessage(500, "this programming language not supported")
-}
-
-func (s *labService) goLabTemplate(templatePathObject, content, funcName string, tests []domains.TestLab) (string, error) {
-	// Read the template file
-	temp, err := os.ReadFile(templatePathObject)
-	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while reading go template", err)
-	}
-
-	// Replace placeholders with actual function names and imports
-	replace := strings.Replace(string(temp), "#funccall", funcName, -1)
-	imports := extractor.ExtractImports(content)
-	replace = strings.Replace(replace, "#imports", imports, -1)
-
-	// Extract the user's function from the content
-	userfunc, err := extractor.ExtractFunction(content, funcName)
-	if err != nil {
-		return "", err
-	}
-	replace = strings.Replace(replace, "#funcs", userfunc, -1)
-
-	// Build the test cases
-	result := "var tests = []struct{\n input []interface{}\n output []interface{}\n}{\n"
-
-	for _, test := range tests {
-		result += "\t{input:[]interface{}{"
-		for i, input := range test.GetInput() {
-			result += formatInput(input)
-			if len(test.GetInput()) != i+1 {
-				result += ","
-			}
-		}
-		result += "}, output:[]interface{}{"
-		for i, output := range test.GetOutput() {
-			result += formatInput(output)
-			if len(test.GetOutput()) != i+1 {
-				result += ","
-			}
-		}
-		result += "}},\n"
-	}
-	result += "}"
-
-	// Replace the test cases placeholder in the template
-	replace = strings.Replace(replace, "#tests", result, -1)
-
-	return replace, nil
-}
-
-// Helper function to format input and output values correctly
-func formatInput(value interface{}) string {
-	switch v := value.(type) {
-	case string:
-		// Convert "true" and "false" strings to their boolean representations
-		if strings.ToLower(v) == "true" || strings.ToLower(v) == "false" {
-			return v
-		}
-		// Convert numeric strings to integers
-		if num, err := strconv.Atoi(v); err == nil {
-			return fmt.Sprintf("%d", num)
-		}
-		// Otherwise, format as a string
-		return fmt.Sprintf("\"%s\"", v)
-	case bool:
-		return fmt.Sprintf("%v", v)
-	case int:
-		return fmt.Sprintf("%d", v)
-	default:
-		return fmt.Sprintf("%v", v)
-	}
 }
