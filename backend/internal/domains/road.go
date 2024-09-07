@@ -6,7 +6,6 @@ type IRoadService interface {
 	GetRoadInformation(programmingID int32) (*Road, error)
 	GetUserLanguageRoadStats(userID string) ([]RoadStats, error)
 	GetUserRoadProgressStats(userID string) (progressStats *RoadProgressStats, err error)
-	CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []TestRoad) (string, error)
 }
 
 // LanguageRoad represents the details of a programming language.
@@ -70,165 +69,11 @@ func NewLanguageRoad(lang, title, description, content, note string) *LanguageRo
 	}
 }
 
-// TestRoad represents a test case for a function.
-type TestRoad struct {
-	input  []string
-	output []string
-}
-
-// Getter and Setter methods for TestRoad
-func (t *TestRoad) GetInput() []string {
-	return t.input
-}
-
-func (t *TestRoad) SetInput(input []string) {
-	t.input = input
-}
-
-func (t *TestRoad) GetOutput() []string {
-	return t.output
-}
-
-func (t *TestRoad) SetOutput(output []string) {
-	t.output = output
-}
-
-// NewTestRoad creates a new instance of TestRoad
-func NewTestRoad(input, output []string) *TestRoad {
-	return &TestRoad{
-		input:  input,
-		output: output,
-	}
-}
-
-// ParamRoad represents a parameter of a function.
-type ParamRoad struct {
-	name string
-	typ  string
-}
-
-// Getter and Setter methods for ParamRoad
-func (p *ParamRoad) GetName() string {
-	return p.name
-}
-
-func (p *ParamRoad) SetName(name string) {
-	p.name = name
-}
-
-func (p *ParamRoad) GetType() string {
-	return p.typ
-}
-
-func (p *ParamRoad) SetType(typ string) {
-	p.typ = typ
-}
-
-// NewParamRoad creates a new instance of ParamRoad
-func NewParamRoad(name, typ string) *ParamRoad {
-	return &ParamRoad{
-		name: name,
-		typ:  typ,
-	}
-}
-
-// ReturnRoad represents a parameter of a function.
-type ReturnRoad struct {
-	name string
-	typ  string
-}
-
-// Getter and Setter methods for ReturnRoad
-func (p *ReturnRoad) GetName() string {
-	return p.name
-}
-
-func (p *ReturnRoad) SetName(name string) {
-	p.name = name
-}
-
-func (p *ReturnRoad) GetType() string {
-	return p.typ
-}
-
-func (p *ReturnRoad) SetType(typ string) {
-	p.typ = typ
-}
-
-// NewReturnRoad creates a new instance of ReturnRoad
-func NewReturnRoad(name, typ string) *ReturnRoad {
-	return &ReturnRoad{
-		name: name,
-		typ:  typ,
-	}
-}
-
-// QuestRoad represents a coding challenge or task.
-type QuestRoad struct {
-	difficulty int
-	funcName   string
-	tests      []TestRoad
-	params     []ParamRoad
-	returns    []ReturnRoad
-}
-
-// Getter and Setter methods for QuestRoad
-func (q *QuestRoad) GetDifficulty() int {
-	return q.difficulty
-}
-
-func (q *QuestRoad) SetDifficulty(difficulty int) {
-	q.difficulty = difficulty
-}
-
-func (q *QuestRoad) GetFuncName() string {
-	return q.funcName
-}
-
-func (q *QuestRoad) SetFuncName(funcName string) {
-	q.funcName = funcName
-}
-
-func (q *QuestRoad) GetTests() []TestRoad {
-	return q.tests
-}
-
-func (q *QuestRoad) SetTests(tests []TestRoad) {
-	q.tests = tests
-}
-
-func (q *QuestRoad) GetParams() []ParamRoad {
-	return q.params
-}
-
-func (q *QuestRoad) SetParams(params []ParamRoad) {
-	q.params = params
-}
-
-func (q *QuestRoad) GetReturns() []ReturnRoad {
-	return q.returns
-}
-
-func (q *QuestRoad) SetReturns(returns []ReturnRoad) {
-	q.returns = returns
-}
-
-// NewQuestRoad creates a new instance of QuestRoad
-func NewQuestRoad(difficulty int, funcName string, tests []TestRoad, params []ParamRoad, returns []ReturnRoad) *QuestRoad {
-	return &QuestRoad{
-		difficulty: difficulty,
-		funcName:   funcName,
-		tests:      tests,
-		params:     params,
-		returns:    returns,
-	}
-}
-
 // Path represents a specific coding road exercise.
 type Path struct {
 	id         int
 	languages  []LanguageRoad
-	quest      QuestRoad
+	quest      Quest
 	isStarted  bool
 	isFinished bool
 }
@@ -250,11 +95,11 @@ func (p *Path) SetLanguages(languages []LanguageRoad) {
 	p.languages = languages
 }
 
-func (p *Path) GetQuest() *QuestRoad {
+func (p *Path) GetQuest() *Quest {
 	return &p.quest
 }
 
-func (p *Path) SetQuest(quest QuestRoad) {
+func (p *Path) SetQuest(quest Quest) {
 	p.quest = quest
 }
 
@@ -275,7 +120,7 @@ func (p *Path) SetIsFinished(isFinished bool) {
 }
 
 // NewPath creates a new instance of Path
-func NewPath(id int, languages []LanguageRoad, quest QuestRoad, isStarted, isFinished bool) *Path {
+func NewPath(id int, languages []LanguageRoad, quest Quest, isStarted, isFinished bool) *Path {
 	return &Path{
 		id:         id,
 		languages:  languages,

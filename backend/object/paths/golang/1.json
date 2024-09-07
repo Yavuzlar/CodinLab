@@ -31,6 +31,9 @@
 				"name": "res",
 				"type": "string"
 			}
+		],
+		"questImports": [
+			"fmt"
 		]
 	}
 }

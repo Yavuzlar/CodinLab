@@ -3,12 +3,8 @@ package services
 import (
 	"context"
 	"fmt"
-	"os"
-	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
-	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
-	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 )
 
 type roadService struct {
@@ -76,22 +72,27 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 				languages = append(languages, *domains.NewLanguageRoad(lang.Lang, lang.Title, lang.Description, lang.Content, lang.Note))
 			}
 
-			var tests []domains.TestRoad
+			var tests []domains.Test
 			for _, test := range path.Quest.Tests {
-				tests = append(tests, *domains.NewTestRoad(test.Input, test.Output))
+				tests = append(tests, *domains.NewTest(test.Input, test.Output))
 			}
 
-			var params []domains.ParamRoad
+			var params []domains.Param
 			for _, param := range path.Quest.Params {
-				params = append(params, *domains.NewParamRoad(param.Name, param.Type))
+				params = append(params, *domains.NewParam(param.Name, param.Type))
 			}
 
-			var returns []domains.ReturnRoad
+			var returns []domains.Returns
 			for _, returnedParam := range path.Quest.Returns {
-				returns = append(returns, *domains.NewReturnRoad(returnedParam.Name, returnedParam.Type))
+				returns = append(returns, *domains.NewReturn(returnedParam.Name, returnedParam.Type))
 			}
 
-			quest := domains.NewQuestRoad(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns)
+			var questImports []string
+			for _, questImport := range path.Quest.QuestImports {
+				questImports = append(questImports, questImport)
+			}
+
+			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, questImports)
 			newPath := domains.NewPath(path.ID, languages, *quest, false, false)
 
 			isStarted, isFinished, err := s.getPathStatuses(userID, fmt.Sprintf("%v", roadCollection.ID), fmt.Sprintf("%v", path.ID))
@@ -258,66 +259,4 @@ func (s *roadService) GetUserRoadProgressStats(userID string) (progressStats *do
 		float32(completed)/float32(totalRoads)*100,
 	)
 	return
-}
-
-// this func choses the template according to the programming language
-func (s *roadService) CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []domains.TestRoad) (string, error) {
-	if programmingName == "GO" {
-		return s.goRoadTemplateWriter(templatePathObject, content, funcName, tests)
-	}
-
-	return "", service_errors.NewServiceErrorWithMessage(500, "Programming language not supported")
-
-}
-
-func (s *roadService) goRoadTemplateWriter(templatePathObject, content, funcName string, tests []domains.TestRoad) (string, error) {
-	temp, err := os.ReadFile(templatePathObject)
-	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while reading go template", err)
-	}
-
-	replace := strings.Replace(string(temp), "#funccall", funcName, -1)
-	imports := extractor.ExtractImports(content) //slice imports and code
-	replace = strings.Replace(replace, "#imports", imports, -1)
-	userfunc, err := extractor.ExtractFunction(content, funcName) // slice users code to get the function
-	if err != nil {
-		return "", err
-	}
-	replace = strings.Replace(replace, "#funcs", userfunc, -1)                         //replace the function with the user function
-	result := "var tests=[]struct{\n input []interface{}\n output []interface{}\n}{\n" // Test struct is created to add to the template
-
-	for _, test := range tests {
-		result = result + "\t{input:[]interface{} {"
-		for i, input := range test.GetInput() {
-			var myInterface interface{} = input
-			switch myInterface.(type) {
-			case string:
-				result = result + fmt.Sprintf("\t\"%v\"", input)
-			default:
-				result = result + fmt.Sprintf("\t%v", input)
-			}
-			if len(test.GetInput()) != i+1 {
-				result += ","
-			}
-
-		}
-		result = result + "}, output:[]interface{} {"
-		for i, output := range test.GetOutput() {
-			var myInterface interface{} = output
-			switch myInterface.(type) {
-			case string:
-				result = result + fmt.Sprintf("\t\"%v\"", output)
-			default:
-				result = result + fmt.Sprintf("\t%v", output)
-			}
-			if len(test.GetInput()) != i+1 {
-				result += ","
-			}
-		}
-		result += "}},\n"
-	}
-	result = result + "}"
-	replace = strings.Replace(replace, "#tests", result, -1)
-
-	return replace, nil
 }

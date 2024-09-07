@@ -55,11 +55,12 @@ type ReturnP struct {
 
 // Quest represents a coding challenge or task.
 type QuestP struct {
-	Difficulty int       `json:"difficulty"`
-	FuncName   string    `json:"funcName"`
-	Tests      []TestP   `json:"tests"`
-	Params     []ParamP  `json:"params"`
-	Returns    []ReturnP `json:"returns"`
+	Difficulty   int       `json:"difficulty"`
+	FuncName     string    `json:"funcName"`
+	Tests        []TestP   `json:"tests"`
+	Params       []ParamP  `json:"params"`
+	Returns      []ReturnP `json:"returns"`
+	QuestImports []string  `json:"questImports"`
 }
 
 // Lab represents a specific coding lab exercise.

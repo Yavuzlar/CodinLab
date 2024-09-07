@@ -7,7 +7,6 @@ type ILabService interface {
 	GetUserLabDifficultyStats(userID string) (userLabDifficultyStats UserLabDifficultyStats, err error)
 	GetUserLabProgressStats(userID string) (userLabProgressStats UserLabProgressStats, err error)
 	CountLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) (counter int, err error)
-	CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []TestLab) (string, error)
 	GetLabByID(userID string, programmingID, labID int) (lab *Lab, err error)
 }
 
@@ -174,130 +173,11 @@ func (l *LanguageLab) SetHint(hint string) {
 	l.hint = hint
 }
 
-// TestLab represents a test case for a function.
-type TestLab struct {
-	input  []string
-	output []string
-}
-
-// Getter and Setter methods for Test
-func (t *TestLab) GetInput() []string {
-	return t.input
-}
-
-func (t *TestLab) SetInput(input []string) {
-	t.input = input
-}
-
-func (t *TestLab) GetOutput() []string {
-	return t.output
-}
-
-func (t *TestLab) SetOutput(output []string) {
-	t.output = output
-}
-
-// ParamLab represents a parameter of a function.
-type ParamLab struct {
-	name string
-	typ  string
-}
-
-// Getter and Setter methods for Param
-func (p *ParamLab) GetName() string {
-	return p.name
-}
-
-func (p *ParamLab) SetName(name string) {
-	p.name = name
-}
-
-func (p *ParamLab) GetType() string {
-	return p.typ
-}
-
-func (p *ParamLab) SetType(typ string) {
-	p.typ = typ
-}
-
-// ReturnLab represents a parameter of a function.
-type ReturnLab struct {
-	name string
-	typ  string
-}
-
-// Getter and Setter methods for Return
-func (p *ReturnLab) GetName() string {
-	return p.name
-}
-
-func (p *ReturnLab) SetName(name string) {
-	p.name = name
-}
-
-func (p *ReturnLab) GetType() string {
-	return p.typ
-}
-
-func (p *ReturnLab) SetType(typ string) {
-	p.typ = typ
-}
-
-// QuestLab represents a coding challenge or task.
-type QuestLab struct {
-	difficulty int
-	funcName   string
-	tests      []TestLab
-	params     []ParamLab
-	returns    []ReturnLab
-}
-
-// Getter and Setter methods for Quest
-func (q *QuestLab) GetDifficulty() int {
-	return q.difficulty
-}
-
-func (q *QuestLab) SetDifficulty(difficulty int) {
-	q.difficulty = difficulty
-}
-
-func (q *QuestLab) GetFuncName() string {
-	return q.funcName
-}
-
-func (q *QuestLab) SetFuncName(funcName string) {
-	q.funcName = funcName
-}
-
-func (q *QuestLab) GetTests() []TestLab {
-	return q.tests
-}
-
-func (q *QuestLab) SetTests(tests []TestLab) {
-	q.tests = tests
-}
-
-func (q *QuestLab) GetParams() []ParamLab {
-	return q.params
-}
-
-func (q *QuestLab) SetParams(params []ParamLab) {
-	q.params = params
-}
-
-func (q *QuestLab) GetReturns() []ReturnLab {
-	return q.returns
-}
-
-func (q *QuestLab) SetReturns(returns []ReturnLab) {
-	q.returns = returns
-}
-
 // Lab represents a specific coding lab exercise.
 type Lab struct {
 	id         int
 	languages  []LanguageLab
-	quest      QuestLab
+	quest      Quest
 	isStarted  bool
 	isFinished bool
 }
@@ -319,11 +199,11 @@ func (l *Lab) SetLanguages(languages []LanguageLab) {
 	l.languages = languages
 }
 
-func (l *Lab) GetQuest() *QuestLab {
+func (l *Lab) GetQuest() *Quest {
 	return &l.quest
 }
 
-func (l *Lab) SetQuest(quest QuestLab) {
+func (l *Lab) SetQuest(quest Quest) {
 	l.quest = quest
 }
 
@@ -460,43 +340,8 @@ func NewLanguageLab(lang, title, description, note, hint string) *LanguageLab {
 	}
 }
 
-// NewTestLab creates a new instance of Test
-func NewTestLab(input, output []string) *TestLab {
-	return &TestLab{
-		input:  input,
-		output: output,
-	}
-}
-
-// NewParamLab creates a new instance of Param
-func NewParamLab(name, typ string) *ParamLab {
-	return &ParamLab{
-		name: name,
-		typ:  typ,
-	}
-}
-
-// NewReturnLab creates a new instance of Return
-func NewReturnLab(name, typ string) *ReturnLab {
-	return &ReturnLab{
-		name: name,
-		typ:  typ,
-	}
-}
-
-// NewQuestLab creates a new instance of Quest
-func NewQuestLab(difficulty int, funcName string, tests []TestLab, params []ParamLab, returns []ReturnLab) *QuestLab {
-	return &QuestLab{
-		difficulty: difficulty,
-		funcName:   funcName,
-		tests:      tests,
-		params:     params,
-		returns:    returns,
-	}
-}
-
 // NewLab creates a new instance of Lab
-func NewLab(id int, languages []LanguageLab, quest QuestLab, isStarted, isFinished bool) *Lab {
+func NewLab(id int, languages []LanguageLab, quest Quest, isStarted, isFinished bool) *Lab {
 	return &Lab{
 		id:         id,
 		languages:  languages,

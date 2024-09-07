@@ -44,6 +44,9 @@
 				"name": "res",
 				"type": "bool"
 			}
+		],
+		"questImports": [
+			"#include <iostream>"
 		]
 	}
 }

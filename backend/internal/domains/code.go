@@ -10,4 +10,5 @@ type ICodeService interface {
 	UploadUserCode(ctx context.Context, userID string, programmingLanguageID, PathLabID int, codeType, fileExtention, content string) (string, error)
 	RunContainerWithTar(ctx context.Context, image, tmpCodePath string, cmd []string) (string, error)
 	CreateFileAndWrite(filePath, content string) (err error)
+	CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []Test) (string, error)
 }
