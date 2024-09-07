@@ -132,12 +132,44 @@ func NewParamRoad(name, typ string) *ParamRoad {
 	}
 }
 
+// ReturnRoad represents a parameter of a function.
+type ReturnRoad struct {
+	name string
+	typ  string
+}
+
+// Getter and Setter methods for ReturnRoad
+func (p *ReturnRoad) GetName() string {
+	return p.name
+}
+
+func (p *ReturnRoad) SetName(name string) {
+	p.name = name
+}
+
+func (p *ReturnRoad) GetType() string {
+	return p.typ
+}
+
+func (p *ReturnRoad) SetType(typ string) {
+	p.typ = typ
+}
+
+// NewReturnRoad creates a new instance of ReturnRoad
+func NewReturnRoad(name, typ string) *ReturnRoad {
+	return &ReturnRoad{
+		name: name,
+		typ:  typ,
+	}
+}
+
 // QuestRoad represents a coding challenge or task.
 type QuestRoad struct {
 	difficulty int
 	funcName   string
 	tests      []TestRoad
 	params     []ParamRoad
+	returns    []ReturnRoad
 }
 
 // Getter and Setter methods for QuestRoad
@@ -173,13 +205,22 @@ func (q *QuestRoad) SetParams(params []ParamRoad) {
 	q.params = params
 }
 
+func (q *QuestRoad) GetReturns() []ReturnRoad {
+	return q.returns
+}
+
+func (q *QuestRoad) SetReturns(returns []ReturnRoad) {
+	q.returns = returns
+}
+
 // NewQuestRoad creates a new instance of QuestRoad
-func NewQuestRoad(difficulty int, funcName string, tests []TestRoad, params []ParamRoad) *QuestRoad {
+func NewQuestRoad(difficulty int, funcName string, tests []TestRoad, params []ParamRoad, returns []ReturnRoad) *QuestRoad {
 	return &QuestRoad{
 		difficulty: difficulty,
 		funcName:   funcName,
 		tests:      tests,
 		params:     params,
+		returns:    returns,
 	}
 }
 

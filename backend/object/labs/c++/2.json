@@ -38,6 +38,12 @@
 				"name": "n",
 				"type": "int"
 			}
+		],
+		"returns": [
+			{
+				"name": "res",
+				"type": "int"
+			}
 		]
 	}
 }

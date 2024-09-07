@@ -74,7 +74,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 // @Param programmingID path string true "Programming ID"
 // @Param pathID path string true "Path ID"
 // @Success 200 {object} response.BaseResponse{data=dto.PathDTO}
-// @Router /private/path/{programmingID}/{pathID} [get]
+// @Router /private/road/path/{programmingID}/{pathID} [get]
 func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	pathID := c.Params("pathID")

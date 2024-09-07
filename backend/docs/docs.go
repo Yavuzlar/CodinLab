@@ -602,7 +602,53 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/path/{programmingID}/{pathID}": {
+        "/private/road/general/stats": {
+            "get": {
+                "description": "Gets users language road stats",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "GetUserLanguageRoadStats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/path/data": {
+            "get": {
+                "description": "Add dummy data for testing",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "DummyLogData",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/path/{programmingID}/{pathID}": {
             "get": {
                 "description": "Get Path By ID",
                 "consumes": [
@@ -648,52 +694,6 @@ const docTemplate = `{
                                     }
                                 }
                             ]
-                        }
-                    }
-                }
-            }
-        },
-        "/private/road/general/stats": {
-            "get": {
-                "description": "Gets users language road stats",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Road"
-                ],
-                "summary": "GetUserLanguageRoadStats",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/road/path/data": {
-            "get": {
-                "description": "Add dummy data for testing",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Road"
-                ],
-                "summary": "DummyLogData",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
                         }
                     }
                 }

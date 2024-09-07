@@ -57,7 +57,12 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 				params = append(params, *domains.NewParamLab(param.Name, param.Type))
 			}
 
-			quest := domains.NewQuestLab(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params)
+			var returns []domains.ReturnLab
+			for _, returnedParam := range lab.Quest.Returns {
+				returns = append(returns, *domains.NewReturnLab(returnedParam.Name, returnedParam.Type))
+			}
+
+			quest := domains.NewQuestLab(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params, returns)
 			newLab := domains.NewLab(lab.ID, languages, *quest, false, false)
 
 			labIDString := strconv.Itoa(lab.ID)
