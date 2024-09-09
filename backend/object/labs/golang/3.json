@@ -1,0 +1,64 @@
+{
+	"id": 3,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Sum of Array",
+			"description": "Calculates the sum of the array of a given number",
+			"note": "Questions Note",
+			"hint": "Use a loop to extract each digit and sum them."
+		},
+		{
+			"lang": "tr",
+			"title": "Diziyi Topla",
+			"description": "Verilen  dizinin toplamını hesaplar",
+			"note": "Sorunun Notu",
+			"hint": "Her bir diziyi toplamak için bir döngü kullan."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "sumOfArray",
+		"tests": [
+			{
+				"input": ["123"],
+				"output": ["6"]
+			},
+			{
+				"input": ["456"],
+				"output": ["15"]
+			},
+			{
+				"input": ["789"],
+				"output": ["24"]
+			}
+		],
+		"params": [
+			{
+				"name": "intArray",
+				"type": "[]int"
+			},
+			{
+				"name": "stringArray",
+				"type": "[]string"
+			}
+		],
+		"returns": [
+			{
+				"name": "sumInt",
+				"type": "int"
+			},
+			{
+				"name": "sumString",
+				"type": "string"
+			}
+		],
+		"questImports": [
+			"bufio",
+			"fmt",
+			"os",
+			"strconv",
+			"strings"
+		]
+	}
+}

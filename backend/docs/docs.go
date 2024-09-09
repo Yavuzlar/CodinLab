@@ -316,6 +316,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/lab/template/{programmingID}/{labID}": {
+            "get": {
+                "description": "Creating Go Template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GoTemplate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Lab ID",
+                        "name": "labID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/lab/{programmingID}/{labID}": {
             "get": {
                 "description": "Get Lab By Programming Language ID \u0026 Lab ID",
