@@ -17,6 +17,7 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute.Get("/general/stats", h.GetUserLanguageRoadStats)
 	roadRoute.Get("/path/data", h.AddDummyRoadData)
 	roadRoute.Get("/progress/stats", h.GetUserRoadProgressStats)
+	roadRoute.Post("/answer", h.AnswerRoad)
 }
 
 // @Tags Road
@@ -167,4 +168,59 @@ func (h *PrivateHandler) GetUserRoadProgressStats(c *fiber.Ctx) error {
 	roadDTO := h.dtoManager.RoadDTOManager.ToRoadProgressDTO(*roadStats)
 
 	return response.Response(200, "Get User Road Progress Stats", roadDTO)
+}
+
+// @Tags Road
+// @Summary Answer
+// @Description This is for answering quests.
+// @Accept json
+// @Produce json
+// @Param answerRoadDTO body dto.AnswerRoadDTO true "Answer Road DTO"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/answer [post]
+func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+	var answerRoadDTO dto.AnswerRoadDTO
+	if err := c.BodyParser(&answerRoadDTO); err != nil {
+		return err
+	}
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(answerRoadDTO.ProgrammingID))
+	if err != nil {
+		return response.Response(500, "Programming Language Information Error", nil)
+	}
+	if inventoryInformation == nil {
+		return response.Response(404, "Programming Language Not Found", nil)
+	}
+	road, err := h.services.RoadService.GetRoadByID(userSession.UserID, answerRoadDTO.ProgrammingID, answerRoadDTO.PathID)
+	if err != nil {
+		return response.Response(500, "Path Not Found", nil)
+	}
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, answerRoadDTO.ProgrammingID, answerRoadDTO.PathID, domains.TypePath, inventoryInformation.GetFileExtension(), answerRoadDTO.UserCode)
+	if err != nil {
+		return err
+	}
+
+	tmpContent, err := h.services.CodeService.CodeTemplateGenerator(inventoryInformation.GetName(), inventoryInformation.GetTemplatePath(), answerRoadDTO.UserCode, road.GetQuest().GetFuncName(), road.GetQuest().GetTests())
+	if err != nil {
+		return err
+	}
+
+	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
+		return err
+	}
+
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, inventoryInformation.GetCmd())
+	if err != nil {
+		return err
+	}
+
+	//eklenecek kısımlar:
+	//log cevabı kontrol edilir. Eğer başarılı ise tamamlandı loglanır
+	//başarılı değilse doğru ve yanlış cevap için özel mesaj oluşturulur( ~ ->bunun sağı ve solundaki cevaplar alınır)
+
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, int32(answerRoadDTO.ProgrammingID), int32(answerRoadDTO.PathID)); err != nil {
+		return response.Response(500, "Answer couldn't saved", nil)
+	}
+
+	return response.Response(200, logs, nil)
 }

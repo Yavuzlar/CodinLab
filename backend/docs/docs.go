@@ -318,7 +318,7 @@ const docTemplate = `{
         },
         "/private/lab/template/{programmingID}/{labID}": {
             "get": {
-                "description": "Creating Go Template",
+                "description": "Creating Go Template Test",
                 "consumes": [
                     "application/json"
                 ],
@@ -636,6 +636,40 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/answer": {
+            "post": {
+                "description": "This is for answering quests.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "Answer",
+                "parameters": [
+                    {
+                        "description": "Answer Road DTO",
+                        "name": "answerRoadDTO",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.AnswerRoadDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
                         }
                     }
                 }
@@ -1057,6 +1091,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "labID": {
+                    "type": "integer"
+                },
+                "programmindID": {
+                    "type": "integer"
+                },
+                "userCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.AnswerRoadDTO": {
+            "type": "object",
+            "properties": {
+                "pathID": {
                     "type": "integer"
                 },
                 "programmindID": {

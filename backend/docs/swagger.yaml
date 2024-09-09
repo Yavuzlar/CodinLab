@@ -24,6 +24,15 @@ definitions:
       userCode:
         type: string
     type: object
+  dto.AnswerRoadDTO:
+    properties:
+      pathID:
+        type: integer
+      programmindID:
+        type: integer
+      userCode:
+        type: string
+    type: object
   dto.CreateUserDTO:
     properties:
       githubProfile:
@@ -481,7 +490,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Creating Go Template
+      description: Creating Go Template Test
       parameters:
       - description: Programming Language ID
         in: path
@@ -681,6 +690,28 @@ paths:
                   $ref: '#/definitions/dto.GetRoadDTO'
               type: object
       summary: GetRoads
+      tags:
+      - Road
+  /private/road/answer:
+    post:
+      consumes:
+      - application/json
+      description: This is for answering quests.
+      parameters:
+      - description: Answer Road DTO
+        in: body
+        name: answerRoadDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AnswerRoadDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Answer
       tags:
       - Road
   /private/road/general/stats:
