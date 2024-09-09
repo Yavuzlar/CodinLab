@@ -477,6 +477,32 @@ paths:
       summary: DummyLogData
       tags:
       - Lab
+  /private/lab/template/{programmingID}/{labID}:
+    get:
+      consumes:
+      - application/json
+      description: Creating Go Template
+      parameters:
+      - description: Programming Language ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: Lab ID
+        in: path
+        name: labID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GoTemplate
+      tags:
+      - Lab
   /private/labs/{programmingID}:
     get:
       consumes:

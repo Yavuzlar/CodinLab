@@ -1,6 +1,7 @@
 package private
 
 import (
+	"os"
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -21,6 +22,7 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
 	root.Get("/lab/data", h.AddDummyLabData)
 	root.Post("/lab/answer", h.AnswerLab)
+	root.Get("/lab/template/:programmingID/:labID", h.GetGoTemplates)
 }
 
 // @Tags Lab
@@ -183,6 +185,44 @@ func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
 	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 2)
 
 	return response.Response(200, "Dummy Data Added", nil)
+}
+
+// @Tags Lab
+// @Summary GoTemplate
+// @Description Creating Go Template Test
+// @Accept json
+// @Produce json
+// @Param programmingID path string true "Programming Language ID"
+// @Param labID path string true "Lab ID"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/lab/template/{programmingID}/{labID} [get]
+func (h *PrivateHandler) GetGoTemplates(c *fiber.Ctx) error {
+	programmingID := c.Params("programmingID")
+	labID := c.Params("labID")
+
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return response.Response(400, "Invalid Lang ID", nil)
+	}
+
+	intLabID, err := strconv.Atoi(labID)
+	if err != nil {
+		return response.Response(400, "Invalid Labs ID", nil)
+	}
+	template, err := h.services.TemplateService.TemplateGenerator(domains.TypeLab, intProgrammingID, intLabID)
+	if err != nil {
+		return err
+	}
+
+	//test için object/template içerisine bir go dosyasına yazıyor.
+	dirPath := "./object/template"
+	filePath := dirPath + "/exampleFile.go"
+	os.MkdirAll(dirPath, os.ModePerm)
+	file, _ := os.Create(filePath)
+	defer file.Close()
+	file.WriteString(template)
+
+	return response.Response(200, "Go Template Successfull", template)
 }
 
 // @Tags Lab
