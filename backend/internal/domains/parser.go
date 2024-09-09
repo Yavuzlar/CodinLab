@@ -37,8 +37,8 @@ type LanguageP struct {
 
 // Test represents a test case for a function.
 type TestP struct {
-	Input  []string `json:"input"`
-	Output []string `json:"output"`
+	Input  []interface{} `json:"input"`
+	Output []interface{} `json:"output"`
 }
 
 // Param represents a parameter of a function.

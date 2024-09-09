@@ -22,15 +22,15 @@
 		"tests": [
 			{
 				"input": ["madam"],
-				"output": ["true"]
+				"output": [true]
 			},
 			{
 				"input": ["hello"],
-				"output": ["false"]
+				"output": [false]
 			},
 			{
 				"input": ["racecar"],
-				"output": ["true"]
+				"output": [true]
 			}
 		],
 		"params": [
