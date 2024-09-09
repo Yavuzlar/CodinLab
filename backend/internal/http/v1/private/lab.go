@@ -240,12 +240,12 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	}
 
 	userSession := session_store.GetSessionData(c)
-	roadInformation, err := h.services.RoadService.GetRoadInformation(int32(answerLabDTO.ProgrammingID))
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(answerLabDTO.ProgrammingID))
 	if err != nil {
-		return response.Response(500, "Road Information Error", nil)
+		return response.Response(500, "Programming Language Information Error", nil)
 	}
-	if roadInformation == nil {
-		return response.Response(404, "Road Not Found", nil)
+	if inventoryInformation == nil {
+		return response.Response(404, "Programming Language Not Found", nil)
 	}
 
 	lab, err := h.services.LabService.GetLabByID(userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID)
@@ -256,12 +256,12 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return response.Response(404, "Lab Not Found", nil)
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID, domains.TypeLab, roadInformation.GetFileExtension(), answerLabDTO.UserCode)
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
 	if err != nil {
 		return err
 	}
 
-	tmpContent, err := h.services.CodeService.CodeTemplateGenerator(roadInformation.GetName(), roadInformation.GetTemplatePath(), answerLabDTO.UserCode, lab.GetQuest().GetFuncName(), lab.GetQuest().GetTests())
+	tmpContent, err := h.services.CodeService.CodeTemplateGenerator(inventoryInformation.GetName(), inventoryInformation.GetTemplatePath(), answerLabDTO.UserCode, lab.GetQuest().GetFuncName(), lab.GetQuest().GetTests())
 	if err != nil {
 		return err
 	}
@@ -270,7 +270,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), roadInformation.GetDockerImage(), tmpPath, roadInformation.GetCmd())
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, inventoryInformation.GetCmd())
 	if err != nil {
 		return err
 	}

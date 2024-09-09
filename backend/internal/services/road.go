@@ -25,36 +25,6 @@ func newRoadService(
 	}
 }
 
-// Retrieves name, dockerImage and icon path
-func (s *roadService) GetRoadInformation(programmingID int32) (*domains.Road, error) {
-	src, err := s.parserService.GetRoads()
-	if err != nil {
-		return nil, err
-	}
-
-	var road domains.Road
-	var isRoad bool
-	for _, roadCollection := range src {
-		if roadCollection.ID == int(programmingID) {
-			isRoad = true
-			road.SetID(int(programmingID))
-			road.SetName(roadCollection.Name)
-			road.SetDockerImage(roadCollection.DockerImage)
-			road.SetIconPath(roadCollection.IconPath)
-			road.SetCmd(roadCollection.Cmd)
-			road.SetFileExtension(roadCollection.FileExtension)
-			road.SetTemplatePath(roadCollection.TemplatePath)
-			break
-		}
-	}
-
-	if !isRoad {
-		return nil, err
-	}
-
-	return &road, err
-}
-
 func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 	src, err := s.parserService.GetRoads()
 	if err != nil {
@@ -259,4 +229,22 @@ func (s *roadService) GetUserRoadProgressStats(userID string) (progressStats *do
 		float32(completed)/float32(totalRoads)*100,
 	)
 	return
+}
+
+func (s *roadService) GetRoadByID(userID string, programmingID, pathID int) (path *domains.Path, err error) {
+	road, err := s.getAllRoads(userID)
+	if err != nil {
+		return nil, err
+	}
+	for _, roadCollection := range road {
+		if roadCollection.GetID() == int(programmingID) {
+			for _, path := range roadCollection.GetPaths() {
+				if path.GetID() == pathID {
+					return &path, nil
+				}
+			}
+		}
+	}
+
+	return nil, err
 }

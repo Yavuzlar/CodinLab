@@ -13,7 +13,7 @@ import (
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
 	roadRoute.Get("/:programmingID", h.GetRoad)
-	roadRoute.Get("/path/:programmingID/:pathID", h.GetPath)
+	root.Get("/path/:programmingID/:pathID", h.GetPath)
 	roadRoute.Get("/general/stats", h.GetUserLanguageRoadStats)
 	roadRoute.Get("/path/data", h.AddDummyRoadData)
 	roadRoute.Get("/progress/stats", h.GetUserRoadProgressStats)
