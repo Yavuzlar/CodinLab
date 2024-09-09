@@ -21,7 +21,7 @@
 		"funcName": "helloWorld",
 		"tests": [
 			{
-				"input": [""],
+				"input": [],
 				"output": ["Hello, World!"]
 			}
 		],

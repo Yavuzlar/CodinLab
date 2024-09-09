@@ -21,16 +21,16 @@
 		"funcName": "factorial",
 		"tests": [
 			{
-				"input": ["5"],
-				"output": ["120"]
+				"input": [5],
+				"output": [120]
 			},
 			{
-				"input": ["7"],
-				"output": ["5040"]
+				"input": [7],
+				"output": [5040]
 			},
 			{
-				"input": ["10"],
-				"output": ["3628800"]
+				"input": [10],
+				"output": [3628800]
 			}
 		],
 		"params": [

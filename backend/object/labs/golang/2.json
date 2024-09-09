@@ -21,16 +21,16 @@
 		"funcName": "sumOfDigits",
 		"tests": [
 			{
-				"input": ["123"],
-				"output": ["6"]
+				"input": [123],
+				"output": [6]
 			},
 			{
-				"input": ["456"],
-				"output": ["15"]
+				"input": [456],
+				"output": [15]
 			},
 			{
-				"input": ["789"],
-				"output": ["24"]
+				"input": [789],
+				"output": [24]
 			}
 		],
 		"params": [

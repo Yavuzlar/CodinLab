@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -132,14 +131,28 @@ func (s *codeService) goLabTemplate(templatePathObject, content, funcName string
 	for _, test := range tests {
 		result += "\t{input:[]interface{}{"
 		for i, input := range test.GetInput() {
-			result += formatInput(input)
+
+			switch input.(type) { //checking if string or not
+			case string:
+				result += fmt.Sprintf("\"%v\"", input)
+			default:
+				result += fmt.Sprintf("%v", input)
+			}
+
 			if len(test.GetInput()) != i+1 {
 				result += ","
 			}
 		}
 		result += "}, output:[]interface{}{"
 		for i, output := range test.GetOutput() {
-			result += formatInput(output)
+
+			switch output.(type) {
+			case string:
+				result += fmt.Sprintf("\"%v\"", output)
+			default:
+				result += fmt.Sprintf("%v", output)
+			}
+
 			if len(test.GetOutput()) != i+1 {
 				result += ","
 			}
@@ -152,29 +165,6 @@ func (s *codeService) goLabTemplate(templatePathObject, content, funcName string
 	replace = strings.Replace(replace, "#tests", result, -1)
 
 	return replace, nil
-}
-
-// Helper function to format input and output values correctly
-func formatInput(value interface{}) string {
-	switch v := value.(type) {
-	case string:
-		// Convert "true" and "false" strings to their boolean representations
-		if strings.ToLower(v) == "true" || strings.ToLower(v) == "false" {
-			return v
-		}
-		// Convert numeric strings to integers
-		if num, err := strconv.Atoi(v); err == nil {
-			return fmt.Sprintf("%d", num)
-		}
-		// Otherwise, format as a string
-		return fmt.Sprintf("\"%s\"", v)
-	case bool:
-		return fmt.Sprintf("%v", v)
-	case int:
-		return fmt.Sprintf("%d", v)
-	default:
-		return fmt.Sprintf("%v", v)
-	}
 }
 
 func (s *codeService) createCodeFile(userID string) (err error) {

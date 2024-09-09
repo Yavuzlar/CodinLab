@@ -2,24 +2,24 @@ package domains
 
 // Test represents a test case for a function.
 type Test struct {
-	input  []string
-	output []string
+	input  []interface{}
+	output []interface{}
 }
 
 // Getter and Setter methods for Test
-func (t *Test) GetInput() []string {
+func (t *Test) GetInput() []interface{} {
 	return t.input
 }
 
-func (t *Test) SetInput(input []string) {
+func (t *Test) SetInput(input []interface{}) {
 	t.input = input
 }
 
-func (t *Test) GetOutput() []string {
+func (t *Test) GetOutput() []interface{} {
 	return t.output
 }
 
-func (t *Test) SetOutput(output []string) {
+func (t *Test) SetOutput(output []interface{}) {
 	t.output = output
 }
 
@@ -129,7 +129,7 @@ func (q *Quest) SetQuestImports(QuestImports []string) {
 }
 
 // NewTest creates a new instance of Test
-func NewTest(input, output []string) *Test {
+func NewTest(input, output []interface{}) *Test {
 	return &Test{
 		input:  input,
 		output: output,
