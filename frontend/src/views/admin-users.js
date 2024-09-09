@@ -30,7 +30,7 @@ const UsersList = () => {
   const [filters, setFilters] = useState({
     status: "all",
     search: "",
-    sort: "", 
+    sort: "",
   });
 
   const rows = [
