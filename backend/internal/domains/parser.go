@@ -2,7 +2,7 @@ package domains
 
 // IParserService is the interface that provides the methods for the parser service.
 type IParserService interface {
-	GetLabs() (labs []LabsP, err error)
+	GetLabs() (labs []LabP, err error)
 	GetRoads() (roads []RoadP, err error)
 	GetInventory() (inventory []InventoryP, err error)
 	GetLevels() (userLevel []LevelP, err error)
@@ -52,15 +52,21 @@ type ReturnP struct {
 	Name string `json:"name"`
 	Type string `json:"type"`
 }
+type CodeTemplateP struct {
+	ProgrammingID int    `json:"programmingID"`
+	Frontend      string `json:"frontend"`
+	Template      string `json:"template"`
+	Check         string `json:"check"`
+}
 
-// Quest represents a coding challenge or task.
 type QuestP struct {
-	Difficulty   int       `json:"difficulty"`
-	FuncName     string    `json:"funcName"`
-	Tests        []TestP   `json:"tests"`
-	Params       []ParamP  `json:"params"`
-	Returns      []ReturnP `json:"returns"`
-	QuestImports []string  `json:"questImports"`
+	Difficulty    int             `json:"difficulty"`
+	FuncName      string          `json:"funcName"`
+	Tests         []TestP         `json:"tests"`
+	Params        []ParamP        `json:"params"`
+	Returns       []ReturnP       `json:"returns"`
+	QuestImports  []string        `json:"questImports"`
+	CodeTemplates []CodeTemplateP `json:"codeTemplates"`
 }
 
 // Lab represents a specific coding lab exercise.
@@ -68,18 +74,6 @@ type LabP struct {
 	ID        int         `json:"id"`
 	Languages []LanguageP `json:"languages"`
 	Quest     QuestP      `json:"quest"`
-}
-
-// Labs represents a collection of labs grouped together.
-type LabsP struct {
-	ID            int
-	Name          string
-	DockerImage   string
-	IconPath      string
-	Cmd           []string
-	FileExtension string
-	TemplatePath  string
-	Labs          []LabP
 }
 
 // Path represents a coding learning path.

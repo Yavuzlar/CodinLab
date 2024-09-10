@@ -1,9 +1,6 @@
 package services
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 )
 
@@ -31,7 +28,7 @@ func newTemplateService(
 	}
 }
 
-// Template Generator ana fonksiyonu
+/* // Template Generator ana fonksiyonu
 func (s *templateService) TemplateGenerator(category string, programmingID, labRoadID int) (string, error) {
 	template := ""
 	if category == domains.TypeLab {
@@ -329,3 +326,4 @@ func goReadFromInput(params []domains.Param) string {
 
 	return codeSnippet
 }
+*/

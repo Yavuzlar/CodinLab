@@ -316,9 +316,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/lab/template/{programmingID}/{labID}": {
+        "/private/lab/{labID}": {
             "get": {
-                "description": "Creating Go Template",
+                "description": "Get Lab By Programming Language ID \u0026 Lab ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -328,15 +328,8 @@ const docTemplate = `{
                 "tags": [
                     "Lab"
                 ],
-                "summary": "GoTemplate",
+                "summary": "GetLabByID",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Programming Language ID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Lab ID",
@@ -355,9 +348,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/lab/{programmingID}/{labID}": {
+        "/private/labs/": {
             "get": {
-                "description": "Get Lab By Programming Language ID \u0026 Lab ID",
+                "description": "Get Labs",
                 "consumes": [
                     "application/json"
                 ],
@@ -367,23 +360,7 @@ const docTemplate = `{
                 "tags": [
                     "Lab"
                 ],
-                "summary": "GetLabByID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Programming Language ID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Lab ID",
-                        "name": "labID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "GetLabs",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -453,38 +430,6 @@ const docTemplate = `{
                     "Lab"
                 ],
                 "summary": "GetUserLabProgressStats",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/labs/{programmingID}": {
-            "get": {
-                "description": "Get Labs By Programming Language ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Lab"
-                ],
-                "summary": "GetLabs",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Programming Language ID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -815,7 +760,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StartLabRoad"
+                    "LabRoadCommon"
                 ],
                 "summary": "Start",
                 "parameters": [
@@ -823,6 +768,45 @@ const docTemplate = `{
                         "type": "string",
                         "description": "programmingID",
                         "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/template/{labID}/{programmingID}": {
+            "get": {
+                "description": "Get Template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LabRoadCommon"
+                ],
+                "summary": "Get Template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "labID",
+                        "name": "labID",
                         "in": "path",
                         "required": true
                     }

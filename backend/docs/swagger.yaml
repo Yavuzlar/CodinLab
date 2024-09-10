@@ -414,17 +414,12 @@ paths:
       summary: GetUserLevel
       tags:
       - Home
-  /private/lab/{programmingID}/{labID}:
+  /private/lab/{labID}:
     get:
       consumes:
       - application/json
       description: Get Lab By Programming Language ID & Lab ID
       parameters:
-      - description: Programming Language ID
-        in: path
-        name: programmingID
-        required: true
-        type: string
       - description: Lab ID
         in: path
         name: labID
@@ -477,43 +472,11 @@ paths:
       summary: DummyLogData
       tags:
       - Lab
-  /private/lab/template/{programmingID}/{labID}:
+  /private/labs/:
     get:
       consumes:
       - application/json
-      description: Creating Go Template
-      parameters:
-      - description: Programming Language ID
-        in: path
-        name: programmingID
-        required: true
-        type: string
-      - description: Lab ID
-        in: path
-        name: labID
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: GoTemplate
-      tags:
-      - Lab
-  /private/labs/{programmingID}:
-    get:
-      consumes:
-      - application/json
-      description: Get Labs By Programming Language ID
-      parameters:
-      - description: Programming Language ID
-        in: path
-        name: programmingID
-        required: true
-        type: string
+      description: Get Labs
       produces:
       - application/json
       responses:
@@ -779,7 +742,33 @@ paths:
             $ref: '#/definitions/response.BaseResponse'
       summary: Start
       tags:
-      - StartLabRoad
+      - LabRoadCommon
+  /private/template/{labID}/{programmingID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Template
+      parameters:
+      - description: programmingID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: labID
+        in: path
+        name: labID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Template
+      tags:
+      - LabRoadCommon
   /private/user/:
     get:
       consumes:

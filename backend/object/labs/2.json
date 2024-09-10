@@ -1,0 +1,64 @@
+{
+	"id": 2,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Sum of Two Numbers",
+			"description": "Calculates the sum of two given integers and returns the result.",
+			"note": "Questions Note",
+			"hint": "Add the two integers and return the result."
+		},
+		{
+			"lang": "tr",
+			"title": "İki Sayının Toplamı",
+			"description": "İki verilen tam sayının toplamını hesaplar ve sonucu döndürür.",
+			"note": "Sorunun Notu",
+			"hint": "İki tam sayıyı toplayın ve sonucu döndürün."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "sumTwoNumbers",
+		"tests": [
+			{
+				"input": [3, 4],
+				"output": [7]
+			},
+			{
+				"input": [5, 10],
+				"output": [15]
+			},
+			{
+				"input": [8, 2],
+				"output": [10]
+			}
+		],
+		"params": [
+			{
+				"name": "num1",
+				"type": "int"
+			},
+			{
+				"name": "num2",
+				"type": "int"
+			}
+		],
+		"returns": [
+			{
+				"name": "sum",
+				"type": "int"
+			}
+		],
+		"questImports": [
+			"#include <iostream>"
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"template": "$userCode$\n\nint main() {\n    $checks$\n    return 0;\n}",
+				"frontend": "$returns$ $funcname$($params$){\n\n // Write your code here \n\n}",
+				"check": "int result = $func$($input$);\n    if (result == $output$) {\n        std::cout << \"Test Passed\" << std::endl;\n    } else {\n        std::cout << \"Test Failed: Expected $output$, but got \" << result << std::endl;\n    }\n"
+			}
+		]
+	}
+}

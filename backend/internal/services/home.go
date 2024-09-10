@@ -66,7 +66,7 @@ func (s *homeService) GetUserDevelopment(ctx context.Context, userID string) (de
 		if err != nil {
 			return development, err
 		}
-		allLabsCount := s.countAllLab(allLabs)
+		allLabsCount := len(allLabs)
 		if allLabsCount > 0 {
 			if labCompletedCount > allLabsCount {
 				labCompletedCount = allLabsCount
@@ -119,7 +119,7 @@ func (s *homeService) GetUserAdvancement(ctx context.Context, userID string) (ad
 
 		labCompletedCount := len(labCompleted)
 		if labCompletedCount > 0 {
-			labByIdCount := s.countLabById(allLabs, item.ID)
+			labByIdCount := len(allLabs)
 			if labByIdCount > 0 {
 				if labCompletedCount > labByIdCount {
 					labCompletedCount = labByIdCount
@@ -177,28 +177,10 @@ func (s *homeService) countRoadById(roadsP []domains.RoadP, id int) int {
 	return count
 }
 
-func (s *homeService) countLabById(labsP []domains.LabsP, id int) int {
-	count := 0
-	for _, labGroup := range labsP {
-		if labGroup.ID == id {
-			count += len(labGroup.Labs)
-		}
-	}
-	return count
-}
-
 func (s *homeService) countAllRoad(roadsP []domains.RoadP) int {
 	count := 0
 	for _, roadGroup := range roadsP {
 		count += len(roadGroup.Paths)
-	}
-	return count
-}
-
-func (s *homeService) countAllLab(labsP []domains.LabsP) int {
-	count := 0
-	for _, labGroup := range labsP {
-		count += len(labGroup.Labs)
 	}
 	return count
 }
