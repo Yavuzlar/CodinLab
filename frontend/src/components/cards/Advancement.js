@@ -12,8 +12,11 @@ import { fetchAdvancement } from "src/store/statistics/statisticsSlice";
 import { languages } from "src/data/home";
 
 const Advancement = () => {
-  const dispatch = useDispatch();
-  const { data: advancementData } = useSelector((state) => state.statistics);
+
+  const dispatch = useDispatch();   
+  const { statistics: stateStatistics } = useSelector(
+    (state) => state
+  );
 
   useEffect(() => {
     dispatch(fetchAdvancement());
@@ -49,7 +52,7 @@ const Advancement = () => {
               flexGrow: 1,
             }}
           >
-            {advancementData.map((languages, index) => (
+            {stateStatistics.advancementData?.data?.map((languages, index) => (
               <Box
                 sx={{
                   display: "flex",

@@ -5,11 +5,12 @@ import axios from "axios";
 const initialState = {
   loading: false,
   data: [],
+  advancementData: [],
   error: false,
 };
 
 export const fetchAdvancement = createAsyncThunk(
-  "statistics/fetchAdvancement",
+  "advancementStatistics/fetchAdvancement",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios({
@@ -17,14 +18,13 @@ export const fetchAdvancement = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data.data; 
+        return response.data; 
       }
     } catch (error) {
       return rejectWithValue(response.message); 
     }
   }
 );
-
 
 export const GetUserLevel = createAsyncThunk(
   "statistics/GetUserLevel",
@@ -65,18 +65,18 @@ const statisticsSlice = createSlice({
   initialState: initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAdvancement.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAdvancement.fulfilled, (state, action) => {
-        state.data = action.payload;
-        state.loading = false;
-      })
-      .addCase(fetchAdvancement.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
+    .addCase(fetchAdvancement.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(fetchAdvancement.fulfilled, (state, action) => {
+      state.advancementData = action.payload;
+      state.loading = false;
+    })
+    .addCase(fetchAdvancement.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
       .addCase(GetUserLevel.pending, (state) => {
         state.loading = true;
         state.error = null;
