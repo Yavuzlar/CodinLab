@@ -1,6 +1,7 @@
 package private
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -242,7 +243,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	roadInformation, err := h.services.RoadService.GetRoadInformation(int32(answerLabDTO.ProgrammingID))
 	if err != nil {
-		return response.Response(500, "Road Information Error", nil)
+		return response.Response(500, "Road Information Error", err)
 	}
 	if roadInformation == nil {
 		return response.Response(404, "Road Not Found", nil)
@@ -250,7 +251,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 
 	lab, err := h.services.LabService.GetLabByID(userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID)
 	if err != nil {
-		return response.Response(404, "Error While Getting Lab", nil)
+		return response.Response(404, "Error While Getting Lab", err)
 	}
 	if lab == nil {
 		return response.Response(404, "Lab Not Found", nil)
@@ -261,16 +262,26 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	tmpContent, err := h.services.CodeService.CodeTemplateGenerator(roadInformation.GetName(), roadInformation.GetTemplatePath(), answerLabDTO.UserCode, lab.GetQuest().GetFuncName(), lab.GetQuest().GetTests())
+	var codeTemplate domains.CodeTemplate
+	for _, codeTmp := range lab.GetQuest().GetCodeTemplates() {
+		if codeTmp.Name == roadInformation.GetName() {
+			codeTemplate = codeTmp
+		}
+	}
+
+	tmpContent, err := h.services.CodeService.CodeTemplateGenerator(codeTemplate.Template, codeTemplate.Check, answerLabDTO.UserCode, lab.GetQuest().GetFuncName(), lab.GetQuest().GetTests())
 	if err != nil {
 		return err
 	}
+	// FIXME: LABLARI TEKE AL. SUAN C++ VE GOLANG DEKİ SORULARI ÇÖZEBİLİYORSUN SORUN YOK.
+	// fmt.Println("Content: ", tmpContent)
 
 	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
 		return err
 	}
 
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), roadInformation.GetDockerImage(), tmpPath, roadInformation.GetCmd())
+	// roadInformation.GetCmd()
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), roadInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", roadInformation.GetFileExtension()), roadInformation.GetCmd())
 	if err != nil {
 		return err
 	}

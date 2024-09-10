@@ -92,7 +92,12 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 				questImports = append(questImports, questImport)
 			}
 
-			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, questImports)
+			var codeTemplates []domains.CodeTemplate
+			for _, codeTemplateParser := range path.Quest.CodeTemplates {
+				codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.Name, codeTemplateParser.Template, codeTemplateParser.Check))
+			}
+
+			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, questImports, codeTemplates)
 			newPath := domains.NewPath(path.ID, languages, *quest, false, false)
 
 			isStarted, isFinished, err := s.getPathStatuses(userID, fmt.Sprintf("%v", roadCollection.ID), fmt.Sprintf("%v", path.ID))

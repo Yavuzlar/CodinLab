@@ -50,8 +50,8 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 	return s.dockerSDK.Images().IsImageExists(ctx, imageReference)
 }
 
-func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath string, cmd []string) (string, error) {
-	return s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath)
+func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error) {
+	return s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath, fileName)
 }
 
 // Bunu Answer Kısmınlarında Kullanacaksın.
@@ -97,13 +97,67 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID string, program
 	return codeTmpPath, nil
 }
 
-// Bu kısımda bütün diller için template oluşturma kısmı gelicek.
-func (s *codeService) CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []domains.Test) (string, error) {
-	if programmingName == "GO" {
-		return s.goLabTemplate(templatePathObject, content, funcName, tests)
+// // Bu kısımda bütün diller için template oluşturma kısmı gelicek.
+// func (s *codeService) CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []domains.Test) (string, error) {
+// 	if programmingName == "GO" {
+// 		return s.goLabTemplate(templatePathObject, content, funcName, tests)
+// 	}
+
+// 	return "", service_errors.NewServiceErrorWithMessage(500, "this programming language not supported")
+// }
+
+func (s *codeService) CodeTemplateGenerator(template, check, userCode, funcName string, tests []domains.Test) (string, error) {
+	if !strings.Contains(userCode, funcName) {
+		return "", fmt.Errorf("invalid func name")
 	}
 
-	return "", service_errors.NewServiceErrorWithMessage(500, "this programming language not supported")
+	checks := s.createChecks(check, tests)
+	template = strings.Replace(template, "$checks$", checks, -1)
+	template = strings.Replace(template, "$func$", funcName, -1)
+	template = strings.Replace(template, "$userCode$", userCode, -1)
+
+	return template, nil
+}
+
+func (s *codeService) createChecks(check string, tests []domains.Test) string {
+	var checks strings.Builder
+
+	for i, test := range tests {
+		tmp := check
+		tmp = strings.Replace(tmp, "result", fmt.Sprintf("result%v", i), -1)
+
+		// Handle input replacement
+		var inputs []string
+		for _, in := range test.GetInput() {
+			switch v := in.(type) {
+			case string:
+				// Add double quotes around string inputs
+				inputs = append(inputs, `"`+v+`"`)
+			default:
+				// Directly use other types (int, etc.)
+				inputs = append(inputs, fmt.Sprintf("%v", v))
+			}
+		}
+		tmp = strings.Replace(tmp, "$input$", strings.Join(inputs, ", "), -1)
+
+		// Handle output replacement
+		var outputs []string
+		for _, out := range test.GetOutput() {
+			switch v := out.(type) {
+			case string:
+				// Add double quotes around string outputs
+				outputs = append(outputs, `"`+v+`"`)
+			default:
+				// Directly use other types (int, etc.)
+				outputs = append(outputs, fmt.Sprintf("%v", v))
+			}
+		}
+		tmp = strings.Replace(tmp, "$output$", strings.Join(outputs, ", "), -1)
+
+		checks.WriteString(tmp + "\n")
+	}
+
+	return checks.String()
 }
 
 func (s *codeService) goLabTemplate(templatePathObject, content, funcName string, tests []domains.Test) (string, error) {

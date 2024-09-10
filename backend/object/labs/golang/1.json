@@ -3,50 +3,61 @@
 	"languages": [
 		{
 			"lang": "en",
-			"title": "Prime Number Checker",
-			"description": "Checks if a given number is a prime number",
+			"title": "Multiplication Checker",
+			"description": "Calculates the product of two given numbers.",
 			"note": "Questions Note",
-			"hint": "A prime number is only divisible by 1 and itself. Use a loop to check divisibility."
+			"hint": "Multiply the two input numbers to get the result."
 		},
 		{
 			"lang": "tr",
-			"title": "Asal Sayı Kontrolü",
-			"description": "Verilen bir sayının asal olup olmadığını kontrol eder",
+			"title": "Çarpma Kontrolü",
+			"description": "Verilen iki sayının çarpımını hesaplar.",
 			"note": "Sorunun Notu",
-			"hint": "Bir asal sayı sadece 1'e ve kendisine bölünebilir. Bölünebilirliği kontrol etmek için bir döngü kullan."
+			"hint": "Sonucu elde etmek için iki girdi sayıyı çarpın."
 		}
 	],
 	"quest": {
-		"difficulty": 2,
-		"funcName": "isPrime",
+		"difficulty": 1,
+		"funcName": "multiply",
 		"tests": [
 			{
-				"input": [5],
-				"output": [true]
+				"input": [3, 4],
+				"output": [12]
 			},
 			{
-				"input": [8],
-				"output": [false]
+				"input": [5, 6],
+				"output": [30]
 			},
 			{
-				"input": [13],
-				"output": [true]
+				"input": [7, 8],
+				"output": [56]
 			}
 		],
 		"params": [
 			{
-				"name": "n",
+				"name": "a",
+				"type": "int"
+			},
+			{
+				"name": "b",
 				"type": "int"
 			}
 		],
 		"returns": [
 			{
-				"name": "res",
-				"type": "bool"
+				"name": "result",
+				"type": "int"
 			}
 		],
 		"questImports": [
 			"fmt"
+		],
+		"codeTemplates": [
+			{
+				"name": "GO",
+				"template": "\n\n$userCode$\n\nfunc main() {\n    $checks$\n}",
+				"check": "result := $func$($input$)\n    if result == $output$ {\n        fmt.Println(\"Test Passed\")\n    } else {\n        fmt.Printf(\"Test Failed: Expected %d, but got %d\\n\", $output$, result)\n    }"
+			}
 		]
 	}
 }

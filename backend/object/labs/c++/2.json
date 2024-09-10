@@ -3,50 +3,61 @@
 	"languages": [
 		{
 			"lang": "en",
-			"title": "Factorial Calculator",
-			"description": "Calculates the factorial of a given number",
+			"title": "Sum of Two Numbers",
+			"description": "Calculates the sum of two given integers and returns the result.",
 			"note": "Questions Note",
-			"hint": "Use recursion or a loop to multiply the number by each positive integer less than it."
+			"hint": "Add the two integers and return the result."
 		},
 		{
 			"lang": "tr",
-			"title": "Faktöriyel Hesaplayıcı",
-			"description": "Verilen bir sayının faktöriyelini hesaplar",
+			"title": "İki Sayının Toplamı",
+			"description": "İki verilen tam sayının toplamını hesaplar ve sonucu döndürür.",
 			"note": "Sorunun Notu",
-			"hint": "Rekursif veya döngü kullanarak sayıyı kendisinden küçük pozitif tam sayılarla çarp."
+			"hint": "İki tam sayıyı toplayın ve sonucu döndürün."
 		}
 	],
 	"quest": {
-		"difficulty": 2,
-		"funcName": "factorial",
+		"difficulty": 1,
+		"funcName": "sumTwoNumbers",
 		"tests": [
 			{
-				"input": [5],
-				"output": [120]
+				"input": [3, 4],
+				"output": [7]
 			},
 			{
-				"input": [7],
-				"output": [5040]
+				"input": [5, 10],
+				"output": [15]
 			},
 			{
-				"input": [10],
-				"output": [3628800]
+				"input": [8, 2],
+				"output": [10]
 			}
 		],
 		"params": [
 			{
-				"name": "n",
+				"name": "num1",
+				"type": "int"
+			},
+			{
+				"name": "num2",
 				"type": "int"
 			}
 		],
 		"returns": [
 			{
-				"name": "res",
+				"name": "sum",
 				"type": "int"
 			}
 		],
 		"questImports": [
-			"#include <iostream>"		
+			"#include <iostream>"
+		],
+		"codeTemplates": [
+			{
+				"name": "C++",
+				"template": "$userCode$\n\nint main() {\n    $checks$\n    return 0;\n}",
+				"check": "int result = $func$($input$);\n    if (result == $output$) {\n        std::cout << \"Test Passed\" << std::endl;\n    } else {\n        std::cout << \"Test Failed: Expected $output$, but got \" << result << std::endl;\n    }\n"
+			}
 		]
 	}
 }

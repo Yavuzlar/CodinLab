@@ -20,7 +20,7 @@ type IContainerManager interface {
 	StartContainer(ctx context.Context, containerID string) error
 	StopContainer(ctx context.Context, containerID string) error
 	ReadContainerLogs(ctx context.Context, containerID string) (string, error)
-	RunContainerWithTar(ctx context.Context, image string, cmd []string, tmpCodePath string) (string, error)
+	RunContainerWithTar(ctx context.Context, image string, cmd []string, tmpCodePath, fileName string) (string, error)
 }
 
 // Manager, manages the docker containers
@@ -114,7 +114,7 @@ func (m *Manager) ContainerIDByName(ctx context.Context, containerName string) (
 	return containerID, nil
 }
 
-func (m *Manager) RunContainerWithTar(ctx context.Context, image string, cmd []string, tmpCodePath string) (string, error) {
+func (m *Manager) RunContainerWithTar(ctx context.Context, image string, cmd []string, tmpCodePath, fileName string) (string, error) {
 	// Creates container
 	resp, err := m.client.ContainerCreate(ctx, &container.Config{
 		Image:        image,
@@ -127,7 +127,7 @@ func (m *Manager) RunContainerWithTar(ctx context.Context, image string, cmd []s
 	}
 
 	// Copy file to container
-	if err := m.CopyToContainer(ctx, resp.ID, tmpCodePath, "/go"); err != nil {
+	if err := m.CopyToContainer(ctx, resp.ID, tmpCodePath, "/", fileName); err != nil {
 		return "", fmt.Errorf("error copying file to container: %w", err)
 	}
 
@@ -161,7 +161,7 @@ func (m *Manager) RunContainerWithTar(ctx context.Context, image string, cmd []s
 	return logs, nil
 }
 
-func (m *Manager) CopyToContainer(ctx context.Context, containerID, srcPath, destPath string) error {
+func (m *Manager) CopyToContainer(ctx context.Context, containerID, srcPath, destPath, fileName string) error {
 	// Create tarball
 	tarBuffer := new(bytes.Buffer)
 	tw := tar.NewWriter(tarBuffer)
@@ -177,7 +177,7 @@ func (m *Manager) CopyToContainer(ctx context.Context, containerID, srcPath, des
 		return fmt.Errorf("error getting file info: %w", err)
 	}
 
-	header, err := CreateTarHeader("main.go", int64(stat.Mode()), stat.Size())
+	header, err := CreateTarHeader(fileName, int64(stat.Mode()), stat.Size())
 	if err != nil {
 		return fmt.Errorf("error creating tar header: %w", err)
 	}
