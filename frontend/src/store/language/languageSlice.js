@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = { //initial state
+const initialState = {
   loading: false,
   data: [],
   error: false,
@@ -31,6 +31,23 @@ export const getUserLanguageLabStats = createAsyncThunk(
     try {
       const response = await axios({
         url: "/api/v1/private/labs/general/stats",
+        method: "GET",
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      return rejectWithValue(response.message);
+    }
+  }
+);
+
+export const getUserLanguageRoadStats = createAsyncThunk(
+  "language/getUserLanguageRoadStats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        url: "/api/v1/private/road/general/stats",
         method: "GET",
       });
       if (response.status === 200) {
@@ -71,7 +88,20 @@ const languageSlice = createSlice({
       .addCase(getUserLanguageLabStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(getUserLanguageRoadStats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUserLanguageRoadStats.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.loading = false;
+      })
+      .addCase(getUserLanguageRoadStats.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+      
     }
 });
 

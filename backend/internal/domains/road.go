@@ -69,124 +69,11 @@ func NewLanguageRoad(lang, title, description, content, note string) *LanguageRo
 	}
 }
 
-// TestRoad represents a test case for a function.
-type TestRoad struct {
-	input  []string
-	output []string
-}
-
-// Getter and Setter methods for TestRoad
-func (t *TestRoad) GetInput() []string {
-	return t.input
-}
-
-func (t *TestRoad) SetInput(input []string) {
-	t.input = input
-}
-
-func (t *TestRoad) GetOutput() []string {
-	return t.output
-}
-
-func (t *TestRoad) SetOutput(output []string) {
-	t.output = output
-}
-
-// NewTestRoad creates a new instance of TestRoad
-func NewTestRoad(input, output []string) *TestRoad {
-	return &TestRoad{
-		input:  input,
-		output: output,
-	}
-}
-
-// ParamRoad represents a parameter of a function.
-type ParamRoad struct {
-	name string
-	typ  string
-}
-
-// Getter and Setter methods for ParamRoad
-func (p *ParamRoad) GetName() string {
-	return p.name
-}
-
-func (p *ParamRoad) SetName(name string) {
-	p.name = name
-}
-
-func (p *ParamRoad) GetType() string {
-	return p.typ
-}
-
-func (p *ParamRoad) SetType(typ string) {
-	p.typ = typ
-}
-
-// NewParamRoad creates a new instance of ParamRoad
-func NewParamRoad(name, typ string) *ParamRoad {
-	return &ParamRoad{
-		name: name,
-		typ:  typ,
-	}
-}
-
-// QuestRoad represents a coding challenge or task.
-type QuestRoad struct {
-	difficulty int
-	funcName   string
-	tests      []TestRoad
-	params     []ParamRoad
-}
-
-// Getter and Setter methods for QuestRoad
-func (q *QuestRoad) GetDifficulty() int {
-	return q.difficulty
-}
-
-func (q *QuestRoad) SetDifficulty(difficulty int) {
-	q.difficulty = difficulty
-}
-
-func (q *QuestRoad) GetFuncName() string {
-	return q.funcName
-}
-
-func (q *QuestRoad) SetFuncName(funcName string) {
-	q.funcName = funcName
-}
-
-func (q *QuestRoad) GetTests() []TestRoad {
-	return q.tests
-}
-
-func (q *QuestRoad) SetTests(tests []TestRoad) {
-	q.tests = tests
-}
-
-func (q *QuestRoad) GetParams() []ParamRoad {
-	return q.params
-}
-
-func (q *QuestRoad) SetParams(params []ParamRoad) {
-	q.params = params
-}
-
-// NewQuestRoad creates a new instance of QuestRoad
-func NewQuestRoad(difficulty int, funcName string, tests []TestRoad, params []ParamRoad) *QuestRoad {
-	return &QuestRoad{
-		difficulty: difficulty,
-		funcName:   funcName,
-		tests:      tests,
-		params:     params,
-	}
-}
-
 // Path represents a specific coding road exercise.
 type Path struct {
 	id         int
 	languages  []LanguageRoad
-	quest      QuestRoad
+	quest      Quest
 	isStarted  bool
 	isFinished bool
 }
@@ -208,11 +95,11 @@ func (p *Path) SetLanguages(languages []LanguageRoad) {
 	p.languages = languages
 }
 
-func (p *Path) GetQuest() *QuestRoad {
+func (p *Path) GetQuest() *Quest {
 	return &p.quest
 }
 
-func (p *Path) SetQuest(quest QuestRoad) {
+func (p *Path) SetQuest(quest Quest) {
 	p.quest = quest
 }
 
@@ -233,7 +120,7 @@ func (p *Path) SetIsFinished(isFinished bool) {
 }
 
 // NewPath creates a new instance of Path
-func NewPath(id int, languages []LanguageRoad, quest QuestRoad, isStarted, isFinished bool) *Path {
+func NewPath(id int, languages []LanguageRoad, quest Quest, isStarted, isFinished bool) *Path {
 	return &Path{
 		id:         id,
 		languages:  languages,
@@ -245,13 +132,16 @@ func NewPath(id int, languages []LanguageRoad, quest QuestRoad, isStarted, isFin
 
 // Road represents a collection of roads grouped together.
 type Road struct {
-	id          int
-	name        string
-	dockerImage string
-	iconPath    string
-	paths       []Path
-	isStarted   bool
-	isFinished  bool
+	id            int
+	name          string
+	dockerImage   string
+	iconPath      string
+	cmd           []string
+	fileExtension string
+	templatePath  string
+	paths         []Path
+	isStarted     bool
+	isFinished    bool
 }
 
 // Getter and Setter methods for Roads
@@ -287,6 +177,30 @@ func (r *Road) SetIconPath(iconPath string) {
 	r.iconPath = iconPath
 }
 
+func (r *Road) GetCmd() []string {
+	return r.cmd
+}
+
+func (r *Road) SetCmd(cmd []string) {
+	r.cmd = cmd
+}
+
+func (r *Road) GetFileExtension() string {
+	return r.fileExtension
+}
+
+func (r *Road) SetFileExtension(fileExtension string) {
+	r.fileExtension = fileExtension
+}
+
+func (r *Road) GetTemplatePath() string {
+	return r.templatePath
+}
+
+func (r *Road) SetTemplatePath(templatePath string) {
+	r.templatePath = templatePath
+}
+
 func (r *Road) GetPaths() []Path {
 	return r.paths
 }
@@ -312,15 +226,18 @@ func (r *Road) SetIsFinished(ok bool) {
 }
 
 // NewRoads creates a new instance of Roads
-func NewRoads(id int, name, dockerImage, iconPath string, paths []Path, isStarted, isFinished bool) *Road {
+func NewRoads(id int, name, dockerImage, iconPath, fileExtension, templatePath string, paths []Path, cmd []string, isStarted, isFinished bool) *Road {
 	return &Road{
-		id:          id,
-		name:        name,
-		dockerImage: dockerImage,
-		iconPath:    iconPath,
-		paths:       paths,
-		isStarted:   isStarted,
-		isFinished:  isFinished,
+		id:            id,
+		name:          name,
+		dockerImage:   dockerImage,
+		iconPath:      iconPath,
+		cmd:           cmd,
+		fileExtension: fileExtension,
+		templatePath:  templatePath,
+		paths:         paths,
+		isStarted:     isStarted,
+		isFinished:    isFinished,
 	}
 }
 

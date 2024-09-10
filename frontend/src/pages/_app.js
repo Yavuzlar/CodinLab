@@ -70,7 +70,7 @@ const App = (props) => {
         <meta name="description" content={`${themeConfig.projectName}`} />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link
-          href="https://fonts.cdnfonts.com/css/outfit"
+          href="https://fonts.cdnfonts.com/css/Outfit"
           rel="stylesheet"
         ></link>
         <link
@@ -85,22 +85,22 @@ const App = (props) => {
 
       <AuthProvider>
         <NavProvider>
-        <ThemeComponent>
-          <WindowWrapper>
-            <Guard authGuard={authGuard} guestGuard={guestGuard}>
-              <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
-                {getLayout(<Component {...pageProps} />)}
-              </AclGuard>
-            </Guard>
-          </WindowWrapper>
+          <ThemeComponent>
+            <WindowWrapper>
+              <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
+                  {getLayout(<Component {...pageProps} />)}
+                </AclGuard>
+              </Guard>
+            </WindowWrapper>
 
-          <ReactHotToast>
-            <Toaster
-              position={themeConfig.toastPosition}
-              toastOptions={{ className: "react-hot-toast" }}
-            />
-          </ReactHotToast>
-        </ThemeComponent>
+            <ReactHotToast>
+              <Toaster
+                position={themeConfig.toastPosition}
+                toastOptions={{ className: "react-hot-toast" }}
+              />
+            </ReactHotToast>
+          </ThemeComponent>
         </NavProvider>
       </AuthProvider>
     </Provider>

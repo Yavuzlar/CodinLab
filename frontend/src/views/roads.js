@@ -1,11 +1,13 @@
 import { Box, Card, Divider, Grid } from "@mui/material";
-import { useState } from "react";
-import { roads, languages } from "src/data/home";
+import { useEffect, useState } from "react";
+import { roads} from "src/data/home";
 import InfoCard from "src/components/cards/Info";
 import LanguageProgress from "src/components/cards/LanguageProgress";
-import roadsIcon from "src/assets/icons/icons8-path-100.png";
 import Filter from "src/components/filter/Filter";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserLanguageRoadStats } from "src/store/language/languageSlice";
+
 
 
 const Roads = () => {
@@ -17,6 +19,13 @@ const Roads = () => {
 
   const { t } = useTranslation();
   const searchPlaceholder = t("roads.search.placeholder")
+
+  const dispatch = useDispatch();
+  const { language: stateLanguage } = useSelector((state) => state);
+
+  useEffect(() => {
+    dispatch(getUserLanguageRoadStats());
+  }, [dispatch]);
 
   return (
     <>
@@ -48,12 +57,11 @@ const Roads = () => {
           spacing={2}
           sx={{ maxHeight: "calc(100vh - 143px)", pt: "0px !important" }}
         >
-          {languages.map((language, index) => (
+         {stateLanguage.data?.data?.map((language, index) => (
             <Grid item xs={12} md={12} key={index}>
               <LanguageProgress
                 language={language}
-                icon={roadsIcon}
-                map={"20/40 Path"}
+                type = "road"
               />
             </Grid>
           ))}

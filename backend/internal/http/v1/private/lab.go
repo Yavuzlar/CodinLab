@@ -1,9 +1,11 @@
 package private
 
 import (
+	"os"
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -13,12 +15,14 @@ import (
 // UserLanguageLabStatsDto represents the DTO for user language lab statistics
 
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
-	root.Get("/labs/:ID", h.GetLabsByID)
+	root.Get("/labs/:programmingID", h.GetLabsByID)
 	root.Get("/lab/:programmingID/:labID", h.GetLabByID)
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
 	root.Get("/lab/data", h.AddDummyLabData)
+	root.Post("/lab/answer", h.AnswerLab)
+	root.Get("/lab/template/:programmingID/:labID", h.GetGoTemplates)
 }
 
 // @Tags Lab
@@ -76,20 +80,28 @@ func (h *PrivateHandler) GetUserLabProgressStats(c *fiber.Ctx) error {
 }
 
 // @Tags Lab
-// @Summary GetLabsById
+// @Summary GetLabs
 // @Description Get Labs By Programming Language ID
 // @Accept json
 // @Produce json
-// @Param ID path string true "Programming Language ID"
+// @Param programmingID path string true "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/{ID} [get]
+// @Router /private/labs/{programmingID} [get]
 func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
-	ID := c.Params("ID")
-	indID, err := strconv.Atoi(ID)
+	programmingID := c.Params("programmingID")
+	indID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return response.Response(400, "Invalid ID", nil)
 	}
 	userSession := session_store.GetSessionData(c)
+
+	isExist, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeProgrammingLanguage, domains.ContentStarted, int32(indID), 0)
+	if err != nil {
+		return response.Response(500, "Log Check Error", nil)
+	}
+	if !isExist {
+		return response.Response(500, "Programming Language could not started", nil)
+	}
 
 	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, indID, 0, nil, nil)
 	if err != nil {
@@ -173,4 +185,99 @@ func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
 	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 2)
 
 	return response.Response(200, "Dummy Data Added", nil)
+}
+
+// @Tags Lab
+// @Summary GoTemplate
+// @Description Creating Go Template Test
+// @Accept json
+// @Produce json
+// @Param programmingID path string true "Programming Language ID"
+// @Param labID path string true "Lab ID"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/lab/template/{programmingID}/{labID} [get]
+func (h *PrivateHandler) GetGoTemplates(c *fiber.Ctx) error {
+	programmingID := c.Params("programmingID")
+	labID := c.Params("labID")
+
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return response.Response(400, "Invalid Lang ID", nil)
+	}
+
+	intLabID, err := strconv.Atoi(labID)
+	if err != nil {
+		return response.Response(400, "Invalid Labs ID", nil)
+	}
+	template, err := h.services.TemplateService.TemplateGenerator(domains.TypeLab, intProgrammingID, intLabID)
+	if err != nil {
+		return err
+	}
+
+	//test için object/template içerisine bir go dosyasına yazıyor.
+	dirPath := "./object/template"
+	filePath := dirPath + "/exampleFile.go"
+	os.MkdirAll(dirPath, os.ModePerm)
+	file, _ := os.Create(filePath)
+	defer file.Close()
+	file.WriteString(template)
+
+	return response.Response(200, "Go Template Successfull", template)
+}
+
+// @Tags Lab
+// @Summary Answer
+// @Description This is for answering quests.
+// @Accept json
+// @Produce json
+// @Param answerLabDTO body dto.AnswerLabDTO true "Answer Lab DTO"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/lab/answer [post]
+func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
+	var answerLabDTO dto.AnswerLabDTO
+	if err := c.BodyParser(&answerLabDTO); err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "Invalid Format", err)
+	}
+
+	userSession := session_store.GetSessionData(c)
+	roadInformation, err := h.services.RoadService.GetRoadInformation(int32(answerLabDTO.ProgrammingID))
+	if err != nil {
+		return response.Response(500, "Road Information Error", nil)
+	}
+	if roadInformation == nil {
+		return response.Response(404, "Road Not Found", nil)
+	}
+
+	lab, err := h.services.LabService.GetLabByID(userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID)
+	if err != nil {
+		return response.Response(404, "Error While Getting Lab", nil)
+	}
+	if lab == nil {
+		return response.Response(404, "Lab Not Found", nil)
+	}
+
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID, domains.TypeLab, roadInformation.GetFileExtension(), answerLabDTO.UserCode)
+	if err != nil {
+		return err
+	}
+
+	tmpContent, err := h.services.CodeService.CodeTemplateGenerator(roadInformation.GetName(), roadInformation.GetTemplatePath(), answerLabDTO.UserCode, lab.GetQuest().GetFuncName(), lab.GetQuest().GetTests())
+	if err != nil {
+		return err
+	}
+
+	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
+		return err
+	}
+
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), roadInformation.GetDockerImage(), tmpPath, roadInformation.GetCmd())
+	if err != nil {
+		return err
+	}
+
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, int32(answerLabDTO.ProgrammingID), int32(answerLabDTO.LabID)); err != nil {
+		return response.Response(500, "Docker Image Pull Error", nil)
+	}
+
+	return response.Response(200, logs, nil)
 }

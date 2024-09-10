@@ -2,11 +2,12 @@ package domains
 
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
-	GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]Labs, error)
+	GetLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) ([]Labs, error)
 	GetUserLanguageLabStats(userID string) (programmingLangugageStats []ProgrammingLanguageStats, err error)
 	GetUserLabDifficultyStats(userID string) (userLabDifficultyStats UserLabDifficultyStats, err error)
 	GetUserLabProgressStats(userID string) (userLabProgressStats UserLabProgressStats, err error)
-	CountLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) (counter int, err error)
+	CountLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) (counter int, err error)
+	GetLabByID(userID string, programmingID, labID int) (lab *Lab, err error)
 }
 
 // ProgrammingLanguageStats represents the statistics for a specific language lab.
@@ -172,98 +173,11 @@ func (l *LanguageLab) SetHint(hint string) {
 	l.hint = hint
 }
 
-// TestLab represents a test case for a function.
-type TestLab struct {
-	input  []string
-	output []string
-}
-
-// Getter and Setter methods for Test
-func (t *TestLab) GetInput() []string {
-	return t.input
-}
-
-func (t *TestLab) SetInput(input []string) {
-	t.input = input
-}
-
-func (t *TestLab) GetOutput() []string {
-	return t.output
-}
-
-func (t *TestLab) SetOutput(output []string) {
-	t.output = output
-}
-
-// ParamLab represents a parameter of a function.
-type ParamLab struct {
-	name string
-	typ  string
-}
-
-// Getter and Setter methods for Param
-func (p *ParamLab) GetName() string {
-	return p.name
-}
-
-func (p *ParamLab) SetName(name string) {
-	p.name = name
-}
-
-func (p *ParamLab) GetType() string {
-	return p.typ
-}
-
-func (p *ParamLab) SetType(typ string) {
-	p.typ = typ
-}
-
-// QuestLab represents a coding challenge or task.
-type QuestLab struct {
-	difficulty int
-	funcName   string
-	tests      []TestLab
-	params     []ParamLab
-}
-
-// Getter and Setter methods for Quest
-func (q *QuestLab) GetDifficulty() int {
-	return q.difficulty
-}
-
-func (q *QuestLab) SetDifficulty(difficulty int) {
-	q.difficulty = difficulty
-}
-
-func (q *QuestLab) GetFuncName() string {
-	return q.funcName
-}
-
-func (q *QuestLab) SetFuncName(funcName string) {
-	q.funcName = funcName
-}
-
-func (q *QuestLab) GetTests() []TestLab {
-	return q.tests
-}
-
-func (q *QuestLab) SetTests(tests []TestLab) {
-	q.tests = tests
-}
-
-func (q *QuestLab) GetParams() []ParamLab {
-	return q.params
-}
-
-func (q *QuestLab) SetParams(params []ParamLab) {
-	q.params = params
-}
-
 // Lab represents a specific coding lab exercise.
 type Lab struct {
 	id         int
 	languages  []LanguageLab
-	quest      QuestLab
+	quest      Quest
 	isStarted  bool
 	isFinished bool
 }
@@ -285,11 +199,11 @@ func (l *Lab) SetLanguages(languages []LanguageLab) {
 	l.languages = languages
 }
 
-func (l *Lab) GetQuest() *QuestLab {
+func (l *Lab) GetQuest() *Quest {
 	return &l.quest
 }
 
-func (l *Lab) SetQuest(quest QuestLab) {
+func (l *Lab) SetQuest(quest Quest) {
 	l.quest = quest
 }
 
@@ -311,11 +225,14 @@ func (l *Lab) SetIsFinished(isFinished bool) {
 
 // Labs represents a collection of labs grouped together.
 type Labs struct {
-	id          int
-	name        string
-	dockerImage string
-	iconPath    string
-	labs        []Lab
+	id            int // programming ID
+	name          string
+	dockerImage   string
+	iconPath      string
+	cmd           []string
+	fileExtension string
+	templatePath  string
+	labs          []Lab
 }
 
 // Getter and Setter methods for Labs
@@ -349,6 +266,30 @@ func (l *Labs) GetIconPath() string {
 
 func (l *Labs) SetIconPath(iconPath string) {
 	l.iconPath = iconPath
+}
+
+func (l *Labs) GetCmd() []string {
+	return l.cmd
+}
+
+func (l *Labs) SetCmd(cmd []string) {
+	l.cmd = cmd
+}
+
+func (l *Labs) GetFileExtension() string {
+	return l.fileExtension
+}
+
+func (l *Labs) SetFileExtension(fileExtension string) {
+	l.fileExtension = fileExtension
+}
+
+func (l *Labs) GetTemplatePath() string {
+	return l.templatePath
+}
+
+func (l *Labs) SetTemplatePath(templatePath string) {
+	l.templatePath = templatePath
 }
 
 func (l *Labs) GetLabs() []Lab {
@@ -399,34 +340,8 @@ func NewLanguageLab(lang, title, description, note, hint string) *LanguageLab {
 	}
 }
 
-// NewTestLab creates a new instance of Test
-func NewTestLab(input, output []string) *TestLab {
-	return &TestLab{
-		input:  input,
-		output: output,
-	}
-}
-
-// NewParamLab creates a new instance of Param
-func NewParamLab(name, typ string) *ParamLab {
-	return &ParamLab{
-		name: name,
-		typ:  typ,
-	}
-}
-
-// NewQuestLab creates a new instance of Quest
-func NewQuestLab(difficulty int, funcName string, tests []TestLab, params []ParamLab) *QuestLab {
-	return &QuestLab{
-		difficulty: difficulty,
-		funcName:   funcName,
-		tests:      tests,
-		params:     params,
-	}
-}
-
 // NewLab creates a new instance of Lab
-func NewLab(id int, languages []LanguageLab, quest QuestLab, isStarted, isFinished bool) *Lab {
+func NewLab(id int, languages []LanguageLab, quest Quest, isStarted, isFinished bool) *Lab {
 	return &Lab{
 		id:         id,
 		languages:  languages,
@@ -437,12 +352,15 @@ func NewLab(id int, languages []LanguageLab, quest QuestLab, isStarted, isFinish
 }
 
 // NewLabs creates a new instance of Labs
-func NewLabs(id int, name, dockerImage, iconPath string, labs []Lab) *Labs {
+func NewLabs(id int, name, dockerImage, iconPath, fileExtension, templatePath string, cmd []string, labs []Lab) *Labs {
 	return &Labs{
-		id:          id,
-		name:        name,
-		dockerImage: dockerImage,
-		iconPath:    iconPath,
-		labs:        labs,
+		id:            id,
+		name:          name,
+		dockerImage:   dockerImage,
+		iconPath:      iconPath,
+		cmd:           cmd,
+		fileExtension: fileExtension,
+		templatePath:  templatePath,
+		labs:          labs,
 	}
 }

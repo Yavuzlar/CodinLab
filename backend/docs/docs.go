@@ -259,6 +259,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/lab/answer": {
+            "post": {
+                "description": "This is for answering quests.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "Answer",
+                "parameters": [
+                    {
+                        "description": "Answer Lab DTO",
+                        "name": "answerLabDTO",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.AnswerLabDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/lab/data": {
             "get": {
                 "description": "Add dummy data for testing",
@@ -272,6 +306,45 @@ const docTemplate = `{
                     "Lab"
                 ],
                 "summary": "DummyLogData",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/lab/template/{programmingID}/{labID}": {
+            "get": {
+                "description": "Creating Go Template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GoTemplate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Lab ID",
+                        "name": "labID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -390,7 +463,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/labs/{ID}": {
+        "/private/labs/{programmingID}": {
             "get": {
                 "description": "Get Labs By Programming Language ID",
                 "consumes": [
@@ -402,12 +475,12 @@ const docTemplate = `{
                 "tags": [
                     "Lab"
                 ],
-                "summary": "GetLabsById",
+                "summary": "GetLabs",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Programming Language ID",
-                        "name": "ID",
+                        "name": "programmingID",
                         "in": "path",
                         "required": true
                     }
@@ -568,7 +641,53 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/path/{programmingID}/{pathID}": {
+        "/private/road/general/stats": {
+            "get": {
+                "description": "Gets users language road stats",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "GetUserLanguageRoadStats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/path/data": {
+            "get": {
+                "description": "Add dummy data for testing",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "DummyLogData",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/path/{programmingID}/{pathID}": {
             "get": {
                 "description": "Get Path By ID",
                 "consumes": [
@@ -619,52 +738,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/road/general/stats": {
-            "get": {
-                "description": "Gets users language road stats",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Road"
-                ],
-                "summary": "GetUserLanguageRoadStats",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/road/path/data": {
-            "get": {
-                "description": "Add dummy data for testing",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Road"
-                ],
-                "summary": "DummyLogData",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/private/road/progress/stats": {
             "get": {
                 "description": "Gets users road progress stats",
@@ -678,40 +751,6 @@ const docTemplate = `{
                     "Road"
                 ],
                 "summary": "GetUserRoadProgressStats",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/road/start": {
-            "post": {
-                "description": "Start",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Road"
-                ],
-                "summary": "Start",
-                "parameters": [
-                    {
-                        "description": "Start",
-                        "name": "start",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.StartDTO"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -761,6 +800,38 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/private/start/{programmingID}": {
+            "get": {
+                "description": "Start",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "StartLabRoad"
+                ],
+                "summary": "Start",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
                         }
                     }
                 }
@@ -982,6 +1053,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.AnswerLabDTO": {
+            "type": "object",
+            "properties": {
+                "labID": {
+                    "type": "integer"
+                },
+                "programmindID": {
+                    "type": "integer"
+                },
+                "userCode": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.CreateUserDTO": {
             "type": "object",
             "required": [
@@ -1025,6 +1110,12 @@ const docTemplate = `{
             "properties": {
                 "iconPath": {
                     "type": "string"
+                },
+                "isFinished": {
+                    "type": "boolean"
+                },
+                "isStarted": {
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"
@@ -1219,17 +1310,6 @@ const docTemplate = `{
                 },
                 "roadHours": {
                     "type": "number"
-                }
-            }
-        },
-        "dto.StartDTO": {
-            "type": "object",
-            "required": [
-                "programmingID"
-            ],
-            "properties": {
-                "programmingID": {
-                    "type": "integer"
                 }
             }
         },

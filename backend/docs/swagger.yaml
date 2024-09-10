@@ -15,6 +15,15 @@ definitions:
         maxLength: 30
         type: string
     type: object
+  dto.AnswerLabDTO:
+    properties:
+      labID:
+        type: integer
+      programmindID:
+        type: integer
+      userCode:
+        type: string
+    type: object
   dto.CreateUserDTO:
     properties:
       githubProfile:
@@ -48,6 +57,10 @@ definitions:
     properties:
       iconPath:
         type: string
+      isFinished:
+        type: boolean
+      isStarted:
+        type: boolean
       name:
         type: string
       paths:
@@ -178,13 +191,6 @@ definitions:
         type: integer
       roadHours:
         type: number
-    type: object
-  dto.StartDTO:
-    properties:
-      programmingID:
-        type: integer
-    required:
-    - programmingID
     type: object
   dto.UpdatePasswordDTO:
     properties:
@@ -434,6 +440,28 @@ paths:
       summary: GetLabByID
       tags:
       - Lab
+  /private/lab/answer:
+    post:
+      consumes:
+      - application/json
+      description: This is for answering quests.
+      parameters:
+      - description: Answer Lab DTO
+        in: body
+        name: answerLabDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AnswerLabDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Answer
+      tags:
+      - Lab
   /private/lab/data:
     get:
       consumes:
@@ -449,15 +477,20 @@ paths:
       summary: DummyLogData
       tags:
       - Lab
-  /private/labs/{ID}:
+  /private/lab/template/{programmingID}/{labID}:
     get:
       consumes:
       - application/json
-      description: Get Labs By Programming Language ID
+      description: Creating Go Template
       parameters:
       - description: Programming Language ID
         in: path
-        name: ID
+        name: programmingID
+        required: true
+        type: string
+      - description: Lab ID
+        in: path
+        name: labID
         required: true
         type: string
       produces:
@@ -467,7 +500,28 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: GetLabsById
+      summary: GoTemplate
+      tags:
+      - Lab
+  /private/labs/{programmingID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Labs By Programming Language ID
+      parameters:
+      - description: Programming Language ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetLabs
       tags:
       - Lab
   /private/labs/difficulty/stats:
@@ -603,37 +657,6 @@ paths:
       summary: GetSolutionsHoursByProgramming
       tags:
       - Log
-  /private/path/{programmingID}/{pathID}:
-    get:
-      consumes:
-      - application/json
-      description: Get Path By ID
-      parameters:
-      - description: Programming ID
-        in: path
-        name: programmingID
-        required: true
-        type: string
-      - description: Path ID
-        in: path
-        name: pathID
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.BaseResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.PathDTO'
-              type: object
-      summary: GetPathByID
-      tags:
-      - Road
   /private/road/{programmingID}:
     get:
       consumes:
@@ -675,6 +698,37 @@ paths:
       summary: GetUserLanguageRoadStats
       tags:
       - Road
+  /private/road/path/{programmingID}/{pathID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Path By ID
+      parameters:
+      - description: Programming ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: Path ID
+        in: path
+        name: pathID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PathDTO'
+              type: object
+      summary: GetPathByID
+      tags:
+      - Road
   /private/road/path/data:
     get:
       consumes:
@@ -705,18 +759,17 @@ paths:
       summary: GetUserRoadProgressStats
       tags:
       - Road
-  /private/road/start:
-    post:
+  /private/start/{programmingID}:
+    get:
       consumes:
       - application/json
       description: Start
       parameters:
-      - description: Start
-        in: body
-        name: start
+      - description: programmingID
+        in: path
+        name: programmingID
         required: true
-        schema:
-          $ref: '#/definitions/dto.StartDTO'
+        type: string
       produces:
       - application/json
       responses:
@@ -726,7 +779,7 @@ paths:
             $ref: '#/definitions/response.BaseResponse'
       summary: Start
       tags:
-      - Road
+      - StartLabRoad
   /private/user/:
     get:
       consumes:

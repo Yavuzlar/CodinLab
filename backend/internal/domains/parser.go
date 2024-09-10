@@ -13,13 +13,16 @@ type IParserService interface {
 
 // Inventory represents the information related to an item in inventory.
 type InventoryP struct {
-	ID          int         `json:"id"`
-	Name        string      `json:"name"`
-	DockerImage string      `json:"dockerImage"`
-	PathDir     string      `json:"pathDir"`
-	LabDir      string      `json:"labDir"`
-	IconPath    string      `json:"iconPath"`
-	Languages   []LanguageP `json:"languages"`
+	ID            int         `json:"id"`
+	Name          string      `json:"name"`
+	DockerImage   string      `json:"dockerImage"`
+	PathDir       string      `json:"pathDir"`
+	LabDir        string      `json:"labDir"`
+	IconPath      string      `json:"iconPath"`
+	Cmd           []string    `json:"cmd"`
+	FileExtension string      `json:"fileExtension"`
+	TemplatePath  string      `json:"templatePath"`
+	Languages     []LanguageP `json:"languages"`
 }
 
 // Language represents the details of a programming language.
@@ -34,8 +37,8 @@ type LanguageP struct {
 
 // Test represents a test case for a function.
 type TestP struct {
-	Input  []string `json:"input"`
-	Output []string `json:"output"`
+	Input  []interface{} `json:"input"`
+	Output []interface{} `json:"output"`
 }
 
 // Param represents a parameter of a function.
@@ -44,12 +47,20 @@ type ParamP struct {
 	Type string `json:"type"`
 }
 
+// Returns represents a parameter of a function.
+type ReturnP struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
 // Quest represents a coding challenge or task.
 type QuestP struct {
-	Difficulty int      `json:"difficulty"`
-	FuncName   string   `json:"funcName"`
-	Tests      []TestP  `json:"tests"`
-	Params     []ParamP `json:"params"`
+	Difficulty   int       `json:"difficulty"`
+	FuncName     string    `json:"funcName"`
+	Tests        []TestP   `json:"tests"`
+	Params       []ParamP  `json:"params"`
+	Returns      []ReturnP `json:"returns"`
+	QuestImports []string  `json:"questImports"`
 }
 
 // Lab represents a specific coding lab exercise.
@@ -61,11 +72,14 @@ type LabP struct {
 
 // Labs represents a collection of labs grouped together.
 type LabsP struct {
-	ID          int
-	Name        string
-	DockerImage string
-	IconPath    string
-	Labs        []LabP
+	ID            int
+	Name          string
+	DockerImage   string
+	IconPath      string
+	Cmd           []string
+	FileExtension string
+	TemplatePath  string
+	Labs          []LabP
 }
 
 // Path represents a coding learning path.
@@ -77,11 +91,14 @@ type PathP struct {
 
 // Road represents a collection of learning paths.
 type RoadP struct {
-	ID          int
-	Name        string
-	DockerImage string
-	IconPath    string
-	Paths       []PathP
+	ID            int
+	Name          string
+	DockerImage   string
+	IconPath      string
+	Cmd           []string
+	FileExtension string
+	TemplatePath  string
+	Paths         []PathP
 }
 
 type LevelP struct {

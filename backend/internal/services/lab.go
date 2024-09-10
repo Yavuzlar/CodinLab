@@ -42,17 +42,27 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 				languages = append(languages, *domains.NewLanguageLab(lang.Lang, lang.Title, lang.Description, lang.Note, lang.Hint))
 			}
 
-			var tests []domains.TestLab
+			var tests []domains.Test
 			for _, test := range lab.Quest.Tests {
-				tests = append(tests, *domains.NewTestLab(test.Input, test.Output))
+				tests = append(tests, *domains.NewTest(test.Input, test.Output))
 			}
 
-			var params []domains.ParamLab
+			var params []domains.Param
 			for _, param := range lab.Quest.Params {
-				params = append(params, *domains.NewParamLab(param.Name, param.Type))
+				params = append(params, *domains.NewParam(param.Name, param.Type))
 			}
 
-			quest := domains.NewQuestLab(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params)
+			var returns []domains.Returns
+			for _, returnedParam := range lab.Quest.Returns {
+				returns = append(returns, *domains.NewReturn(returnedParam.Name, returnedParam.Type))
+			}
+
+			var questImports []string
+			for _, imp := range lab.Quest.QuestImports {
+				questImports = append(questImports, imp)
+			}
+
+			quest := domains.NewQuest(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params, returns, questImports)
 			newLab := domains.NewLab(lab.ID, languages, *quest, false, false)
 
 			labIDString := strconv.Itoa(lab.ID)
@@ -75,26 +85,26 @@ func (s *labService) getAllLabs(userID string) ([]domains.Labs, error) {
 
 			newLabList = append(newLabList, *newLab)
 		}
-		labs = append(labs, *domains.NewLabs(labCollection.ID, labCollection.Name, labCollection.DockerImage, labCollection.IconPath, newLabList))
+		labs = append(labs, *domains.NewLabs(labCollection.ID, labCollection.Name, labCollection.DockerImage, labCollection.IconPath, labCollection.FileExtension, labCollection.TemplatePath, labCollection.Cmd, newLabList))
 	}
 
 	return labs, nil
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) ([]domains.Labs, error) {
+func (s *labService) GetLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) ([]domains.Labs, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStarted == nil && isFinished == nil {
+	if userID == "" && programmingID == 0 && labId == 0 && isStarted == nil && isFinished == nil {
 		return allLabs, nil
 	}
 
 	var filteredLabs []domains.Labs
 	for _, labCollection := range allLabs {
-		if labsId != 0 && labCollection.GetID() != labsId {
+		if programmingID != 0 && labCollection.GetID() != programmingID {
 			continue
 		}
 
@@ -119,6 +129,9 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 				labCollection.GetName(),
 				labCollection.GetDockerImage(),
 				labCollection.GetIconPath(),
+				labCollection.GetFileExtension(),
+				labCollection.GetTemplatePath(),
+				labCollection.GetCmd(),
 				newLabList,
 			))
 		}
@@ -127,19 +140,38 @@ func (s *labService) GetLabsFilter(userID string, labsId, labId int, isStarted, 
 	return filteredLabs, nil
 }
 
+func (s *labService) GetLabByID(userID string, programmingID, labID int) (lab *domains.Lab, err error) {
+	allLabs, err := s.getAllLabs(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, programmingLang := range allLabs {
+		if programmingLang.GetID() == programmingID {
+			for _, lab := range programmingLang.GetLabs() {
+				if lab.GetID() == labID {
+					return &lab, nil
+				}
+			}
+		}
+	}
+
+	return nil, err
+}
+
 // Fetch labs by filters
-func (s *labService) CountLabsFilter(userID string, labsId, labId int, isStarted, isFinished *bool) (counter int, err error) {
+func (s *labService) CountLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) (counter int, err error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return 0, err
 	}
 
-	if userID == "" && labsId == 0 && labId == 0 && isStarted == nil && isFinished == nil {
+	if userID == "" && programmingID == 0 && labId == 0 && isStarted == nil && isFinished == nil {
 		return 0, nil
 	}
 
 	for _, labCollection := range allLabs {
-		if labsId != 0 && labCollection.GetID() != labsId {
+		if programmingID != 0 && labCollection.GetID() != programmingID {
 			continue
 		}
 

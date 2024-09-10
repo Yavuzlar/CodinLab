@@ -20,8 +20,7 @@ const Advancement = () => {
 
   useEffect(() => {
     dispatch(fetchAdvancement());
-  }
-  , [dispatch]);
+  }, [dispatch]);
 
   const theme = useTheme();
   return (
@@ -68,10 +67,14 @@ const Advancement = () => {
                 key={index}
               >
                 <Box sx={{ mr: "1rem" }}>
-                <img src={"/api/v1/" + languages.iconPath} width={50} height={50} />
+                  <img
+                    src={"/api/v1/" + languages.iconPath}
+                    width={50}
+                    height={50}
+                  />
                 </Box>
                 <Box sx={{ width: "100%" }}>
-                  <Typography  sx={{ mt: "1rem",  }}>{languages.name}</Typography>
+                  <Typography sx={{ mt: "1rem" }}>{languages.name}</Typography>
                   <LinearProgess
                     progress={languages.roadPercentage}
                     backgroundColor={theme.palette.primary.dark}

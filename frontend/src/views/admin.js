@@ -39,7 +39,6 @@ const Admin = () => {
 
   const router = useRouter();
 
-
   return (
     <>
       <Grid container spacing={2}>
@@ -69,7 +68,7 @@ const Admin = () => {
                 alignItems: "center",
                 flexDirection: "row",
                 mb: "0.5rem",
-                gap: '16px'
+                gap: "16px",
               }}
             >
               <Button
@@ -77,7 +76,7 @@ const Admin = () => {
                 onClick={() => router.push("admin/users")}
                 sx={{
                   textTransform: "none",
-                  width: '100%',
+                  width: "100%",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -98,7 +97,7 @@ const Admin = () => {
               </Button>
 
               <Button
-              onClick={() => router.push("admin/settings")}
+                onClick={() => router.push("admin/settings")}
                 variant="dark"
                 sx={{
                   textTransform: "none",
@@ -128,7 +127,7 @@ const Admin = () => {
               </Button>
             </Box>
           </Grid>
-          
+
           <Grid item xs={12} md={12}>
             <Box
               sx={{

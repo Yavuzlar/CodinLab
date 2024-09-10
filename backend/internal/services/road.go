@@ -33,15 +33,23 @@ func (s *roadService) GetRoadInformation(programmingID int32) (*domains.Road, er
 	}
 
 	var road domains.Road
+	var isRoad bool
 	for _, roadCollection := range src {
 		if roadCollection.ID == int(programmingID) {
+			isRoad = true
 			road.SetID(int(programmingID))
 			road.SetName(roadCollection.Name)
 			road.SetDockerImage(roadCollection.DockerImage)
 			road.SetIconPath(roadCollection.IconPath)
-
+			road.SetCmd(roadCollection.Cmd)
+			road.SetFileExtension(roadCollection.FileExtension)
+			road.SetTemplatePath(roadCollection.TemplatePath)
 			break
 		}
+	}
+
+	if !isRoad {
+		return nil, err
 	}
 
 	return &road, err
@@ -64,16 +72,27 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 				languages = append(languages, *domains.NewLanguageRoad(lang.Lang, lang.Title, lang.Description, lang.Content, lang.Note))
 			}
 
-			var tests []domains.TestRoad
+			var tests []domains.Test
 			for _, test := range path.Quest.Tests {
-				tests = append(tests, *domains.NewTestRoad(test.Input, test.Output))
+				tests = append(tests, *domains.NewTest(test.Input, test.Output))
 			}
 
-			var params []domains.ParamRoad
+			var params []domains.Param
 			for _, param := range path.Quest.Params {
-				params = append(params, *domains.NewParamRoad(param.Name, param.Type))
+				params = append(params, *domains.NewParam(param.Name, param.Type))
 			}
-			quest := domains.NewQuestRoad(path.Quest.Difficulty, path.Quest.FuncName, tests, params)
+
+			var returns []domains.Returns
+			for _, returnedParam := range path.Quest.Returns {
+				returns = append(returns, *domains.NewReturn(returnedParam.Name, returnedParam.Type))
+			}
+
+			var questImports []string
+			for _, questImport := range path.Quest.QuestImports {
+				questImports = append(questImports, questImport)
+			}
+
+			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, questImports)
 			newPath := domains.NewPath(path.ID, languages, *quest, false, false)
 
 			isStarted, isFinished, err := s.getPathStatuses(userID, fmt.Sprintf("%v", roadCollection.ID), fmt.Sprintf("%v", path.ID))
@@ -92,7 +111,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 			return nil, err
 		}
 
-		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, newPathList, *isStarted, *isFinished))
+		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.FileExtension, roadCollection.TemplatePath, newPathList, roadCollection.Cmd, *isStarted, *isFinished))
 	}
 
 	return roads, nil
@@ -181,7 +200,7 @@ func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, is
 		}
 
 		if len(newRoadList) > 0 {
-			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), newRoadList, *isStarted, *isFinished))
+			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetFileExtension(), roadCollection.GetTemplatePath(), newRoadList, roadCollection.GetCmd(), *isStarted, *isFinished))
 		}
 	}
 

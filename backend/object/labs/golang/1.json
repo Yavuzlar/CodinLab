@@ -21,16 +21,16 @@
 		"funcName": "isPrime",
 		"tests": [
 			{
-				"input": ["5"],
-				"output": ["true"]
+				"input": [5],
+				"output": [true]
 			},
 			{
-				"input": ["8"],
-				"output": ["false"]
+				"input": [8],
+				"output": [false]
 			},
 			{
-				"input": ["13"],
-				"output": ["true"]
+				"input": [13],
+				"output": [true]
 			}
 		],
 		"params": [
@@ -38,6 +38,15 @@
 				"name": "n",
 				"type": "int"
 			}
+		],
+		"returns": [
+			{
+				"name": "res",
+				"type": "bool"
+			}
+		],
+		"questImports": [
+			"fmt"
 		]
 	}
 }

@@ -38,7 +38,9 @@ function ResponsiveAppBar() {
   const logoutText = t("logout");
 
   return (
-    <AppBar sx={{ backgroundColor: "#0A3B7A", boxShadow: "none", py:"0.5rem" }}>
+    <AppBar
+      sx={{ backgroundColor: "#0A3B7A", boxShadow: "none", py: "0.5rem" }}
+    >
       <Container maxWidth="lgPlus">
         <Toolbar disableGutters variant="dense">
           <Box
@@ -51,12 +53,16 @@ function ResponsiveAppBar() {
             onClick={LogoClick}
           >
             <Box
-            sx={{
-              display: { xs: "none", mdlg: "flex" },
-            }}
+              sx={{
+                display: { xs: "none", mdlg: "flex" },
+              }}
             >
-              
-            <Image src={Logo} alt="CodinLab-Logo" width={"auto"} height={64} />
+              <Image
+                src={Logo}
+                alt="CodinLab-Logo"
+                width={"auto"}
+                height={64}
+              />
             </Box>
             <Typography
               variant="h3"

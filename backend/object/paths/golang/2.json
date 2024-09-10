@@ -21,16 +21,16 @@
 		"funcName": "isEven",
 		"tests": [
 			{
-				"input": ["4"],
-				"output": ["true"]
+				"input": [4],
+				"output": [true]
 			},
 			{
-				"input": ["7"],
-				"output": ["false"]
+				"input": [7],
+				"output": [false]
 			},
 			{
-				"input": ["10"],
-				"output": ["true"]
+				"input": [10],
+				"output": [true]
 			}
 		],
 		"params": [
@@ -38,6 +38,15 @@
 				"name": "number",
 				"type": "int"
 			}
+		],
+		"returns": [
+			{
+				"name": "res",
+				"type": "bool"
+			}
+		],
+		"questImports": [
+			"fmt"
 		]
 	}
 }

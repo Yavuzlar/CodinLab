@@ -1,12 +1,13 @@
 body {
-    margin: 0;
-    background-color: #DAF0FE;
-    font-family: 'Outfit', sans-serif !important;
+  margin: 0;
+  background-color: #daf0fe;
+  /* font-family: 'Outfit', sans-serif !important; */
+  font-family: "Outfit", sans-serif !important;
 }
 
 a {
-    text-decoration: none;
-    color: unset;
+  text-decoration: none;
+  color: unset;
 }
 
 /* width */
@@ -16,15 +17,15 @@ a {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #525964;
+  background: #525964;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #7A828E;
+  background: #7a828e;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #BDC4CC;
+  background: #bdc4cc;
 }

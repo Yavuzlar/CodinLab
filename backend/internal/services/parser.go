@@ -92,10 +92,13 @@ func (s *parserService) GetLabs() (labs []domains.LabsP, err error) {
 	// Loop through each language
 	for _, language := range inventory {
 		oneLab := domains.LabsP{
-			ID:          language.ID,
-			Name:        language.Name,
-			DockerImage: language.DockerImage,
-			IconPath:    language.IconPath,
+			ID:            language.ID,
+			Name:          language.Name,
+			DockerImage:   language.DockerImage,
+			IconPath:      language.IconPath,
+			Cmd:           language.Cmd,
+			FileExtension: language.FileExtension,
+			TemplatePath:  language.TemplatePath,
 		}
 
 		// Find JSON files for the lab
@@ -144,10 +147,13 @@ func (s *parserService) GetRoads() (roads []domains.RoadP, err error) {
 	// Iterate over each language in the inventory
 	for _, language := range inventory {
 		road := domains.RoadP{
-			Name:        language.Name,
-			DockerImage: language.DockerImage,
-			IconPath:    language.IconPath,
-			ID:          language.ID,
+			ID:            language.ID,
+			Name:          language.Name,
+			DockerImage:   language.DockerImage,
+			IconPath:      language.IconPath,
+			Cmd:           language.Cmd,
+			FileExtension: language.FileExtension,
+			TemplatePath:  language.TemplatePath,
 		}
 
 		// Locate JSON files within the language's lab directory

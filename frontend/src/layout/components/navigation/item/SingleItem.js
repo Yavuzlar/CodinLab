@@ -19,7 +19,7 @@ const SingleItem = (props) => {
       if (p) {
         router.replace(p);
       }
-      ChangePage(); 
+      ChangePage();
     };
   };
 
