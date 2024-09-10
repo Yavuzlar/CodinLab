@@ -18,7 +18,7 @@
 	],
 	"quest": {
 		"difficulty": 1,
-		"funcName": "palindrome",
+		"funcName": "isPalindrome",
 		"tests": [
 			{
 				"input": ["madam"],
@@ -51,9 +51,9 @@
 		],
 		"codeTemplates": [
 			{
-				"name": "C++",
-				"template": "$imports$\n\n$func$\n\nint main() {\n    $checks$\n    return 0;\n}",
-				"check": "std::bool result = $func$($params$);\n    if (result == $expected$) {\n        std::cout << \"Test Passed\" << std::endl;\n    } else {\n        std::cout << \"Test Failed: Expected $expected$, but got \" << result << std::endl;\n    }"
+				"programmingID": 1,
+				"template": "$userCode$\n\nint main() {\n    $checks$\n    return 0;\n}",
+				"check": "bool result = $func$($input$);\n    if (result == $output$) {\n        std::cout << \"Test Passed\" << std::endl;\n    } else {\n        std::cout << \"Test Failed: Expected $output$, but got \" << result << std::endl;\n    }\n"
 			}
 		]
 	}

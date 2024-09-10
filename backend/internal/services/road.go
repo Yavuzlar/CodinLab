@@ -25,36 +25,6 @@ func newRoadService(
 	}
 }
 
-// Retrieves name, dockerImage and icon path
-func (s *roadService) GetRoadInformation(programmingID int32) (*domains.Road, error) {
-	src, err := s.parserService.GetRoads()
-	if err != nil {
-		return nil, err
-	}
-
-	var road domains.Road
-	var isRoad bool
-	for _, roadCollection := range src {
-		if roadCollection.ID == int(programmingID) {
-			isRoad = true
-			road.SetID(int(programmingID))
-			road.SetName(roadCollection.Name)
-			road.SetDockerImage(roadCollection.DockerImage)
-			road.SetIconPath(roadCollection.IconPath)
-			road.SetCmd(roadCollection.Cmd)
-			road.SetFileExtension(roadCollection.FileExtension)
-			road.SetTemplatePath(roadCollection.TemplatePath)
-			break
-		}
-	}
-
-	if !isRoad {
-		return nil, err
-	}
-
-	return &road, err
-}
-
 func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 	src, err := s.parserService.GetRoads()
 	if err != nil {
@@ -94,7 +64,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 
 			var codeTemplates []domains.CodeTemplate
 			for _, codeTemplateParser := range path.Quest.CodeTemplates {
-				codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.Name, codeTemplateParser.Template, codeTemplateParser.Check))
+				codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Template, codeTemplateParser.Check))
 			}
 
 			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, questImports, codeTemplates)

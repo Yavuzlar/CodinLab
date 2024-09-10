@@ -3,12 +3,9 @@ package services
 import (
 	"context"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
-	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
-	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 	"github.com/Yavuzlar/CodinLab/pkg/docker"
 	"github.com/Yavuzlar/CodinLab/pkg/file"
 )
@@ -97,15 +94,6 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID string, program
 	return codeTmpPath, nil
 }
 
-// // Bu kısımda bütün diller için template oluşturma kısmı gelicek.
-// func (s *codeService) CodeTemplateGenerator(programmingName, templatePathObject, content, funcName string, tests []domains.Test) (string, error) {
-// 	if programmingName == "GO" {
-// 		return s.goLabTemplate(templatePathObject, content, funcName, tests)
-// 	}
-
-// 	return "", service_errors.NewServiceErrorWithMessage(500, "this programming language not supported")
-// }
-
 func (s *codeService) CodeTemplateGenerator(template, check, userCode, funcName string, tests []domains.Test) (string, error) {
 	if !strings.Contains(userCode, funcName) {
 		return "", fmt.Errorf("invalid func name")
@@ -158,67 +146,6 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 	}
 
 	return checks.String()
-}
-
-func (s *codeService) goLabTemplate(templatePathObject, content, funcName string, tests []domains.Test) (string, error) {
-	// Read the template file
-	temp, err := os.ReadFile(templatePathObject)
-	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while reading go template", err)
-	}
-
-	// Replace placeholders with actual function names and imports
-	replace := strings.Replace(string(temp), "#funccall", funcName, -1)
-	imports := extractor.ExtractImports(content)
-	replace = strings.Replace(replace, "#imports", imports, -1)
-
-	// Extract the user's function from the content
-	userfunc, err := extractor.ExtractFunction(content, funcName)
-	if err != nil {
-		return "", err
-	}
-	replace = strings.Replace(replace, "#funcs", userfunc, -1)
-
-	// Build the test cases
-	result := "var tests = []struct{\n input []interface{}\n output []interface{}\n}{\n"
-
-	for _, test := range tests {
-		result += "\t{input:[]interface{}{"
-		for i, input := range test.GetInput() {
-
-			switch input.(type) { //checking if string or not
-			case string:
-				result += fmt.Sprintf("\"%v\"", input)
-			default:
-				result += fmt.Sprintf("%v", input)
-			}
-
-			if len(test.GetInput()) != i+1 {
-				result += ","
-			}
-		}
-		result += "}, output:[]interface{}{"
-		for i, output := range test.GetOutput() {
-
-			switch output.(type) {
-			case string:
-				result += fmt.Sprintf("\"%v\"", output)
-			default:
-				result += fmt.Sprintf("%v", output)
-			}
-
-			if len(test.GetOutput()) != i+1 {
-				result += ","
-			}
-		}
-		result += "}},\n"
-	}
-	result += "}"
-
-	// Replace the test cases placeholder in the template
-	replace = strings.Replace(replace, "#tests", result, -1)
-
-	return replace, nil
 }
 
 func (s *codeService) createCodeFile(userID string) (err error) {

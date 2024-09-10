@@ -1,5 +1,5 @@
 {
-	"id": 1,
+	"id": 3,
 	"languages": [
 		{
 			"lang": "en",
@@ -54,7 +54,7 @@
 		],
 		"codeTemplates": [
 			{
-				"name": "GO",
+				"programmingID": 2,
 				"template": "\n\n$userCode$\n\nfunc main() {\n    $checks$\n}",
 				"check": "result := $func$($input$)\n    if result == $output$ {\n        fmt.Println(\"Test Passed\")\n    } else {\n        fmt.Printf(\"Test Failed: Expected %d, but got %d\\n\", $output$, result)\n    }"
 			}

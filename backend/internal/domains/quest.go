@@ -70,9 +70,9 @@ func (p *Returns) SetType(typ string) {
 }
 
 type CodeTemplate struct {
-	Name     string `json:"name"`
-	Template string `json:"template"`
-	Check    string `json:"check"`
+	ProgrammingID int
+	Template      string
+	Check         string
 }
 
 // Quest represents a coding challenge or task.
@@ -167,11 +167,11 @@ func NewReturn(name, typ string) *Returns {
 	}
 }
 
-func NewCodeTemplate(name, template, check string) *CodeTemplate {
+func NewCodeTemplate(programmingID int, template, check string) *CodeTemplate {
 	return &CodeTemplate{
-		Name:     name,
-		Template: template,
-		Check:    check,
+		ProgrammingID: programmingID,
+		Template:      template,
+		Check:         check,
 	}
 }
 

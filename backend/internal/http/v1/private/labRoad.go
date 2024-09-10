@@ -9,7 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (h *PrivateHandler) initStartRoutes(root fiber.Router) {
+func (h *PrivateHandler) initLabRoadRoutes(root fiber.Router) {
 	root.Get("/start/:programmingID", h.Start)
 }
 
@@ -28,7 +28,7 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 		return response.Response(400, "Invalid Programming ID", nil)
 	}
 
-	plInformation, err := h.services.StartService.GetProgrammingInformation(num)
+	plInformation, err := h.services.LabRoadService.GetInventoryInformation(num)
 	if err != nil {
 		return response.Response(500, "Get Programming Language error", nil)
 	}

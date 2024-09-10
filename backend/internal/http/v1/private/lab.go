@@ -2,7 +2,6 @@ package private
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -16,14 +15,14 @@ import (
 // UserLanguageLabStatsDto represents the DTO for user language lab statistics
 
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
-	root.Get("/labs/:programmingID", h.GetLabsByID)
-	root.Get("/lab/:programmingID/:labID", h.GetLabByID)
+	root.Get("/labs", h.GetLabs)
+	root.Get("/lab/data", h.AddDummyLabData)
+	root.Get("/lab/:labID", h.GetLabByID)
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
-	root.Get("/lab/data", h.AddDummyLabData)
 	root.Post("/lab/answer", h.AnswerLab)
-	root.Get("/lab/template/:programmingID/:labID", h.GetGoTemplates)
+	//root.Get("/lab/template/:programmingID/:labID", h.GetGoTemplates)
 }
 
 // @Tags Lab
@@ -36,11 +35,12 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 func (h *PrivateHandler) GetUserLanguageLabStats(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
-	stats, err := h.services.LabService.GetUserLanguageLabStats(userSession.UserID)
+	stat, err := h.services.LabService.GetUserLanguageLabStats(userSession.UserID)
 	if err != nil {
 		return err
 	}
-	labStatsDTO := h.dtoManager.LabDTOManager.ToUserProgrammingLanguageStatsDTO(stats)
+	labStatsDTO := h.dtoManager.LabDTOManager.ToUserProgrammingLanguageStatDTO(stat)
+
 	return response.Response(200, "GetUserLanguageLabStats successful", labStatsDTO)
 }
 
@@ -82,46 +82,29 @@ func (h *PrivateHandler) GetUserLabProgressStats(c *fiber.Ctx) error {
 
 // @Tags Lab
 // @Summary GetLabs
-// @Description Get Labs By Programming Language ID
+// @Description Get Labs
 // @Accept json
 // @Produce json
-// @Param programmingID path string true "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/{programmingID} [get]
-func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
-	programmingID := c.Params("programmingID")
-	indID, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalid ID", nil)
-	}
+// @Router /private/labs/ [get]
+func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
-	isExist, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeProgrammingLanguage, domains.ContentStarted, int32(indID), 0)
-	if err != nil {
-		return response.Response(500, "Log Check Error", nil)
-	}
-	if !isExist {
-		return response.Response(500, "Programming Language could not started", nil)
-	}
-
-	filteredLabs, err := h.services.LabService.GetLabsFilter(userSession.UserID, indID, 0, nil, nil)
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, 0, nil, nil)
 	if err != nil {
 		return err
 	}
-	var labsDtoList []dto.LabsDTO
-	for _, labCollection := range filteredLabs {
-		var labDTOList []dto.LabDTO
-		for _, lab := range labCollection.GetLabs() {
-			languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(lab.GetLanguages())
-			labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(lab, languageDTOs))
 
-		}
-		labsDtoList = append(labsDtoList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, labDTOList))
+	var labDTOList []dto.LabDTO
+	for _, labCollection := range labData {
+		languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(labCollection.GetLanguages())
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs))
 	}
-	if len(labsDtoList) == 0 {
-		return response.Response(404, "Labs not found", labsDtoList)
+	if len(labDTOList) == 0 {
+		return response.Response(404, "Labs not found", nil)
 	}
-	return response.Response(200, "GetLabs successful", labsDtoList)
+
+	return response.Response(200, "GetLabs successful", labDTOList)
 }
 
 // @Tags Lab
@@ -129,26 +112,19 @@ func (h *PrivateHandler) GetLabsByID(c *fiber.Ctx) error {
 // @Description Get Lab By Programming Language ID & Lab ID
 // @Accept json
 // @Produce json
-// @Param programmingID path string true "Programming Language ID"
 // @Param labID path string true "Lab ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/lab/{programmingID}/{labID} [get]
+// @Router /private/lab/{labID} [get]
 func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
-	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
 	labID := c.Params("labID")
-
-	intProgrammingID, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalid Lang ID", nil)
-	}
 
 	intLabID, err := strconv.Atoi(labID)
 	if err != nil {
 		return response.Response(400, "Invalid Labs ID", nil)
 	}
 
-	userSession := session_store.GetSessionData(c)
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intProgrammingID, intLabID, nil, nil)
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -156,18 +132,16 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		return response.Response(404, "Lab not found", nil)
 	}
 
-	var labsDtoList []dto.LabsDTO
+	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
-		var labDTOList []dto.LabDTO
-		for _, lab := range labCollection.GetLabs() {
-			languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(lab.GetLanguages())
-			labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(lab, languageDTOs))
-
-		}
-		labsDtoList = append(labsDtoList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, labDTOList))
+		languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(labCollection.GetLanguages())
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs))
+	}
+	if len(labDTOList) == 0 {
+		return response.Response(404, "Labs not found", nil)
 	}
 
-	return response.Response(200, "GetLab successful", labsDtoList)
+	return response.Response(200, "GetLab successful", labDTOList)
 }
 
 // @Tags Lab
@@ -181,14 +155,21 @@ func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
 	// Dummy Data for testing
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 3, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 2, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 2, 3)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 3, 4)
 	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 1, 2)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 2, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 3, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 2, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 2, 3)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 3, 4)
 	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 2)
 
 	return response.Response(200, "Dummy Data Added", nil)
 }
 
-// @Tags Lab
+/* // @Tags Lab
 // @Summary GoTemplate
 // @Description Creating Go Template Test
 // @Accept json
@@ -224,7 +205,7 @@ func (h *PrivateHandler) GetGoTemplates(c *fiber.Ctx) error {
 	file.WriteString(template)
 
 	return response.Response(200, "Go Template Successfull", template)
-}
+} */
 
 // @Tags Lab
 // @Summary Answer
@@ -241,15 +222,15 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	}
 
 	userSession := session_store.GetSessionData(c)
-	roadInformation, err := h.services.RoadService.GetRoadInformation(int32(answerLabDTO.ProgrammingID))
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(answerLabDTO.ProgrammingID)
 	if err != nil {
-		return response.Response(500, "Road Information Error", err)
+		return response.Response(500, "Programming Language Information Error", err)
 	}
-	if roadInformation == nil {
-		return response.Response(404, "Road Not Found", nil)
+	if inventoryInformation == nil {
+		return response.Response(404, "Programming Language Not Found", nil)
 	}
 
-	lab, err := h.services.LabService.GetLabByID(userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID)
+	lab, err := h.services.LabService.GetLabByID(userSession.UserID, answerLabDTO.LabID)
 	if err != nil {
 		return response.Response(404, "Error While Getting Lab", err)
 	}
@@ -257,14 +238,14 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return response.Response(404, "Lab Not Found", nil)
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID, domains.TypeLab, roadInformation.GetFileExtension(), answerLabDTO.UserCode)
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, answerLabDTO.ProgrammingID, answerLabDTO.LabID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
 	if err != nil {
 		return err
 	}
 
 	var codeTemplate domains.CodeTemplate
 	for _, codeTmp := range lab.GetQuest().GetCodeTemplates() {
-		if codeTmp.Name == roadInformation.GetName() {
+		if codeTmp.ProgrammingID == inventoryInformation.GetID() {
 			codeTemplate = codeTmp
 		}
 	}
@@ -273,15 +254,13 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	// FIXME: LABLARI TEKE AL. SUAN C++ VE GOLANG DEKİ SORULARI ÇÖZEBİLİYORSUN SORUN YOK.
 	// fmt.Println("Content: ", tmpContent)
 
 	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
 		return err
 	}
 
-	// roadInformation.GetCmd()
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), roadInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", roadInformation.GetFileExtension()), roadInformation.GetCmd())
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd())
 	if err != nil {
 		return err
 	}

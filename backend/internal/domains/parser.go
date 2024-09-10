@@ -2,7 +2,7 @@ package domains
 
 // IParserService is the interface that provides the methods for the parser service.
 type IParserService interface {
-	GetLabs() (labs []LabsP, err error)
+	GetLabs() (labs []LabP, err error)
 	GetRoads() (roads []RoadP, err error)
 	GetInventory() (inventory []InventoryP, err error)
 	GetLevels() (userLevel []LevelP, err error)
@@ -53,9 +53,9 @@ type ReturnP struct {
 	Type string `json:"type"`
 }
 type CodeTemplateP struct {
-	Name     string `json:"name"`
-	Template string `json:"template"`
-	Check    string `json:"check"`
+	ProgrammingID int    `json:"programmingID"`
+	Template      string `json:"template"`
+	Check         string `json:"check"`
 }
 
 type QuestP struct {
@@ -73,18 +73,6 @@ type LabP struct {
 	ID        int         `json:"id"`
 	Languages []LanguageP `json:"languages"`
 	Quest     QuestP      `json:"quest"`
-}
-
-// Labs represents a collection of labs grouped together.
-type LabsP struct {
-	ID            int
-	Name          string
-	DockerImage   string
-	IconPath      string
-	Cmd           []string
-	FileExtension string
-	TemplatePath  string
-	Labs          []LabP
 }
 
 // Path represents a coding learning path.
