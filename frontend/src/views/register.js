@@ -136,7 +136,8 @@ const Register = () => {
     <Box
       sx={{
         position: "relative",
-      }}>
+      }}
+    >
       <Box
         sx={{
           display: { xs: "none", mdlg: "block" },
@@ -151,7 +152,8 @@ const Register = () => {
             xxl: "18%",
           },
           zIndex: 1,
-        }}>
+        }}
+      >
         <Image src={CardImage} width={368} height={226} alt="Cards" />
       </Box>
       <Box
@@ -168,7 +170,8 @@ const Register = () => {
             xxl: "14%",
           },
           zIndex: 1,
-        }}>
+        }}
+      >
         <Image
           src={GirlImage}
           width={368}
@@ -181,17 +184,20 @@ const Register = () => {
         <Card
           sx={{
             m: 1,
-          }}>
+          }}
+        >
           <CardContent
             sx={{
               width: { md: "auto", lg: "50.75rem" },
-            }}>
+            }}
+          >
             <Grid
               container
               direction="column"
               sx={{
                 px: { xs: 2, sm: 4, md: 6, lg: 8, xl: 10, xxl: 12 },
-              }}>
+              }}
+            >
               <Box
                 sx={{
                   display: "flex",
@@ -199,14 +205,16 @@ const Register = () => {
                   alignItems: "center",
                   gap: 1,
                   my: 5,
-                }}>
+                }}
+              >
                 <Circle sx={{ width: 40, height: 40, mr: 1 }} />
                 <Typography
                   textAlign="center"
                   variant="body1"
                   fontFamily="Outfit"
                   fontWeight="600"
-                  fontSize="35px">
+                  fontSize="35px"
+                >
                   {themeConfig.projectName}
                 </Typography>
               </Box>
@@ -264,7 +272,8 @@ const Register = () => {
                           <IconButton
                             sx={{ zIndex: 999 }}
                             aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}>
+                            onClick={handleClickShowPassword}
+                          >
                             {showPassword ? (
                               <VisibilityOff sx={{ color: "#000" }} />
                             ) : (
@@ -296,12 +305,14 @@ const Register = () => {
                       <Typography
                         fontWeight={300}
                         fontSize={18}
-                        fontFamily={"Outfit"}>
+                        fontFamily={"Outfit"}
+                      >
                         {t("register.accept")}
                         <Link
                           sx={{ textDecoration: "none", fontWeight: "600" }}
                           color={"#0A3B7A"}
-                          href="#">
+                          href="#"
+                        >
                           {t("register.terms")}
                         </Link>
                       </Typography>
@@ -316,7 +327,8 @@ const Register = () => {
                       py: 2,
                     }}
                     onClick={handleSubmit}
-                    fullWidth>
+                    fullWidth
+                  >
                     {t("register.signup")}
                   </Button>
                 </Grid>
@@ -334,12 +346,14 @@ const Register = () => {
                 variant="body1"
                 textAlign={"center"}
                 mt={4}
-                fontFamily={"Outfit"}>
+                fontFamily={"Outfit"}
+              >
                 {t("register.already")}
                 <Link
                   href="/login"
                   color={bgColor}
-                  sx={{ fontWeight: "600", textDecoration: "none", ml: 1 }}>
+                  sx={{ fontWeight: "600", textDecoration: "none", ml: 1 }}
+                >
                   {t("register.login")}
                 </Link>
               </Typography>

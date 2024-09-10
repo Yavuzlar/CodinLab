@@ -11,8 +11,6 @@ import navigation from "src/navigation";
 import findParent from "src/utils/findParent";
 
 const Layout = ({ children }) => {
-
-
   const router = useRouter();
 
   const [mounted, setMounted] = useState(false);
@@ -48,7 +46,7 @@ const Layout = ({ children }) => {
 
       <Navbar />
 
-      <Box sx={{ mt: "88px"}}>
+      <Box sx={{ mt: "88px" }}>
         <Container maxWidth="lgPlus" fixed>
           <CustomBreadcrumbs titles={titles} />
         </Container>
@@ -61,7 +59,7 @@ const Layout = ({ children }) => {
           pb: "48px",
         }}
       >
-        <Box sx={{ mt: '27px' }}>
+        <Box sx={{ mt: "27px" }}>
           <Container maxWidth="lgPlus" fixed>
             {children}
           </Container>

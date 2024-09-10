@@ -41,6 +41,7 @@
   "login.create.new.account": "Hesap Oluştur",
   "login.invalidEroor": "Geçersiz e-posta",
   "login.emailError": "E-posta gereklidir",
+  "login.usernameError": "Kullanıcı adı gereklidir",
   "login.passwordError": "Parola gereklidir",
   "labs.search.placeholder": "Lablarda ara",
   "labs.sort_the_labs": "Labları sırala",

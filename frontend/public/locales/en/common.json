@@ -20,7 +20,7 @@
   "login.new.on.platform": "Are you new on our platform?",
   "login.create.new.account": "Create an account",
   "login.invalidError": "Invalid email",
-  "login.emailError": "Email is required",
+  "login.usernameError": "Username is required",
   "login.passwordError": "Password is required",
   "labs.search.placeholder": "Search in labs",
   "labs.sort_the_labs": "Sort the labs",
