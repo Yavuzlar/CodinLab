@@ -94,17 +94,56 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID string, program
 	return codeTmpPath, nil
 }
 
-func (s *codeService) CodeTemplateGenerator(template, check, userCode, funcName string, tests []domains.Test) (string, error) {
+func (s *codeService) CodeDockerTemplateGenerator(template, check, userCode, funcName string, tests []domains.Test, returns []domains.Returns) (string, error) {
 	if !strings.Contains(userCode, funcName) {
 		return "", fmt.Errorf("invalid func name")
+	}
+
+	var returnStr string
+	for _, r := range returns {
+		returnStr += fmt.Sprintf("%v,", r.GetType())
+	}
+	if len(returnStr) > 0 {
+		returnStr = returnStr[:len(returnStr)-1]
 	}
 
 	checks := s.createChecks(check, tests)
 	template = strings.Replace(template, "$checks$", checks, -1)
 	template = strings.Replace(template, "$func$", funcName, -1)
 	template = strings.Replace(template, "$userCode$", userCode, -1)
+	template = strings.Replace(template, "$returns$", returnStr, -1)
 
 	return template, nil
+}
+
+func (s *codeService) CodeFrontendTemplateGenerator(programmingName, funcName, frontend string, params []domains.Param, returns []domains.Returns) string {
+	var paramStr string
+	var returnStr string
+	if programmingName == "GO" {
+		for _, param := range params {
+			paramStr += fmt.Sprintf("%v %v", param.GetName(), param.GetType())
+		}
+	} else {
+		for _, param := range params {
+			paramStr += fmt.Sprintf("%v %v,", param.GetType(), param.GetName())
+		}
+	}
+	if len(paramStr) > 0 {
+		paramStr = paramStr[:len(paramStr)-1]
+	}
+
+	for _, r := range returns {
+		returnStr += fmt.Sprintf("%v,", r.GetType())
+	}
+	if len(returnStr) > 0 {
+		returnStr = returnStr[:len(returnStr)-1]
+	}
+
+	frontend = strings.Replace(frontend, "$params$", paramStr, -1)
+	frontend = strings.Replace(frontend, "$funcname$", funcName, -1)
+	frontend = strings.Replace(frontend, "$returns$", returnStr, -1)
+
+	return frontend
 }
 
 func (s *codeService) createChecks(check string, tests []domains.Test) string {

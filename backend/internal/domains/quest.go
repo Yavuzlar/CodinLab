@@ -71,6 +71,7 @@ func (p *Returns) SetType(typ string) {
 
 type CodeTemplate struct {
 	ProgrammingID int
+	Frontend      string
 	Template      string
 	Check         string
 }
@@ -167,11 +168,12 @@ func NewReturn(name, typ string) *Returns {
 	}
 }
 
-func NewCodeTemplate(programmingID int, template, check string) *CodeTemplate {
+func NewCodeTemplate(programmingID int, frontend, template, check string) *CodeTemplate {
 	return &CodeTemplate{
 		ProgrammingID: programmingID,
 		Template:      template,
 		Check:         check,
+		Frontend:      frontend,
 	}
 }
 

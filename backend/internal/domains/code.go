@@ -10,5 +10,6 @@ type ICodeService interface {
 	UploadUserCode(ctx context.Context, userID string, programmingLanguageID, PathLabID int, codeType, fileExtention, content string) (string, error)
 	RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error)
 	CreateFileAndWrite(filePath, content string) (err error)
-	CodeTemplateGenerator(template, check, userCode, funcName string, tests []Test) (string, error)
+	CodeDockerTemplateGenerator(template, check, userCode, funcName string, tests []Test, returns []Returns) (string, error)
+	CodeFrontendTemplateGenerator(programmingName, funcName, frontend string, params []Param, returns []Returns) string
 }

@@ -760,7 +760,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "StartLabRoad"
+                    "LabRoadCommon"
                 ],
                 "summary": "Start",
                 "parameters": [
@@ -768,6 +768,45 @@ const docTemplate = `{
                         "type": "string",
                         "description": "programmingID",
                         "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/template/{labID}/{programmingID}": {
+            "get": {
+                "description": "Get Template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LabRoadCommon"
+                ],
+                "summary": "Get Template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "labID",
+                        "name": "labID",
                         "in": "path",
                         "required": true
                     }

@@ -742,7 +742,33 @@ paths:
             $ref: '#/definitions/response.BaseResponse'
       summary: Start
       tags:
-      - StartLabRoad
+      - LabRoadCommon
+  /private/template/{labID}/{programmingID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Template
+      parameters:
+      - description: programmingID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: labID
+        in: path
+        name: labID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Template
+      tags:
+      - LabRoadCommon
   /private/user/:
     get:
       consumes:

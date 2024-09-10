@@ -56,6 +56,7 @@
 			{
 				"programmingID": 1,
 				"template": "$userCode$\n\nint main() {\n    $checks$\n    return 0;\n}",
+				"frontend": "$returns$ $funcname$($params$){\n\n // Write your code here \n\n}",
 				"check": "int result = $func$($input$);\n    if (result == $output$) {\n        std::cout << \"Test Passed\" << std::endl;\n    } else {\n        std::cout << \"Test Failed: Expected $output$, but got \" << result << std::endl;\n    }\n"
 			}
 		]

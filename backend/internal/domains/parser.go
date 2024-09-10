@@ -54,6 +54,7 @@ type ReturnP struct {
 }
 type CodeTemplateP struct {
 	ProgrammingID int    `json:"programmingID"`
+	Frontend      string `json:"frontend"`
 	Template      string `json:"template"`
 	Check         string `json:"check"`
 }

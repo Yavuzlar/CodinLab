@@ -250,11 +250,10 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		}
 	}
 
-	tmpContent, err := h.services.CodeService.CodeTemplateGenerator(codeTemplate.Template, codeTemplate.Check, answerLabDTO.UserCode, lab.GetQuest().GetFuncName(), lab.GetQuest().GetTests())
+	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTemplate.Template, codeTemplate.Check, answerLabDTO.UserCode, lab.GetQuest().GetFuncName(), lab.GetQuest().GetTests(), lab.GetQuest().GetReturns())
 	if err != nil {
 		return err
 	}
-	// fmt.Println("Content: ", tmpContent)
 
 	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
 		return err
