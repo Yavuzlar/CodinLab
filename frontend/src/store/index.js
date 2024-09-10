@@ -11,7 +11,7 @@ export const store = configureStore({
     auth: authSlice,
     user : userSlice, 
     statistics: statisticsSlice, 
-    language : languageSlice 
+    language : languageSlice,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

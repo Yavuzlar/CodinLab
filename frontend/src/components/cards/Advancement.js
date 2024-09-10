@@ -14,8 +14,8 @@ import { languages } from "src/data/home";
 const Advancement = () => {
 
   const dispatch = useDispatch();   
-  const { data: advancementData} = useSelector(
-    (state) => state.statistics
+  const { statistics: stateStatistics } = useSelector(
+    (state) => state
   );
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const Advancement = () => {
               flexGrow: 1,
             }}
           >
-            {advancementData.map((languages, index) => (
+            {stateStatistics.advancementData?.data?.map((languages, index) => (
               <Box
                 sx={{
                   display: "flex",

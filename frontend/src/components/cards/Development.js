@@ -1,37 +1,14 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import { CircularProgressStatistics } from "../progress/CircularProgressStatistics";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getUserDevelopment } from "../../store/statistics/statisticsSlice";
 
 const Development = () => {
-  // let Deneme = [
-  //   {
-  //     name: "In progress", // String
-  //     value: 90, // Number
-  //     color: "#0A3B7A", // String
-  //   },
-  // ];
-
-  const dispatch = useDispatch();
-  const { statistics: stateStatistics } = useSelector((state) => state);
-
-  useEffect(() => {
-    dispatch(getUserDevelopment());
-  }, [dispatch]);
-
-  const progresses = [
+  let Deneme = [
     {
-      name: "Roads", //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.data?.data?.roadPercentage,
-    },
-    {
-      name: "Labs", //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.data?.data?.labPercantage,
+      name: "In progress", // String
+      value: 90, // Number
+      color: "#0A3B7A", // String
     },
   ];
-
-  console.log(stateStatistics);
 
   return (
     <Box
@@ -66,7 +43,7 @@ const Development = () => {
               flexGrow: 1,
             }}
           >
-            <CircularProgressStatistics progresses={progresses} />
+            <CircularProgressStatistics progresses={Deneme} />
           </Box>
         </CardContent>
       </Card>
