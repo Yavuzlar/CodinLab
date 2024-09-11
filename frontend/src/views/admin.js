@@ -10,6 +10,8 @@ import { CircularProgressStatistics } from "src/components/progress/CircularProg
 import cImg from "../assets/icons/c.png";
 import cppImg from "../assets/icons/cpp.png";
 import goImg from "../assets/icons/go.png";
+import pythonImg from "../assets/icons/python.png";
+import jsImg from "../assets/icons/javascript.png";
 import { useRouter } from "next/router";
 
 const languageStatistics = [
@@ -25,6 +27,14 @@ const languageStatistics = [
     image: goImg,
     process: "80",
   },
+  {
+    image: pythonImg,
+    process: "80",
+  },
+  {
+    image: jsImg,
+    process: "80",
+  },
 ];
 const Admin = () => {
   const theme = useTheme();
@@ -38,36 +48,33 @@ const Admin = () => {
   ];
 
   const router = useRouter();
-
   return (
-    <>
-      <Grid container spacing={2}>
+    <Grid container spacing={2}>
+      <Grid item xs={12} sx={{ display: "flex", gap: 2 }}>
         {/* left */}
         <Grid item xs={12} md={7}>
-          <Box
-            sx={{
-              display: "flex",
-              gap: "1rem",
-              flexDirection: "column",
-              height: "100%",
-            }}
-          >
-            <Box sx={{ height: "470px" }}>
-              <Timestatistic />
-            </Box>
-          </Box>
+          {/* <Box sx={{ minHeight: "500px" }}> */}
+          <Timestatistic />
+          {/* </Box> */}
         </Grid>
 
         {/* right */}
-        <Grid item container xs={12} md={5}>
-          <Grid item xs={12}>
+        <Grid item xs={12} md={5}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              height: "100%",
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
                 flexDirection: "row",
-                mb: "0.5rem",
+
                 gap: "16px",
               }}
             >
@@ -126,36 +133,37 @@ const Admin = () => {
                 </Typography>
               </Button>
             </Box>
-          </Grid>
 
-          <Grid item xs={12} md={12}>
-            <Box
+            <Card
               sx={{
-                height: "422px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
               }}
             >
-              <Card
+              <Typography
+                variant="title"
+                sx={{
+                  fontWeight: "bold",
+                  padding: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Translations text="admin.language.rates" />
+              </Typography>
+              <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  width: "100%",
-                  height: "100%",
+                  gap: 0.25,
                 }}
               >
-                <Typography
-                  variant="title"
-                  sx={{
-                    fontWeight: "bold",
-                    padding: "20px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                  }}
-                >
-                  <Translations text="admin.language.rates" />
-                </Typography>
                 <Box
                   sx={{
                     display: "flex",
@@ -191,17 +199,18 @@ const Admin = () => {
                     </Typography>
                   </Box>
                 ))}
-              </Card>
-            </Box>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Box sx={{ height: "450px" }}>
-            <Activity />
+              </Box>
+            </Card>
           </Box>
         </Grid>
       </Grid>
-    </>
+      {/* Activity Card */}
+      <Grid item xs={12}>
+        <Box sx={{ height: "auto", py: 2 }}>
+          <Activity />
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 

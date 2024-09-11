@@ -56,16 +56,48 @@ const Timestatistic = () => {
             <Typography variant="title" sx={{ fontWeight: "bold" }}>
               <Translations text="admin.time.title" />
             </Typography>
-            <Typography
-              sx={{
-                maxWidth: "calc(100% - 9.625rem)",
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box>
+                <Typography
+                  sx={{
+                    maxWidth: "calc(100% - 9.625rem)",
 
-                paddingTop: "0.8rem",
-                ...(_smd && { maxWidth: "60ch" }),
+                    paddingTop: "0.8rem",
+                    ...(_smd && { maxWidth: "60ch" }),
+                  }}
+                >
+                  <Translations text="admin.time.content" />
+                </Typography>
+              </Box>
+            </Box>
+            {/* Week */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "end",
               }}
             >
-              <Translations text="admin.time.content" />
-            </Typography>
+              <Box sx={{ display: "flex" }}>
+                <Box sx={{ mr: "5px" }}>
+                  <Image src={goImg} width={30} height={30} />
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{ font: "normal normal bold 18px/23px Outfit;" }}
+                  >
+                    Week
+                  </Typography>
+                  <Typography
+                    sx={{
+                      font: "normal normal normal 16px/20px Outfit;",
+                    }}
+                  >
+                    8 Apr - 14 Apr
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
           </Box>
           <Box
             sx={{
@@ -83,65 +115,41 @@ const Timestatistic = () => {
                 gap: 15,
                 mr: "3rem",
               }}
-            >
-              <Box>
-                {/* Week */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box sx={{ display: "flex" }}>
-                    <Box sx={{ mr: "5px" }}>
-                      <Image src={goImg} width={30} height={30} />
-                    </Box>
-                    <Box>
-                      <Typography
-                        sx={{ font: "normal normal bold 18px/23px Outfit;" }}
-                      >
-                        Week
-                      </Typography>
-                      <Typography
-                        sx={{
-                          font: "normal normal normal 16px/20px Outfit;",
-                        }}
-                      >
-                        8 Apr - 14 Apr
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-              <Box>
-                {/* Labs and Roads */}
-                <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  <Box
-                    sx={{
-                      width: "15px",
-                      height: "15px",
-                      backgroundColor: theme.palette.primary.light,
-                      borderRadius: "50%",
-                    }}
-                  />
-                  <Typography>Labs</Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  <Box
-                    sx={{
-                      width: "15px",
-                      height: "15px",
-                      backgroundColor: theme.palette.primary.dark,
-                      borderRadius: "50%",
-                    }}
-                  />
-                  <Typography>Roads</Typography>
-                </Box>
-              </Box>
-            </Box>
+            ></Box>
             <Box sx={{ flexGrow: 1 }}>
               <GraphicalStatistics data={langData} />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* Labs and Roads */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box
+                sx={{
+                  width: "15px",
+                  height: "15px",
+                  backgroundColor: theme.palette.primary.light,
+                  borderRadius: "50%",
+                }}
+              />
+              <Typography>Labs</Typography>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box
+                sx={{
+                  width: "15px",
+                  height: "15px",
+                  backgroundColor: theme.palette.primary.dark,
+                  borderRadius: "50%",
+                }}
+              />
+              <Typography>Roads</Typography>
             </Box>
           </Box>
         </CardContent>

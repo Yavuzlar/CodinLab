@@ -1,5 +1,5 @@
 import { useTheme } from "@emotion/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -9,9 +9,31 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import Translations from "../Translations";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const GraphicalStatistics = ({ data }) => {
   const theme = useTheme();
+  const { i18n } = useTranslation();
+  const language = i18n.language;
+  const [hoursLang, setHoursLang] = useState({ language });
+
+  useEffect(() => {
+    let storedLang = localStorage.getItem("i18nextLng");
+
+    switch (storedLang) {
+      case "tr":
+        setHoursLang("saat");
+        break;
+      case "en":
+        setHoursLang("hour");
+        break;
+      default:
+        setHoursLang("hour");
+        break;
+    }
+  }, [language, i18n]);
 
   return (
     <ResponsiveContainer width="100%" height={280}>
@@ -36,10 +58,13 @@ const GraphicalStatistics = ({ data }) => {
           tick={{ fill: "#fff" }}
           axisLine={null}
           ticks={[0, 2, 4, 6, 8, 10, 12, 14, 16]}
-          tickFormatter={(value) => `${value} hours`}
+          tickFormatter={(value) => `${value} ${hoursLang}`}
           tickLine={false}
         />
-        <Tooltip />
+        <Tooltip
+          contentStyle={{ backgroundColor: theme.palette.background.default }}
+          labelStyle={{ color: theme.palette.primary.main }}
+        />
         <Line
           type="monotone"
           dataKey="Roads"
@@ -50,7 +75,7 @@ const GraphicalStatistics = ({ data }) => {
         <Line
           type="monotone"
           dataKey="Labs"
-          stroke={theme.palette.primary.light}
+          stroke={theme.palette.info.main}
           strokeWidth={3}
         />
       </LineChart>
