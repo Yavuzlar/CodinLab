@@ -69,6 +69,13 @@ func (p *Returns) SetType(typ string) {
 	p.typ = typ
 }
 
+type CodeTemplate struct {
+	ProgrammingID int
+	Frontend      string
+	Template      string
+	Check         string
+}
+
 // Quest represents a coding challenge or task.
 type Quest struct {
 	difficulty   int
@@ -77,9 +84,18 @@ type Quest struct {
 	params       []Param
 	returns      []Returns
 	questImports []string
+	codeTemplate []CodeTemplate
 }
 
 // Getter and Setter methods for Quest
+func (q *Quest) GetCodeTemplates() []CodeTemplate {
+	return q.codeTemplate
+}
+
+func (q *Quest) SetCodeTemplate(codeTemplate []CodeTemplate) {
+	q.codeTemplate = codeTemplate
+}
+
 func (q *Quest) GetDifficulty() int {
 	return q.difficulty
 }
@@ -152,8 +168,17 @@ func NewReturn(name, typ string) *Returns {
 	}
 }
 
+func NewCodeTemplate(programmingID int, frontend, template, check string) *CodeTemplate {
+	return &CodeTemplate{
+		ProgrammingID: programmingID,
+		Template:      template,
+		Check:         check,
+		Frontend:      frontend,
+	}
+}
+
 // NewQuest creates a new instance of Quest
-func NewQuest(difficulty int, funcName string, tests []Test, params []Param, returns []Returns, questImports []string) *Quest {
+func NewQuest(difficulty int, funcName string, tests []Test, params []Param, returns []Returns, questImports []string, codeTemplates []CodeTemplate) *Quest {
 	return &Quest{
 		difficulty:   difficulty,
 		funcName:     funcName,
@@ -161,5 +186,6 @@ func NewQuest(difficulty int, funcName string, tests []Test, params []Param, ret
 		params:       params,
 		returns:      returns,
 		questImports: questImports,
+		codeTemplate: codeTemplates,
 	}
 }

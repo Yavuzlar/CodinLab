@@ -5,7 +5,6 @@ import Turkish from "src/assets/flags/turkish.png";
 import English from "src/assets/flags/english.png";
 import { useTranslation } from "react-i18next";
 
-
 const LanguageSelector = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -49,11 +48,11 @@ const LanguageSelector = () => {
   useEffect(() => {
     const handleResize = () => {
       setAnchorEl(null);
-    }
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [setAnchorEl]);
-  
+
   return (
     <>
       <Button

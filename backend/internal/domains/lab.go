@@ -2,19 +2,18 @@ package domains
 
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
-	GetLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) ([]Labs, error)
-	GetUserLanguageLabStats(userID string) (programmingLangugageStats []ProgrammingLanguageStats, err error)
+	GetLabsFilter(userID string, labId int, isStarted, isFinished *bool) ([]Lab, error)
+	GetUserLanguageLabStats(userID string) (programmingLangugageStats *ProgrammingLanguageStats, err error)
 	GetUserLabDifficultyStats(userID string) (userLabDifficultyStats UserLabDifficultyStats, err error)
 	GetUserLabProgressStats(userID string) (userLabProgressStats UserLabProgressStats, err error)
-	CountLabsFilter(userID string, programmingID, labId int, isStarted, isFinished *bool) (counter int, err error)
-	GetLabByID(userID string, programmingID, labID int) (lab *Lab, err error)
+	CountLabsFilter(userID string, labId int, isStarted, isFinished *bool) (counter int, err error)
+	GetLabByID(userID string, labID int) (lab *Lab, err error)
 }
 
 // ProgrammingLanguageStats represents the statistics for a specific language lab.
 type ProgrammingLanguageStats struct {
 	id            int
 	name          string
-	iconPath      string
 	totalLabs     int
 	completedLabs int
 	percentage    float32
@@ -29,14 +28,6 @@ func (p *ProgrammingLanguageStats) SetTotalLabs(totalLabs int) {
 	p.totalLabs = totalLabs
 }
 
-func (p *ProgrammingLanguageStats) GetID() int {
-	return p.id
-}
-
-func (p *ProgrammingLanguageStats) SetID(id int) {
-	p.id = id
-}
-
 func (p *ProgrammingLanguageStats) GetName() string {
 	return p.name
 }
@@ -45,12 +36,12 @@ func (p *ProgrammingLanguageStats) SetName(name string) {
 	p.name = name
 }
 
-func (p *ProgrammingLanguageStats) GetIconPath() string {
-	return p.iconPath
+func (p *ProgrammingLanguageStats) GetID() int {
+	return p.id
 }
 
-func (p *ProgrammingLanguageStats) SetIconPath(iconPath string) {
-	p.iconPath = iconPath
+func (p *ProgrammingLanguageStats) SetID(id int) {
+	p.id = id
 }
 
 func (p *ProgrammingLanguageStats) GetCompletedLabs() int {
@@ -175,11 +166,12 @@ func (l *LanguageLab) SetHint(hint string) {
 
 // Lab represents a specific coding lab exercise.
 type Lab struct {
-	id         int
-	languages  []LanguageLab
-	quest      Quest
-	isStarted  bool
-	isFinished bool
+	id            int
+	programmingID int
+	languages     []LanguageLab
+	quest         Quest
+	isStarted     bool
+	isFinished    bool
 }
 
 // Getter and Setter methods for Lab
@@ -189,6 +181,14 @@ func (l *Lab) GetID() int {
 
 func (l *Lab) SetID(id int) {
 	l.id = id
+}
+
+func (l *Lab) GetProgrammingID() int {
+	return l.programmingID
+}
+
+func (l *Lab) SetProgrammingID(programmingID int) {
+	l.programmingID = programmingID
 }
 
 func (l *Lab) GetLanguages() []LanguageLab {
@@ -223,89 +223,9 @@ func (l *Lab) SetIsFinished(isFinished bool) {
 	l.isFinished = isFinished
 }
 
-// Labs represents a collection of labs grouped together.
-type Labs struct {
-	id            int // programming ID
-	name          string
-	dockerImage   string
-	iconPath      string
-	cmd           []string
-	fileExtension string
-	templatePath  string
-	labs          []Lab
-}
-
-// Getter and Setter methods for Labs
-func (l *Labs) GetID() int {
-	return l.id
-}
-
-func (l *Labs) SetID(id int) {
-	l.id = id
-}
-
-func (l *Labs) GetName() string {
-	return l.name
-}
-
-func (l *Labs) SetName(name string) {
-	l.name = name
-}
-
-func (l *Labs) GetDockerImage() string {
-	return l.dockerImage
-}
-
-func (l *Labs) SetDockerImage(dockerImage string) {
-	l.dockerImage = dockerImage
-}
-
-func (l *Labs) GetIconPath() string {
-	return l.iconPath
-}
-
-func (l *Labs) SetIconPath(iconPath string) {
-	l.iconPath = iconPath
-}
-
-func (l *Labs) GetCmd() []string {
-	return l.cmd
-}
-
-func (l *Labs) SetCmd(cmd []string) {
-	l.cmd = cmd
-}
-
-func (l *Labs) GetFileExtension() string {
-	return l.fileExtension
-}
-
-func (l *Labs) SetFileExtension(fileExtension string) {
-	l.fileExtension = fileExtension
-}
-
-func (l *Labs) GetTemplatePath() string {
-	return l.templatePath
-}
-
-func (l *Labs) SetTemplatePath(templatePath string) {
-	l.templatePath = templatePath
-}
-
-func (l *Labs) GetLabs() []Lab {
-	return l.labs
-}
-
-func (l *Labs) SetLabs(labs []Lab) {
-	l.labs = labs
-}
-
 // NewProgrammingLanguageStats creates a new instance of ProgrammingLanguageStats
-func NewProgrammingLanguageStats(id int, name, iconPath string, totalLabs, completedLabs int, percentage float32) *ProgrammingLanguageStats {
+func NewProgrammingLanguageStats(totalLabs, completedLabs int, percentage float32) *ProgrammingLanguageStats {
 	return &ProgrammingLanguageStats{
-		id:            id,
-		name:          name,
-		iconPath:      iconPath,
 		totalLabs:     totalLabs,
 		completedLabs: completedLabs,
 		percentage:    percentage,
@@ -348,19 +268,5 @@ func NewLab(id int, languages []LanguageLab, quest Quest, isStarted, isFinished 
 		quest:      quest,
 		isStarted:  isStarted,
 		isFinished: isFinished,
-	}
-}
-
-// NewLabs creates a new instance of Labs
-func NewLabs(id int, name, dockerImage, iconPath, fileExtension, templatePath string, cmd []string, labs []Lab) *Labs {
-	return &Labs{
-		id:            id,
-		name:          name,
-		dockerImage:   dockerImage,
-		iconPath:      iconPath,
-		cmd:           cmd,
-		fileExtension: fileExtension,
-		templatePath:  templatePath,
-		labs:          labs,
 	}
 }

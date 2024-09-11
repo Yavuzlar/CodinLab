@@ -49,11 +49,10 @@ func (s *levelService) updateUserPoint(ctx context.Context, userID string) (oldP
 			if log.Type() == domains.TypeLab {
 				for _, lab := range labs {
 					if int32(lab.ID) == log.ProgrammingID() {
-						for _, l := range lab.Labs {
-							if int32(l.ID) == log.LabPathID() {
-								newPoint += int32(l.Quest.Difficulty)
-							}
+						if int32(lab.ID) == log.LabPathID() {
+							newPoint += int32(lab.Quest.Difficulty)
 						}
+
 					}
 				}
 			} else if log.Type() == domains.TypePath {

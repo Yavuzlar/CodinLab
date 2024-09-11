@@ -29,22 +29,6 @@ func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTOs []LabLanguageDTO
 	}
 }
 
-type LabsDTO struct {
-	ID       int
-	Name     string   `json:"name"`
-	IconPath string   `json:"iconPath"`
-	Labs     []LabDTO `json:"labs"`
-}
-
-func (m *LabDTOManager) ToLabsDTO(labs domains.Labs, labDTOs []LabDTO) LabsDTO {
-	return LabsDTO{
-		ID:       labs.GetID(),
-		Name:     labs.GetName(),
-		IconPath: labs.GetIconPath(),
-		Labs:     labDTOs,
-	}
-}
-
 type UserLabDifficultyStatsDTO struct {
 	EasyPercentage   float32 `json:"easyPercentage"`
 	MediumPercentage float32 `json:"mediumPercentage"`
@@ -98,26 +82,23 @@ func (m *LabDTOManager) ToLanguageDTOs(languages []domains.LanguageLab) []LabLan
 }
 
 type UserProgrammingLanguageLabStatsDTO struct {
-	ID            int     `json:"id"`
-	Name          string  `json:"name"`
-	IconPath      string  `json:"iconPath"`
 	TotalLabs     int     `json:"totalLabs"`
 	CompletedLabs int     `json:"completedLabs"`
 	Percentage    float32 `json:"percentage"`
 }
 
+func (m *LabDTOManager) ToUserProgrammingLanguageStatDTO(stat *domains.ProgrammingLanguageStats) UserProgrammingLanguageLabStatsDTO {
+	return UserProgrammingLanguageLabStatsDTO{
+		TotalLabs:     stat.GetTotalLabs(),
+		CompletedLabs: stat.GetCompletedLabs(),
+		Percentage:    stat.GetPercentage(),
+	}
+}
+
 func (m *LabDTOManager) ToUserProgrammingLanguageStatsDTO(stats []domains.ProgrammingLanguageStats) []UserProgrammingLanguageLabStatsDTO {
 	var userProgrammingLanguageLabStatsDTO []UserProgrammingLanguageLabStatsDTO
 	for _, stat := range stats {
-		newStatDto := UserProgrammingLanguageLabStatsDTO{
-			ID:            stat.GetID(),
-			Name:          stat.GetName(),
-			IconPath:      stat.GetIconPath(),
-			TotalLabs:     stat.GetTotalLabs(),
-			CompletedLabs: stat.GetCompletedLabs(),
-			Percentage:    stat.GetPercentage(),
-		}
-		userProgrammingLanguageLabStatsDTO = append(userProgrammingLanguageLabStatsDTO, newStatDto)
+		userProgrammingLanguageLabStatsDTO = append(userProgrammingLanguageLabStatsDTO, m.ToUserProgrammingLanguageStatDTO(&stat))
 	}
 	return userProgrammingLanguageLabStatsDTO
 }

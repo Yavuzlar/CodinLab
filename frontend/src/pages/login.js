@@ -12,7 +12,7 @@ import {
   IconButton,
   InputAdornment,
   Grid,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import Translations from "src/components/Translations";
@@ -21,12 +21,14 @@ import rocketImg from "../assets/3d/3d-casual-life-space-white-starship.png";
 import googleIcon from "../assets/icons/icons8-google-100.png";
 import githubIcon from "../assets/icons/icons8-github-144.png";
 import visibilityOnIcon from "../assets/icons/icons8-eye-1.png";
-import visibilityOffIcon from "../assets/icons/icons8-eye-1.png";
+import visibilityOffIcon from "../assets/icons/eye-hidden.png";
+import CodinLabLogo from "../assets/logo/codinlab-logo-main.png";
 import Image from "next/image";
 import manImg from "../assets/3d/3d-casual-life-young-man-sitting-with-laptop-and-waving.png";
 import { useTranslation } from "next-i18next";
 import themeConfig from "src/configs/themeConfig";
 import { useAuth } from "src/hooks/useAuth";
+import LanguageSelector from "src/layout/components/navigation/item/LanguageSelector";
 const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Login = () => {
@@ -39,7 +41,6 @@ const Login = () => {
   const [visibleUsernameLabel, setVisibleUsernameLabel] = useState(false);
   const [visiblePasswordLabel, setVisiblePasswordLabel] = useState(false);
   const { login } = useAuth();
-
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   // const handleMouseDownPassword = (event) => {
@@ -68,7 +69,7 @@ const Login = () => {
   };
 
   const handleSubmit = async () => {
-    setFormSubmit(true); 
+    setFormSubmit(true);
     const validationErrors = await loginValidation(formData);
     setErrors(validationErrors);
 
@@ -90,7 +91,6 @@ const Login = () => {
         const validationErrors = await loginValidation(formData);
         setErrors(validationErrors);
         console.log(validationErrors, "errors");
-
       };
       validateForm();
     }
@@ -99,7 +99,9 @@ const Login = () => {
   const { t } = useTranslation();
   const sm_down = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const sm_up = useMediaQuery((theme) => theme.breakpoints.up("sm"));
-  const mdmd_down = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
+  const md_down = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  const mdxl_down = useMediaQuery((theme) => theme.breakpoints.down("mdxl"));
+  const lg_down = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   return (
     <Box
@@ -111,24 +113,32 @@ const Login = () => {
         height: "100vh",
       }}
     >
+      {md_down ? (
+        ""
+      ) : (
+        <Button sx={{ top: 10, right: 5, position: "absolute" }}>
+          <LanguageSelector />
+        </Button>
+      )}
       <Box
         sx={{
-          width: "50.625rem",
+          width: "100%",
+          ...(mdxl_down ? { maxWidth: "35rem" } : { maxWidth: "45rem" }),
           position: "relative",
           alignItems: "center",
           justifyContent: "center",
-          height: "100vh",
+          maxHeight: "100%",
           display: "flex",
-          px: mdmd_down ? "5rem" : "10rem",
         }}
       >
         <Card
           sx={{
             width: "100%",
-            height: "50rem",
           }}
         >
-          <CardContent sx={{ height: "calc(100% - 3rem)" }}>
+          <CardContent
+            sx={{ height: "calc(100% - 3rem)", position: "relative" }}
+          >
             <Grid
               container
               sx={{
@@ -138,34 +148,42 @@ const Login = () => {
                 alignItems: "center",
                 px: sm_down ? "1rem" : "3rem",
               }}
+              spacing={4}
             >
+              {md_down ? (
+                <Button sx={{ top: 10, right: 5, position: "absolute" }}>
+                  <LanguageSelector />
+                </Button>
+              ) : (
+                ""
+              )}
+
               <Grid
                 item
                 xs={12}
                 sx={{
                   display: "flex",
-                  marginTop: sm_down ? "5rem" : "8.438rem",
+                  marginTop: sm_down ? "2rem" : "4rem",
+                  alignItems: "center",
+                  alignContent: "center",
+                  flexDirection: "column",
                 }}
               >
-                <Box
-                  sx={{
-                    width: "2.5rem",
-                    height: "2.5rem",
-                    borderRadius: "50%",
-                    background: "#FFFFFF",
-                    opacity: 1,
-                  }}
+                <Image
+                  src={CodinLabLogo}
+                  alt="codinlab-logo"
+                  width={80}
+                  height={120}
                 />
                 <Typography
                   sx={{
-                    marginLeft: "1.563rem",
                     font: "normal normal bold 35px/44px Outfit;",
                   }}
                 >
                   {themeConfig.projectName}
                 </Typography>
               </Grid>
-              <Grid item xs={12} sx={{ width: "100%", mt: "2.5rem" }}>
+              <Grid item xs={12} sx={{ width: "100%" }}>
                 <Typography
                   sx={{
                     // display: visibleUsernameLabel ? "block" : "none",
@@ -196,34 +214,38 @@ const Login = () => {
                     onChange={handleChange}
                     error={errors.username ? true : false}
                     helperText={errors.username}
-                    InputProps={{ style: { color: "#0A3B7A" } }}
+                    InputProps={{
+                      style: { color: "#0A3B7A" },
+                    }}
                     sx={{
                       "& .MuiFormLabel-root": {
                         color: "#0A3B7A",
-                        fontWeight: "bold",
+                        // fontWeight: "bold",
                       },
                       "& .MuiOutlinedInput-root": {
+                        "& input::placeholder": {
+                          fontWeight: "bold",
+                        },
                         "& fieldset": {
                           color: "#0A3B7A",
-                          fontWeight: "bold",
+                          // fontWeight: "bold",
                         },
                         "&:hover fieldset": {
                           color: "#0A3B7A",
-                          fontWeight: "bold",
+                          // fontWeight: "bold",
                         },
                         "&.Mui-focused": {
                           color: "#0A3B7A",
-                          fontWeight: "bold",
+                          // fontWeight: "bold",
                         },
                       },
-
                       width: "100%",
                       height: "3.125rem",
                     }}
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sx={{ width: "100%", mt: "2.5rem" }}>
+              <Grid item xs={12} sx={{ width: "100%" }}>
                 <Typography
                   sx={{
                     // display: visiblePasswordLabel ? "block" : "none",
@@ -282,11 +304,17 @@ const Login = () => {
                         fontWeight: "bold",
                       },
                       "& .MuiOutlinedInput-root": {
+                        "& input::placeholder": {
+                          fontWeight: "bold",
+                        },
                         "& fieldset": {
                           color: "#0A3B7A",
                           fontWeight: "bold",
                         },
-                        "&:hover fieldset": {},
+                        "&:hover fieldset": {
+                          color: "#0A3B7A",
+                          fontWeight: "bold",
+                        },
                         "&.Mui-focused": {
                           color: "#0A3B7A",
                           fontWeight: "bold",
@@ -304,32 +332,8 @@ const Login = () => {
                 xs={12}
                 sx={{
                   width: "100%",
-                  mt: "2.5rem",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  flexDirection: mdmd_down ? "column" : "row",
-                  textAlign: "center",
-                  alignItems: "center",
                 }}
               >
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      sx={{
-                        color: "#FFF",
-                        "&.Mui-checked": {
-                          color: "#0A3B7A",
-                        },
-                      }}
-                    />
-                  }
-                  label={<Translations text={"login.remember.me"} />}
-                />
-                <Button href="#ForgotPassword" sx={{ color: "#0A3B7A" }}>
-                  <Translations text={"login.forget.password"} />
-                </Button>
-              </Grid>
-              <Grid item xs={12} sx={{ width: "100%", mt: "1.163rem" }}>
                 <Button
                   sx={{
                     width: "100%",
@@ -349,7 +353,8 @@ const Login = () => {
                   </Typography>
                 </Button>
               </Grid>
-              <Grid item xs={12} sx={{ width: "100%", mt: "1.563rem" }}>
+              {/*               
+              <Grid item xs={12} sx={{ width: "100%" }}>
                 <Divider sx={{ width: "100%" }}>
                   <Translations text={"login.divider.or"} />
                 </Divider>
@@ -358,7 +363,6 @@ const Login = () => {
                 item
                 xs={12}
                 sx={{
-                  mt: "1.563rem",
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
@@ -395,13 +399,12 @@ const Login = () => {
                     height={50}
                   />
                 </Button>
-              </Grid>
+              </Grid> */}
               <Grid
                 item
                 xs={12}
                 sx={{
                   display: "flex",
-                  mt: "1.563rem",
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
@@ -433,23 +436,23 @@ const Login = () => {
             </Grid>
           </CardContent>
         </Card>
-        {mdmd_down ? (
+        {md_down ? (
           ""
         ) : (
           <Image
             src={rocketImg}
             alt="rocket-icon"
             style={{
-              width: "12.438rem",
-              height: "16rem",
+              ...(lg_down ? { width: "10rem" } : { width: "12rem" }),
+              ...(lg_down ? { height: "12rem" } : { height: "16rem" }),
+              ...(lg_down ? { right: -75 } : { right: -88 }),
               position: "absolute",
-              top: 50,
-              right: 69,
-              transform: "rotate(-57deg)",
+              top: -64,
+              transform: "scaleX(-1)",
             }}
           />
         )}
-        {mdmd_down ? (
+        {md_down ? (
           ""
         ) : (
           <Image
@@ -457,10 +460,11 @@ const Login = () => {
             alt="man-icon"
             style={{
               position: "absolute",
-              bottom: 60,
-              left: -50,
-              width: sm_down ? "60px" : "",
-              height: sm_down ? "60px" : "",
+              bottom: -48,
+              ...(lg_down ? { width: "18rem" } : { width: "" }),
+              ...(lg_down ? { height: "20rem" } : { height: "" }),
+              ...(lg_down ? { left: -210 } : { left: -264 }),
+              marginLeft: "1rem",
             }}
           />
         )}

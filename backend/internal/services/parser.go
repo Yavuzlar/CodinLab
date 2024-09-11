@@ -76,56 +76,34 @@ func (s *parserService) GetInventory() (inventory []domains.InventoryP, err erro
 	return
 }
 
-func (s *parserService) GetLabs() (labs []domains.LabsP, err error) {
+func (s *parserService) GetLabs() (labs []domains.LabP, err error) {
 	// Check if the directory exists
 	err = s.checkDir("object")
 	if err != nil {
 		return nil, err
 	}
 
-	// Get list of programming languages
-	inventory, err := s.GetInventory()
+	// Find JSON files for the lab
+	jsonFiles, err := s.findJSONFiles("object/labs")
 	if err != nil {
 		return nil, err
 	}
 
-	// Loop through each language
-	for _, language := range inventory {
-		oneLab := domains.LabsP{
-			ID:            language.ID,
-			Name:          language.Name,
-			DockerImage:   language.DockerImage,
-			IconPath:      language.IconPath,
-			Cmd:           language.Cmd,
-			FileExtension: language.FileExtension,
-			TemplatePath:  language.TemplatePath,
-		}
-
-		// Find JSON files for the lab
-		jsonFiles, err := s.findJSONFiles(language.LabDir)
+	// Loop through each JSON file
+	for _, file := range jsonFiles {
+		// Read the JSON file
+		jsonData, err := os.ReadFile(file)
 		if err != nil {
 			return nil, err
 		}
 
-		// Loop through each JSON file
-		for _, file := range jsonFiles {
-			// Read the JSON file
-			jsonData, err := os.ReadFile(file)
-			if err != nil {
-				return nil, err
-			}
-
-			var lab domains.LabP
-			err = json.Unmarshal(jsonData, &lab)
-			if err != nil {
-				return nil, err
-			}
-			oneLab.Labs = append(oneLab.Labs, lab)
-			// Append the quest to the lab
+		var lab domains.LabP
+		err = json.Unmarshal(jsonData, &lab)
+		if err != nil {
+			return nil, err
 		}
 
-		// Append the lab to the labs slice
-		labs = append(labs, oneLab)
+		labs = append(labs, lab)
 	}
 
 	return
