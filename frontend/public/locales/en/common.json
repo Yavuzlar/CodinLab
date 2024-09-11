@@ -100,5 +100,9 @@
   "dialog.button.cancel": "Cancel",
   "logout": "Logout",
   "languages.tr": "Turkish",
-  "languages.en": "English"
+  "languages.en": "English",
+  "labs.difficulty.easy": "Easy",
+  "labs.difficulty.medium": "Medium",
+  "labs.difficulty.hard": "Hard"
+
 }
