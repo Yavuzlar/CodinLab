@@ -4,6 +4,10 @@ import axios from "axios";
 
 const initialState = {
   loading: false,
+  userLanguageLabStatsLoading: false,
+  userLanguageRoadStatsLoading: false,
+  userLanguageLabStatsData: [],
+  userLanguageRoadStatsData: [],
   data: [],
   error: false,
 };
@@ -78,27 +82,27 @@ const languageSlice = createSlice({
         state.error = action.payload; 
       }) 
       .addCase(getUserLanguageLabStats.pending, (state) => {
-        state.loading = true;
+        state.userLanguageLabStatsLoading = true;
         state.error = null;
       })
       .addCase(getUserLanguageLabStats.fulfilled, (state, action) => {
-        state.data = action.payload;
-        state.loading = false;
+        state.userLanguageLabStatsData = action.payload;
+        state.userLanguageLabStatsLoading = false;
       })
       .addCase(getUserLanguageLabStats.rejected, (state, action) => {
-        state.loading = false;
+        state.userLanguageLabStatsLoading = false;
         state.error = action.payload;
       })
       .addCase(getUserLanguageRoadStats.pending, (state) => {
-        state.loading = true;
+        state.userLanguageRoadStatsLoading = true;
         state.error = null;
       })
       .addCase(getUserLanguageRoadStats.fulfilled, (state, action) => {
-        state.data = action.payload;
-        state.loading = false;
+        state.userLanguageRoadStatsData = action.payload;
+        state.userLanguageRoadStatsLoading = false;
       })
       .addCase(getUserLanguageRoadStats.rejected, (state, action) => {
-        state.loading = false;
+        state.userLanguageRoadStatsLoading = false;
         state.error = action.payload;
       });
       
