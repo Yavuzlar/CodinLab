@@ -49,7 +49,7 @@ const Advancement = () => {
               flexGrow: 1,
             }}
           >
-            {advancementData.map((languages, index) => (
+            {stateStatistics.advancementData?.data?.map((languages, index) => (
               <Box
                 sx={{
                   display: "flex",
