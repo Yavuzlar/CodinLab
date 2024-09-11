@@ -18,16 +18,21 @@ const LanguageProgress = ({ language,type }) => {
   const _md = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const _sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-  switch (type) {
-    case "road":
-      var icon = roadIcon;
-      var data = language.totalRoads;
-      break;
-    case "lab":
-      var icon = labIcon;
-      var data = language.totalLabs;
-      break;
-  }
+  // switch (type) {
+  //   case "road":
+  //     var icon = roadIcon;
+  //     var data = language.totalRoads;
+  //     break;
+  //   case "lab":
+  //     var icon = labIcon;
+  //     var data = language.totalLabs;
+  //     break;
+  // }
+  // console.log("language", language.totalLabs);
+
+    // Determine icon and data based on the type
+    const icon = type === "road" ? roadIcon : labIcon;
+    const data = type === "road" ? language.totalRoads : language.totalLabs;
 
   return (
     <Card>

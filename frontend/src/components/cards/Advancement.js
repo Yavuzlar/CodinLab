@@ -1,15 +1,9 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import LanguageProgress from "./LanguageProgress";
 import LinearProgess from "../progress/LinearProgess";
-import Image from "next/image";
-import goImg from "../../assets/icons/go.png";
-import cImg from "../../assets/icons/c.png";
-import pythonImg from "../../assets/icons/python.png";
 import { useTheme } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchAdvancement } from "src/store/statistics/statisticsSlice";
-import { languages } from "src/data/home";
 
 const Advancement = () => {
   const dispatch = useDispatch();
@@ -49,7 +43,7 @@ const Advancement = () => {
               flexGrow: 1,
             }}
           >
-            {advancementData.map((languages, index) => (
+            {stateStatistics.advancementData?.data?.map((languages, index) => (
               <Box
                 sx={{
                   display: "flex",

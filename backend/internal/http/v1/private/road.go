@@ -38,14 +38,6 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 		return response.Response(400, "Invalid Programming ID", nil)
 	}
 
-	isExist, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, domains.TypeProgrammingLanguage, domains.ContentStarted, int32(num), 0)
-	if err != nil {
-		return response.Response(500, "Log Check Error", nil)
-	}
-	if !isExist {
-		return response.Response(500, "Programming Language could not started", nil)
-	}
-
 	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, num, 0, nil, nil)
 	if err != nil {
 		return err

@@ -1,4 +1,4 @@
-import { Box, Card, Grid } from "@mui/material";
+import { Box, Card, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import InfoCard from "src/components/cards/Info";
 import LanguageProgress from "src/components/cards/LanguageProgress";
@@ -22,8 +22,19 @@ const Labs = () => {
 
   useEffect(() => {
     dispatch(getUserLanguageLabStats());
+    console.log("stateLanguage", stateLanguage);
   }, [dispatch]);
 
+  console.log("stateLanguage", stateLanguage.userLanguageLabStatsData.data);
+
+  const labsStatsData =[
+    {
+      id: 1,
+      totalLabs: stateLanguage.userLanguageLabStatsData.data?.totalLabs,
+      completedLabs: stateLanguage.userLanguageLabStatsData.data?.completedLabs,
+      percentage: stateLanguage.userLanguageLabStatsData.data?.percentage,
+    },
+  ]
 
   return (
     <>
@@ -54,7 +65,9 @@ const Labs = () => {
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                  <Card sx={{ height: "100%" }}></Card>
+                  <Card sx={{ height: "100%" }}>
+                    <Typography variant="h6"></Typography>
+                  </Card>
                 </Grid>
               </Grid>
             </Box>
@@ -73,7 +86,7 @@ const Labs = () => {
             pt: "0px !important",
           }}
         >
-          {stateLanguage.data?.data?.map((language, index) => (
+          {labsStatsData.map((language, index) => (
             <Grid item xs={12} md={12} key={index}>
               <LanguageProgress
                 language={language}

@@ -168,6 +168,7 @@ func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugag
 	if err != nil {
 		return
 	}
+	programmingLangugages, _ := s.parserService.GetInventory()
 
 	completedLabs := 0
 
@@ -177,9 +178,9 @@ func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugag
 		}
 	}
 	programmingLangugageStats = domains.NewProgrammingLanguageStats(
-		len(allLabs),
+		len(allLabs)*len(programmingLangugages),
 		completedLabs,
-		float32((float32(completedLabs)/float32(len(allLabs)))*100),
+		float32((float32(completedLabs)/float32(len(allLabs)*len(programmingLangugages)))*100),
 	)
 
 	return
@@ -203,9 +204,10 @@ func (s *labService) GetUserLabProgressStats(userID string) (userLabProgressStat
 	if err != nil {
 		return
 	}
+	programmingLangugages, _ := s.parserService.GetInventory()
 
-	progressPercentage := float32(float32(progressLabs) / float32(totalLabs) * 100)
-	completedPercentage := float32(float32(completedLabs) / float32(totalLabs) * 100)
+	progressPercentage := float32(float32(progressLabs) / float32(totalLabs*len(programmingLangugages)) * 100)
+	completedPercentage := float32(float32(completedLabs) / float32(totalLabs*len(programmingLangugages)) * 100)
 
 	userLabProgressStats = *domains.NewsUserLabProgressStats(progressPercentage, completedPercentage)
 
@@ -237,6 +239,8 @@ func (s *labService) GetUserLabDifficultyStats(userID string) (userLabDifficulty
 			}
 		}
 	}
+	programmingLangugages, _ := s.parserService.GetInventory()
+	totalLabs = totalLabs * len(programmingLangugages)
 
 	easyPercentage := float32(float32(easyLabs) / float32(totalLabs) * 100)
 	mediumPercentage := float32(float32(mediumLabs) / float32(totalLabs) * 100)

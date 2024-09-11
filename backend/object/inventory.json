@@ -44,28 +44,5 @@
                 "description": "Go programlama dilinin temellerini öğrenin."
             }
         ]
-    },
-    {
-        "id": 3,
-        "name": "Python",
-        "dockerImage": "python:latest",
-        "labDir": "object/labs/python",
-        "pathDir": "object/paths/python",
-        "iconPath": "images/python.png",
-        "cmd": ["python3", "main.py"],
-        "fileExtension": "py",
-        "templatePath": "object/template/python.txt",
-        "language": [
-            {
-                "lang": "en",
-                "title": "What is Python",
-                "description": "Learn the basics of Python programming"
-            },
-            {
-                "lang": "tr",
-                "title": "Python nedir?",
-                "description": "Python programlama dilinin temellerini öğrenin."
-            }
-        ]
     }
 ]
