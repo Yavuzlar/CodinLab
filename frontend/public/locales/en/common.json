@@ -35,6 +35,7 @@
   "users.sort_the_labs": "Sort the users",
   "admin.time.title": "Time Spent & Languages",
   "admin.time.content": "This graph shows how much time is spent in which software languages on a weekly basis.",
+  "admin.graphic.hours": "hours",
   "admin.activity.title": "Activity Calendar",
   "admin.activity.content": "Activities are measured by the completion of roads and labs.",
   "admin.settings.button": "Settings",
