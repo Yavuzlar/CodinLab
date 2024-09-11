@@ -54,7 +54,7 @@ func (s *homeService) GetUserDevelopment(ctx context.Context, userID string) (de
 	}
 	labCompletedCount := len(labCompleted)
 
-	roadCompleted, err := s.logService.GetAllLogs(ctx, userID, "", "", domains.TypeRoad, domains.ContentCompleted)
+	roadCompleted, err := s.logService.GetAllLogs(ctx, userID, "", "", domains.TypePath, domains.ContentCompleted)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,12 @@ func (s *homeService) GetUserDevelopment(ctx context.Context, userID string) (de
 	var labPercentage, roadPercentage int32
 
 	if labCompletedCount > 0 {
+		programmingLanguages, _ := s.parserService.GetInventory()
 		allLabs, err := s.parserService.GetLabs()
 		if err != nil {
 			return development, err
 		}
-		allLabsCount := len(allLabs)
+		allLabsCount := len(allLabs) * len(programmingLanguages)
 		if allLabsCount > 0 {
 			if labCompletedCount > allLabsCount {
 				labCompletedCount = allLabsCount
@@ -119,7 +120,7 @@ func (s *homeService) GetUserAdvancement(ctx context.Context, userID string) (ad
 
 		labCompletedCount := len(labCompleted)
 		if labCompletedCount > 0 {
-			labByIdCount := len(allLabs)
+			labByIdCount := len(allLabs) * len(inventoryP)
 			if labByIdCount > 0 {
 				if labCompletedCount > labByIdCount {
 					labCompletedCount = labByIdCount
@@ -129,7 +130,7 @@ func (s *homeService) GetUserAdvancement(ctx context.Context, userID string) (ad
 
 		}
 
-		roadCompleted, err := s.logService.GetAllLogs(ctx, userID, strconv.Itoa(item.ID), "", domains.TypeRoad, domains.ContentCompleted)
+		roadCompleted, err := s.logService.GetAllLogs(ctx, userID, strconv.Itoa(item.ID), "", domains.TypePath, domains.ContentCompleted)
 		if err != nil {
 			return nil, err
 		}
