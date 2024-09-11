@@ -50,6 +50,7 @@
   "roads.sort_the_labs": "Yol haritalarını sırala",
   "admin.time.title": "Harcanan Zaman & Diller",
   "admin.time.content": "Bu grafik, haftalık bazda hangi yazılım dillerinde ne kadar zaman harcandığını göstermektedir.",
+  "admin.graphic.hours": "saat",
   "admin.activity.title": "Aktivite takvimi",
   "admin.activity.content": "Aktivite etkinlikleri laboratuvarların tamamlanmasıyla ölçülür.",
   "admin.settings.button": "Ayarlar",
