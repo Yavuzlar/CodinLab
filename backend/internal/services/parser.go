@@ -2,7 +2,6 @@ package services
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -134,14 +133,12 @@ func (s *parserService) GetRoads() (roads []domains.RoadP, err error) {
 			FileExtension: language.FileExtension,
 			TemplatePath:  language.TemplatePath,
 		}
-		fmt.Println(language.PathDir)
 
 		// Locate JSON files within the language's lab directory
 		jsonFiles, err := s.findJSONFiles(language.PathDir)
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println(jsonFiles)
 
 		// Iterate over each JSON file found
 		for _, file := range jsonFiles {
