@@ -7,12 +7,13 @@ import LockIcon from "src/assets/icons/padlock.png"
 import PathIcon from "src/assets/icons/icons8-path-100.png"
 import CIcon from "src/assets/icons/c.png"
 import DoneIcon from "src/assets/icons/icons8-done-100 (1).png"
-import NextPathIcon from "src/assets/icons/icons8-signpost-100 (1).png"
 import Image from "next/image";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LinearProgess from "src/components/progress/LinearProgess";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserRoadProgressStats } from "src/store/statistics/statisticsSlice";
 
 
 const RoadDetails = ({ language = "" }) => {
@@ -28,6 +29,15 @@ const RoadDetails = ({ language = "" }) => {
     const title = "What is C?"
     const description = "C is a programming language created by Dennis Ritchie at Bell Laboratories in 1972. It is a popular language due to its foundational nature and close association with UNIX."
     const amountOfCompletedPaths = 1;
+
+    const dispatch = useDispatch();
+    const { statistics: stateStatistics } = useSelector(
+      (state) => state
+    );
+  
+    useEffect(() => {
+        dispatch(getUserRoadProgressStats());
+    }, [dispatch]);
 
     const handleStartRoad = () => {
         // Redirect to the first path of the road
@@ -51,12 +61,12 @@ const RoadDetails = ({ language = "" }) => {
     const progresses = [
   {
     name: "In progress", // String
-    value: 0, // Number
+    value: stateStatistics.data?.data?.progress, // Number
     color: "#8FDDFD" // String
   },
   {
     name: "Completed", // String
-    value: 0, // Number
+    value: stateStatistics.data?.data?.completed, // Number
     color: "#0A3B7A" // String
   }
 ]
