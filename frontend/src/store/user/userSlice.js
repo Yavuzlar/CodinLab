@@ -16,7 +16,7 @@ export const fetchProfileUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios({
-        //this is the for the api call
+        // This is for the api call
         url: "/api/v1/private/user/",
         method: "GET",
       });
