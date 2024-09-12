@@ -203,15 +203,6 @@ const RoadDetails = ({ language = "" }) => {
                         <Card sx={{ height: "100%" }}>
                             <CardContent sx={{display: "flex", justifyContent: "space-around", alignItems: "center"}}>
                                 <CircularProgressStatistics progresses={progresses} />
-                                <Box sx={{display: "flex", flexDirection: "column", gap: 2}}>
-                                    {progresses.map((progress, index) => (
-                                    <Box sx={{display: "flex", gap: 2, alignItems: "center"}} key={index}>
-                                        <CircleIcon sx={{color: progress.color}} />
-                                        <Typography variant="body1">{progress.name}</Typography>
-                                        <Typography variant="body1">%{progress.value}</Typography>
-                                    </Box>
-                                    ))}
-                                </Box>
                             </CardContent>
                         </Card>
                     </Grid>
