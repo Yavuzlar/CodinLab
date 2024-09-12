@@ -8,6 +8,7 @@ const button = (theme) => {
           borderRadius: "0.938rem",
           fontSize: "1.125rem",
           opacity: 1,
+          textTransform: "none",
 
           "& .MuiTypography-root": {
             color: theme.palette[ownerState.color || "primary"].contrastText,

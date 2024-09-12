@@ -15,7 +15,7 @@
   "login.password": "Password",
   "login.remember.me": "Remember Me",
   "login.forget.password": "Forgot Password?",
-  "login.login.button": "Login",
+  "login.login.button": "LOGIN",
   "login.divider.or": "or",
   "login.new.on.platform": "Are you new on our platform?",
   "login.create.new.account": "Create an account",
@@ -106,5 +106,4 @@
   "labs.difficulty.hard": "Hard",
   "labs.progress.stats.progress": "In Progress",
   "labs.progress.stats.completed": "Completed"
-
 }
