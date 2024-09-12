@@ -17,11 +17,6 @@ import awardIcon from "../assets/icons/icons8-award-100.png";
 import tupeIcon from "../assets/icons/icons8-test-tube-100.png";
 import FilterUser from "../components/filter/FilterUser";
 import Translations from "src/components/Translations";
-import C from "../assets/language/c.png";
-import Cpp from "../assets/language/cpp.png";
-import Go from "../assets/language/go.png";
-import Js from "../assets/language/javascript.png";
-import Python from "../assets/language/python.png";
 import i18n from "src/configs/i18n";
 import { useDispatch, useSelector } from "react-redux";
 import { getAdminUser } from "src/store/user/userSlice";
@@ -37,16 +32,11 @@ const UsersList = () => {
     dispatch(getAdminUser());
   }, [dispatch]);
 
-  console.log("adminuserdata",stateUser.adminUserData.data);
-
-
   const [filters, setFilters] = useState({
     status: "all",
     search: "",
     sort: "",
   });
-
- 
 
   const language = i18n.language;
 
@@ -249,7 +239,7 @@ const UsersList = () => {
                       padding: "10px 10px 10px 35px",
                     }}
                   >
-                   <LanguageIcon language={row.bestLanguage}/>
+                    <LanguageIcon language={row.bestLanguage} />
                   </TableCell>
                 </TableRow>
               ))}
