@@ -54,17 +54,12 @@ func (s *labService) getAllLabs(userID string) ([]domains.Lab, error) {
 			returns = append(returns, *domains.NewReturn(returnedParam.Name, returnedParam.Type))
 		}
 
-		var questImports []string
-		for _, imp := range lab.Quest.QuestImports {
-			questImports = append(questImports, imp)
-		}
-
 		var codeTemplates []domains.CodeTemplate
 		for _, codeTemplateParser := range lab.Quest.CodeTemplates {
-			codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check))
+			codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check, codeTemplateParser.QuestImports))
 		}
 
-		quest := domains.NewQuest(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params, returns, questImports, codeTemplates)
+		quest := domains.NewQuest(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params, returns, codeTemplates, lab.Quest.QuestImports)
 		newLab := domains.NewLab(lab.ID, languages, *quest, false, false)
 
 		labIDString := strconv.Itoa(lab.ID)

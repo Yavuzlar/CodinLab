@@ -57,17 +57,12 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 				returns = append(returns, *domains.NewReturn(returnedParam.Name, returnedParam.Type))
 			}
 
-			var questImports []string
-			for _, questImport := range path.Quest.QuestImports {
-				questImports = append(questImports, questImport)
-			}
-
 			var codeTemplates []domains.CodeTemplate
 			for _, codeTemplateParser := range path.Quest.CodeTemplates {
-				codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check))
+				codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check, codeTemplateParser.QuestImports))
 			}
 
-			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, questImports, codeTemplates)
+			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, codeTemplates, path.Quest.QuestImports)
 			newPath := domains.NewPath(path.ID, languages, *quest, false, false)
 
 			isStarted, isFinished, err := s.getPathStatuses(userID, fmt.Sprintf("%v", roadCollection.ID), fmt.Sprintf("%v", path.ID))
@@ -86,7 +81,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 			return nil, err
 		}
 
-		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.FileExtension, roadCollection.TemplatePath, newPathList, roadCollection.Cmd, *isStarted, *isFinished))
+		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.FileExtension, newPathList, roadCollection.Cmd, *isStarted, *isFinished))
 	}
 
 	return roads, nil
@@ -175,7 +170,7 @@ func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, is
 		}
 
 		if len(newRoadList) > 0 {
-			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetFileExtension(), roadCollection.GetTemplatePath(), newRoadList, roadCollection.GetCmd(), *isStarted, *isFinished))
+			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetFileExtension(), newRoadList, roadCollection.GetCmd(), *isStarted, *isFinished))
 		}
 	}
 

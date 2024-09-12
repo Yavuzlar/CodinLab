@@ -108,6 +108,7 @@ func (s *codeService) CodeDockerTemplateGenerator(template, check, userCode, fun
 	}
 
 	checks := s.createChecks(check, tests)
+
 	template = strings.Replace(template, "$checks$", checks, -1)
 	template = strings.Replace(template, "$func$", funcName, -1)
 	template = strings.Replace(template, "$userCode$", userCode, -1)
@@ -116,16 +117,30 @@ func (s *codeService) CodeDockerTemplateGenerator(template, check, userCode, fun
 	return template, nil
 }
 
-func (s *codeService) CodeFrontendTemplateGenerator(programmingName, funcName, frontend string, params []domains.Param, returns []domains.Returns) string {
+func (s *codeService) CodeFrontendTemplateGenerator(programmingName, funcName, frontend string, params []domains.Param, returns []domains.Returns, imports []string) string {
 	var paramStr string
 	var returnStr string
+	var questImports string
 	if programmingName == "GO" {
 		for _, param := range params {
 			paramStr += fmt.Sprintf("%v %v", param.GetName(), param.GetType())
 		}
+		if len(imports) > 1 {
+			questImports = "import (\n"
+			for _, imp := range imports {
+				questImports += (`"` + imp + `"` + "\n")
+			}
+			questImports += ")\n"
+		} else {
+			questImports = "import " + `"` + imports[0] + `"` + "\n"
+		}
+
 	} else {
 		for _, param := range params {
 			paramStr += fmt.Sprintf("%v %v,", param.GetType(), param.GetName())
+		}
+		for _, imp := range imports {
+			questImports += (imp + "\n")
 		}
 	}
 	if len(paramStr) > 0 {
@@ -139,6 +154,7 @@ func (s *codeService) CodeFrontendTemplateGenerator(programmingName, funcName, f
 		returnStr = returnStr[:len(returnStr)-1]
 	}
 
+	frontend = strings.Replace(frontend, "$imports$", questImports, -1)
 	frontend = strings.Replace(frontend, "$params$", paramStr, -1)
 	frontend = strings.Replace(frontend, "$funcname$", funcName, -1)
 	frontend = strings.Replace(frontend, "$returns$", returnStr, -1)

@@ -37,13 +37,12 @@ func (i *InventoryInformation) GetTemplatePath() string {
 	return i.templatePath
 }
 
-func NewInventoryInformation(name, dockerImage, fileExtension, templatePath string, ID int, cmd []string) *InventoryInformation {
+func NewInventoryInformation(name, dockerImage, fileExtension string, ID int, cmd []string) *InventoryInformation {
 	return &InventoryInformation{
 		id:            ID,
 		name:          name,
 		dockerImage:   dockerImage,
 		fileExtension: fileExtension,
 		cmd:           cmd,
-		templatePath:  templatePath,
 	}
 }

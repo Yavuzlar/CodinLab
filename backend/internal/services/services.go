@@ -17,7 +17,6 @@ type Services struct {
 	CodeService     domains.ICodeService
 	LabRoadService  domains.ILabRoadService
 	TemplateService domains.ITemplateService
-	LabRoadService  domains.ILabRoadService
 	// diğer servisler buraya eklenecek
 }
 
@@ -40,7 +39,6 @@ func CreateNewServices(
 	labRoadService := newLabRoadService(parserService)
 	codeService := NewCodeService()
 	templateService := newTemplateService(utilsService, logService, parserService, labService, roadService)
-	labRoadService := newLabRoadService(parserService)
 	// diğer servisler buraya eklenecek
 
 	return &Services{
@@ -56,7 +54,6 @@ func CreateNewServices(
 		CodeService:     codeService,
 		LabRoadService:  labRoadService,
 		TemplateService: templateService,
-		LabRoadService:  labRoadService,
 		// diğer servisler buraya eklenecek
 
 	}

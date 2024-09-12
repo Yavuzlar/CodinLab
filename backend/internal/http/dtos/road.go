@@ -169,7 +169,7 @@ func (m *RoadDTOManager) ToRoadProgressDTO(stats domains.RoadProgressStats) Road
 }
 
 type AnswerRoadDTO struct {
-	ProgrammingID int    `json:"programmindID"`
-	PathID        int    `json:"pathID"`
-	UserCode      string `json:"userCode"`
+	/* ProgrammingID int    `json:"programmindID"`
+	PathID        int    `json:"pathID"` */
+	UserCode string `json:"userCode"`
 }

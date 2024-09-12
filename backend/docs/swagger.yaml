@@ -17,20 +17,14 @@ definitions:
     type: object
   dto.AnswerLabDTO:
     properties:
-      labID:
-        type: integer
-      programmindID:
-        type: integer
       userCode:
         type: string
     type: object
   dto.AnswerRoadDTO:
     properties:
-      pathID:
-        type: integer
-      programmindID:
-        type: integer
       userCode:
+        description: "ProgrammingID int    `json:\"programmindID\"`\n\tPathID        int
+          \   `json:\"pathID\"`"
         type: string
     type: object
   dto.CreateUserDTO:
@@ -444,12 +438,21 @@ paths:
       summary: GetLabByID
       tags:
       - Lab
-  /private/lab/answer:
+  /private/lab/answer/{programmingID}/{labID}:
     post:
       consumes:
       - application/json
       description: This is for answering quests.
       parameters:
+      - description: programmingID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: labID
+        in: path
+        name: labID
+        type: string
       - description: Answer Lab DTO
         in: body
         name: answerLabDTO
@@ -479,6 +482,31 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: DummyLogData
+      tags:
+      - Lab
+  /private/lab/template/{programmingID}/{labID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Lab Template
+      parameters:
+      - description: programmingID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: labID
+        in: path
+        name: labID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Lab Template
       tags:
       - Lab
   /private/labs/:
@@ -655,12 +683,22 @@ paths:
       summary: GetRoads
       tags:
       - Road
-  /private/road/answer:
+  /private/road/answer/{programmingID}/{pathID}:
     post:
       consumes:
       - application/json
       description: This is for answering quests.
       parameters:
+      - description: Programming ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: Path ID
+        in: path
+        name: pathID
+        required: true
+        type: string
       - description: Answer Road DTO
         in: body
         name: answerRoadDTO
@@ -753,6 +791,31 @@ paths:
       summary: GetUserRoadProgressStats
       tags:
       - Road
+  /private/road/template/{pathID}/{programmingID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Road Template
+      parameters:
+      - description: programmingID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: pathID
+        in: path
+        name: pathID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Road Template
+      tags:
+      - Road
   /private/start/{programmingID}:
     get:
       consumes:
@@ -772,32 +835,6 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: Start
-      tags:
-      - LabRoadCommon
-  /private/template/{labID}/{programmingID}:
-    get:
-      consumes:
-      - application/json
-      description: Get Template
-      parameters:
-      - description: programmingID
-        in: path
-        name: programmingID
-        required: true
-        type: string
-      - description: labID
-        in: path
-        name: labID
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: Get Template
       tags:
       - LabRoadCommon
   /private/user/:

@@ -70,10 +70,51 @@ func (p *Returns) SetType(typ string) {
 }
 
 type CodeTemplate struct {
-	ProgrammingID int
-	Frontend      string
-	Template      string
-	Check         string
+	programmingID int
+	frontend      string
+	template      string
+	check         string
+	questImports  []string
+}
+
+func (ct *CodeTemplate) GetProgrammingID() int {
+	return ct.programmingID
+}
+
+func (ct *CodeTemplate) SetProgrammingID(id int) {
+	ct.programmingID = id
+}
+
+func (ct *CodeTemplate) GetFrontend() string {
+	return ct.frontend
+}
+
+func (ct *CodeTemplate) SetFrontend(frontend string) {
+	ct.frontend = frontend
+}
+
+func (ct *CodeTemplate) GetTemplate() string {
+	return ct.template
+}
+
+func (ct *CodeTemplate) SetTemplate(template string) {
+	ct.template = template
+}
+
+func (ct *CodeTemplate) GetCheck() string {
+	return ct.check
+}
+
+func (ct *CodeTemplate) SetCheck(check string) {
+	ct.check = check
+}
+
+func (ct *CodeTemplate) GetQuestImports() []string {
+	return ct.questImports
+}
+
+func (ct *CodeTemplate) SetQuestImports(imports []string) {
+	ct.questImports = imports
 }
 
 // Quest represents a coding challenge or task.
@@ -87,7 +128,6 @@ type Quest struct {
 	codeTemplate []CodeTemplate
 }
 
-// Getter and Setter methods for Quest
 func (q *Quest) GetCodeTemplates() []CodeTemplate {
 	return q.codeTemplate
 }
@@ -140,8 +180,8 @@ func (q *Quest) GetQuestImports() []string {
 	return q.questImports
 }
 
-func (q *Quest) SetQuestImports(QuestImports []string) {
-	q.questImports = QuestImports
+func (q *Quest) SetQuestImports(questImports []string) {
+	q.questImports = questImports
 }
 
 // NewTest creates a new instance of Test
@@ -168,24 +208,25 @@ func NewReturn(name, typ string) *Returns {
 	}
 }
 
-func NewCodeTemplate(programmingID int, frontend, template, check string) *CodeTemplate {
+func NewCodeTemplate(programmingID int, frontend, template, check string, questImports []string) *CodeTemplate {
 	return &CodeTemplate{
-		ProgrammingID: programmingID,
-		Template:      template,
-		Check:         check,
-		Frontend:      frontend,
+		programmingID: programmingID,
+		template:      template,
+		check:         check,
+		frontend:      frontend,
+		questImports:  questImports,
 	}
 }
 
 // NewQuest creates a new instance of Quest
-func NewQuest(difficulty int, funcName string, tests []Test, params []Param, returns []Returns, questImports []string, codeTemplates []CodeTemplate) *Quest {
+func NewQuest(difficulty int, funcName string, tests []Test, params []Param, returns []Returns, codeTemplates []CodeTemplate, questImports []string) *Quest {
 	return &Quest{
 		difficulty:   difficulty,
 		funcName:     funcName,
 		tests:        tests,
 		params:       params,
 		returns:      returns,
-		questImports: questImports,
 		codeTemplate: codeTemplates,
+		questImports: questImports,
 	}
 }

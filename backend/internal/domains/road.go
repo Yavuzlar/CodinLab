@@ -138,7 +138,6 @@ type Road struct {
 	iconPath      string
 	cmd           []string
 	fileExtension string
-	templatePath  string
 	paths         []Path
 	isStarted     bool
 	isFinished    bool
@@ -193,14 +192,6 @@ func (r *Road) SetFileExtension(fileExtension string) {
 	r.fileExtension = fileExtension
 }
 
-func (r *Road) GetTemplatePath() string {
-	return r.templatePath
-}
-
-func (r *Road) SetTemplatePath(templatePath string) {
-	r.templatePath = templatePath
-}
-
 func (r *Road) GetPaths() []Path {
 	return r.paths
 }
@@ -226,7 +217,7 @@ func (r *Road) SetIsFinished(ok bool) {
 }
 
 // NewRoads creates a new instance of Roads
-func NewRoads(id int, name, dockerImage, iconPath, fileExtension, templatePath string, paths []Path, cmd []string, isStarted, isFinished bool) *Road {
+func NewRoads(id int, name, dockerImage, iconPath, fileExtension string, paths []Path, cmd []string, isStarted, isFinished bool) *Road {
 	return &Road{
 		id:            id,
 		name:          name,
@@ -234,7 +225,6 @@ func NewRoads(id int, name, dockerImage, iconPath, fileExtension, templatePath s
 		iconPath:      iconPath,
 		cmd:           cmd,
 		fileExtension: fileExtension,
-		templatePath:  templatePath,
 		paths:         paths,
 		isStarted:     isStarted,
 		isFinished:    isFinished,

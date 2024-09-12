@@ -253,7 +253,7 @@
                 }
             }
         },
-        "/private/lab/answer": {
+        "/private/lab/answer/{programmingID}/{labID}": {
             "post": {
                 "description": "This is for answering quests.",
                 "consumes": [
@@ -267,6 +267,19 @@
                 ],
                 "summary": "Answer",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "labID",
+                        "name": "labID",
+                        "in": "path"
+                    },
                     {
                         "description": "Answer Lab DTO",
                         "name": "answerLabDTO",
@@ -300,6 +313,44 @@
                     "Lab"
                 ],
                 "summary": "DummyLogData",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/lab/template/{programmingID}/{labID}": {
+            "get": {
+                "description": "Get Lab Template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "Get Lab Template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "labID",
+                        "name": "labID",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -580,7 +631,7 @@
                 }
             }
         },
-        "/private/road/answer": {
+        "/private/road/answer/{programmingID}/{pathID}": {
             "post": {
                 "description": "This is for answering quests.",
                 "consumes": [
@@ -594,6 +645,20 @@
                 ],
                 "summary": "Answer",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Programming ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Path ID",
+                        "name": "pathID",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Answer Road DTO",
                         "name": "answerRoadDTO",
@@ -734,6 +799,44 @@
                 }
             }
         },
+        "/private/road/template/{pathID}/{programmingID}": {
+            "get": {
+                "description": "Get Road Template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "Get Road Template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "pathID",
+                        "name": "pathID",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/road/{programmingID}": {
             "get": {
                 "description": "Get Road with Paths",
@@ -796,45 +899,6 @@
                         "type": "string",
                         "description": "programmingID",
                         "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/template/{labID}/{programmingID}": {
-            "get": {
-                "description": "Get Template",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "LabRoadCommon"
-                ],
-                "summary": "Get Template",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "programmingID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "labID",
-                        "name": "labID",
                         "in": "path",
                         "required": true
                     }
@@ -1068,12 +1132,6 @@
         "dto.AnswerLabDTO": {
             "type": "object",
             "properties": {
-                "labID": {
-                    "type": "integer"
-                },
-                "programmindID": {
-                    "type": "integer"
-                },
                 "userCode": {
                     "type": "string"
                 }
@@ -1082,13 +1140,8 @@
         "dto.AnswerRoadDTO": {
             "type": "object",
             "properties": {
-                "pathID": {
-                    "type": "integer"
-                },
-                "programmindID": {
-                    "type": "integer"
-                },
                 "userCode": {
+                    "description": "ProgrammingID int    `json:\"programmindID\"`\n\tPathID        int    `json:\"pathID\"`",
                     "type": "string"
                 }
             }

@@ -259,7 +259,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/lab/answer": {
+        "/private/lab/answer/{programmingID}/{labID}": {
             "post": {
                 "description": "This is for answering quests.",
                 "consumes": [
@@ -273,6 +273,19 @@ const docTemplate = `{
                 ],
                 "summary": "Answer",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "labID",
+                        "name": "labID",
+                        "in": "path"
+                    },
                     {
                         "description": "Answer Lab DTO",
                         "name": "answerLabDTO",
@@ -306,6 +319,44 @@ const docTemplate = `{
                     "Lab"
                 ],
                 "summary": "DummyLogData",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/lab/template/{programmingID}/{labID}": {
+            "get": {
+                "description": "Get Lab Template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "Get Lab Template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "labID",
+                        "name": "labID",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -586,7 +637,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/road/answer": {
+        "/private/road/answer/{programmingID}/{pathID}": {
             "post": {
                 "description": "This is for answering quests.",
                 "consumes": [
@@ -600,6 +651,20 @@ const docTemplate = `{
                 ],
                 "summary": "Answer",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Programming ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Path ID",
+                        "name": "pathID",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Answer Road DTO",
                         "name": "answerRoadDTO",
@@ -740,6 +805,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/road/template/{pathID}/{programmingID}": {
+            "get": {
+                "description": "Get Road Template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "Get Road Template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "programmingID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "pathID",
+                        "name": "pathID",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/road/{programmingID}": {
             "get": {
                 "description": "Get Road with Paths",
@@ -802,45 +905,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "programmingID",
                         "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/template/{labID}/{programmingID}": {
-            "get": {
-                "description": "Get Template",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "LabRoadCommon"
-                ],
-                "summary": "Get Template",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "programmingID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "labID",
-                        "name": "labID",
                         "in": "path",
                         "required": true
                     }
@@ -1074,12 +1138,6 @@ const docTemplate = `{
         "dto.AnswerLabDTO": {
             "type": "object",
             "properties": {
-                "labID": {
-                    "type": "integer"
-                },
-                "programmindID": {
-                    "type": "integer"
-                },
                 "userCode": {
                     "type": "string"
                 }
@@ -1088,13 +1146,8 @@ const docTemplate = `{
         "dto.AnswerRoadDTO": {
             "type": "object",
             "properties": {
-                "pathID": {
-                    "type": "integer"
-                },
-                "programmindID": {
-                    "type": "integer"
-                },
                 "userCode": {
+                    "description": "ProgrammingID int    ` + "`" + `json:\"programmindID\"` + "`" + `\n\tPathID        int    ` + "`" + `json:\"pathID\"` + "`" + `",
                     "type": "string"
                 }
             }

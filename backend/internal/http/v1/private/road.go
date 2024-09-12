@@ -1,6 +1,7 @@
 package private
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -13,11 +14,12 @@ import (
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
 	roadRoute.Get("/:programmingID", h.GetRoad)
-	root.Get("/path/:programmingID/:pathID", h.GetPath)
+	roadRoute.Get("/path/:programmingID/:pathID", h.GetPath)
 	roadRoute.Get("/general/stats", h.GetUserLanguageRoadStats)
 	roadRoute.Get("/path/data", h.AddDummyRoadData)
 	roadRoute.Get("/progress/stats", h.GetUserRoadProgressStats)
-	roadRoute.Post("/answer", h.AnswerRoad)
+	roadRoute.Post("/answer/:programmingID/:pathID", h.AnswerRoad)
+	roadRoute.Get("/template/:pathID/:programmingID", h.GetRoadTemplate)
 }
 
 // @Tags Road
@@ -167,32 +169,48 @@ func (h *PrivateHandler) GetUserRoadProgressStats(c *fiber.Ctx) error {
 // @Description This is for answering quests.
 // @Accept json
 // @Produce json
+// @Param programmingID path string true "Programming ID"
+// @Param pathID path string true "Path ID"
 // @Param answerRoadDTO body dto.AnswerRoadDTO true "Answer Road DTO"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/road/answer [post]
+// @Router /private/road/answer/{programmingID}/{pathID} [post]
 func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	var answerRoadDTO dto.AnswerRoadDTO
 	if err := c.BodyParser(&answerRoadDTO); err != nil {
 		return err
 	}
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(answerRoadDTO.ProgrammingID))
+	programmingID := c.Params("programmingID")
+	pathID := c.Params("pathID")
+
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return response.Response(400, "Invalid Programming ID", nil)
+	}
+
+	intPathID, err := strconv.Atoi(pathID)
+	if err != nil {
+		return response.Response(400, "Invalid Path ID", nil)
+	}
+
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
 	if err != nil {
 		return response.Response(500, "Programming Language Information Error", nil)
 	}
 	if inventoryInformation == nil {
 		return response.Response(404, "Programming Language Not Found", nil)
 	}
-	road, err := h.services.RoadService.GetRoadByID(userSession.UserID, answerRoadDTO.ProgrammingID, answerRoadDTO.PathID)
-	if err != nil {
-		return response.Response(500, "Path Not Found", nil)
-	}
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, answerRoadDTO.ProgrammingID, answerRoadDTO.PathID, domains.TypePath, inventoryInformation.GetFileExtension(), answerRoadDTO.UserCode)
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, intProgrammingID, intPathID, domains.TypePath, inventoryInformation.GetFileExtension(), answerRoadDTO.UserCode)
 	if err != nil {
 		return err
 	}
+	road, err := h.services.RoadService.GetRoadByID(userSession.UserID, intProgrammingID, intPathID)
+	if err != nil {
+		return response.Response(500, "Path Not Found", nil)
+	}
+	codeTmp := road.GetQuest().GetCodeTemplates()[0]
 
-	tmpContent, err := h.services.CodeService.CodeTemplateGenerator(inventoryInformation.GetName(), inventoryInformation.GetTemplatePath(), answerRoadDTO.UserCode, road.GetQuest().GetFuncName(), road.GetQuest().GetTests())
+	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplate(), codeTmp.GetCheck(), answerRoadDTO.UserCode, road.GetQuest().GetFuncName(), road.GetQuest().GetTests(), road.GetQuest().GetReturns())
 	if err != nil {
 		return err
 	}
@@ -200,19 +218,61 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
 		return err
 	}
-
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, inventoryInformation.GetCmd())
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd())
 	if err != nil {
 		return err
 	}
 
-	//eklenecek kısımlar:
-	//log cevabı kontrol edilir. Eğer başarılı ise tamamlandı loglanır
-	//başarılı değilse doğru ve yanlış cevap için özel mesaj oluşturulur( ~ ->bunun sağı ve solundaki cevaplar alınır)
-
-	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, int32(answerRoadDTO.ProgrammingID), int32(answerRoadDTO.PathID)); err != nil {
-		return response.Response(500, "Answer couldn't saved", nil)
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, int32(intProgrammingID), int32(intPathID)); err != nil {
+		return response.Response(500, "Docker Image Pull Error", nil)
 	}
 
 	return response.Response(200, logs, nil)
+}
+
+// @Tags Road
+// @Summary Get Road Template
+// @Description Get Road Template
+// @Accept json
+// @Produce json
+// @Param programmingID path string true "programmingID"
+// @Param pathID path string false "pathID"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/template/{pathID}/{programmingID} [get]
+func (h *PrivateHandler) GetRoadTemplate(c *fiber.Ctx) error {
+	pathID := c.Params("pathID")
+	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
+
+	num, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return response.Response(400, "Invalid Programming ID", nil)
+	}
+
+	pathIDInt, err := strconv.Atoi(pathID)
+	if err != nil {
+		return response.Response(400, "Invalid Lab ID", nil)
+	}
+
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(num))
+	if err != nil {
+		return response.Response(500, "Programming Language Information Error", err)
+	}
+	if inventoryInformation == nil {
+		return response.Response(404, "Programming Language Not Found", nil)
+	}
+
+	path, err := h.services.RoadService.GetRoadByID(userSession.UserID, num, pathIDInt)
+	if err != nil {
+		return response.Response(404, "Error While Getting Path", err)
+	}
+	if path == nil {
+		return response.Response(404, "Path Not Found", nil)
+	}
+
+	codeTmp := path.GetQuest().GetCodeTemplates()[0]
+
+	frontendContent := h.services.CodeService.CodeFrontendTemplateGenerator(inventoryInformation.GetName(), path.GetQuest().GetFuncName(), codeTmp.GetFrontend(), path.GetQuest().GetParams(), path.GetQuest().GetReturns(), path.GetQuest().GetQuestImports())
+
+	return response.Response(200, "Template Successfully Sent", frontendContent)
 }
