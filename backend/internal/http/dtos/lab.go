@@ -104,7 +104,5 @@ func (m *LabDTOManager) ToUserProgrammingLanguageStatsDTO(stats []domains.Progra
 }
 
 type AnswerLabDTO struct {
-	ProgrammingID int    `json:"programmindID"`
-	LabID         int    `json:"labID"`
-	UserCode      string `json:"userCode"`
+	UserCode string `json:"userCode"`
 }

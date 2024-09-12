@@ -57,17 +57,12 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 				returns = append(returns, *domains.NewReturn(returnedParam.Name, returnedParam.Type))
 			}
 
-			var questImports []string
-			for _, questImport := range path.Quest.QuestImports {
-				questImports = append(questImports, questImport)
-			}
-
 			var codeTemplates []domains.CodeTemplate
 			for _, codeTemplateParser := range path.Quest.CodeTemplates {
-				codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check))
+				codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check, codeTemplateParser.Success, codeTemplateParser.QuestImports))
 			}
 
-			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, questImports, codeTemplates)
+			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, codeTemplates, path.Quest.QuestImports)
 			newPath := domains.NewPath(path.ID, languages, *quest, false, false)
 
 			isStarted, isFinished, err := s.getPathStatuses(userID, fmt.Sprintf("%v", roadCollection.ID), fmt.Sprintf("%v", path.ID))
@@ -86,7 +81,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 			return nil, err
 		}
 
-		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.FileExtension, roadCollection.TemplatePath, newPathList, roadCollection.Cmd, *isStarted, *isFinished))
+		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.FileExtension, newPathList, roadCollection.Cmd, *isStarted, *isFinished))
 	}
 
 	return roads, nil
@@ -175,7 +170,7 @@ func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, is
 		}
 
 		if len(newRoadList) > 0 {
-			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetFileExtension(), roadCollection.GetTemplatePath(), newRoadList, roadCollection.GetCmd(), *isStarted, *isFinished))
+			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetFileExtension(), newRoadList, roadCollection.GetCmd(), *isStarted, *isFinished))
 		}
 	}
 
@@ -234,4 +229,22 @@ func (s *roadService) GetUserRoadProgressStats(userID string) (progressStats *do
 		float32(completed)/float32(totalRoads)*100,
 	)
 	return
+}
+
+func (s *roadService) GetRoadByID(userID string, programmingID, pathID int) (path *domains.Path, err error) {
+	road, err := s.getAllRoads(userID)
+	if err != nil {
+		return nil, err
+	}
+	for _, roadCollection := range road {
+		if roadCollection.GetID() == int(programmingID) {
+			for _, path := range roadCollection.GetPaths() {
+				if path.GetID() == pathID {
+					return &path, nil
+				}
+			}
+		}
+	}
+
+	return nil, err
 }

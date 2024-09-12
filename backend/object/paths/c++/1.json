@@ -29,11 +29,20 @@
 		"returns": [
 			{
 				"name": "res",
-				"type": "string"
+				"type": "std::string"
 			}
 		],
 		"questImports": [
-			"#include <iostream>"
+			"#include <iostream>",
+			"#include <string>"
+		],
+		"codeTemplates": [
+			{
+				"frontend": "$imports$\n\n$returns$ $funcname$($params$){\n\n // Write your code here \n\n}",
+				"template": "$userCode$\n\nint main() {\n    $checks$\n    return 0;\n}",
+				"check": "$returns$ result = $func$($input$);\n    if (result != $output$) {\n       std::cout << \"Test Failed: Expected $out$ , but got \" << result << std::endl;\n return 1;}\n",
+				"success":"std::cout << \"Test Passed\" << std::endl;\n"
+			}
 		]
 	}
 }

@@ -8,7 +8,6 @@
         "iconPath": "images/c++.png",
         "cmd": ["sh", "-c", "g++ -o main main.cpp && ./main"],
         "fileExtension": "cpp",
-        "templatePath": "object/template/cpp.txt",
         "language": [
             {
                 "lang": "en",
@@ -31,7 +30,6 @@
         "iconPath": "images/go.png",
         "cmd": ["go", "run", "../main.go"],
         "fileExtension": "go",
-        "templatePath": "object/template/go.txt",
         "language": [
             {
                 "lang": "en",

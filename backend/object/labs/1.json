@@ -45,16 +45,17 @@
 				"type": "bool"
 			}
 		],
-		"questImports": [
-			"#include <string>",
-			"#include <iostream>"
-		],
 		"codeTemplates": [
 			{
 				"programmingID": 1,
-				"frontend": "$returns$ $funcname$($params$){\n\n // Write your code here \n\n}",
+				"frontend": "$imports$\n\n$returns$ $funcname$($params$){\n\n // Write your code here \n\n}",
 				"template": "$userCode$\n\nint main() {\n    $checks$\n    return 0;\n}",
-				"check": "$returns$ result = $func$($input$);\n    if (result == $output$) {\n        std::cout << \"Test Passed\" << std::endl;\n    } else {\n       std::cout << \"Test Failed: Expected $output$, but got \" << result << std::endl;\n return 1;}\n"
+				"check": "$returns$ result = $func$($input$);\n    if (result != $output$){\n       std::cout << \"Test Failed: Expected $out$, but got \" << result << std::endl;\n       return 1;\n       }\n",
+				"success":"std::cout << \"Test Passed\" << std::endl;\n",
+				"questImports":[
+					"#include <string>",
+                    "#include <iostream>"
+				]
 			}
 		]
 	}

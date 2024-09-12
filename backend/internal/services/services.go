@@ -5,18 +5,17 @@ import "github.com/Yavuzlar/CodinLab/internal/domains"
 // Tüm servisler tek bir yapıda toplayarark tek endpoint üzerinden erişim sağlamak için oluşturulmuştur.
 
 type Services struct {
-	UtilService     IUtilService
-	UserService     domains.IUserService
-	LogService      domains.ILogService
-	ParserService   domains.IParserService
-	LabService      domains.ILabService
-	RoadService     domains.IRoadService
-	LevelService    domains.ILevelService
-	HomeService     domains.IHomeService
-	AdminService    domains.IAdminService
-	CodeService     domains.ICodeService
-	LabRoadService  domains.ILabRoadService
-	TemplateService domains.ITemplateService
+	UtilService    IUtilService
+	UserService    domains.IUserService
+	LogService     domains.ILogService
+	ParserService  domains.IParserService
+	LabService     domains.ILabService
+	RoadService    domains.IRoadService
+	LevelService   domains.ILevelService
+	HomeService    domains.IHomeService
+	AdminService   domains.IAdminService
+	CodeService    domains.ICodeService
+	LabRoadService domains.ILabRoadService
 	// diğer servisler buraya eklenecek
 }
 
@@ -38,22 +37,20 @@ func CreateNewServices(
 	adminService := newAdminService(userRepositories, logService, parserService, levelService, utilsService)
 	labRoadService := newLabRoadService(parserService)
 	codeService := NewCodeService()
-	templateService := newTemplateService(utilsService, logService, parserService, labService, roadService)
 	// diğer servisler buraya eklenecek
 
 	return &Services{
-		UtilService:     utilsService,
-		UserService:     userService,
-		LogService:      logService,
-		ParserService:   parserService,
-		LabService:      labService,
-		RoadService:     roadService,
-		LevelService:    levelService,
-		HomeService:     homeService,
-		AdminService:    adminService,
-		CodeService:     codeService,
-		LabRoadService:  labRoadService,
-		TemplateService: templateService,
+		UtilService:    utilsService,
+		UserService:    userService,
+		LogService:     logService,
+		ParserService:  parserService,
+		LabService:     labService,
+		RoadService:    roadService,
+		LevelService:   levelService,
+		HomeService:    homeService,
+		AdminService:   adminService,
+		CodeService:    codeService,
+		LabRoadService: labRoadService,
 		// diğer servisler buraya eklenecek
 
 	}

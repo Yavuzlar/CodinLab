@@ -131,7 +131,6 @@ func (s *parserService) GetRoads() (roads []domains.RoadP, err error) {
 			IconPath:      language.IconPath,
 			Cmd:           language.Cmd,
 			FileExtension: language.FileExtension,
-			TemplatePath:  language.TemplatePath,
 		}
 
 		// Locate JSON files within the language's lab directory

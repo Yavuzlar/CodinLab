@@ -21,7 +21,6 @@ type InventoryP struct {
 	IconPath      string      `json:"iconPath"`
 	Cmd           []string    `json:"cmd"`
 	FileExtension string      `json:"fileExtension"`
-	TemplatePath  string      `json:"templatePath"`
 	Languages     []LanguageP `json:"languages"`
 }
 
@@ -53,10 +52,12 @@ type ReturnP struct {
 	Type string `json:"type"`
 }
 type CodeTemplateP struct {
-	ProgrammingID int    `json:"programmingID"`
-	Frontend      string `json:"frontend"`
-	Template      string `json:"template"`
-	Check         string `json:"check"`
+	ProgrammingID int      `json:"programmingID"`
+	Frontend      string   `json:"frontend"`
+	Template      string   `json:"template"`
+	Check         string   `json:"check"`
+	Success       string   `json:"success"`
+	QuestImports  []string `json:"questImports,omitempty"`
 }
 
 type QuestP struct {
@@ -65,7 +66,7 @@ type QuestP struct {
 	Tests         []TestP         `json:"tests"`
 	Params        []ParamP        `json:"params"`
 	Returns       []ReturnP       `json:"returns"`
-	QuestImports  []string        `json:"questImports"`
+	QuestImports  []string        `json:"questImports,omitempty"`
 	CodeTemplates []CodeTemplateP `json:"codeTemplates"`
 }
 
@@ -91,7 +92,6 @@ type RoadP struct {
 	IconPath      string
 	Cmd           []string
 	FileExtension string
-	TemplatePath  string
 	Paths         []PathP
 }
 

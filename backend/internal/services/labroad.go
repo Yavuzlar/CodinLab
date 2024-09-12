@@ -17,14 +17,14 @@ func newLabRoadService(
 	}
 }
 
-func (s *labRoadService) GetInventoryInformation(programmingID int) (inventorys *domains.InventoryInformation, err error) {
+func (s *labRoadService) GetInventoryInformation(programmingID int32) (inventorys *domains.InventoryInformation, err error) {
 	inventory, err := s.parserService.GetInventory()
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(500, "error by getting programming language information")
 	}
 	for _, inv := range inventory {
 		if inv.ID == int(programmingID) {
-			inventorys = domains.NewInventoryInformation(inv.Name, inv.DockerImage, inv.FileExtension, inv.TemplatePath, inv.ID, inv.Cmd)
+			inventorys = domains.NewInventoryInformation(inv.Name, inv.DockerImage, inv.FileExtension, inv.ID, inv.Cmd)
 			break
 		}
 	}

@@ -47,6 +47,14 @@
 		],
 		"questImports": [
 			"fmt"
+		],
+		"codeTemplates": [
+			{
+				"frontend": "package main\n\n$imports$\n\nfunc $funcname$($params$)$returns${\n\n // Write your code here \n\n}",
+				"template": "$userCode$\n\nfunc main() {\n    $checks$\n    \n}",
+				"check": "result := $func$($input$);\n    if (result != $output$){\n       fmt.Println(\"Test Failed: Expected\", $output$, \"but got\", result)\n       return\n       }\n",
+				"success":"fmt.Println(\"Test Passed\")\n"
+			}
 		]
 	}
 }
