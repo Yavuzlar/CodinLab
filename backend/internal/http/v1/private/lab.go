@@ -21,7 +21,7 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
-	root.Post("/lab/answer/programmingID/:labID", h.AnswerLab)
+	root.Post("/lab/answer/:programmingID/:labID", h.AnswerLab)
 	root.Get("/lab/template/:programmingID/:labID", h.GetLabTemplate)
 }
 
