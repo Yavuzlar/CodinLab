@@ -74,6 +74,7 @@ type CodeTemplate struct {
 	frontend      string
 	template      string
 	check         string
+	success       string
 	questImports  []string
 }
 
@@ -107,6 +108,14 @@ func (ct *CodeTemplate) GetCheck() string {
 
 func (ct *CodeTemplate) SetCheck(check string) {
 	ct.check = check
+}
+
+func (ct *CodeTemplate) GetSuccess() string {
+	return ct.success
+}
+
+func (ct *CodeTemplate) SetSuccess(success string) {
+	ct.success = success
 }
 
 func (ct *CodeTemplate) GetQuestImports() []string {
@@ -208,11 +217,12 @@ func NewReturn(name, typ string) *Returns {
 	}
 }
 
-func NewCodeTemplate(programmingID int, frontend, template, check string, questImports []string) *CodeTemplate {
+func NewCodeTemplate(programmingID int, frontend, template, check, success string, questImports []string) *CodeTemplate {
 	return &CodeTemplate{
 		programmingID: programmingID,
 		template:      template,
 		check:         check,
+		success:       success,
 		frontend:      frontend,
 		questImports:  questImports,
 	}

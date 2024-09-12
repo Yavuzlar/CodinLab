@@ -94,7 +94,7 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID string, program
 	return codeTmpPath, nil
 }
 
-func (s *codeService) CodeDockerTemplateGenerator(template, check, userCode, funcName string, tests []domains.Test, returns []domains.Returns) (string, error) {
+func (s *codeService) CodeDockerTemplateGenerator(template, check, success, userCode, funcName string, tests []domains.Test, returns []domains.Returns) (string, error) {
 	if !strings.Contains(userCode, funcName) {
 		return "", fmt.Errorf("invalid func name")
 	}
@@ -107,7 +107,7 @@ func (s *codeService) CodeDockerTemplateGenerator(template, check, userCode, fun
 		returnStr = returnStr[:len(returnStr)-1]
 	}
 
-	checks := s.createChecks(check, tests)
+	checks := s.createChecks(check, success, tests)
 
 	template = strings.Replace(template, "$checks$", checks, -1)
 	template = strings.Replace(template, "$func$", funcName, -1)
@@ -162,7 +162,7 @@ func (s *codeService) CodeFrontendTemplateGenerator(programmingName, funcName, f
 	return frontend
 }
 
-func (s *codeService) createChecks(check string, tests []domains.Test) string {
+func (s *codeService) createChecks(check, success string, tests []domains.Test) string {
 	var checks strings.Builder
 
 	for i, test := range tests {
@@ -185,20 +185,28 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 
 		// Handle output replacement
 		var outputs []string
+		var fails []string
 		for _, out := range test.GetOutput() {
 			switch v := out.(type) {
 			case string:
 				// Add double quotes around string outputs
 				outputs = append(outputs, `"`+v+`"`)
+				fails = append(fails, fmt.Sprintf("%v", v))
+
 			default:
 				// Directly use other types (int, etc.)
 				outputs = append(outputs, fmt.Sprintf("%v", v))
+				fails = append(fails, fmt.Sprintf("%v", v))
 			}
 		}
 		tmp = strings.Replace(tmp, "$output$", strings.Join(outputs, ", "), -1)
+		if strings.Contains(check, "$out$") { //in c++ strings should not contain "". This will correct it. Add $out$ instead of $output$ in failed message
+			tmp = strings.Replace(tmp, "$out$", strings.Join(fails, ", "), -1)
+		}
 
-		checks.WriteString(tmp + "\n")
+		checks.WriteString(tmp + "\n       ")
 	}
+	checks.WriteString(success + "\n")
 
 	return checks.String()
 }

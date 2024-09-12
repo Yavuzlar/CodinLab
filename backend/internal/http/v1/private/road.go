@@ -210,7 +210,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	}
 	codeTmp := road.GetQuest().GetCodeTemplates()[0]
 
-	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplate(), codeTmp.GetCheck(), answerRoadDTO.UserCode, road.GetQuest().GetFuncName(), road.GetQuest().GetTests(), road.GetQuest().GetReturns())
+	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplate(), codeTmp.GetCheck(), codeTmp.GetSuccess(), answerRoadDTO.UserCode, road.GetQuest().GetFuncName(), road.GetQuest().GetTests(), road.GetQuest().GetReturns())
 	if err != nil {
 		return err
 	}

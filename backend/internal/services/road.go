@@ -59,7 +59,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 
 			var codeTemplates []domains.CodeTemplate
 			for _, codeTemplateParser := range path.Quest.CodeTemplates {
-				codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check, codeTemplateParser.QuestImports))
+				codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check, codeTemplateParser.Success, codeTemplateParser.QuestImports))
 			}
 
 			quest := domains.NewQuest(path.Quest.Difficulty, path.Quest.FuncName, tests, params, returns, codeTemplates, path.Quest.QuestImports)

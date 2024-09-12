@@ -56,7 +56,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Lab, error) {
 
 		var codeTemplates []domains.CodeTemplate
 		for _, codeTemplateParser := range lab.Quest.CodeTemplates {
-			codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check, codeTemplateParser.QuestImports))
+			codeTemplates = append(codeTemplates, *domains.NewCodeTemplate(codeTemplateParser.ProgrammingID, codeTemplateParser.Frontend, codeTemplateParser.Template, codeTemplateParser.Check, codeTemplateParser.Success, codeTemplateParser.QuestImports))
 		}
 
 		quest := domains.NewQuest(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params, returns, codeTemplates, lab.Quest.QuestImports)

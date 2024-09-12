@@ -56,6 +56,7 @@ type CodeTemplateP struct {
 	Frontend      string   `json:"frontend"`
 	Template      string   `json:"template"`
 	Check         string   `json:"check"`
+	Success       string   `json:"success"`
 	QuestImports  []string `json:"questImports,omitempty"`
 }
 
