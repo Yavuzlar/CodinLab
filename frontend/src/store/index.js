@@ -5,6 +5,7 @@ import authSlice from './auth/index.js'
 import userSlice from './user/userSlice'
 import statisticsSlice from './statistics/statisticsSlice.js'
 import languageSlice from './language/languageSlice' 
+import pathsSlice from './paths/pathsSlice.js'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     user : userSlice, 
     statistics: statisticsSlice, 
     language : languageSlice,
+    paths : pathsSlice
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
