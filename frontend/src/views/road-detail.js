@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPaths, startRoad } from "src/store/paths/pathsSlice";
 import { getProgrammingId } from "src/data/programmingIds";
+// import { getUserRoadProgressStats } from "src/store/statistics/statisticsSlice";
 
 
 const RoadDetails = ({ language = "" }) => {
@@ -47,13 +48,13 @@ const RoadDetails = ({ language = "" }) => {
     const title = "What is C?"
     const description = "C is a programming language created by Dennis Ritchie at Bell Laboratories in 1972. It is a popular language due to its foundational nature and close association with UNIX."
 
-    const { statistics: stateStatistics } = useSelector(
-      (state) => state
-    );
+    // const { statistics: stateStatistics } = useSelector(
+    //   (state) => state
+    // );
   
-    useEffect(() => {
-        dispatch(getUserRoadProgressStats());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(getUserRoadProgressStats());
+    // }, [dispatch]);
 
     const handleStartRoad = () => {
         // Redirect to the first path of the road
@@ -132,12 +133,14 @@ const RoadDetails = ({ language = "" }) => {
     const progresses = [
   {
     name: "In progress", // String
-    value: stateStatistics.data?.data?.progress, // Number
+    // value: stateStatistics.data?.data?.progress, // Number
+    value: amountOfInProgressPaths,
     color: "#8FDDFD" // String
   },
   {
     name: "Completed", // String
-    value: stateStatistics.data?.data?.completed, // Number
+    // value: stateStatistics.data?.data?.completed, // Number
+    value: amountOfCompletedPaths,
     color: "#0A3B7A" // String
   }
     ]
