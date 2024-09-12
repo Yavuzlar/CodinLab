@@ -70,9 +70,10 @@ const App = (props) => {
         <meta name="description" content={`${themeConfig.projectName}`} />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link
-          href="https://fonts.cdnfonts.com/css/Outfit"
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap&subset=latin-ext"
           rel="stylesheet"
         ></link>
+
         <link
           href="https://fonts.cdnfonts.com/css/cascadia-code"
           rel="stylesheet"
