@@ -103,6 +103,8 @@
   "languages.en": "English",
   "labs.difficulty.easy": "Easy",
   "labs.difficulty.medium": "Medium",
-  "labs.difficulty.hard": "Hard"
+  "labs.difficulty.hard": "Hard",
+  "labs.progress.stats.progress": "In Progress",
+  "labs.progress.stats.completed": "Completed"
 
 }

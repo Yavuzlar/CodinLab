@@ -104,6 +104,8 @@
   "languages.en": "İngilizce",
   "labs.difficulty.easy": "Kolay",
   "labs.difficulty.medium": "Orta",
-  "labs.difficulty.hard": "Zor"
+  "labs.difficulty.hard": "Zor",
+   "labs.progress.stats.progress": "Devam ediyor",
+  "labs.progress.stats.completed": "Tamamlandı"
 
 }
