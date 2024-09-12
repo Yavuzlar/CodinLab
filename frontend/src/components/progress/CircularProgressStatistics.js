@@ -1,8 +1,8 @@
-import { Box, createTheme, ThemeProvider, Typography } from "@mui/material";
+import { Box, Card, CardContent, createTheme, ThemeProvider, Typography } from "@mui/material";
 import CircularProgress, {
   circularProgressClasses,
 } from "@mui/material/CircularProgress";
-
+import CircleIcon from '@mui/icons-material/Circle';
 /*
 Takes an array of object to shown as a prop.
 progresses = [
@@ -15,8 +15,6 @@ progresses = [
 */
 
 export const CircularProgressStatistics = ({ progresses }) => {
-
-
 
   if (!progresses) {
     return (
@@ -31,7 +29,6 @@ export const CircularProgressStatistics = ({ progresses }) => {
   const theme = createTheme({
     palette: {
       first: {
-
         main: progresses[0]?.color ? progresses[0]?.color : "#0A3B7A",
       },
       second: {
@@ -39,7 +36,6 @@ export const CircularProgressStatistics = ({ progresses }) => {
       },
       third: {
         main: progresses[2]?.color ? progresses[2]?.color : "#000fff",
-
       },
     },
   });
@@ -52,112 +48,131 @@ export const CircularProgressStatistics = ({ progresses }) => {
   const thicknessSecond = 3.8;
   const thicknessThird = 5.5;
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Box
-        sx={{
-          position: "relative",
-          display: "inline-flex",
-        }}
-      >
-        <CircularProgress
-          variant="determinate"
+  const CircularProgressNoNames = ({ progresses }) => {
+    return (
+      <ThemeProvider theme={theme}>
+        <Box
           sx={{
-            color: "#fff",
+            position: "relative",
+            display: "inline-flex",
           }}
-          size={sizeFirst}
-          thickness={thicknessFirst - 0.1}
-          value={100}
-        />
-        <CircularProgress
-          variant="determinate"
-          value={progresses[0]?.value === 0 ? 1 : progresses[0]?.value}
-          size={sizeFirst}
-          thickness={thicknessFirst}
-          color="first"
-          sx={{
-            position: "absolute",
-            [`& .${circularProgressClasses.circle}`]: {
-              strokeLinecap: "round",
-            },
-          }}
-        />
-
-        {progresses[1] && (
-          <Box
+        >
+          <CircularProgress
+            variant="determinate"
             sx={{
-              top: 0,
-              left: 0,
-              bottom: 0,
-              right: 0,
-              position: "absolute",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              color: "#fff",
             }}
-          >
-            <CircularProgress
-              variant="determinate"
+            size={sizeFirst}
+            thickness={thicknessFirst - 0.1}
+            value={100}
+          />
+          <CircularProgress
+            variant="determinate"
+            value={progresses[0]?.value === 0 ? 1 : progresses[0]?.value}
+            size={sizeFirst}
+            thickness={thicknessFirst}
+            color="first"
+            sx={{
+              position: "absolute",
+              [`& .${circularProgressClasses.circle}`]: {
+                strokeLinecap: "round",
+              },
+            }}
+          />
+
+          {progresses[1] && (
+            <Box
               sx={{
-                color: "#fff",
-              }}
-              size={sizeSecond}
-              thickness={thicknessSecond - 0.1}
-              value={100}
-            />
-            <CircularProgress
-              variant="determinate"
-              value={progresses[1].value === 0 ? 1 : progresses[1].value}
-              size={sizeSecond}
-              thickness={thicknessSecond}
-              color="second"
-              sx={{
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
                 position: "absolute",
-                [`& .${circularProgressClasses.circle}`]: {
-                  strokeLinecap: "round",
-                },
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
-            {progresses[2] && (
-              <Box
+            >
+              <CircularProgress
+                variant="determinate"
                 sx={{
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  right: 0,
-                  position: "absolute",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  color: "#fff",
                 }}
-              >
-                <CircularProgress
-                  variant="determinate"
+                size={sizeSecond}
+                thickness={thicknessSecond - 0.1}
+                value={100}
+              />
+              <CircularProgress
+                variant="determinate"
+                value={progresses[1].value === 0 ? 1 : progresses[1].value}
+                size={sizeSecond}
+                thickness={thicknessSecond}
+                color="second"
+                sx={{
+                  position: "absolute",
+                  [`& .${circularProgressClasses.circle}`]: {
+                    strokeLinecap: "round",
+                  },
+                }}
+              />
+              {progresses[2] && (
+                <Box
                   sx={{
-                    color: "#fff",
-                  }}
-                  size={sizeThird}
-                  thickness={thicknessThird - 0.1}
-                  value={100}
-                />
-                <CircularProgress
-                  variant="determinate"
-                  value={progresses[2].value === 0 ? 1 : progresses[2].value}
-                  size={sizeThird}
-                  thickness={thicknessThird}
-                  color="third"
-                  sx={{
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
                     position: "absolute",
-                    [`& .${circularProgressClasses.circle}`]: {
-                      strokeLinecap: "round",
-                    },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                />
-              </Box>
-            )}
-          </Box>
-        )}
+                >
+                  <CircularProgress
+                    variant="determinate"
+                    sx={{
+                      color: "#fff",
+                    }}
+                    size={sizeThird}
+                    thickness={thicknessThird - 0.1}
+                    value={100}
+                  />
+                  <CircularProgress
+                    variant="determinate"
+                    value={progresses[2].value === 0 ? 1 : progresses[2].value}
+                    size={sizeThird}
+                    thickness={thicknessThird}
+                    color="third"
+                    sx={{
+                      position: "absolute",
+                      [`& .${circularProgressClasses.circle}`]: {
+                        strokeLinecap: "round",
+                      },
+                    }}
+                  />
+                </Box>
+              )}
+            </Box>
+          )}
+        </Box>
+      </ThemeProvider>
+    )
+  }
+
+  return (
+    <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", gap: 3}}>
+
+    <CircularProgressNoNames progresses={progresses} />
+
+    <Box sx={{display: "flex", flexDirection: "column", gap: 2}}>
+      {progresses.map((progress, index) => (
+        <Box sx={{display: "flex", gap: 2, alignItems: "center"}} key={index}>
+            <CircleIcon sx={{color: progress.color ? progress.color : "#0A3B7A"}} />
+            <Typography variant="body1">{progress.name}</Typography>
+            <Typography variant="body1">%{progress.value}</Typography>
+        </Box>
+      ))}
       </Box>
-    </ThemeProvider>
+    </Box>
   );
 };
