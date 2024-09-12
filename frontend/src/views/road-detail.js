@@ -10,15 +10,13 @@ import CIcon from "src/assets/icons/c.png"
 import DoneIcon from "src/assets/icons/icons8-done-100 (1).png"
 import Image from "next/image";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
-import { useEffect, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SkeletonLoader from "src/components/skeleton/SkeletonLoader.js";
 import LinearProgess from "src/components/progress/LinearProgess";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPaths, startRoad } from "src/store/paths/pathsSlice";
 import { getProgrammingId } from "src/data/programmingIds";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserRoadProgressStats } from "src/store/statistics/statisticsSlice";
 
 
 const RoadDetails = ({ language = "" }) => {
