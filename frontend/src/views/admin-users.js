@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -23,9 +23,22 @@ import Go from "../assets/language/go.png";
 import Js from "../assets/language/javascript.png";
 import Python from "../assets/language/python.png";
 import i18n from "src/configs/i18n";
+import { useDispatch, useSelector } from "react-redux";
+import { getAdminUser } from "src/store/user/userSlice";
+import { Language } from "@mui/icons-material";
+import LanguageIcon from "src/components/language-icon/LanguageIcon";
 
 const UsersList = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const { user: stateUser } = useSelector((state) => state);
+
+  useEffect(() => {
+    dispatch(getAdminUser());
+  }, [dispatch]);
+
+  console.log("adminuserdata",stateUser.adminUserData.data);
+
 
   const [filters, setFilters] = useState({
     status: "all",
@@ -33,74 +46,7 @@ const UsersList = () => {
     sort: "",
   });
 
-  const rows = [
-    { order: 1, username: "User1", level: "Level 7", language: "C", image: C },
-    {
-      order: 2,
-      username: "User2",
-      level: "Level 5",
-      language: "C++",
-      image: Cpp,
-    },
-    {
-      order: 3,
-      username: "User3",
-      level: "Level 5",
-      language: "Go",
-      image: Go,
-    },
-    { order: 4, username: "User4", level: "Level 4", language: "C", image: C },
-    {
-      order: 5,
-      username: "User5",
-      level: "Level 3",
-      language: "Python",
-      image: Python,
-    },
-    {
-      order: 6,
-      username: "User6",
-      level: "Level 2",
-      language: "JavaScript",
-      image: Js,
-    },
-    {
-      order: 7,
-      username: "User7",
-      level: "Level 2",
-      language: "Go",
-      image: Go,
-    },
-    { order: 8, username: "User8", level: "Level 2", language: "C", image: C },
-    {
-      order: 9,
-      username: "User9",
-      level: "Level 2",
-      language: "Python",
-      image: Python,
-    },
-    {
-      order: 10,
-      username: "User10",
-      level: "Level 1",
-      language: "JavaScript",
-      image: Js,
-    },
-    {
-      order: 11,
-      username: "User11",
-      level: "Level 7",
-      language: "C",
-      image: C,
-    },
-    {
-      order: 12,
-      username: "User12",
-      level: "Level 5",
-      language: "C++",
-      image: Cpp,
-    },
-  ];
+ 
 
   const language = i18n.language;
 
@@ -248,7 +194,7 @@ const UsersList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {stateUser.adminUserData?.data?.map((row) => (
                 <TableRow
                   key={row.order}
                   sx={{
@@ -303,29 +249,7 @@ const UsersList = () => {
                       padding: "10px 10px 10px 35px",
                     }}
                   >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "start",
-                        gap: "0.5rem",
-                      }}
-                    >
-                      <Image
-                        src={row.image}
-                        alt="Language Icon"
-                        width={25}
-                        height={25}
-                      />
-                      <Box
-                        component="span"
-                        sx={{
-                          minWidth: "80px",
-                        }}
-                      >
-                        {row.language}
-                      </Box>
-                    </Box>
+                   <LanguageIcon language={row.bestLanguage}/>
                   </TableCell>
                 </TableRow>
               ))}

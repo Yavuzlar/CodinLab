@@ -33,7 +33,6 @@ const Labs = () => {
     dispatch(getLabsProgressStats());
   }, [dispatch]);
 
-  console.log("labsproges", stateStatistics.labsProgressStatsData);
   const labsStatsData = [
     {
       id: 1,

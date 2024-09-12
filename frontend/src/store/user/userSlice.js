@@ -6,6 +6,7 @@ import { showToast } from "src/utils/showToast";
 const initialState = { //initial state
   loading: false,
   data: [],
+  adminUserData: [],
   error: false,
 };
 
@@ -66,6 +67,23 @@ export const changePassword = createAsyncThunk(
   }
 );
 
+export const getAdminUser = createAsyncThunk(
+  "user/getAdminUser",
+  async (_, { rejectWithValue }) => {
+    try {
+     const response = await axios({
+      url: "/api/v1/private/admin/user",
+      method: "GET",
+    });
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    return rejectWithValue(response.message);
+  }
+}
+);
+
 
 const userSlice = createSlice({
   name: "user",
@@ -115,6 +133,18 @@ const userSlice = createSlice({
       state.error = action.payload;
       showToast("dismiss");
       showToast("error", state.error);
+    })
+    .addCase(getAdminUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(getAdminUser.fulfilled, (state, action) => {
+      state.adminUserData = action.payload;
+      state.loading = false;
+    })
+    .addCase(getAdminUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     });
     }
 });
