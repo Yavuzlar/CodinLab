@@ -7,7 +7,10 @@ import { labs } from "src/data/home";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserLanguageLabStats } from "src/store/language/languageSlice";
-import { getDifficultyStatistics } from "src/store/statistics/statisticsSlice";
+import {
+  getDifficultyStatistics,
+  getLabsProgressStats,
+} from "src/store/statistics/statisticsSlice";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
 
 const Labs = () => {
@@ -27,8 +30,10 @@ const Labs = () => {
   useEffect(() => {
     dispatch(getUserLanguageLabStats());
     dispatch(getDifficultyStatistics());
+    dispatch(getLabsProgressStats());
   }, [dispatch]);
 
+  console.log("labsproges", stateStatistics.labsProgressStatsData);
   const labsStatsData = [
     {
       id: 1,
@@ -56,25 +61,48 @@ const Labs = () => {
     },
   ];
 
-  const progresses = [
+  const difficultyProgresses = [
     {
       name: "Easy", // when CircularProgressStatistics.js is changed, this name should be changed too
       value: stateStatistics.difficultyStatsData.data?.easyPercentage,
-      color: "#39CE19"
+      color: "#39CE19",
     },
     {
       name: "Medium", // when CircularProgressStatistics.js is changed, this name should be changed too
       value: stateStatistics.difficultyStatsData.data?.mediumPercentage,
-      color: "#EE7A19"
-
+      color: "#EE7A19",
     },
     {
       name: "Hard", // when CircularProgressStatistics.js is changed, this name should be changed too
       value: stateStatistics.difficultyStatsData.data?.hardPercentage,
-      color: "#DC0101"
-
+      color: "#DC0101",
     },
+  ];
 
+  const labsProgressStats = [
+    {
+      id: 1,
+      name: t("labs.progress.stats.progress"),
+      value: stateStatistics.labsProgressStatsData.data?.progress,
+    },
+    {
+      id: 2,
+      name: t("labs.progress.stats.completed"),
+      value: stateStatistics.labsProgressStatsData.data?.completed,
+    },
+  ];
+
+  const labsProgresses = [
+    {
+      name: "Progress", // when CircularProgressStatistics.js is changed, this name should be changed too
+      value: stateStatistics.labsProgressStatsData.data?.progress,
+      color: "#8FDDFD",
+    },
+    {
+      name: "Completed", // when CircularProgressStatistics.js is changed, this name should be changed too
+      value: stateStatistics.labsProgressStatsData.data?.completed,
+      color: "#0A3B7A",
+    },
   ];
 
   return (
@@ -101,11 +129,7 @@ const Labs = () => {
 
             <Grid container spacing={2} sx={{ height: "100%" }}>
               <Grid item xs={12} md={6}>
-                <Card sx={{ height: "100%" }} />
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <Card sx={{ width: "100%" }}>
+                <Card sx={{ width: "100%", height: "100%" }}>
                   <CardContent>
                     <Box
                       sx={{
@@ -114,7 +138,77 @@ const Labs = () => {
                         justifyContent: "center",
                       }}
                     >
-                      <CircularProgressStatistics progresses={progresses} />
+                      <CircularProgressStatistics progresses={labsProgresses} />
+                    </Box>
+
+                    {labsProgressStats.map((progress) => (
+                      <Box
+                        key={progress.id}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          mt: "1.5rem",
+
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: "15px",
+                            height: "15px",
+                            backgroundColor:
+                              progress.name ===
+                              t("labs.progress.stats.progress")
+                                ? "#8FDDFD"
+                                : "#0A3B7A",
+                            borderRadius: "50%",
+                            marginRight: "0.5rem",
+
+                          }}
+                        />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "144px",
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              textAlign: "left",
+                              width: "100%",
+                            }}
+                          >
+                            {progress.name}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              textAlign: "left",
+                            }}
+                          >
+                            {progress.value}%
+                          </Typography>
+                        </Box>
+                      </Box>
+                    ))}
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Card sx={{ width: "100%", height: "100%" }}>
+                  <CardContent>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <CircularProgressStatistics
+                        progresses={difficultyProgresses}
+                      />
                     </Box>
 
                     {difficultyStats.map((difficulty) => (
@@ -122,9 +216,9 @@ const Labs = () => {
                         key={difficulty.id}
                         sx={{
                           display: "flex",
-                          mt: "25px",
+                          mt: "1.5rem",
                           alignItems: "center",
-                          justifyContent: "center", 
+                          justifyContent: "center",
                         }}
                       >
                         <Box
@@ -134,7 +228,8 @@ const Labs = () => {
                             backgroundColor:
                               difficulty.name === t("labs.difficulty.easy")
                                 ? "#39CE19"
-                                : difficulty.name === t("labs.difficulty.medium")
+                                : difficulty.name ===
+                                  t("labs.difficulty.medium")
                                 ? "#EE7A19"
                                 : "#DC0101",
                             borderRadius: "50%",
@@ -142,27 +237,25 @@ const Labs = () => {
                           }}
                         />
                         <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          width: "104px",
-                        }}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "104px",
+                          }}
                         >
                           <Typography
-                          sx={{
-                          
-                            textAlign: "left",
-                            width: "100%",
-                            
-                          }}
+                            sx={{
+                              textAlign: "left",
+                              width: "100%",
+                            }}
                           >
                             {difficulty.name}
                           </Typography>
                           <Typography
-                          sx={{
-                            textAlign: "left",
-                          }}
+                            sx={{
+                              textAlign: "left",
+                            }}
                           >
                             {difficulty.value}%
                           </Typography>

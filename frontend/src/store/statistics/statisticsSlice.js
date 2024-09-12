@@ -7,6 +7,7 @@ const initialState = {
   data: [],
   advancementData: [],
   difficultyStatsData: [],
+  labsProgressStatsData: [],
   error: false,
 };
 
@@ -78,6 +79,23 @@ export const getDifficultyStatistics = createAsyncThunk(
   }
 );
 
+export const getLabsProgressStats = createAsyncThunk(
+  "statistics/getLabsProgressStats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        url: "/api/v1/private/labs/progress/stats",
+        method: "GET",
+      });
+      if (response.status === 200) {
+        return response.data; 
+      }
+    } catch (error) {
+      return rejectWithValue(response.message); 
+    }
+  }
+);
+
 const statisticsSlice = createSlice({
   name: "statistics",
   initialState: initialState,
@@ -128,6 +146,18 @@ const statisticsSlice = createSlice({
         state.loading = false;
       })
       .addCase(getDifficultyStatistics.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getLabsProgressStats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getLabsProgressStats.fulfilled, (state, action) => {
+        state.labsProgressStatsData = action.payload;
+        state.loading = false;
+      })
+      .addCase(getLabsProgressStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
