@@ -101,5 +101,9 @@
   "dialog.button.cancel": "İptal Et",
   "logout": "Çıkış Yap",
   "languages.tr": "Türkçe",
-  "languages.en": "İngilizce"
+  "languages.en": "İngilizce",
+  "labs.difficulty.easy": "Kolay",
+  "labs.difficulty.medium": "Orta",
+  "labs.difficulty.hard": "Zor"
+
 }
