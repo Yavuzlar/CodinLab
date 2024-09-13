@@ -20,6 +20,24 @@ type AdminUserDTO struct {
 	BestLanguage string    `json:"bestLanguage"`
 }
 
+type GetUsersDTO struct {
+	Username      string `json:"username"`
+	Name          string `json:"name"`
+	Surname       string `json:"surname"`
+	Role          string `json:"role"`
+	GithubProfile string `json:"githubProfile"`
+}
+
+func (m *AdminDTOManager) ToUserProfileDTO(user *domains.User) GetUsersDTO {
+	return GetUsersDTO{
+		Username:      user.Username(),
+		Name:          user.Name(),
+		Surname:       user.Surname(),
+		Role:          user.Role(),
+		GithubProfile: user.GithubProfile(),
+	}
+}
+
 func (m *AdminDTOManager) ToUserAdminDTO(user *domains.AdminUserDetail) AdminUserDTO {
 	return AdminUserDTO{
 		UserID:       user.GetID(),
@@ -42,6 +60,6 @@ type AdminUpdateUsersDTO struct {
 	Username      string `json:"username" validate:"omitempty,max=30"`
 	Name          string `json:"name"`
 	Surname       string `json:"surname"`
-	Password      string `json:"newPassword"`
+	Role          string `json:"role" validate:"oneof=admin user ''"`
 	GithubProfile string `json:"githubProfile" validate:"omitempty,max=30"`
 }

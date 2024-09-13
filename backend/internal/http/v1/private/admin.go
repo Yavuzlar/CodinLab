@@ -10,10 +10,9 @@ import (
 func (h *PrivateHandler) initAdminRoutes(root fiber.Router) {
 	adminRoute := root.Group("/admin")
 	adminRoute.Use(h.adminAuthMiddleware)
-	adminRoute.Get("/user/:ID", h.GetUserProfile)
-	adminRoute.Put("/user/:ID", h.UpdateUser)
+	adminRoute.Get("/user/:userID", h.GetUserProfile)
 	adminRoute.Get("/user", h.GetAllUsers)
-	adminRoute.Post("/user", h.CreateUser)
+	//adminRoute.Post("/user", h.CreateUser)
 	adminRoute.Post("/user/:userID", h.UpdateUserAdmin)
 }
 
@@ -22,21 +21,18 @@ func (h *PrivateHandler) initAdminRoutes(root fiber.Router) {
 // @Description Retrieves User Profile
 // @Accept json
 // @Produce json
-// @Param ID path string true "User ID"
+// @Param userID path string true "User ID"
 // @Success 200 {object} response.BaseResponse{data=dto.UserDTO}
 // @Failure 400 {object} response.BaseResponse
-// @Router /private/admin/user/{ID} [get]
+// @Router /private/admin/user/{userID} [get]
 func (h *PrivateHandler) GetUserProfile(c *fiber.Ctx) error {
-	userID := c.Params("ID")
+	userID := c.Params("userID")
 	user, err := h.services.AdminService.GetProfile(c.Context(), userID)
 	if err != nil {
 		return err
 	}
-	bestProgrammingLanguage, err := h.services.UserService.BestProgrammingLanguages(c.Context(), user.ID().String())
-	if err != nil {
-		return err
-	}
-	userDTO := h.dtoManager.UserDTOManager.ToUserDTO(user, bestProgrammingLanguage)
+
+	userDTO := h.dtoManager.AdminDTOManager.ToUserProfileDTO(user)
 
 	return response.Response(200, "STATUS OK", userDTO)
 }
@@ -59,7 +55,7 @@ func (h *PrivateHandler) GetAllUsers(c *fiber.Ctx) error {
 	return response.Response(200, "STATUS OK", userDTOs)
 }
 
-// @Tags Admin
+/* // @Tags Admin
 // @Summary Creates User
 // @Description Creates User
 // @Accept json
@@ -80,7 +76,7 @@ func (h *PrivateHandler) CreateUser(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "Register successful", nil)
-}
+} */
 
 // @Tags Admin
 // @Summary Updates User
@@ -101,7 +97,7 @@ func (h *PrivateHandler) UpdateUserAdmin(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := h.services.AdminService.UpdateUser(c.Context(), userID, user.Password, user.Username, user.GithubProfile, user.Name, user.Surname); err != nil {
+	if err := h.services.AdminService.UpdateUser(c.Context(), userID, user.Role, user.Username, user.GithubProfile, user.Name, user.Surname); err != nil {
 		return err
 	}
 

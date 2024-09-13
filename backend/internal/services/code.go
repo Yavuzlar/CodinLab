@@ -251,3 +251,7 @@ func (s *codeService) createCodeFile(userID string) (err error) {
 func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
 	return file.CreateFileAndWrite(filePath, content)
 }
+
+/* func (s *codeService) GetTemplate(labPathID, programmingID int, labPathType string) (template string, err error) {
+
+} */

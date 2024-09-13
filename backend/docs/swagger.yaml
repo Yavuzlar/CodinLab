@@ -7,7 +7,11 @@ definitions:
         type: string
       name:
         type: string
-      newPassword:
+      role:
+        enum:
+        - admin
+        - user
+        - ""
         type: string
       surname:
         type: string
@@ -26,35 +30,6 @@ definitions:
         description: "ProgrammingID int    `json:\"programmindID\"`\n\tPathID        int
           \   `json:\"pathID\"`"
         type: string
-    type: object
-  dto.CreateUserDTO:
-    properties:
-      githubProfile:
-        maxLength: 30
-        type: string
-      name:
-        description: Name is required
-        type: string
-      password:
-        description: Password is required and must be at least 8 characters
-        minLength: 8
-        type: string
-      role:
-        type: string
-      surname:
-        description: Surname is required
-        type: string
-      username:
-        description: Username is required, must be alphanumeric and between 3-30 characters
-        maxLength: 30
-        minLength: 3
-        type: string
-    required:
-    - name
-    - password
-    - role
-    - surname
-    - username
     type: object
   dto.GetRoadDTO:
     properties:
@@ -279,28 +254,7 @@ paths:
       summary: Get Users
       tags:
       - Admin
-    post:
-      consumes:
-      - application/json
-      description: Creates User
-      parameters:
-      - description: User
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/dto.CreateUserDTO'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: Creates User
-      tags:
-      - Admin
-  /private/admin/user/{ID}:
+  /private/admin/user/{userID}:
     get:
       consumes:
       - application/json
@@ -308,7 +262,7 @@ paths:
       parameters:
       - description: User ID
         in: path
-        name: ID
+        name: userID
         required: true
         type: string
       produces:
@@ -330,7 +284,6 @@ paths:
       summary: Get Profile
       tags:
       - Admin
-  /private/admin/user/{userID}:
     post:
       consumes:
       - application/json
@@ -469,21 +422,6 @@ paths:
       summary: Answer
       tags:
       - Lab
-  /private/lab/data:
-    get:
-      consumes:
-      - application/json
-      description: Add dummy data for testing
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: DummyLogData
-      tags:
-      - Lab
   /private/lab/template/{programmingID}/{labID}:
     get:
       consumes:
@@ -514,6 +452,11 @@ paths:
       consumes:
       - application/json
       description: Get Labs
+      parameters:
+      - description: Programming Language ID
+        in: query
+        name: programmingID
+        type: string
       produces:
       - application/json
       responses:
@@ -610,6 +553,36 @@ paths:
                   type: array
               type: object
       summary: Get all logs
+      tags:
+      - Log
+  /private/log/lab:
+    get:
+      consumes:
+      - application/json
+      description: Add dummy data for testing
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: DummyLogData
+      tags:
+      - Log
+  /private/log/road:
+    get:
+      consumes:
+      - application/json
+      description: Add dummy data for testing
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: DummyLogData
       tags:
       - Log
   /private/log/solution/byday:
@@ -759,21 +732,6 @@ paths:
                   $ref: '#/definitions/dto.PathDTO'
               type: object
       summary: GetPathByID
-      tags:
-      - Road
-  /private/road/path/data:
-    get:
-      consumes:
-      - application/json
-      description: Add dummy data for testing
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: DummyLogData
       tags:
       - Road
   /private/road/progress/stats:

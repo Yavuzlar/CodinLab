@@ -42,41 +42,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "Creates User",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "summary": "Creates User",
-                "parameters": [
-                    {
-                        "description": "User",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.CreateUserDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
             }
         },
-        "/private/admin/user/{ID}": {
+        "/private/admin/user/{userID}": {
             "get": {
                 "description": "Retrieves User Profile",
                 "consumes": [
@@ -93,7 +61,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "User ID",
-                        "name": "ID",
+                        "name": "userID",
                         "in": "path",
                         "required": true
                     }
@@ -124,9 +92,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/private/admin/user/{userID}": {
+            },
             "post": {
                 "description": "Updates User",
                 "consumes": [
@@ -306,29 +272,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/lab/data": {
-            "get": {
-                "description": "Add dummy data for testing",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Lab"
-                ],
-                "summary": "DummyLogData",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/private/lab/template/{programmingID}/{labID}": {
             "get": {
                 "description": "Get Lab Template",
@@ -412,6 +355,14 @@ const docTemplate = `{
                     "Lab"
                 ],
                 "summary": "GetLabs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -561,6 +512,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/log/lab": {
+            "get": {
+                "description": "Add dummy data for testing",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "DummyLogData",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/log/road": {
+            "get": {
+                "description": "Add dummy data for testing",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "DummyLogData",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/log/solution/byday": {
             "get": {
                 "description": "Retrieves the number of lab and road solutions solved day by day.",
@@ -698,29 +695,6 @@ const docTemplate = `{
                     "Road"
                 ],
                 "summary": "GetUserLanguageRoadStats",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/road/path/data": {
-            "get": {
-                "description": "Add dummy data for testing",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Road"
-                ],
-                "summary": "DummyLogData",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1123,8 +1097,13 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "newPassword": {
-                    "type": "string"
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "admin",
+                        "user",
+                        ""
+                    ]
                 },
                 "surname": {
                     "type": "string"
@@ -1149,44 +1128,6 @@ const docTemplate = `{
                 "userCode": {
                     "description": "ProgrammingID int    ` + "`" + `json:\"programmindID\"` + "`" + `\n\tPathID        int    ` + "`" + `json:\"pathID\"` + "`" + `",
                     "type": "string"
-                }
-            }
-        },
-        "dto.CreateUserDTO": {
-            "type": "object",
-            "required": [
-                "name",
-                "password",
-                "role",
-                "surname",
-                "username"
-            ],
-            "properties": {
-                "githubProfile": {
-                    "type": "string",
-                    "maxLength": 30
-                },
-                "name": {
-                    "description": "Name is required",
-                    "type": "string"
-                },
-                "password": {
-                    "description": "Password is required and must be at least 8 characters",
-                    "type": "string",
-                    "minLength": 8
-                },
-                "role": {
-                    "type": "string"
-                },
-                "surname": {
-                    "description": "Surname is required",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "Username is required, must be alphanumeric and between 3-30 characters",
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 3
                 }
             }
         },

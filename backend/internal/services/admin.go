@@ -113,7 +113,7 @@ func (s *adminService) GetProfile(ctx context.Context, userID string) (user *dom
 	return
 }
 
-func (s *adminService) UpdateUser(ctx context.Context, userID, newPassword, username, githubProfile, name, surname string) (err error) {
+func (s *adminService) UpdateUser(ctx context.Context, userID, role, username, githubProfile, name, surname string) (err error) {
 	user, err := s.GetProfile(ctx, userID)
 	if err != nil {
 		return err
@@ -137,13 +137,7 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, newPassword, user
 		}
 	}
 
-	// Checking if password is being updated
-	if newPassword != "" {
-		if err := user.SetPassword(newPassword); err != nil {
-			return err
-		}
-	}
-
+	user.SetRole(role)
 	user.SetGithubProfile(githubProfile)
 	if name != "" {
 		if err := user.SetName(name); err != nil {
