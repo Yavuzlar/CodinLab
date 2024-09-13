@@ -12,15 +12,32 @@ func NewLabDTOManager() LabDTOManager {
 }
 
 type LabDTO struct {
-	ID        int              `json:"id"`
-	Languages []LabLanguageDTO `json:"languages"`
-	//ProgrammingLanguages []string         `json:"programmingLanguages"`
-	IsStarted  bool `json:"isStarted"`
-	IsFinished bool `json:"isFinished"`
-	Difficulty int  `json:"difficulty"`
+	ID         int              `json:"id"`
+	Languages  []LabLanguageDTO `json:"languages"`
+	Template   string           `json:"template,omitempty"`
+	IsStarted  bool             `json:"isStarted"`
+	IsFinished bool             `json:"isFinished"`
+	Difficulty int              `json:"difficulty"`
+}
+type LabsDTO struct {
+	ID         int              `json:"id"`
+	Languages  []LabLanguageDTO `json:"languages"`
+	IsStarted  bool             `json:"isStarted"`
+	IsFinished bool             `json:"isFinished"`
+	Difficulty int              `json:"difficulty"`
 }
 
-func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTOs []LabLanguageDTO) LabDTO {
+func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTOs []LabLanguageDTO, template string) LabDTO {
+	return LabDTO{
+		ID:         lab.GetID(),
+		Languages:  languagesDTOs,
+		Template:   template,
+		IsStarted:  lab.GetIsStarted(),
+		IsFinished: lab.GetIsFinished(),
+		Difficulty: lab.GetQuest().GetDifficulty(),
+	}
+}
+func (m *LabDTOManager) ToLabsDTO(lab domains.Lab, languagesDTOs []LabLanguageDTO) LabDTO {
 	return LabDTO{
 		ID:         lab.GetID(),
 		Languages:  languagesDTOs,

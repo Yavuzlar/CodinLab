@@ -330,6 +330,12 @@ const docTemplate = `{
                         "name": "labID",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1277,6 +1283,9 @@ const docTemplate = `{
                     }
                 },
                 "name": {
+                    "type": "string"
+                },
+                "template": {
                     "type": "string"
                 }
             }

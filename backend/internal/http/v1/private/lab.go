@@ -105,7 +105,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
 		languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(labCollection.GetLanguages())
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs))
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, languageDTOs))
 	}
 	if len(labDTOList) == 0 {
 		return response.Response(404, "Labs not found", nil)
@@ -120,6 +120,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param labID path string true "Lab ID"
+// @Param programmingID query string false "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/lab/{labID} [get]
 func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
@@ -130,8 +131,14 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	if err != nil {
 		return response.Response(400, "Invalid Labs ID", nil)
 	}
+	programmingID := c.Query("programmingID")
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, 0, nil, nil)
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return response.Response(400, "Invalid Programming Language ID", nil)
+	}
+
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, intProgrammingID, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -141,13 +148,17 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 
 	//FIXME: FRONTEND TEMPLATE
 	// Code Service bir service yaz o sana query ile verilen dilin frontend template'ini  döndürsün. Eğer verilmediyse 0. indexi yollasın zaten boş olamaz.
+
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
 		languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(labCollection.GetLanguages())
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs))
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs, ""))
 	}
 	if len(labDTOList) == 0 {
 		return response.Response(404, "Labs not found", nil)
+	}
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, int32(intProgrammingID), int32(intLabID)); err != nil {
+		return err
 	}
 
 	return response.Response(200, "GetLab successful", labDTOList)

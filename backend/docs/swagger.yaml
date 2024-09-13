@@ -129,6 +129,8 @@ definitions:
         type: array
       name:
         type: string
+      template:
+        type: string
     type: object
   dto.RegisterDTO:
     properties:
@@ -380,6 +382,10 @@ paths:
         in: path
         name: labID
         required: true
+        type: string
+      - description: Programming Language ID
+        in: query
+        name: programmingID
         type: string
       produces:
       - application/json

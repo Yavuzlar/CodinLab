@@ -324,6 +324,12 @@
                         "name": "labID",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1271,6 +1277,9 @@
                     }
                 },
                 "name": {
+                    "type": "string"
+                },
+                "template": {
                     "type": "string"
                 }
             }

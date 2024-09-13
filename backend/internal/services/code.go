@@ -11,7 +11,10 @@ import (
 )
 
 type codeService struct {
-	dockerSDK docker.IDockerSDK
+	dockerSDK      docker.IDockerSDK
+	labRoadService domains.ILabRoadService
+	labService     domains.ILabService
+	roadService    domains.IRoadService
 }
 
 func NewCodeService() domains.ICodeService {
@@ -252,6 +255,53 @@ func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
 	return file.CreateFileAndWrite(filePath, content)
 }
 
-/* func (s *codeService) GetTemplate(labPathID, programmingID int, labPathType string) (template string, err error) {
+/* func (s *codeService) GetTemplate(labPathID, programmingID int, userID, labPathType string) (frontendContent string, err error) {
+	inventoryInformation, err := s.labRoadService.GetInventoryInformation(int32(programmingID))
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessage(404, "Programming Language Not Found")
+	}
 
-} */
+	var lab *domains.Lab
+	var path *domains.Path
+	var codeTemplate domains.CodeTemplate
+	if labPathType == domains.TypeLab {
+		if programmingID != 0 {
+			lab, err = s.labService.GetLabByID(userID, labPathID)
+		} else {
+			lab, err = s.labService.GetLabByID(userID, 1)
+		}
+		if err != nil {
+			return "", service_errors.NewServiceErrorWithMessage(404, "Error While Getting Lab")
+		}
+		if lab == nil {
+			return "", service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
+		}
+		for _, codeTmp := range lab.GetQuest().GetCodeTemplates() {
+			if codeTmp.GetProgrammingID() == inventoryInformation.GetID() {
+				codeTemplate = codeTmp
+			}
+		}
+		frontendContent := s.CodeFrontendTemplateGenerator(inventoryInformation.GetName(), lab.GetQuest().GetFuncName(), codeTemplate.GetFrontend(), lab.GetQuest().GetParams(), lab.GetQuest().GetReturns(), codeTemplate.GetQuestImports())
+		return frontendContent, nil
+	} else if labPathType == domains.TypePath {
+		if programmingID != 0 {
+			path, err = s.roadService.GetRoadByID(userID, programmingID, labPathID)
+		} else {
+			path, err = s.roadService.GetRoadByID(userID, programmingID, 1)
+		}
+
+		if err != nil {
+			return "", service_errors.NewServiceErrorWithMessage(404, "Error While Getting Path")
+		}
+		if path == nil {
+			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
+		}
+		codeTemplate = path.GetQuest().GetCodeTemplates()[0]
+		frontendContent := s.CodeFrontendTemplateGenerator(inventoryInformation.GetName(), path.GetQuest().GetFuncName(), codeTemplate.GetFrontend(), path.GetQuest().GetParams(), path.GetQuest().GetReturns(), codeTemplate.GetQuestImports())
+		return frontendContent, nil
+	}
+
+	return frontendContent, nil
+
+}
+*/

@@ -61,15 +61,17 @@ type PathDTO struct {
 	ID         int           `json:"id,omitempty"`
 	Name       string        `json:"name,omitempty"`
 	Language   []LanguageDTO `json:"languages"`
+	Template   string        `json:"template,omitempty"`
 	Difficulty int           `json:"difficulty"`
 	IsStarted  bool          `json:"isStarted"`
 	IsFinished bool          `json:"isFinished"`
 }
 
-func (m *RoadDTOManager) ToPathDTO(path domains.Path, languages []LanguageDTO) PathDTO {
+func (m *RoadDTOManager) ToPathDTO(path domains.Path, languages []LanguageDTO, template string) PathDTO {
 	return PathDTO{
 		ID:         path.GetID(),
 		Language:   languages,
+		Template:   template,
 		Difficulty: path.GetQuest().GetDifficulty(),
 		IsFinished: path.GetIsFinished(),
 		IsStarted:  path.GetIsStarted(),
