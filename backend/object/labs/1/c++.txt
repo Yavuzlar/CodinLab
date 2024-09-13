@@ -1,0 +1,30 @@
+## FRONTEND
+
+#include <stdio.h>
+
+using namespace std;
+
+bool $funcname$(std::string s) {
+    // Write your code here
+
+    return false
+}
+
+## DOCKER
+
+$usercode$
+
+int main(){
+    $checks$
+}
+
+## CHECK
+
+bool result = $funcname$($input$);
+if (result != $output$){
+    std::cout << "Test Failed: Expected $out$, but got" << result << std::endl;
+}
+
+## SUCCESS
+
+std::cout << "Test Passed" << std::endl;

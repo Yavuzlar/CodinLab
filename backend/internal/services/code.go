@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -97,72 +98,36 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID string, program
 	return codeTmpPath, nil
 }
 
-func (s *codeService) CodeDockerTemplateGenerator(template, check, success, userCode, funcName string, tests []domains.Test, returns []domains.Returns) (string, error) {
-	if !strings.Contains(userCode, funcName) {
-		return "", fmt.Errorf("invalid func name")
+func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []domains.Test) (string, error) {
+	templateMap, err := s.readTemplate(templatePath)
+	if err != nil {
+		return "", err
 	}
+	docker := templateMap["docker"]
 
-	var returnStr string
-	for _, r := range returns {
-		returnStr += fmt.Sprintf("%v,", r.GetType())
-	}
-	if len(returnStr) > 0 {
-		returnStr = returnStr[:len(returnStr)-1]
-	}
+	checks := s.createChecks(templateMap["check"], templateMap["success"], tests)
 
-	checks := s.createChecks(check, success, tests)
+	docker = strings.Replace(docker, "$checks$", checks, -1)
+	docker = strings.Replace(docker, "$usercode$", userCode, -1)
+	docker = strings.Replace(docker, "$funcname$", funcName, -1)
 
-	template = strings.Replace(template, "$checks$", checks, -1)
-	template = strings.Replace(template, "$func$", funcName, -1)
-	template = strings.Replace(template, "$userCode$", userCode, -1)
-	template = strings.Replace(template, "$returns$", returnStr, -1)
-
-	return template, nil
+	return docker, nil
 }
 
-func (s *codeService) CodeFrontendTemplateGenerator(programmingName, funcName, frontend string, params []domains.Param, returns []domains.Returns, imports []string) string {
-	var paramStr string
-	var returnStr string
-	var questImports string
-	if programmingName == "GO" {
-		for _, param := range params {
-			paramStr += fmt.Sprintf("%v %v", param.GetName(), param.GetType())
-		}
-		if len(imports) > 1 {
-			questImports = "import (\n"
-			for _, imp := range imports {
-				questImports += (`"` + imp + `"` + "\n")
-			}
-			questImports += ")\n"
-		} else {
-			questImports = "import " + `"` + imports[0] + `"` + "\n"
-		}
+func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName string) (string, error) {
+	templateMap, err := s.readTemplate(templatePath)
+	if err != nil {
+		return "", err
+	}
+	frontend := templateMap["frontend"]
 
-	} else {
-		for _, param := range params {
-			paramStr += fmt.Sprintf("%v %v,", param.GetType(), param.GetName())
-		}
-		for _, imp := range imports {
-			questImports += (imp + "\n")
-		}
-	}
-	if len(paramStr) > 0 {
-		paramStr = paramStr[:len(paramStr)-1]
-	}
-
-	for _, r := range returns {
-		returnStr += fmt.Sprintf("%v,", r.GetType())
-	}
-	if len(returnStr) > 0 {
-		returnStr = returnStr[:len(returnStr)-1]
-	}
-
-	frontend = strings.Replace(frontend, "$imports$", questImports, -1)
-	frontend = strings.Replace(frontend, "$params$", paramStr, -1)
 	frontend = strings.Replace(frontend, "$funcname$", funcName, -1)
-	frontend = strings.Replace(frontend, "$returns$", returnStr, -1)
 
-	return frontend
+	return frontend, nil
+}
+
+func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
+	return file.CreateFileAndWrite(filePath, content)
 }
 
 func (s *codeService) createChecks(check, success string, tests []domains.Test) string {
@@ -251,8 +216,37 @@ func (s *codeService) createCodeFile(userID string) (err error) {
 	return nil
 }
 
-func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
-	return file.CreateFileAndWrite(filePath, content)
+func (s *codeService) readTemplate(templatePath string) (map[string]string, error) {
+	// Dosyayı oku
+	templateData, err := os.ReadFile(templatePath)
+	if err != nil {
+		return nil, err
+	}
+	content := string(templateData)
+
+	// Metni ## işaretlerine göre böl
+	sections := strings.Split(content, "##")
+
+	// Değişkenleri tanımla
+	template := make(map[string]string)
+
+	// Bölümleri tara ve ilgili anahtarlara ata
+	for _, section := range sections {
+		trimmedSection := strings.TrimSpace(section)
+
+		// Eğer bölüm başlığı varsa bu başlığı anahtar olarak kullan ve içeriği map'e ata
+		if strings.HasPrefix(trimmedSection, "FRONTEND") {
+			template["frontend"] = strings.TrimSpace(strings.TrimPrefix(trimmedSection, "FRONTEND"))
+		} else if strings.HasPrefix(trimmedSection, "DOCKER") {
+			template["docker"] = strings.TrimSpace(strings.TrimPrefix(trimmedSection, "DOCKER"))
+		} else if strings.HasPrefix(trimmedSection, "CHECK") {
+			template["check"] = strings.TrimSpace(strings.TrimPrefix(trimmedSection, "CHECK"))
+		} else if strings.HasPrefix(trimmedSection, "SUCCESS") {
+			template["success"] = strings.TrimSpace(strings.TrimPrefix(trimmedSection, "SUCCESS"))
+		}
+	}
+
+	return template, nil
 }
 
 /* func (s *codeService) GetTemplate(labPathID, programmingID int, userID, labPathType string) (frontendContent string, err error) {

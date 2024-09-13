@@ -213,6 +213,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	fmt.Println(tmpPath)
 
 	var codeTemplate domains.CodeTemplate
 	for _, codeTmp := range lab.GetQuest().GetCodeTemplates() {
@@ -221,7 +222,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		}
 	}
 
-	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTemplate.GetTemplate(), codeTemplate.GetCheck(), codeTemplate.GetSuccess(), answerLabDTO.UserCode, lab.GetQuest().GetFuncName(), lab.GetQuest().GetTests(), lab.GetQuest().GetReturns())
+	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTemplate.GetTemplatePath(), lab.GetQuest().GetFuncName(), answerLabDTO.UserCode, lab.GetQuest().GetTests())
 	if err != nil {
 		return err
 	}
@@ -290,7 +291,10 @@ func (h *PrivateHandler) GetLabTemplate(c *fiber.Ctx) error {
 			codeTemplate = codeTmp
 		}
 	}
-	frontendContent := h.services.CodeService.CodeFrontendTemplateGenerator(inventoryInformation.GetName(), lab.GetQuest().GetFuncName(), codeTemplate.GetFrontend(), lab.GetQuest().GetParams(), lab.GetQuest().GetReturns(), codeTemplate.GetQuestImports())
+	frontendContent, err := h.services.CodeService.CodeFrontendTemplateGenerator(codeTemplate.GetTemplatePath(), lab.GetQuest().GetFuncName())
+	if err != nil {
+		return err
+	}
 
 	return response.Response(200, "Template Successfully Sent", frontendContent)
 }

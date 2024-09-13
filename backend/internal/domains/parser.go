@@ -52,12 +52,8 @@ type ReturnP struct {
 	Type string `json:"type"`
 }
 type CodeTemplateP struct {
-	ProgrammingID int      `json:"programmingID"`
-	Frontend      string   `json:"frontend"`
-	Template      string   `json:"template"`
-	Check         string   `json:"check"`
-	Success       string   `json:"success"`
-	QuestImports  []string `json:"questImports,omitempty"`
+	ProgrammingID int    `json:"programmingID"`
+	TemplatePath  string `json:"templatePath"`
 }
 
 type QuestP struct {

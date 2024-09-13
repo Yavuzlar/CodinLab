@@ -1,0 +1,29 @@
+## FRONTEND
+
+package main;
+
+func $funcname$(s string) bool {
+    // Write your code here
+
+    return false
+}
+
+## DOCKER
+
+$usercode$
+
+func main(){
+    $checks$
+}
+
+## CHECK
+
+result := $funcname$($input$)
+if (result != $output$){
+    fmt.Printf("Test Failed: Expected $out$, but got", result)
+}
+
+
+## SUCCESS
+
+fmt.Println("Test Passed")

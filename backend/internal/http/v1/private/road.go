@@ -195,10 +195,12 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	}
 	codeTmp := road.GetQuest().GetCodeTemplates()[0]
 
-	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplate(), codeTmp.GetCheck(), codeTmp.GetSuccess(), answerRoadDTO.UserCode, road.GetQuest().GetFuncName(), road.GetQuest().GetTests(), road.GetQuest().GetReturns())
+	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplatePath(), road.GetQuest().GetFuncName(), answerRoadDTO.UserCode, road.GetQuest().GetTests())
 	if err != nil {
 		return err
 	}
+
+	fmt.Println(tmpContent)
 
 	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
 		return err
@@ -258,7 +260,10 @@ func (h *PrivateHandler) GetRoadTemplate(c *fiber.Ctx) error {
 
 	codeTmp := path.GetQuest().GetCodeTemplates()[0]
 
-	frontendContent := h.services.CodeService.CodeFrontendTemplateGenerator(inventoryInformation.GetName(), path.GetQuest().GetFuncName(), codeTmp.GetFrontend(), path.GetQuest().GetParams(), path.GetQuest().GetReturns(), path.GetQuest().GetQuestImports())
+	frontendContent, err := h.services.CodeService.CodeFrontendTemplateGenerator(codeTmp.GetTemplatePath(), path.GetQuest().GetFuncName())
+	if err != nil {
+		return err
+	}
 
 	return response.Response(200, "Template Successfully Sent", frontendContent)
 }

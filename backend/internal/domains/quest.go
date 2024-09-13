@@ -71,11 +71,7 @@ func (p *Returns) SetType(typ string) {
 
 type CodeTemplate struct {
 	programmingID int
-	frontend      string
-	template      string
-	check         string
-	success       string
-	questImports  []string
+	templatePath  string
 }
 
 func (ct *CodeTemplate) GetProgrammingID() int {
@@ -86,44 +82,12 @@ func (ct *CodeTemplate) SetProgrammingID(id int) {
 	ct.programmingID = id
 }
 
-func (ct *CodeTemplate) GetFrontend() string {
-	return ct.frontend
+func (ct *CodeTemplate) GetTemplatePath() string {
+	return ct.templatePath
 }
 
-func (ct *CodeTemplate) SetFrontend(frontend string) {
-	ct.frontend = frontend
-}
-
-func (ct *CodeTemplate) GetTemplate() string {
-	return ct.template
-}
-
-func (ct *CodeTemplate) SetTemplate(template string) {
-	ct.template = template
-}
-
-func (ct *CodeTemplate) GetCheck() string {
-	return ct.check
-}
-
-func (ct *CodeTemplate) SetCheck(check string) {
-	ct.check = check
-}
-
-func (ct *CodeTemplate) GetSuccess() string {
-	return ct.success
-}
-
-func (ct *CodeTemplate) SetSuccess(success string) {
-	ct.success = success
-}
-
-func (ct *CodeTemplate) GetQuestImports() []string {
-	return ct.questImports
-}
-
-func (ct *CodeTemplate) SetQuestImports(imports []string) {
-	ct.questImports = imports
+func (ct *CodeTemplate) SetTemplatePath(templatePath string) {
+	ct.templatePath = templatePath
 }
 
 // Quest represents a coding challenge or task.
@@ -217,14 +181,10 @@ func NewReturn(name, typ string) *Returns {
 	}
 }
 
-func NewCodeTemplate(programmingID int, frontend, template, check, success string, questImports []string) *CodeTemplate {
+func NewCodeTemplate(programmingID int, templatePath string) *CodeTemplate {
 	return &CodeTemplate{
 		programmingID: programmingID,
-		template:      template,
-		check:         check,
-		success:       success,
-		frontend:      frontend,
-		questImports:  questImports,
+		templatePath:  templatePath,
 	}
 }
 
