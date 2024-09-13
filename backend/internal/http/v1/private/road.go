@@ -3,6 +3,7 @@ package private
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
@@ -100,9 +101,13 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 		var pathsDTO []dto.PathDTO
 		for _, path := range road.GetPaths() {
 			languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageDTOs(path.GetLanguages())
-			pathsDTO = append(pathsDTO, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTOs))
+			pathsDTO = append(pathsDTO, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTOs, ""))
 		}
 		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO))
+	}
+
+	if err := h.services.LogService.Add(c.Context(), userID, domains.TypePath, domains.ContentStarted, int32(intProgrammingID), int32(intPathID)); err != nil {
+		return err
 	}
 
 	return response.Response(200, "Path Retrieved Successfully", roadDTO)
@@ -124,26 +129,6 @@ func (h *PrivateHandler) GetUserLanguageRoadStats(c *fiber.Ctx) error {
 	roadDTO := h.dtoManager.RoadDTOManager.ToRoadStatsDTO(roadStats)
 
 	return response.Response(200, "Get User Language Road Stats", roadDTO)
-}
-
-// @Tags Road
-// @Summary DummyLogData
-// @Description Add dummy data for testing
-// @Accept json
-// @Produce json
-// @Success 200 {object} response.BaseResponse{}
-// @Router /private/road/path/data [get]
-func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
-
-	// Dummy Data for testing
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 2)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 1)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 2)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 1)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, 1, 1)
-
-	return response.Response(200, "Dummy Data Added", nil)
 }
 
 // @Tags Road
@@ -222,9 +207,10 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
-	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, int32(intProgrammingID), int32(intPathID)); err != nil {
-		return response.Response(500, "Docker Image Pull Error", nil)
+	if strings.Contains(logs, "Test Passed") {
+		if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, int32(intProgrammingID), int32(intPathID)); err != nil {
+			return response.Response(500, "Docker Image Pull Error", nil)
+		}
 	}
 
 	return response.Response(200, logs, nil)

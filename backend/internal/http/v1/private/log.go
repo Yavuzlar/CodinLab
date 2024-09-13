@@ -1,7 +1,9 @@
 package private
 
 import (
+	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
+	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -9,6 +11,8 @@ func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 	root.Get("/log", h.GetAllLogs)
 	root.Get("/log/solution/byday", h.GetSolutionsByDay)
 	root.Get("/log/solution/hours", h.GetSolutionsHoursByProgramming)
+	root.Get("/log/lab", h.AddDummyLabData)
+	root.Get("/log/road", h.AddDummyRoadData)
 }
 
 // @Tags Log
@@ -73,4 +77,43 @@ func (h *PrivateHandler) GetSolutionsHoursByProgramming(c *fiber.Ctx) error {
 	solutionsHoursDTOs := h.dtoManager.LogDTOManager.ToSolutionsHoursByProgrammingDTOs(solutionsHours)
 
 	return response.Response(200, "Status OK", solutionsHoursDTOs)
+}
+
+// @Tags Log
+// @Summary DummyLogData
+// @Description Add dummy data for testing
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/log/lab [get]
+func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+
+	// Dummy Data for testing
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 2, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 2, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 1, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 2)
+
+	return response.Response(200, "Dummy Data Added", nil)
+}
+
+// @Tags Log
+// @Summary DummyLogData
+// @Description Add dummy data for testing
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/log/road [get]
+func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+
+	// Dummy Data for testing
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 2)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, 1, 1)
+
+	return response.Response(200, "Dummy Data Added", nil)
 }

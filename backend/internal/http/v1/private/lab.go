@@ -3,6 +3,7 @@ package private
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
@@ -16,7 +17,6 @@ import (
 
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs", h.GetLabs)
-	root.Get("/lab/data", h.AddDummyLabData)
 	root.Get("/lab/:labID", h.GetLabByID)
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
@@ -39,7 +39,7 @@ func (h *PrivateHandler) GetUserLanguageLabStats(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	labStatsDTO := h.dtoManager.LabDTOManager.ToUserProgrammingLanguageStatDTO(stat)
+	labStatsDTO := h.dtoManager.LabDTOManager.ToUserProgrammingLanguageStatsDTO(stat)
 
 	return response.Response(200, "GetUserLanguageLabStats successful", labStatsDTO)
 }
@@ -75,7 +75,7 @@ func (h *PrivateHandler) GetUserLabProgressStats(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	dto := h.dtoManager.LabDTOManager.ToUserLabProgressStatsDto(stats)
+	dto := h.dtoManager.LabDTOManager.ToUserLabProgressStatsDto(*stats)
 
 	return response.Response(200, "GetUserLabDifficultyStats successful", dto)
 }
@@ -85,12 +85,19 @@ func (h *PrivateHandler) GetUserLabProgressStats(c *fiber.Ctx) error {
 // @Description Get Labs
 // @Accept json
 // @Produce json
+// @Param programmingID query string false "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/labs/ [get]
 func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
+	programmingID := c.Query("programmingID")
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, 0, nil, nil)
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return response.Response(400, "Invalid Programming Language ID", nil)
+	}
+
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, 0, intProgrammingID, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -98,7 +105,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
 		languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(labCollection.GetLanguages())
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs))
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, languageDTOs))
 	}
 	if len(labDTOList) == 0 {
 		return response.Response(404, "Labs not found", nil)
@@ -113,6 +120,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param labID path string true "Lab ID"
+// @Param programmingID query string false "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/lab/{labID} [get]
 func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
@@ -123,8 +131,14 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	if err != nil {
 		return response.Response(400, "Invalid Labs ID", nil)
 	}
+	programmingID := c.Query("programmingID")
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, nil, nil)
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return response.Response(400, "Invalid Programming Language ID", nil)
+	}
+
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, intProgrammingID, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -132,35 +146,22 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		return response.Response(404, "Lab not found", nil)
 	}
 
+	//FIXME: FRONTEND TEMPLATE
+	// Code Service bir service yaz o sana query ile verilen dilin frontend template'ini  döndürsün. Eğer verilmediyse 0. indexi yollasın zaten boş olamaz.
+
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
 		languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(labCollection.GetLanguages())
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs))
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs, ""))
 	}
 	if len(labDTOList) == 0 {
 		return response.Response(404, "Labs not found", nil)
 	}
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, int32(intProgrammingID), int32(intLabID)); err != nil {
+		return err
+	}
 
 	return response.Response(200, "GetLab successful", labDTOList)
-}
-
-// @Tags Lab
-// @Summary DummyLogData
-// @Description Add dummy data for testing
-// @Accept json
-// @Produce json
-// @Success 200 {object} response.BaseResponse{}
-// @Router /private/lab/data [get]
-func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
-
-	// Dummy Data for testing
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 2, 1)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 1, 2)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 2, 1)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 2)
-
-	return response.Response(200, "Dummy Data Added", nil)
 }
 
 // @Tags Lab
@@ -234,8 +235,10 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, int32(num), int32(labIDInt)); err != nil {
-		return response.Response(500, "Docker Image Pull Error", nil)
+	if strings.Contains(logs, "Test Passed") {
+		if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, int32(num), int32(labIDInt)); err != nil {
+			return response.Response(500, "Docker Image Pull Error", nil)
+		}
 	}
 
 	return response.Response(200, logs, nil)

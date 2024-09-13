@@ -2,11 +2,10 @@ package domains
 
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
-	GetLabsFilter(userID string, labId int, isStarted, isFinished *bool) ([]Lab, error)
-	GetUserLanguageLabStats(userID string) (programmingLangugageStats *ProgrammingLanguageStats, err error)
+	GetLabsFilter(userID string, labId, programmingID int, isStarted, isFinished *bool) ([]Lab, error)
+	GetUserLanguageLabStats(userID string) (programmingLangugageStats []ProgrammingLanguageStats, err error)
 	GetUserLabDifficultyStats(userID string) (userLabDifficultyStats UserLabDifficultyStats, err error)
-	GetUserLabProgressStats(userID string) (userLabProgressStats UserLabProgressStats, err error)
-	CountLabsFilter(userID string, labId int, isStarted, isFinished *bool) (counter int, err error)
+	GetUserLabProgressStats(userID string) (userLabProgressStats *UserLabProgressStats, err error)
 	GetLabByID(userID string, labID int) (lab *Lab, err error)
 }
 
@@ -14,6 +13,7 @@ type ILabService interface {
 type ProgrammingLanguageStats struct {
 	id            int
 	name          string
+	iconPath      string
 	totalLabs     int
 	completedLabs int
 	percentage    float32
@@ -26,6 +26,14 @@ func (p *ProgrammingLanguageStats) GetTotalLabs() int {
 
 func (p *ProgrammingLanguageStats) SetTotalLabs(totalLabs int) {
 	p.totalLabs = totalLabs
+}
+
+func (p *ProgrammingLanguageStats) GetIconPath() string {
+	return p.iconPath
+}
+
+func (p *ProgrammingLanguageStats) SetIconPath(iconPath string) {
+	p.iconPath = iconPath
 }
 
 func (p *ProgrammingLanguageStats) GetName() string {
@@ -224,8 +232,10 @@ func (l *Lab) SetIsFinished(isFinished bool) {
 }
 
 // NewProgrammingLanguageStats creates a new instance of ProgrammingLanguageStats
-func NewProgrammingLanguageStats(totalLabs, completedLabs int, percentage float32) *ProgrammingLanguageStats {
+func NewProgrammingLanguageStats(name, iconPath string, totalLabs, completedLabs int, percentage float32) *ProgrammingLanguageStats {
 	return &ProgrammingLanguageStats{
+		name:          name,
+		iconPath:      iconPath,
 		totalLabs:     totalLabs,
 		completedLabs: completedLabs,
 		percentage:    percentage,
@@ -261,12 +271,13 @@ func NewLanguageLab(lang, title, description, note, hint string) *LanguageLab {
 }
 
 // NewLab creates a new instance of Lab
-func NewLab(id int, languages []LanguageLab, quest Quest, isStarted, isFinished bool) *Lab {
+func NewLab(id, programmingID int, languages []LanguageLab, quest Quest, isStarted, isFinished bool) *Lab {
 	return &Lab{
-		id:         id,
-		languages:  languages,
-		quest:      quest,
-		isStarted:  isStarted,
-		isFinished: isFinished,
+		id:            id,
+		languages:     languages,
+		programmingID: programmingID,
+		quest:         quest,
+		isStarted:     isStarted,
+		isFinished:    isFinished,
 	}
 }

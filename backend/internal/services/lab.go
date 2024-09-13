@@ -60,44 +60,48 @@ func (s *labService) getAllLabs(userID string) ([]domains.Lab, error) {
 		}
 
 		quest := domains.NewQuest(lab.Quest.Difficulty, lab.Quest.FuncName, tests, params, returns, codeTemplates, lab.Quest.QuestImports)
-		newLab := domains.NewLab(lab.ID, languages, *quest, false, false)
 
 		labIDString := strconv.Itoa(lab.ID)
-		logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", labIDString, domains.TypeLab, domains.ContentStarted)
-		if err != nil {
-			return nil, err
-		}
-		if len(logStartedStatus) > 0 {
-			newLab.SetIsStarted(true)
+		for _, lang := range lab.Quest.CodeTemplates {
+			newLab := domains.NewLab(lab.ID, 0, languages, *quest, false, false)
+			programmingID := strconv.Itoa(lang.ProgrammingID)
+			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingID, labIDString, domains.TypeLab, domains.ContentStarted)
+			if err != nil {
+				return nil, err
+			}
+			if len(logStartedStatus) > 0 {
+				newLab.SetIsStarted(true)
+			}
+
+			logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingID, labIDString, domains.TypeLab, domains.ContentCompleted)
+			if err != nil {
+				return nil, err
+			}
+			if len(logFinishedStatus) > 0 {
+				newLab.SetIsFinished(true)
+			}
+			newLab.SetProgrammingID(lang.ProgrammingID)
+			labs = append(labs, *newLab)
 		}
 
-		logFinishedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, "", labIDString, domains.TypeLab, domains.ContentCompleted)
-		if err != nil {
-			return nil, err
-		}
-		if len(logFinishedStatus) > 0 {
-			newLab.SetIsFinished(true)
-		}
-
-		labs = append(labs, *newLab)
 	}
-
 	return labs, nil
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labId int, isStarted, isFinished *bool) ([]domains.Lab, error) {
+func (s *labService) GetLabsFilter(userID string, labId, programmingID int, isStarted, isFinished *bool) ([]domains.Lab, error) {
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labId == 0 && isStarted == nil && isFinished == nil {
+	if userID == "" && labId == 0 && isStarted == nil && isFinished == nil && programmingID == 0 {
 		return allLabs, nil
 	}
 
 	var labs []domains.Lab
 	for _, lab := range allLabs {
+		//found := false
 		if labId != 0 && lab.GetID() != labId {
 			continue
 		}
@@ -107,6 +111,21 @@ func (s *labService) GetLabsFilter(userID string, labId int, isStarted, isFinish
 		if isFinished != nil && lab.GetIsFinished() != *isFinished {
 			continue
 		}
+		if lab.GetProgrammingID() != programmingID {
+			continue
+		}
+		/* if programmingID != 0 {
+			for _, ct := range lab.GetQuest().GetCodeTemplates() {
+				if ct.GetProgrammingID() == programmingID {
+					found = true
+					break
+				}
+			}
+			if !found {
+				continue
+			}
+		} */
+
 		labs = append(labs, lab)
 
 	}
@@ -129,82 +148,66 @@ func (s *labService) GetLabByID(userID string, labID int) (lab *domains.Lab, err
 	return nil, err
 }
 
-// Fetch labs by filters
-func (s *labService) CountLabsFilter(userID string, labId int, isStarted, isFinished *bool) (counter int, err error) {
-	allLabs, err := s.getAllLabs(userID)
-	if err != nil {
-		return 0, err
-	}
-
-	if userID == "" && labId == 0 && isStarted == nil && isFinished == nil {
-		return 0, nil
-	}
-
-	for _, lab := range allLabs {
-		if labId != 0 && lab.GetID() != labId {
-			continue
-		}
-		if isStarted != nil && lab.GetIsStarted() != *isStarted {
-			continue
-		}
-		if isFinished != nil && lab.GetIsFinished() != *isFinished {
-			continue
-		}
-		counter++
-
-	}
-
-	return counter, nil
-}
-
 // User lab level stats by programming language
-func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugageStats *domains.ProgrammingLanguageStats, err error) {
-	allLabs, err := s.getAllLabs(userID)
-	if err != nil {
-		return
-	}
+func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugageStats []domains.ProgrammingLanguageStats, err error) {
 	programmingLangugages, _ := s.parserService.GetInventory()
 
-	completedLabs := 0
+	for _, pl := range programmingLangugages {
+		allLabs, _ := s.GetLabsFilter(userID, 0, pl.ID, nil, nil)
+		completedLabs := 0
 
-	for _, lab := range allLabs {
-		if lab.GetIsFinished() {
-			completedLabs++
+		for _, lab := range allLabs {
+			if lab.GetIsStarted() && lab.GetIsFinished() {
+				completedLabs++
+			}
 		}
+
+		var completionRate float32
+		if len(allLabs) > 0 {
+			completionRate = float32((float32(completedLabs) / float32(len(allLabs))) * 100)
+		} else {
+			completionRate = 0
+		}
+
+		programmingLanguageStat := domains.NewProgrammingLanguageStats(
+			pl.Name,
+			pl.IconPath,
+			len(allLabs),
+			completedLabs,
+			completionRate,
+		)
+
+		programmingLangugageStats = append(programmingLangugageStats, *programmingLanguageStat)
 	}
-	programmingLangugageStats = domains.NewProgrammingLanguageStats(
-		len(allLabs)*len(programmingLangugages),
-		completedLabs,
-		float32((float32(completedLabs)/float32(len(allLabs)*len(programmingLangugages)))*100),
-	)
 
 	return
 }
 
 // User lab progress Statistics
-func (s *labService) GetUserLabProgressStats(userID string) (userLabProgressStats domains.UserLabProgressStats, err error) {
-	trueValue := true
-	falseValue := false
+func (s *labService) GetUserLabProgressStats(userID string) (userLabProgressStats *domains.UserLabProgressStats, err error) {
+	progress := 0
+	completed := 0
+	totalLabs := 0
 
-	progressLabs, err := s.CountLabsFilter(userID, 0, &trueValue, &falseValue)
-	if err != nil {
-		return
-	}
-	completedLabs, err := s.CountLabsFilter(userID, 0, &trueValue, &trueValue)
-	if err != nil {
-		return
-	}
-
-	totalLabs, err := s.CountLabsFilter(userID, 0, nil, nil)
-	if err != nil {
-		return
-	}
 	programmingLangugages, _ := s.parserService.GetInventory()
 
-	progressPercentage := float32(float32(progressLabs) / float32(totalLabs*len(programmingLangugages)) * 100)
-	completedPercentage := float32(float32(completedLabs) / float32(totalLabs*len(programmingLangugages)) * 100)
+	for _, pl := range programmingLangugages {
+		allLabs, _ := s.GetLabsFilter(userID, 0, pl.ID, nil, nil)
 
-	userLabProgressStats = *domains.NewsUserLabProgressStats(progressPercentage, completedPercentage)
+		for _, lab := range allLabs {
+			if lab.GetIsStarted() && !lab.GetIsFinished() {
+				progress++
+			}
+			if lab.GetIsFinished() && lab.GetIsStarted() {
+				completed++
+			}
+			totalLabs++
+		}
+	}
+	progressPercentage := float32(float32(progress) / float32(totalLabs) * 100)
+	completedPercentage := float32(float32(completed) / float32(totalLabs) * 100)
+
+	userLabProgressStats = domains.NewsUserLabProgressStats(progressPercentage, completedPercentage)
 
 	return
 }
@@ -215,7 +218,6 @@ func (s *labService) GetUserLabDifficultyStats(userID string) (userLabDifficulty
 	if err != nil {
 		return
 	}
-
 	totalLabs := 0
 	easyLabs := 0
 	mediumLabs := 0
@@ -234,9 +236,6 @@ func (s *labService) GetUserLabDifficultyStats(userID string) (userLabDifficulty
 			}
 		}
 	}
-	programmingLangugages, _ := s.parserService.GetInventory()
-	totalLabs = totalLabs * len(programmingLangugages)
-
 	easyPercentage := float32(float32(easyLabs) / float32(totalLabs) * 100)
 	mediumPercentage := float32(float32(mediumLabs) / float32(totalLabs) * 100)
 	hardPercentage := float32(float32(hardLabs) / float32(totalLabs) * 100)

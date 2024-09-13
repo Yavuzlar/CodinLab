@@ -235,7 +235,7 @@ func (r *LogRepository) CountSolutionsByDay(ctx context.Context) (solutions []do
 	query := `
     SELECT 
         DATE(created_at) AS date,
-        SUM(CASE WHEN type = 'Road' AND content = 'Completed' THEN 1 ELSE 0 END) AS road_count,
+        SUM(CASE WHEN type = 'Path' AND content = 'Completed' THEN 1 ELSE 0 END) AS road_count,
         SUM(CASE WHEN type = 'Lab' AND content = 'Completed' THEN 1 ELSE 0 END) AS lab_count
     FROM 
         t_logs
@@ -265,7 +265,7 @@ func (r *LogRepository) CountSolutionsHoursByProgrammingLast7Days(ctx context.Co
 	SELECT
 		l1.programming_id,
 		SUM(CASE WHEN l1.type = 'Lab' THEN (JULIANDAY(l2.created_at) - JULIANDAY(l1.created_at)) * 24 ELSE 0 END) AS total_lab_hours,
-		SUM(CASE WHEN l1.type = 'Road' THEN (JULIANDAY(l2.created_at) - JULIANDAY(l1.created_at)) * 24 ELSE 0 END) AS total_road_hours
+		SUM(CASE WHEN l1.type = 'Path' THEN (JULIANDAY(l2.created_at) - JULIANDAY(l1.created_at)) * 24 ELSE 0 END) AS total_road_hours
 	FROM
 		t_logs l1
 	JOIN
@@ -277,7 +277,7 @@ func (r *LogRepository) CountSolutionsHoursByProgrammingLast7Days(ctx context.Co
 	             AND l2.content = 'Completed'
 	             AND l1.created_at < l2.created_at
 	WHERE
-		l1.type IN ('Road', 'Lab')
+		l1.type IN ('Path', 'Lab')
 		AND l1.created_at >= DATE('now', '-7 days')
 	GROUP BY
 		l1.programming_id

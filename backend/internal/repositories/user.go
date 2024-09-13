@@ -179,6 +179,28 @@ func (r *UserRepository) Update(ctx context.Context, user *domains.User) (err er
 	return
 }
 
+func (r *UserRepository) AdminUpdate(ctx context.Context, user *domains.User) (err error) {
+	dbModel := r.dbModelFromAppModel(*user)
+	query := `
+		UPDATE
+         t_users
+		SET
+			name = COALESCE(:name, name),
+			surname =  COALESCE(:surname, surname),
+			username = COALESCE(:username, username),
+			role =  COALESCE(:role, role),
+			github_profile = COALESCE(:github_profile, github_profile)
+		WHERE
+			id = :id
+
+	`
+	_, err = r.db.NamedExecContext(ctx, query, dbModel)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (r *UserRepository) Delete(ctx context.Context, userID uuid.UUID) (err error) {
 	query := `
 		DELETE FROM

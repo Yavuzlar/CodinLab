@@ -113,7 +113,7 @@ func (s *adminService) GetProfile(ctx context.Context, userID string) (user *dom
 	return
 }
 
-func (s *adminService) UpdateUser(ctx context.Context, userID, newPassword, username, githubProfile, name, surname string) (err error) {
+func (s *adminService) UpdateUser(ctx context.Context, userID, role, username, githubProfile, name, surname string) (err error) {
 	user, err := s.GetProfile(ctx, userID)
 	if err != nil {
 		return err
@@ -127,8 +127,8 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, newPassword, user
 			return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 		}
 		if len(filter) > 0 {
-			oldUsername := filter[0].Username()
-			if oldUsername != username {
+			oldUsername := user.Username()
+			if oldUsername != filter[0].Username() {
 				return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 			}
 		}
@@ -137,13 +137,7 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, newPassword, user
 		}
 	}
 
-	// Checking if password is being updated
-	if newPassword != "" {
-		if err := user.SetPassword(newPassword); err != nil {
-			return err
-		}
-	}
-
+	user.SetRole(role)
 	user.SetGithubProfile(githubProfile)
 	if name != "" {
 		if err := user.SetName(name); err != nil {
@@ -156,7 +150,7 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, newPassword, user
 		}
 	}
 
-	if err = s.userRepositories.Update(ctx, user); err != nil {
+	if err = s.userRepositories.AdminUpdate(ctx, user); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while updating user", err)
 	}
 

@@ -12,4 +12,5 @@ type ICodeService interface {
 	CreateFileAndWrite(filePath, content string) (err error)
 	CodeDockerTemplateGenerator(template, check, success, userCode, funcName string, tests []Test, returns []Returns) (string, error)
 	CodeFrontendTemplateGenerator(programmingName, funcName, frontend string, params []Param, returns []Returns, imports []string) string
+	//GetTemplate(labPathID, programmingID int, userID, labPathType string) (frontendContent string, err error)
 }

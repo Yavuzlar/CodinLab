@@ -15,7 +15,7 @@ type IUserRepository interface {
 	Add(ctx context.Context, user *User) (err error)
 	Update(ctx context.Context, user *User) (err error)
 	Delete(ctx context.Context, userID uuid.UUID) (err error)
-	// Devamı gelecek...
+	AdminUpdate(ctx context.Context, user *User) (err error)
 }
 
 // IUserService is the interface that provides the methods for the user service.
@@ -29,7 +29,6 @@ type IUserService interface {
 	DeleteUser(ctx context.Context, userID string) (err error)
 	BestProgrammingLanguages(ctx context.Context, userID string) (bestLanguage string, err error)
 	UpdatePassword(ctx context.Context, userID, password, newPassword, confirmPassword string) (err error)
-	// Devamı gelecek...
 }
 
 // UserFilter is the struct that represents the user filter.

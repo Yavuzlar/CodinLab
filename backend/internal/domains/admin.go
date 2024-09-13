@@ -11,7 +11,7 @@ type IAdminService interface {
 	CreateUser(ctx context.Context, username, name, surname, password, role, githubProfile string) (err error)
 	GetAllUsers(ctx context.Context) (adminModelUsers []AdminUserDetail, err error)
 	GetProfile(ctx context.Context, userID string) (user *User, err error)
-	UpdateUser(ctx context.Context, userID, newPassword, username, githubProfile, name, surname string) (err error)
+	UpdateUser(ctx context.Context, userID, role, username, githubProfile, name, surname string) (err error)
 	DeleteUser(ctx context.Context, userID string) (err error)
 	BestProgrammingLanguage(ctx context.Context, userID string) (bestLanguage string, err error)
 }

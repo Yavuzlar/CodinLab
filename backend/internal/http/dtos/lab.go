@@ -14,12 +14,30 @@ func NewLabDTOManager() LabDTOManager {
 type LabDTO struct {
 	ID         int              `json:"id"`
 	Languages  []LabLanguageDTO `json:"languages"`
+	Template   string           `json:"template,omitempty"`
+	IsStarted  bool             `json:"isStarted"`
+	IsFinished bool             `json:"isFinished"`
+	Difficulty int              `json:"difficulty"`
+}
+type LabsDTO struct {
+	ID         int              `json:"id"`
+	Languages  []LabLanguageDTO `json:"languages"`
 	IsStarted  bool             `json:"isStarted"`
 	IsFinished bool             `json:"isFinished"`
 	Difficulty int              `json:"difficulty"`
 }
 
-func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTOs []LabLanguageDTO) LabDTO {
+func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTOs []LabLanguageDTO, template string) LabDTO {
+	return LabDTO{
+		ID:         lab.GetID(),
+		Languages:  languagesDTOs,
+		Template:   template,
+		IsStarted:  lab.GetIsStarted(),
+		IsFinished: lab.GetIsFinished(),
+		Difficulty: lab.GetQuest().GetDifficulty(),
+	}
+}
+func (m *LabDTOManager) ToLabsDTO(lab domains.Lab, languagesDTOs []LabLanguageDTO) LabDTO {
 	return LabDTO{
 		ID:         lab.GetID(),
 		Languages:  languagesDTOs,
@@ -82,6 +100,8 @@ func (m *LabDTOManager) ToLanguageDTOs(languages []domains.LanguageLab) []LabLan
 }
 
 type UserProgrammingLanguageLabStatsDTO struct {
+	Name          string  `json:"name"`
+	IconPath      string  `json:"iconPath"`
 	TotalLabs     int     `json:"totalLabs"`
 	CompletedLabs int     `json:"completedLabs"`
 	Percentage    float32 `json:"percentage"`
@@ -89,6 +109,8 @@ type UserProgrammingLanguageLabStatsDTO struct {
 
 func (m *LabDTOManager) ToUserProgrammingLanguageStatDTO(stat *domains.ProgrammingLanguageStats) UserProgrammingLanguageLabStatsDTO {
 	return UserProgrammingLanguageLabStatsDTO{
+		Name:          stat.GetName(),
+		IconPath:      stat.GetIconPath(),
 		TotalLabs:     stat.GetTotalLabs(),
 		CompletedLabs: stat.GetCompletedLabs(),
 		Percentage:    stat.GetPercentage(),
