@@ -149,8 +149,8 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, username
 			return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 		}
 		if len(filter) > 0 {
-			oldUsername := filter[0].Username()
-			if oldUsername != username {
+			oldUsername := user.Username()
+			if oldUsername != filter[0].Username() {
 				return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 			}
 		}

@@ -127,8 +127,8 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, role, username, g
 			return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 		}
 		if len(filter) > 0 {
-			oldUsername := filter[0].Username()
-			if oldUsername != username {
+			oldUsername := user.Username()
+			if oldUsername != filter[0].Username() {
 				return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 			}
 		}
@@ -150,7 +150,7 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, role, username, g
 		}
 	}
 
-	if err = s.userRepositories.Update(ctx, user); err != nil {
+	if err = s.userRepositories.AdminUpdate(ctx, user); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while updating user", err)
 	}
 
