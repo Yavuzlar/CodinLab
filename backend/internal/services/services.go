@@ -36,7 +36,7 @@ func CreateNewServices(
 	homeService := newHomeService(utilsService, logService, parserService, levelService)
 	adminService := newAdminService(userRepositories, logService, parserService, levelService, utilsService)
 	labRoadService := newLabRoadService(parserService)
-	codeService := NewCodeService()
+	codeService := newCodeService(labRoadService, labService, roadService)
 	// diğer servisler buraya eklenecek
 
 	return &Services{

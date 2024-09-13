@@ -2,7 +2,6 @@ package container
 
 import (
 	"archive/tar"
-	"bufio"
 	"bytes"
 	"context"
 	"fmt"
@@ -70,24 +69,27 @@ func (m *Manager) ReadContainerLogs(ctx context.Context, containerID string) (st
 	defer out.Close()
 
 	var result strings.Builder
-	reader := bufio.NewReader(out)
+	buffer := make([]byte, 1024) // Okuma için bir buffer oluşturun
 
 	for {
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			return "", err
+		n, err := out.Read(buffer)
+		if err != nil && err != io.EOF {
+			return "", fmt.Errorf("error reading container logs: %w", err)
 		}
+		if n == 0 {
+			break
+		}
+
+		// Burada `buffer[:n]` kullanarak okunan veriyi işleyebilirsiniz
+		logLine := string(buffer[:n])
 
 		// Cleans answer by removing docker frame (skips first 8 bytes)
-		if len(line) > 8 {
-			line = line[8:]
+		if len(logLine) > 8 {
+			logLine = logLine[8:]
 		}
-		line = strings.TrimSuffix(line, "\n")
+		logLine = strings.TrimSuffix(logLine, "\n")
 
-		result.WriteString(line)
+		result.WriteString(logLine)
 	}
 
 	return result.String(), nil

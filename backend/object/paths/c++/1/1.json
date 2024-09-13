@@ -25,17 +25,6 @@
 				"output": ["Hello, World!"]
 			}
 		],
-		"params": [],
-		"returns": [
-			{
-				"name": "res",
-				"type": "std::string"
-			}
-		],
-		"questImports": [
-			"#include <iostream>",
-			"#include <string>"
-		],
 		"codeTemplates": [
 			{
 				"programmingID": 1,

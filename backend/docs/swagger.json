@@ -266,44 +266,6 @@
                 }
             }
         },
-        "/private/lab/template/{programmingID}/{labID}": {
-            "get": {
-                "description": "Get Lab Template",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Lab"
-                ],
-                "summary": "Get Lab Template",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "programmingID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "labID",
-                        "name": "labID",
-                        "in": "path"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/private/lab/{labID}": {
             "get": {
                 "description": "Get Lab By Programming Language ID \u0026 Lab ID",
@@ -769,44 +731,6 @@
                     "Road"
                 ],
                 "summary": "GetUserRoadProgressStats",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/private/road/template/{pathID}/{programmingID}": {
-            "get": {
-                "description": "Get Road Template",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Road"
-                ],
-                "summary": "Get Road Template",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "programmingID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "pathID",
-                        "name": "pathID",
-                        "in": "path"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",

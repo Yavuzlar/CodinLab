@@ -40,17 +40,6 @@ type TestP struct {
 	Output []interface{} `json:"output"`
 }
 
-// Param represents a parameter of a function.
-type ParamP struct {
-	Name string `json:"name"`
-	Type string `json:"type"`
-}
-
-// Returns represents a parameter of a function.
-type ReturnP struct {
-	Name string `json:"name"`
-	Type string `json:"type"`
-}
 type CodeTemplateP struct {
 	ProgrammingID int    `json:"programmingID"`
 	TemplatePath  string `json:"templatePath"`
@@ -60,8 +49,6 @@ type QuestP struct {
 	Difficulty    int             `json:"difficulty"`
 	FuncName      string          `json:"funcName"`
 	Tests         []TestP         `json:"tests"`
-	Params        []ParamP        `json:"params"`
-	Returns       []ReturnP       `json:"returns"`
 	QuestImports  []string        `json:"questImports,omitempty"`
 	CodeTemplates []CodeTemplateP `json:"codeTemplates"`
 }

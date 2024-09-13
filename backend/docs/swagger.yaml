@@ -428,31 +428,6 @@ paths:
       summary: Answer
       tags:
       - Lab
-  /private/lab/template/{programmingID}/{labID}:
-    get:
-      consumes:
-      - application/json
-      description: Get Lab Template
-      parameters:
-      - description: programmingID
-        in: path
-        name: programmingID
-        required: true
-        type: string
-      - description: labID
-        in: path
-        name: labID
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: Get Lab Template
-      tags:
-      - Lab
   /private/labs/:
     get:
       consumes:
@@ -753,31 +728,6 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: GetUserRoadProgressStats
-      tags:
-      - Road
-  /private/road/template/{pathID}/{programmingID}:
-    get:
-      consumes:
-      - application/json
-      description: Get Road Template
-      parameters:
-      - description: programmingID
-        in: path
-        name: programmingID
-        required: true
-        type: string
-      - description: pathID
-        in: path
-        name: pathID
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: Get Road Template
       tags:
       - Road
   /private/start/{programmingID}:

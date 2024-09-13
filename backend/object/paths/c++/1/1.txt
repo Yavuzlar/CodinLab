@@ -18,6 +18,7 @@ $usercode$
 int main(){
     $checks$
 
+    std::cout << "$success$" << std::endl;
     return 0;
 }
 
@@ -27,7 +28,3 @@ std::string result = $funcname$($input$);
 if (result != $output$){
     std::cout << "Test Failed: Expected $out$, but got" << result << std::endl;
 }
-
-## SUCCESS
-
-std::cout << "Test Passed" << std::endl;

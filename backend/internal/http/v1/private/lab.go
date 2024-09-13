@@ -22,7 +22,6 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
 	root.Post("/lab/answer/:programmingID/:labID", h.AnswerLab)
-	root.Get("/lab/template/:programmingID/:labID", h.GetLabTemplate)
 }
 
 // @Tags Lab
@@ -126,16 +125,16 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	labID := c.Params("labID")
-
-	intLabID, err := strconv.Atoi(labID)
-	if err != nil {
-		return response.Response(400, "Invalid Labs ID", nil)
-	}
 	programmingID := c.Query("programmingID")
 
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
-		return response.Response(400, "Invalid Programming Language ID", nil)
+		return response.Response(400, "Invalidd Programming Language ID", err)
+	}
+
+	intLabID, err := strconv.Atoi(labID)
+	if err != nil {
+		return response.Response(400, "Invalid Lab or Path ID", err)
 	}
 
 	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, intProgrammingID, nil, nil)
@@ -146,13 +145,15 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		return response.Response(404, "Lab not found", nil)
 	}
 
-	//FIXME: FRONTEND TEMPLATE
-	// Code Service bir service yaz o sana query ile verilen dilin frontend template'ini  döndürsün. Eğer verilmediyse 0. indexi yollasın zaten boş olamaz.
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypeLab, intProgrammingID, intLabID)
+	if err != nil {
+		return err
+	}
 
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
 		languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(labCollection.GetLanguages())
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs, ""))
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs, frontendTemplate))
 	}
 	if len(labDTOList) == 0 {
 		return response.Response(404, "Labs not found", nil)
@@ -213,7 +214,6 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(tmpPath)
 
 	var codeTemplate domains.CodeTemplate
 	for _, codeTmp := range lab.GetQuest().GetCodeTemplates() {
@@ -243,58 +243,4 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, logs, nil)
-}
-
-// @Tags Lab
-// @Summary Get Lab Template
-// @Description Get Lab Template
-// @Accept json
-// @Produce json
-// @Param programmingID path string true "programmingID"
-// @Param labID path string false "labID"
-// @Success 200 {object} response.BaseResponse{}
-// @Router /private/lab/template/{programmingID}/{labID} [get]
-func (h *PrivateHandler) GetLabTemplate(c *fiber.Ctx) error {
-	labID := c.Params("labID")
-	programmingID := c.Params("programmingID")
-	userSession := session_store.GetSessionData(c)
-
-	num, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalid Programming ID", nil)
-	}
-
-	labIDInt, err := strconv.Atoi(labID)
-	if err != nil {
-		return response.Response(400, "Invalid Lab ID", nil)
-	}
-
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(num))
-	if err != nil {
-		return response.Response(500, "Programming Language Information Error", err)
-	}
-	if inventoryInformation == nil {
-		return response.Response(404, "Programming Language Not Found", nil)
-	}
-
-	lab, err := h.services.LabService.GetLabByID(userSession.UserID, labIDInt)
-	if err != nil {
-		return response.Response(404, "Error While Getting Lab", err)
-	}
-	if lab == nil {
-		return response.Response(404, "Lab Not Found", nil)
-	}
-
-	var codeTemplate domains.CodeTemplate
-	for _, codeTmp := range lab.GetQuest().GetCodeTemplates() {
-		if codeTmp.GetProgrammingID() == inventoryInformation.GetID() {
-			codeTemplate = codeTmp
-		}
-	}
-	frontendContent, err := h.services.CodeService.CodeFrontendTemplateGenerator(codeTemplate.GetTemplatePath(), lab.GetQuest().GetFuncName())
-	if err != nil {
-		return err
-	}
-
-	return response.Response(200, "Template Successfully Sent", frontendContent)
 }

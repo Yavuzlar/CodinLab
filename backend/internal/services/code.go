@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	"github.com/Yavuzlar/CodinLab/pkg/docker"
 	"github.com/Yavuzlar/CodinLab/pkg/file"
 )
@@ -18,14 +19,21 @@ type codeService struct {
 	roadService    domains.IRoadService
 }
 
-func NewCodeService() domains.ICodeService {
+func newCodeService(
+	labRoadService domains.ILabRoadService,
+	labService domains.ILabService,
+	roadService domains.IRoadService,
+) domains.ICodeService {
 	dockerSDK, err := docker.NewDockerSDK()
 	if err != nil {
 		panic(err)
 	}
 
 	return &codeService{
-		dockerSDK: dockerSDK,
+		dockerSDK:      dockerSDK,
+		labRoadService: labRoadService,
+		labService:     labService,
+		roadService:    roadService,
 	}
 }
 
@@ -105,11 +113,12 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 	}
 	docker := templateMap["docker"]
 
-	checks := s.createChecks(templateMap["check"], templateMap["success"], tests)
+	checks := s.createChecks(templateMap["check"], tests)
 
 	docker = strings.Replace(docker, "$checks$", checks, -1)
 	docker = strings.Replace(docker, "$usercode$", userCode, -1)
 	docker = strings.Replace(docker, "$funcname$", funcName, -1)
+	docker = strings.Replace(docker, "$success$", "Test Passed", -1)
 
 	return docker, nil
 }
@@ -126,11 +135,52 @@ func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName strin
 	return frontend, nil
 }
 
+func (s *codeService) GetFrontendTemplate(userID, labRoadType string, programmingID, labPathID int) (string, error) {
+	var frontendTemplate string
+	if labRoadType == domains.TypeLab {
+		lab, err := s.labService.GetLabByID(userID, labPathID)
+		if err != nil {
+			return "", service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
+		}
+
+		for _, ct := range lab.GetQuest().GetCodeTemplates() {
+			if ct.GetProgrammingID() == programmingID {
+				frontendTemplate, err = s.CodeFrontendTemplateGenerator(ct.GetTemplatePath(), lab.GetQuest().GetFuncName())
+				if err != nil {
+					return "", service_errors.NewServiceErrorWithMessage(404, "Error while getting frontend template")
+				}
+
+				break
+			}
+		}
+
+	} else if labRoadType == domains.TypePath {
+		path, err := s.roadService.GetRoadByID(userID, programmingID, labPathID)
+		if err != nil {
+			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
+		}
+		for _, ct := range path.GetQuest().GetCodeTemplates() {
+			if ct.GetProgrammingID() == programmingID {
+				frontendTemplate, err = s.CodeFrontendTemplateGenerator(ct.GetTemplatePath(), path.GetQuest().GetFuncName())
+				if err != nil {
+					return "", service_errors.NewServiceErrorWithMessage(404, "Error while getting frontend template")
+				}
+
+				break
+
+			}
+		}
+
+	}
+
+	return frontendTemplate, nil
+}
+
 func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
 	return file.CreateFileAndWrite(filePath, content)
 }
 
-func (s *codeService) createChecks(check, success string, tests []domains.Test) string {
+func (s *codeService) createChecks(check string, tests []domains.Test) string {
 	var checks strings.Builder
 
 	for i, test := range tests {
@@ -174,7 +224,6 @@ func (s *codeService) createChecks(check, success string, tests []domains.Test) 
 
 		checks.WriteString(tmp + "\n       ")
 	}
-	checks.WriteString(success + "\n")
 
 	return checks.String()
 }
@@ -241,61 +290,8 @@ func (s *codeService) readTemplate(templatePath string) (map[string]string, erro
 			template["docker"] = strings.TrimSpace(strings.TrimPrefix(trimmedSection, "DOCKER"))
 		} else if strings.HasPrefix(trimmedSection, "CHECK") {
 			template["check"] = strings.TrimSpace(strings.TrimPrefix(trimmedSection, "CHECK"))
-		} else if strings.HasPrefix(trimmedSection, "SUCCESS") {
-			template["success"] = strings.TrimSpace(strings.TrimPrefix(trimmedSection, "SUCCESS"))
 		}
 	}
 
 	return template, nil
 }
-
-/* func (s *codeService) GetTemplate(labPathID, programmingID int, userID, labPathType string) (frontendContent string, err error) {
-	inventoryInformation, err := s.labRoadService.GetInventoryInformation(int32(programmingID))
-	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessage(404, "Programming Language Not Found")
-	}
-
-	var lab *domains.Lab
-	var path *domains.Path
-	var codeTemplate domains.CodeTemplate
-	if labPathType == domains.TypeLab {
-		if programmingID != 0 {
-			lab, err = s.labService.GetLabByID(userID, labPathID)
-		} else {
-			lab, err = s.labService.GetLabByID(userID, 1)
-		}
-		if err != nil {
-			return "", service_errors.NewServiceErrorWithMessage(404, "Error While Getting Lab")
-		}
-		if lab == nil {
-			return "", service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
-		}
-		for _, codeTmp := range lab.GetQuest().GetCodeTemplates() {
-			if codeTmp.GetProgrammingID() == inventoryInformation.GetID() {
-				codeTemplate = codeTmp
-			}
-		}
-		frontendContent := s.CodeFrontendTemplateGenerator(inventoryInformation.GetName(), lab.GetQuest().GetFuncName(), codeTemplate.GetFrontend(), lab.GetQuest().GetParams(), lab.GetQuest().GetReturns(), codeTemplate.GetQuestImports())
-		return frontendContent, nil
-	} else if labPathType == domains.TypePath {
-		if programmingID != 0 {
-			path, err = s.roadService.GetRoadByID(userID, programmingID, labPathID)
-		} else {
-			path, err = s.roadService.GetRoadByID(userID, programmingID, 1)
-		}
-
-		if err != nil {
-			return "", service_errors.NewServiceErrorWithMessage(404, "Error While Getting Path")
-		}
-		if path == nil {
-			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
-		}
-		codeTemplate = path.GetQuest().GetCodeTemplates()[0]
-		frontendContent := s.CodeFrontendTemplateGenerator(inventoryInformation.GetName(), path.GetQuest().GetFuncName(), codeTemplate.GetFrontend(), path.GetQuest().GetParams(), path.GetQuest().GetReturns(), codeTemplate.GetQuestImports())
-		return frontendContent, nil
-	}
-
-	return frontendContent, nil
-
-}
-*/

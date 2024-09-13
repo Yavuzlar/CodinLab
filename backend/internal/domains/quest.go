@@ -23,52 +23,6 @@ func (t *Test) SetOutput(output []interface{}) {
 	t.output = output
 }
 
-// Param represents a parameter of a function.
-type Param struct {
-	name string
-	typ  string
-}
-
-// Getter and Setter methods for Param
-func (p *Param) GetName() string {
-	return p.name
-}
-
-func (p *Param) SetName(name string) {
-	p.name = name
-}
-
-func (p *Param) GetType() string {
-	return p.typ
-}
-
-func (p *Param) SetType(typ string) {
-	p.typ = typ
-}
-
-// Return represents a parameter of a function.
-type Returns struct {
-	name string
-	typ  string
-}
-
-// Getter and Setter methods for Return
-func (p *Returns) GetName() string {
-	return p.name
-}
-
-func (p *Returns) SetName(name string) {
-	p.name = name
-}
-
-func (p *Returns) GetType() string {
-	return p.typ
-}
-
-func (p *Returns) SetType(typ string) {
-	p.typ = typ
-}
-
 type CodeTemplate struct {
 	programmingID int
 	templatePath  string
@@ -95,8 +49,6 @@ type Quest struct {
 	difficulty   int
 	funcName     string
 	tests        []Test
-	params       []Param
-	returns      []Returns
 	questImports []string
 	codeTemplate []CodeTemplate
 }
@@ -133,22 +85,6 @@ func (q *Quest) SetTests(tests []Test) {
 	q.tests = tests
 }
 
-func (q *Quest) GetParams() []Param {
-	return q.params
-}
-
-func (q *Quest) SetParams(params []Param) {
-	q.params = params
-}
-
-func (q *Quest) GetReturns() []Returns {
-	return q.returns
-}
-
-func (q *Quest) SetReturns(returns []Returns) {
-	q.returns = returns
-}
-
 func (q *Quest) GetQuestImports() []string {
 	return q.questImports
 }
@@ -165,22 +101,6 @@ func NewTest(input, output []interface{}) *Test {
 	}
 }
 
-// NewParam creates a new instance of Param
-func NewParam(name, typ string) *Param {
-	return &Param{
-		name: name,
-		typ:  typ,
-	}
-}
-
-// NewReturn creates a new instance of Return
-func NewReturn(name, typ string) *Returns {
-	return &Returns{
-		name: name,
-		typ:  typ,
-	}
-}
-
 func NewCodeTemplate(programmingID int, templatePath string) *CodeTemplate {
 	return &CodeTemplate{
 		programmingID: programmingID,
@@ -189,14 +109,11 @@ func NewCodeTemplate(programmingID int, templatePath string) *CodeTemplate {
 }
 
 // NewQuest creates a new instance of Quest
-func NewQuest(difficulty int, funcName string, tests []Test, params []Param, returns []Returns, codeTemplates []CodeTemplate, questImports []string) *Quest {
+func NewQuest(difficulty int, funcName string, tests []Test, codeTemplates []CodeTemplate) *Quest {
 	return &Quest{
 		difficulty:   difficulty,
 		funcName:     funcName,
 		tests:        tests,
-		params:       params,
-		returns:      returns,
 		codeTemplate: codeTemplates,
-		questImports: questImports,
 	}
 }
