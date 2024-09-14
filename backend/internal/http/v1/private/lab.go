@@ -18,6 +18,7 @@ import (
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs", h.GetLabs)
 	root.Get("/lab/:labID", h.GetLabByID)
+	root.Get("/lab/reset/:labID", h.ResetLabHistory)
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
@@ -266,4 +267,57 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, logs, nil)
+}
+
+// @Tags Lab
+// @Summary ResetLabHistory
+// @Description Reset Lab By Programming Language ID & Lab ID
+// @Accept json
+// @Produce json
+// @Param labID path string true "Lab ID"
+// @Param programmingID query string false "Programming Language ID"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/lab/reset/{labID} [get]
+func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+
+	labID := c.Params("labID")
+	programmingID := c.Query("programmingID")
+
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return response.Response(400, "Invalid Programming Language ID", err)
+	}
+
+	intLabID, err := strconv.Atoi(labID)
+	if err != nil {
+		return response.Response(400, "Invalid Lab ID", err)
+	}
+
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
+	if err != nil {
+		return response.Response(500, "Programming Language Information Error", err)
+	}
+
+	if inventoryInformation == nil {
+		return response.Response(404, "Programming Language Not Found", nil)
+	}
+
+	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, domains.TypeLab, intProgrammingID, intLabID, inventoryInformation.GetFileExtension())
+	if err != nil {
+		return response.Response(500, "Frontend Template Reset Error", err)
+	}
+
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypeLab, intProgrammingID, intLabID, inventoryInformation.GetFileExtension())
+	if err != nil {
+		return err
+	}
+
+	frontendTemplateDto := h.dtoManager.LabDTOManager.ToFrontendTemplateDto(frontendTemplate)
+
+	if len(frontendTemplateDto.Template) == 0 {
+		return response.Response(404, "Frontend Template could not be created ", nil)
+	}
+
+	return response.Response(200, "ResetLabHistory successful", frontendTemplateDto)
 }

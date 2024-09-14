@@ -280,6 +280,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/lab/reset/{labID}": {
+            "get": {
+                "description": "Reset Lab By Programming Language ID \u0026 Lab ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "ResetLabHistory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Lab ID",
+                        "name": "labID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/lab/{labID}": {
             "get": {
                 "description": "Get Lab By Programming Language ID \u0026 Lab ID",
@@ -792,6 +830,45 @@ const docTemplate = `{
                     "Road"
                 ],
                 "summary": "GetUserRoadProgressStats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/road/reset/{programmingID}/{pathID}": {
+            "get": {
+                "description": "Reset Path By Programming Language ID \u0026 Path ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "ResetPathHistory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Path ID",
+                        "name": "pathID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

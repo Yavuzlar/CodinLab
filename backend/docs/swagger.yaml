@@ -424,6 +424,31 @@ paths:
       summary: Answer
       tags:
       - Lab
+  /private/lab/reset/{labID}:
+    get:
+      consumes:
+      - application/json
+      description: Reset Lab By Programming Language ID & Lab ID
+      parameters:
+      - description: Lab ID
+        in: path
+        name: labID
+        required: true
+        type: string
+      - description: Programming Language ID
+        in: query
+        name: programmingID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: ResetLabHistory
+      tags:
+      - Lab
   /private/labs/:
     get:
       consumes:
@@ -755,6 +780,32 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: GetUserRoadProgressStats
+      tags:
+      - Road
+  /private/road/reset/{programmingID}/{pathID}:
+    get:
+      consumes:
+      - application/json
+      description: Reset Path By Programming Language ID & Path ID
+      parameters:
+      - description: Path ID
+        in: path
+        name: pathID
+        required: true
+        type: string
+      - description: Programming Language ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: ResetPathHistory
       tags:
       - Road
   /private/start/{programmingID}:

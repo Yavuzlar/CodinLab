@@ -128,3 +128,13 @@ func (m *LabDTOManager) ToUserProgrammingLanguageStatsDTO(stats []domains.Progra
 type AnswerLabDTO struct {
 	UserCode string `json:"userCode"`
 }
+
+func (m *LabDTOManager) ToFrontendTemplateDto(frontendTemplate string) LabFrontendTemplateDto {
+	return LabFrontendTemplateDto{
+		Template: frontendTemplate,
+	}
+}
+
+type LabFrontendTemplateDto struct {
+	Template string `json:"template"`
+}

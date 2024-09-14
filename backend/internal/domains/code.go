@@ -13,4 +13,5 @@ type ICodeService interface {
 	CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []Test) (string, error)
 	CodeFrontendTemplateGenerator(templatePath, funcName string) (string, error)
 	GetFrontendTemplate(userID, labRoadType string, programmingID, labPathID int, fileExtention string) (string, error)
+	DeleteFrontendTemplateHistory(userID, labRoadType string, programmingID, labPathID int, fileExtention string) (err error)
 }

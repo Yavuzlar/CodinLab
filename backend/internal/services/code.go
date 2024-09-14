@@ -69,21 +69,8 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID string, program
 		return "", err
 	}
 
-	mainDir := "usercodes"
-	userDir := mainDir + "/" + userID
-	labDir := fmt.Sprintf("%v/labs/", userDir)
-	pathDir := fmt.Sprintf("%v/paths/", userDir)
-	fileName := fmt.Sprintf("%v-%v.%v", programmingLanguageID, PathLabID, fileExtention)
-
-	var codePath, codeTmpPath string
-
-	if codeType == domains.TypeLab {
-		codePath = labDir + fileName
-		codeTmpPath = labDir + "tmp-" + fileName
-	} else if codeType == domains.TypePath {
-		codePath = pathDir + fileName
-		codeTmpPath = pathDir + "tmp-" + fileName
-	}
+	codePath := s.generateUserCodePath(userID, codeType, programmingLanguageID, PathLabID, fileExtention)
+	codeTmpPath := s.generateUserCodeTmpPath(userID, codeType, programmingLanguageID, PathLabID, fileExtention)
 
 	if codeType == domains.TypeLab {
 		if err := s.CreateFileAndWrite(codePath, content); err != nil {
@@ -185,6 +172,27 @@ func (s *codeService) GetFrontendTemplate(userID, labRoadType string, programmin
 	}
 
 	return frontendTemplate, nil
+}
+
+func (s *codeService) DeleteFrontendTemplateHistory(userID, labRoadType string, programmingID, labPathID int, fileExtention string) (err error) {
+
+	codePath := s.generateUserCodePath(userID, labRoadType, programmingID, labPathID, fileExtention)
+	if _, err := os.Stat(codePath); err == nil {
+		err := os.Remove(codePath)
+		if err != nil {
+			return service_errors.NewServiceErrorWithMessage(500, "Failed to delete file")
+		}
+	}
+
+	codeTmpPath := s.generateUserCodeTmpPath(userID, labRoadType, programmingID, labPathID, fileExtention)
+	if _, err := os.Stat(codeTmpPath); err == nil {
+		err := os.Remove(codeTmpPath)
+		if err != nil {
+			return service_errors.NewServiceErrorWithMessage(500, "Failed to delete file")
+		}
+	}
+
+	return nil
 }
 
 func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
@@ -330,4 +338,40 @@ func (s *codeService) readFrontendTemplateHistory(userID string, programmingLang
 	content := string(templateData)
 
 	return content
+}
+
+func (s *codeService) generateUserCodePath(userID, labRoadType string, programmingID, labPathID int, fileExtention string) string {
+	mainDir := "usercodes"
+	userDir := mainDir + "/" + userID
+	labDir := fmt.Sprintf("%v/labs/", userDir)
+	pathDir := fmt.Sprintf("%v/paths/", userDir)
+	fileName := fmt.Sprintf("%v-%v.%v", programmingID, labPathID, fileExtention)
+
+	var codePath string
+
+	if labRoadType == domains.TypeLab {
+		codePath = labDir + fileName
+	} else if labRoadType == domains.TypePath {
+		codePath = pathDir + fileName
+	}
+
+	return codePath
+}
+
+func (s *codeService) generateUserCodeTmpPath(userID, labRoadType string, programmingID, labPathID int, fileExtention string) string {
+	mainDir := "usercodes"
+	userDir := mainDir + "/" + userID
+	labDir := fmt.Sprintf("%v/labs/", userDir)
+	pathDir := fmt.Sprintf("%v/paths/", userDir)
+	fileName := fmt.Sprintf("%v-%v.%v", programmingID, labPathID, fileExtention)
+
+	var codeTmpPath string
+
+	if labRoadType == domains.TypeLab {
+		codeTmpPath = labDir + "tmp-" + fileName
+	} else if labRoadType == domains.TypePath {
+		codeTmpPath = pathDir + "tmp-" + fileName
+	}
+
+	return codeTmpPath
 }
