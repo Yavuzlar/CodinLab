@@ -97,6 +97,14 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	session := session_store.GetSessionData(c)
 	userID := session.UserID
 
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
+	if err != nil {
+		return response.Response(500, "Programming Language Information Error", err)
+	}
+	if inventoryInformation == nil {
+		return response.Response(404, "Programming Language Not Found", nil)
+	}
+
 	roadData, err := h.services.RoadService.GetRoadFilter(userID, intProgrammingID, intPathID, nil, nil)
 	if err != nil {
 		return err
@@ -105,7 +113,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 		return response.Response(404, "Path not found", nil)
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypePath, intProgrammingID, intPathID)
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypePath, intProgrammingID, intPathID, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}

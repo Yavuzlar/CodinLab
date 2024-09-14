@@ -152,6 +152,14 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		return response.Response(400, "Invalid Lab or Path ID", err)
 	}
 
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
+	if err != nil {
+		return response.Response(500, "Programming Language Information Error", err)
+	}
+	if inventoryInformation == nil {
+		return response.Response(404, "Programming Language Not Found", nil)
+	}
+
 	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, intProgrammingID, nil, nil)
 	if err != nil {
 		return err
@@ -160,7 +168,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		return response.Response(404, "Lab not found", nil)
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypeLab, intProgrammingID, intLabID)
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypeLab, intProgrammingID, intLabID, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}
