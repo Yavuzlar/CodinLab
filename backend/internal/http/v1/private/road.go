@@ -273,6 +273,14 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 		return response.Response(404, "Programming Language Not Found", nil)
 	}
 
+	roadData, err := h.services.RoadService.GetRoadFilter(userSession.UserID, intProgrammingID, intPathID, nil, nil)
+	if err != nil {
+		return err
+	}
+	if len(roadData) == 0 {
+		return response.Response(404, "Path not found", nil)
+	}
+
 	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, domains.TypePath, intProgrammingID, intPathID, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return response.Response(500, "Frontend Template Reset Error", err)
@@ -283,7 +291,6 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 		return err
 	}
 
-	fmt.Println(frontendTemplate)
 	frontendTemplateDto := h.dtoManager.RoadDTOManager.ToFrontendTemplateDto(frontendTemplate)
 	if len(frontendTemplateDto.Template) == 0 {
 		return response.Response(404, "Frontend Template could not be created ", nil)
