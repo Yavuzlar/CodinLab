@@ -135,9 +135,15 @@ func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName strin
 	return frontend, nil
 }
 
-func (s *codeService) GetFrontendTemplate(userID, labRoadType string, programmingID, labPathID int) (string, error) {
+func (s *codeService) GetFrontendTemplate(userID, labRoadType string, programmingID, labPathID int, fileExtention string) (string, error) {
 	var frontendTemplate string
+
 	if labRoadType == domains.TypeLab {
+		history := s.readFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention)
+		if len(history) > 0 {
+			return history, nil
+		}
+
 		lab, err := s.labService.GetLabByID(userID, labPathID)
 		if err != nil {
 			return "", service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
@@ -155,6 +161,11 @@ func (s *codeService) GetFrontendTemplate(userID, labRoadType string, programmin
 		}
 
 	} else if labRoadType == domains.TypePath {
+		history := s.readFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention)
+		if len(history) > 0 {
+			return history, nil
+		}
+
 		path, err := s.roadService.GetRoadByID(userID, programmingID, labPathID)
 		if err != nil {
 			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
@@ -294,4 +305,29 @@ func (s *codeService) readTemplate(templatePath string) (map[string]string, erro
 	}
 
 	return template, nil
+}
+
+func (s *codeService) readFrontendTemplateHistory(userID string, programmingLanguageID, PathLabID int, codeType, fileExtention string) string {
+
+	mainDir := "usercodes"
+	userDir := mainDir + "/" + userID
+	labDir := fmt.Sprintf("%v/labs/", userDir)
+	pathDir := fmt.Sprintf("%v/paths/", userDir)
+	fileName := fmt.Sprintf("%v-%v.%v", programmingLanguageID, PathLabID, fileExtention)
+
+	var codePath string
+
+	if codeType == domains.TypeLab {
+		codePath = labDir + fileName
+	} else if codeType == domains.TypePath {
+		codePath = pathDir + fileName
+	}
+
+	templateData, err := os.ReadFile(codePath)
+	if err != nil {
+		return ""
+	}
+	content := string(templateData)
+
+	return content
 }
