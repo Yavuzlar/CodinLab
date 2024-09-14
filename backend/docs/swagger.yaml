@@ -349,6 +349,11 @@ paths:
       consumes:
       - application/json
       description: Get User Level
+      parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       produces:
       - application/json
       responses:
@@ -544,6 +549,25 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: DummyLogData
+      tags:
+      - Log
+  /private/log/rates:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves language usage rates
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Language Usage Rates
       tags:
       - Log
   /private/log/road:

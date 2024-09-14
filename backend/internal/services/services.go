@@ -27,8 +27,8 @@ func CreateNewServices(
 
 ) *Services {
 	utilsService := newUtilService(validatorService)
-	logService := newLogService(logRepositories, utilsService)
 	parserService := newParserService(utilsService)
+	logService := newLogService(logRepositories, utilsService, parserService)
 	levelService := newLevelService(utilsService, logService, parserService, userRepositories)
 	userService := newUserService(userRepositories, logService, parserService, utilsService)
 	labService := newLabService(utilsService, logService, parserService)

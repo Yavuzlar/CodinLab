@@ -23,16 +23,23 @@ func (h *PrivateHandler) initHomeRoutes(root fiber.Router) {
 // @Description Get User Level
 // @Accept json
 // @Produce json
+// @Param Language header string false "Language"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/home/level [get]
 func (h *PrivateHandler) GetUserLevel(c *fiber.Ctx) error {
 
 	userSession := session_store.GetSessionData(c)
+
+	language := c.Get("Language")
+	if language == "" {
+		language = "en"
+	}
+
 	userLevel, err := h.services.HomeService.GetUserLevel(c.Context(), userSession.UserID)
 	if err != nil {
 		return err
 	}
-	languageLevelDto := h.dtoManager.HomeDTOManager.ToLanguageLevelDTO(userLevel.Languages())
+	languageLevelDto := h.dtoManager.HomeDTOManager.ToLanguageLevelDTO(userLevel.Languages(), language)
 	userLevelDto := h.dtoManager.HomeDTOManager.ToUserLevelDTO(userLevel, languageLevelDto)
 
 	return response.Response(200, "GetUserLevel successful", userLevelDto)

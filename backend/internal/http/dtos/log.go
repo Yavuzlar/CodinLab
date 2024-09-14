@@ -36,6 +36,27 @@ type SolutionsHoursByProgrammingDTO struct {
 	RoadHours     float64 `json:"roadHours"`
 }
 
+type LanguageUsageRatesDTO struct {
+	IconPath        string  `json:"iconPath"`
+	Name            string  `json:"name"`
+	UsagePercentage float32 `json:"usagePercentage"`
+}
+
+func (m *LogDTOManager) ToLanguageUsageRatesDTO(log domains.LanguageUsageRates) LanguageUsageRatesDTO {
+	return LanguageUsageRatesDTO{
+		IconPath:        log.GetIconPath(),
+		Name:            log.GetName(),
+		UsagePercentage: log.GetUsagePercentage(),
+	}
+}
+
+func (m *LogDTOManager) ToLanguageUsageRatesDTOs(logs []domains.LanguageUsageRates) (languageUsageRatesDTOs []LanguageUsageRatesDTO) {
+	for _, log := range logs {
+		languageUsageRatesDTOs = append(languageUsageRatesDTOs, m.ToLanguageUsageRatesDTO(log))
+	}
+	return
+}
+
 func (m *LogDTOManager) ToLogDTO(log domains.Log) LogDTO {
 	return LogDTO{
 		ID:            log.ID(),
@@ -57,9 +78,9 @@ func (m *LogDTOManager) ToLogDTOs(logs []domains.Log) []LogDTO {
 
 func (m *LogDTOManager) ToSolutionsByDayDTO(solutionsByDay domains.SolutionsByDay) SolutionsByDayDTO {
 	return SolutionsByDayDTO{
-		Date:      solutionsByDay.Date,
-		RoadCount: solutionsByDay.RoadCount,
-		LabCount:  solutionsByDay.LabCount,
+		Date:      solutionsByDay.GetDate(),
+		RoadCount: solutionsByDay.GetRoadCount(),
+		LabCount:  solutionsByDay.GetLabCount(),
 	}
 }
 
@@ -73,9 +94,9 @@ func (m *LogDTOManager) ToSolutionsByDayDTOs(solutionsByDays []domains.Solutions
 
 func (m *LogDTOManager) ToSolutionsHoursByProgrammingDTO(domain domains.SolutionsHoursByProgramming) SolutionsHoursByProgrammingDTO {
 	return SolutionsHoursByProgrammingDTO{
-		ProgrammingID: domain.ProgrammingID,
-		RoadHours:     domain.RoadHours,
-		LabHours:      domain.LabHours,
+		ProgrammingID: domain.GetProgrammingID(),
+		RoadHours:     domain.GetRoadHours(),
+		LabHours:      domain.GetLabHours(),
 	}
 }
 
