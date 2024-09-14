@@ -10,67 +10,46 @@ func NewRoadDTOManager() RoadDTOManager {
 	return RoadDTOManager{}
 }
 
-type LanguageDTO struct {
-	Lang        string `json:"lang"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Content     string `json:"content"`
-	Note        string `json:"note"`
-}
-
-func (m *RoadDTOManager) ToLanguageDTO(language *domains.LanguageRoad) LanguageDTO {
-	return LanguageDTO{
-		Lang:        language.GetLang(),
-		Title:       language.GetTitle(),
-		Description: language.GetDescription(),
-		Content:     language.GetContent(),
-		Note:        language.GetNote(),
-	}
-}
-
-func (m *RoadDTOManager) ToLanguageDTOs(languages []domains.LanguageRoad) []LanguageDTO {
-	var languageDTOs []LanguageDTO
-	for _, lang := range languages {
-		languageDTOs = append(languageDTOs, m.ToLanguageDTO(&lang))
-	}
-	return languageDTOs
-}
-
 type LanguageRoadDTO struct {
 	Lang        string `json:"lang"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
+	Note        string `json:"note"`
+	Content     string `json:"content"`
 }
 
-func (m *RoadDTOManager) ToLanguageRoadDTO(language *domains.LanguageRoad) LanguageRoadDTO {
-	return LanguageRoadDTO{
-		Lang:        language.GetLang(),
-		Title:       language.GetTitle(),
-		Description: language.GetDescription(),
+func (m *RoadDTOManager) ToLanguageRoadDTO(languageRoads []domains.LanguageRoad, langauge string) LanguageRoadDTO {
+	var languageRoadDto LanguageRoadDTO
+
+	for _, languageRoad := range languageRoads {
+		if languageRoad.GetLang() == langauge {
+			languageRoadDto = LanguageRoadDTO{
+				Lang:        languageRoad.GetLang(),
+				Title:       languageRoad.GetTitle(),
+				Description: languageRoad.GetDescription(),
+				Note:        languageRoad.GetNote(),
+				Content:     languageRoad.GetContent(),
+			}
+		}
 	}
-}
-func (m *RoadDTOManager) ToLanguageRoadDTOs(language []domains.LanguageRoad) []LanguageRoadDTO {
-	var languageDTOs []LanguageRoadDTO
-	for _, lang := range language {
-		languageDTOs = append(languageDTOs, m.ToLanguageRoadDTO(&lang))
-	}
-	return languageDTOs
+
+	return languageRoadDto
 }
 
 type PathDTO struct {
-	ID         int           `json:"id,omitempty"`
-	Name       string        `json:"name,omitempty"`
-	Language   []LanguageDTO `json:"languages"`
-	Template   string        `json:"template,omitempty"`
-	Difficulty int           `json:"difficulty"`
-	IsStarted  bool          `json:"isStarted"`
-	IsFinished bool          `json:"isFinished"`
+	ID         int             `json:"id,omitempty"`
+	Name       string          `json:"name,omitempty"`
+	Language   LanguageRoadDTO `json:"language"`
+	Template   string          `json:"template,omitempty"`
+	Difficulty int             `json:"difficulty"`
+	IsStarted  bool            `json:"isStarted"`
+	IsFinished bool            `json:"isFinished"`
 }
 
-func (m *RoadDTOManager) ToPathDTO(path domains.Path, languages []LanguageDTO, template string) PathDTO {
+func (m *RoadDTOManager) ToPathDTO(path domains.Path, language LanguageRoadDTO, template string) PathDTO {
 	return PathDTO{
 		ID:         path.GetID(),
-		Language:   languages,
+		Language:   language,
 		Template:   template,
 		Difficulty: path.GetQuest().GetDifficulty(),
 		IsFinished: path.GetIsFinished(),
@@ -78,19 +57,19 @@ func (m *RoadDTOManager) ToPathDTO(path domains.Path, languages []LanguageDTO, t
 	}
 }
 
-type GetRoadPathDTO struct { //this dto is used for get Roads API
-	ID         int               `json:"id,omitempty"`
-	Name       string            `json:"name,omitempty"`
-	Language   []LanguageRoadDTO `json:"languages"`
-	Difficulty int               `json:"difficulty"`
-	IsStarted  bool              `json:"isStarted"`
-	IsFinished bool              `json:"isFinished"`
+type GetRoadPathDTO struct {
+	ID         int             `json:"id,omitempty"`
+	Name       string          `json:"name,omitempty"`
+	Language   LanguageRoadDTO `json:"languages"`
+	Difficulty int             `json:"difficulty"`
+	IsStarted  bool            `json:"isStarted"`
+	IsFinished bool            `json:"isFinished"`
 }
 
-func (m *RoadDTOManager) ToRoadPathDTO(path domains.Path, languages []LanguageRoadDTO) GetRoadPathDTO {
+func (m *RoadDTOManager) ToRoadPathDTO(path domains.Path, language LanguageRoadDTO) GetRoadPathDTO {
 	return GetRoadPathDTO{
 		ID:         path.GetID(),
-		Language:   languages,
+		Language:   language,
 		Difficulty: path.GetQuest().GetDifficulty(),
 		IsFinished: path.GetIsFinished(),
 		IsStarted:  path.GetIsStarted(),

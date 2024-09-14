@@ -57,13 +57,11 @@ definitions:
       isStarted:
         type: boolean
       languages:
-        items:
-          $ref: '#/definitions/dto.LanguageRoadDTO'
-        type: array
+        $ref: '#/definitions/dto.LanguageRoadDTO'
       name:
         type: string
     type: object
-  dto.LanguageDTO:
+  dto.LanguageRoadDTO:
     properties:
       content:
         type: string
@@ -72,15 +70,6 @@ definitions:
       lang:
         type: string
       note:
-        type: string
-      title:
-        type: string
-    type: object
-  dto.LanguageRoadDTO:
-    properties:
-      description:
-        type: string
-      lang:
         type: string
       title:
         type: string
@@ -123,10 +112,8 @@ definitions:
         type: boolean
       isStarted:
         type: boolean
-      languages:
-        items:
-          $ref: '#/definitions/dto.LanguageDTO'
-        type: array
+      language:
+        $ref: '#/definitions/dto.LanguageRoadDTO'
       name:
         type: string
       template:
@@ -378,6 +365,10 @@ paths:
       - application/json
       description: Get Lab By Programming Language ID & Lab ID
       parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       - description: Lab ID
         in: path
         name: labID
@@ -434,6 +425,10 @@ paths:
       - application/json
       description: Get Labs
       parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       - description: Programming Language ID
         in: query
         name: programmingID
@@ -617,6 +612,10 @@ paths:
       - application/json
       description: Get Road with Paths
       parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       - description: programmingID
         in: path
         name: programmingID
@@ -690,6 +689,10 @@ paths:
       - application/json
       description: Get Path By ID
       parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       - description: Programming ID
         in: path
         name: programmingID
