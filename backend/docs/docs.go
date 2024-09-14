@@ -288,6 +288,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Lab ID",
                         "name": "labID",
                         "in": "path",
@@ -324,6 +330,12 @@ const docTemplate = `{
                 ],
                 "summary": "GetLabs",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Programming Language ID",
@@ -689,6 +701,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Programming ID",
                         "name": "programmingID",
                         "in": "path",
@@ -761,6 +779,12 @@ const docTemplate = `{
                 ],
                 "summary": "GetRoads",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "programmingID",
@@ -1100,17 +1124,14 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "languages": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.LanguageRoadDTO"
-                    }
+                    "$ref": "#/definitions/dto.LanguageRoadDTO"
                 },
                 "name": {
                     "type": "string"
                 }
             }
         },
-        "dto.LanguageDTO": {
+        "dto.LanguageRoadDTO": {
             "type": "object",
             "properties": {
                 "content": {
@@ -1123,20 +1144,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "note": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.LanguageRoadDTO": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "lang": {
                     "type": "string"
                 },
                 "title": {
@@ -1200,11 +1207,8 @@ const docTemplate = `{
                 "isStarted": {
                     "type": "boolean"
                 },
-                "languages": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.LanguageDTO"
-                    }
+                "language": {
+                    "$ref": "#/definitions/dto.LanguageRoadDTO"
                 },
                 "name": {
                     "type": "string"

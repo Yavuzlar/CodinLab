@@ -84,27 +84,36 @@ func (h *PrivateHandler) GetUserLabProgressStats(c *fiber.Ctx) error {
 // @Description Get Labs
 // @Accept json
 // @Produce json
+// @Param Language header string false "Language"
 // @Param programmingID query string false "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/labs/ [get]
 func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
-	programmingID := c.Query("programmingID")
 
-	intProgrammingID, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalid Programming Language ID", nil)
+	programmingID := c.Query("programmingID")
+	language := c.Get("Language")
+	if language == "" {
+		language = "en"
 	}
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, 0, intProgrammingID, nil, nil)
-	if err != nil {
-		return err
+	var labData []domains.Lab
+	if programmingID != "" {
+		intProgrammingID, err := strconv.Atoi(programmingID)
+		if err != nil {
+			return response.Response(400, "Invalid Programming Language ID", nil)
+		}
+
+		labData, err = h.services.LabService.GetLabsFilter(userSession.UserID, 0, intProgrammingID, nil, nil)
+		if err != nil {
+			return err
+		}
 	}
 
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
-		languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(labCollection.GetLanguages())
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, languageDTOs))
+		languageDTO := h.dtoManager.LabDTOManager.ToLanguageDTO(labCollection.GetLanguages(), language)
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, languageDTO))
 	}
 	if len(labDTOList) == 0 {
 		return response.Response(404, "Labs not found", nil)
@@ -118,12 +127,18 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 // @Description Get Lab By Programming Language ID & Lab ID
 // @Accept json
 // @Produce json
+// @Param Language header string false "Language"
 // @Param labID path string true "Lab ID"
 // @Param programmingID query string false "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/lab/{labID} [get]
 func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
+
+	language := c.Get("Language")
+	if language == "" {
+		language = "en"
+	}
 	labID := c.Params("labID")
 	programmingID := c.Query("programmingID")
 
@@ -152,8 +167,8 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
-		languageDTOs := h.dtoManager.LabDTOManager.ToLanguageDTOs(labCollection.GetLanguages())
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTOs, frontendTemplate))
+		languageDTO := h.dtoManager.LabDTOManager.ToLanguageDTO(labCollection.GetLanguages(), language)
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTO, frontendTemplate))
 	}
 	if len(labDTOList) == 0 {
 		return response.Response(404, "Labs not found", nil)
