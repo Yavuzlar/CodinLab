@@ -303,6 +303,14 @@ func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 		return response.Response(404, "Programming Language Not Found", nil)
 	}
 
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, intProgrammingID, nil, nil)
+	if err != nil {
+		return err
+	}
+	if len(labData) == 0 {
+		return response.Response(404, "Lab not found", nil)
+	}
+
 	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, domains.TypeLab, intProgrammingID, intLabID, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return response.Response(500, "Frontend Template Reset Error", err)
