@@ -16,6 +16,7 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
 	roadRoute.Get("/:programmingID", h.GetRoad)
 	roadRoute.Get("/path/:programmingID/:pathID", h.GetPath)
+	roadRoute.Get("/reset/:programmingID/:pathID", h.ResetPathHistory)
 	roadRoute.Get("/general/stats", h.GetUserLanguageRoadStats)
 	roadRoute.Get("/path/data", h.AddDummyRoadData)
 	roadRoute.Get("/progress/stats", h.GetUserRoadProgressStats)
@@ -236,4 +237,57 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, logs, nil)
+}
+
+// @Tags Road
+// @Summary ResetPathHistory
+// @Description Reset Path By Programming Language ID & Path ID
+// @Accept json
+// @Produce json
+// @Param pathID path string true "Path ID"
+// @Param programmingID path string true "Programming Language ID"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/reset/{programmingID}/{pathID} [get]
+func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+
+	pathID := c.Params("pathID")
+	programmingID := c.Params("programmingID")
+
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return response.Response(400, "Invalid Programming Language ID", err)
+	}
+
+	intPathID, err := strconv.Atoi(pathID)
+	if err != nil {
+		return response.Response(400, "Invalid Path ID", err)
+	}
+
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
+	if err != nil {
+		return response.Response(500, "Programming Language Information Error", err)
+	}
+
+	if inventoryInformation == nil {
+		return response.Response(404, "Programming Language Not Found", nil)
+	}
+
+	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, domains.TypePath, intProgrammingID, intPathID, inventoryInformation.GetFileExtension())
+	if err != nil {
+		return response.Response(500, "Frontend Template Reset Error", err)
+	}
+
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypePath, intProgrammingID, intPathID, inventoryInformation.GetFileExtension())
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(frontendTemplate)
+	frontendTemplateDto := h.dtoManager.RoadDTOManager.ToFrontendTemplateDto(frontendTemplate)
+	if len(frontendTemplateDto.Template) == 0 {
+		return response.Response(404, "Frontend Template could not be created ", nil)
+	}
+
+	return response.Response(200, "ResetPathHistory successful", frontendTemplateDto)
 }

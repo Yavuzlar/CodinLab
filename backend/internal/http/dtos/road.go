@@ -154,3 +154,13 @@ type AnswerRoadDTO struct {
 	PathID        int    `json:"pathID"` */
 	UserCode string `json:"userCode"`
 }
+
+func (m *RoadDTOManager) ToFrontendTemplateDto(frontendTemplate string) RoadFrontendTemplateDto {
+	return RoadFrontendTemplateDto{
+		Template: frontendTemplate,
+	}
+}
+
+type RoadFrontendTemplateDto struct {
+	Template string `json:"template"`
+}
