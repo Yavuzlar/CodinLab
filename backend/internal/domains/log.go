@@ -29,6 +29,7 @@ type ILogService interface {
 	IsExists(ctx context.Context, userID, logType, content string, programmingID, labPathID int32) (isExists bool, err error)
 	CountSolutionsByDay(ctx context.Context) (solutions []SolutionsByDay, err error)
 	CountSolutionsHoursByProgrammingLast7Days(ctx context.Context) (solutions []SolutionsHoursByProgramming, err error)
+	LanguageUsageRates(ctx context.Context) (languageUsageRates []LanguageUsageRates, err error)
 }
 
 // LogFilter is the struct that represents the log filter.
@@ -54,16 +55,92 @@ type Log struct {
 
 // lab and road numbers solved day by day
 type SolutionsByDay struct {
-	Date      time.Time
-	RoadCount int
-	LabCount  int
+	date      time.Time
+	roadCount int
+	labCount  int
+}
+
+func (s *SolutionsByDay) GetDate() time.Time {
+	return s.date
+}
+
+func (s *SolutionsByDay) SetDate(date time.Time) {
+	s.date = date
+}
+
+func (s *SolutionsByDay) GetRoadCount() int {
+	return s.roadCount
+}
+
+func (s *SolutionsByDay) SetRoadCount(roadCount int) {
+	s.roadCount = roadCount
+}
+
+func (s *SolutionsByDay) GetLabCount() int {
+	return s.labCount
+}
+
+func (s *SolutionsByDay) SetLabCount(labCount int) {
+	s.labCount = labCount
 }
 
 // SolutionsHoursByProgramming represents the total hours spent on lab and road solutions for each programming language.
 type SolutionsHoursByProgramming struct {
-	ProgrammingID int32
-	LabHours      float64
-	RoadHours     float64
+	programmingID int32
+	labHours      float64
+	roadHours     float64
+}
+
+func (s *SolutionsHoursByProgramming) GetProgrammingID() int32 {
+	return s.programmingID
+}
+
+func (s *SolutionsHoursByProgramming) SetProgrammingID(programmingID int32) {
+	s.programmingID = programmingID
+}
+
+func (s *SolutionsHoursByProgramming) GetLabHours() float64 {
+	return s.labHours
+}
+
+func (s *SolutionsHoursByProgramming) SetLabHours(labHours float64) {
+	s.labHours = labHours
+}
+
+func (s *SolutionsHoursByProgramming) GetRoadHours() float64 {
+	return s.roadHours
+}
+
+func (s *SolutionsHoursByProgramming) SetRoadHours(roadHours float64) {
+	s.roadHours = roadHours
+}
+
+type LanguageUsageRates struct {
+	iconPath        string
+	name            string
+	usagePercentage float32
+}
+
+func (s *LanguageUsageRates) GetIconPath() string {
+	return s.iconPath
+}
+
+func (s *LanguageUsageRates) SetIconPath(iconPath string) {
+	s.iconPath = iconPath
+}
+func (s *LanguageUsageRates) GetName() string { //language name
+	return s.name
+}
+
+func (s *LanguageUsageRates) SetName(name string) {
+	s.name = name
+}
+func (s *LanguageUsageRates) GetUsagePercentage() float32 {
+	return s.usagePercentage
+}
+
+func (s *LanguageUsageRates) SetUsagePercentage(usagePercentage float32) {
+	s.usagePercentage = usagePercentage
 }
 
 // NewLog creates a new log

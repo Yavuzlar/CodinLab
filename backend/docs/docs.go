@@ -215,6 +215,14 @@ const docTemplate = `{
                     "Home"
                 ],
                 "summary": "GetUserLevel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -508,6 +516,35 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/log/rates": {
+            "get": {
+                "description": "Retrieves language usage rates",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Get Language Usage Rates",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/response.BaseResponse"
                         }

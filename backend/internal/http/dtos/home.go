@@ -30,13 +30,15 @@ func (m *HomeDTOManager) ToUserLevelDTO(userLevel *domains.UserLevel, languagesD
 	}
 }
 
-func (m *HomeDTOManager) ToLanguageLevelDTO(languageLevel []domains.LanguageLevel) []LanguageLevelDTO {
+func (m *HomeDTOManager) ToLanguageLevelDTO(languageLevel []domains.LanguageLevel, language string) []LanguageLevelDTO {
 	var languageLevelDTOs []LanguageLevelDTO
 	for _, lang := range languageLevel {
-		languageLevelDTOs = append(languageLevelDTOs, LanguageLevelDTO{
-			Lang:        lang.Lang(),
-			Description: lang.Description(),
-		})
+		if lang.Lang() == language {
+			languageLevelDTOs = append(languageLevelDTOs, LanguageLevelDTO{
+				Lang:        lang.Lang(),
+				Description: lang.Description(),
+			})
+		}
 	}
 	return languageLevelDTOs
 }

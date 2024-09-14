@@ -11,16 +11,19 @@ import (
 
 type logService struct {
 	logRepositories domains.ILogRepository
+	parserService   domains.IParserService
 	utils           IUtilService
 }
 
 func newLogService(
 	logRepositories domains.ILogRepository,
 	utils IUtilService,
+	parserService domains.IParserService,
 ) domains.ILogService {
 	return &logService{
 		logRepositories: logRepositories,
 		utils:           utils,
+		parserService:   parserService,
 	}
 }
 
@@ -174,4 +177,54 @@ func (l *logService) CountSolutionsHoursByProgrammingLast7Days(ctx context.Conte
 	}
 
 	return solutions, err
+}
+func (s *logService) LanguageUsageRates(ctx context.Context) (languageUsageRates []domains.LanguageUsageRates, err error) {
+	var rate int
+	programmingLanguages, _ := s.parserService.GetInventory()
+
+	roadLogs, err := s.GetByType(ctx, domains.TypePath)
+	if err != nil {
+		return nil, err
+	}
+
+	labLogs, err := s.GetByType(ctx, domains.TypeLab)
+	if err != nil {
+		return nil, err
+	}
+
+	roads, err := s.parserService.GetRoads()
+	if err != nil {
+		return nil, err
+	}
+
+	labs, err := s.parserService.GetLabs()
+	if err != nil {
+		return nil, err
+	}
+
+	total := len(roads) + len(labs)
+
+	var rates domains.LanguageUsageRates
+	for _, pl := range programmingLanguages {
+		rates.SetIconPath(pl.IconPath)
+		rates.SetName(pl.Name)
+		for _, path := range roadLogs {
+			if pl.ID == int(path.ProgrammingID()) {
+				if path.Content() == domains.ContentStarted {
+					rate++
+				}
+			}
+		}
+		for _, labs := range labLogs {
+			if pl.ID == int(labs.ProgrammingID()) {
+				if labs.Content() == domains.ContentStarted {
+					rate++
+				}
+			}
+		}
+		totalUsage := float32(float32(rate)/float32(total)) * 100
+		rates.SetUsagePercentage(totalUsage)
+		languageUsageRates = append(languageUsageRates, rates)
+	}
+	return
 }
