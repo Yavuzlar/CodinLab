@@ -91,33 +91,22 @@ func (s *labService) GetLabsFilter(userID string, labId, programmingID int, isSt
 
 	var labs []domains.Lab
 	for _, lab := range allLabs {
-		//found := false
 		if labId != 0 && lab.GetID() != labId {
 			continue
 		}
+
 		if isStarted != nil && lab.GetIsStarted() != *isStarted {
 			continue
 		}
 		if isFinished != nil && lab.GetIsFinished() != *isFinished {
 			continue
 		}
-		if lab.GetProgrammingID() != programmingID {
+
+		if programmingID != 0 && lab.GetProgrammingID() != programmingID {
 			continue
 		}
-		/* if programmingID != 0 {
-			for _, ct := range lab.GetQuest().GetCodeTemplates() {
-				if ct.GetProgrammingID() == programmingID {
-					found = true
-					break
-				}
-			}
-			if !found {
-				continue
-			}
-		} */
 
 		labs = append(labs, lab)
-
 	}
 
 	return labs, nil

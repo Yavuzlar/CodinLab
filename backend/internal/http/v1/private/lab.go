@@ -99,6 +99,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	}
 
 	var labData []domains.Lab
+	var err error
 	if programmingID != "" {
 		intProgrammingID, err := strconv.Atoi(programmingID)
 		if err != nil {
@@ -106,6 +107,11 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 		}
 
 		labData, err = h.services.LabService.GetLabsFilter(userSession.UserID, 0, intProgrammingID, nil, nil)
+		if err != nil {
+			return err
+		}
+	} else {
+		labData, err = h.services.LabService.GetLabsFilter(userSession.UserID, 0, 0, nil, nil)
 		if err != nil {
 			return err
 		}

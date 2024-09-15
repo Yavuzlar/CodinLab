@@ -1,0 +1,32 @@
+## FRONTEND
+
+package main;
+
+import "reflect"
+
+func $funcname$(s string) bool {
+    // Write your code here
+
+    return false
+}
+
+## DOCKER
+
+$usercode$
+
+func main(){
+    $checks$
+
+    fmt.Println("$success$")
+}
+
+## CHECK
+
+inputArr$rnd$ := []int{$input$}
+outputArr$rnd$ := []int{$output$}
+
+result$rnd$ := $funcname$(inputArr$rnd$)
+if (!reflect.DeepEqual(result$rnd$, outputArr$rnd$) ){
+    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    return
+}
