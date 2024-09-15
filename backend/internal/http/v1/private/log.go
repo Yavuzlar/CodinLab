@@ -29,18 +29,16 @@ func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 // @Success 200 {object} response.BaseResponse{data=[]dto.LogDTO}
 // @Router /private/log [get]
 func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
-	userID := c.Query("userID")
-	programmingID := c.Query("programmingID")
-	labRoadID := c.Query("labRoadID")
-	content := c.Query("content")
 	logType := c.Query("type")
+	userID := c.Query("userID")
+	content := c.Query("content")
+	labRoadID := c.Query("labRoadID")
+	programmingID := c.Query("programmingID")
 
 	logs, err := h.services.LogService.GetAllLogs(c.Context(), userID, programmingID, labRoadID, logType, content)
 	if err != nil {
 		return err
 	}
-
-	// Converts to logDto for json tags
 	logDTOs := h.dtoManager.LogDTOManager.ToLogDTOs(logs)
 
 	return response.Response(200, "Status OK", logDTOs)

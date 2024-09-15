@@ -163,14 +163,17 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/lab/answer/{programmingID}/{labID} [post]
 func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
+	labID := c.Params("labID")
+	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
+
 	var answerLabDTO dto.AnswerLabDTO
 	if err := c.BodyParser(&answerLabDTO); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "Invalid Format", err)
 	}
-	userSession := session_store.GetSessionData(c)
-
-	labID := c.Params("labID")
-	programmingID := c.Params("programmingID")
+	if err := h.services.UtilService.Validator().ValidateStruct(answerLabDTO); err != nil {
+		return err
+	}
 
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
@@ -225,10 +228,9 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/lab/reset/{programmingID}/{labID} [get]
 func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
-
 	labID := c.Params("labID")
 	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
 
 	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {

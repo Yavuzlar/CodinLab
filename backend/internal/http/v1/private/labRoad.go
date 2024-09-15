@@ -20,8 +20,8 @@ func (h *PrivateHandler) initLabRoadRoutes(root fiber.Router) {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/start/{programmingID} [get]
 func (h *PrivateHandler) Start(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
 	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
 
 	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {

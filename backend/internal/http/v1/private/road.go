@@ -32,9 +32,8 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 // @Success 200 {object} response.BaseResponse{data=dto.GetRoadDTO}
 // @Router /private/road/{programmingID} [get]
 func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
-
 	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
 	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, "", nil, nil)
@@ -66,10 +65,9 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{data=dto.PathDTO}
 // @Router /private/road/path/{programmingID}/{pathID} [get]
 func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
-
 	pathID := c.Params("pathID")
 	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
@@ -151,14 +149,17 @@ func (h *PrivateHandler) GetUserRoadProgressStats(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/road/answer/{programmingID}/{pathID} [post]
 func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
+	pathID := c.Params("pathID")
+	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
+
 	var answerRoadDTO dto.AnswerRoadDTO
 	if err := c.BodyParser(&answerRoadDTO); err != nil {
 		return err
 	}
-
-	userSession := session_store.GetSessionData(c)
-	programmingID := c.Params("programmingID")
-	pathID := c.Params("pathID")
+	if err := h.services.UtilService.Validator().ValidateStruct(answerRoadDTO); err != nil {
+		return err
+	}
 
 	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
@@ -206,10 +207,9 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/road/reset/{programmingID}/{pathID} [get]
 func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
-
 	pathID := c.Params("pathID")
 	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
 
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {

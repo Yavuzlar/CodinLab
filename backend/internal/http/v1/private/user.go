@@ -47,11 +47,11 @@ func (h *PrivateHandler) GetProfile(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/user/ [put]
 func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
 	var update dto.UpdateUserDTO
 	if err := c.BodyParser(&update); err != nil {
 		return err
 	}
-	userSession := session_store.GetSessionData(c)
 
 	if err := h.services.UtilService.Validator().ValidateStruct(update); err != nil {
 		return err
@@ -75,11 +75,11 @@ func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/user/password [put]
 func (h *PrivateHandler) UpdatePassword(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
 	var update dto.UpdatePasswordDTO
 	if err := c.BodyParser(&update); err != nil {
 		return err
 	}
-	userSession := session_store.GetSessionData(c)
 
 	if err := h.services.UtilService.Validator().ValidateStruct(update); err != nil {
 		return err
