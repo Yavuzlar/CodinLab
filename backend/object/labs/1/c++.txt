@@ -22,7 +22,7 @@ int main(){
 
 ## CHECK
 
-bool result = $funcname$($input$);
-if (result != $output$){
-    std::cout << "Test Failed: Expected $out$, but got" << result << std::endl;
+bool result$rnd$ = $funcname$($input$);
+if (result$rnd$ != $output$){
+    std::cout << "Test Failed: Expected $out$, but got" << result$rnd$ << std::endl;
 }

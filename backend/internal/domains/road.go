@@ -2,8 +2,8 @@ package domains
 
 // IRoadService is the interface that provides the methods for the road service.
 type IRoadService interface {
-	GetRoadFilter(userID string, programmingID, pathId int, isStarted, isFinished *bool) ([]Road, error)
-	GetRoadByID(userID string, programmingID, pathID int) (*Path, error)
+	GetRoadFilter(userID, programmingID, pathID string, isStarted, isFinished *bool) ([]Road, error)
+	GetRoadByID(userID, programmingID, pathID string) (path *Path, err error)
 	GetUserLanguageRoadStats(userID string) ([]RoadStats, error)
 	GetUserRoadProgressStats(userID string) (progressStats *RoadProgressStats, err error)
 }

@@ -12,7 +12,6 @@ func (h *PrivateHandler) initAdminRoutes(root fiber.Router) {
 	adminRoute.Use(h.adminAuthMiddleware)
 	adminRoute.Get("/user/:userID", h.GetUserProfile)
 	adminRoute.Get("/user", h.GetAllUsers)
-	//adminRoute.Post("/user", h.CreateUser)
 	adminRoute.Post("/user/:userID", h.UpdateUserAdmin)
 }
 
@@ -31,7 +30,6 @@ func (h *PrivateHandler) GetUserProfile(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
 	userDTO := h.dtoManager.AdminDTOManager.ToUserProfileDTO(user)
 
 	return response.Response(200, "STATUS OK", userDTO)
@@ -55,29 +53,6 @@ func (h *PrivateHandler) GetAllUsers(c *fiber.Ctx) error {
 	return response.Response(200, "STATUS OK", userDTOs)
 }
 
-/* // @Tags Admin
-// @Summary Creates User
-// @Description Creates User
-// @Accept json
-// @Produce json
-// @Param user body dto.CreateUserDTO true "User"
-// @Success 200 {object} response.BaseResponse{}
-// @Router /private/admin/user [post]
-func (h *PrivateHandler) CreateUser(c *fiber.Ctx) error {
-	var user dto.CreateUserDTO
-	if err := c.BodyParser(&user); err != nil {
-		return err
-	}
-	if err := h.services.UtilService.Validator().ValidateStruct(user); err != nil {
-		return err
-	}
-	if err := h.services.AdminService.CreateUser(c.Context(), user.Username, user.Name, user.Surname, user.Password, user.Role, user.GithubProfile); err != nil {
-		return err
-	}
-
-	return response.Response(200, "Register successful", nil)
-} */
-
 // @Tags Admin
 // @Summary Updates User
 // @Description Updates User
@@ -89,6 +64,7 @@ func (h *PrivateHandler) CreateUser(c *fiber.Ctx) error {
 // @Router /private/admin/user/{userID} [post]
 func (h *PrivateHandler) UpdateUserAdmin(c *fiber.Ctx) error {
 	userID := c.Params("userID")
+
 	var user dto.AdminUpdateUsersDTO
 	if err := c.BodyParser(&user); err != nil {
 		return err

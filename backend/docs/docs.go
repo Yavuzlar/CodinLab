@@ -280,7 +280,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/lab/reset/{labID}": {
+        "/private/lab/reset/{programmingID}/{labID}": {
             "get": {
                 "description": "Reset Lab By Programming Language ID \u0026 Lab ID",
                 "consumes": [
@@ -305,7 +305,8 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Programming Language ID",
                         "name": "programmingID",
-                        "in": "query"
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {

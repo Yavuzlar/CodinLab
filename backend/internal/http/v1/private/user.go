@@ -23,12 +23,12 @@ func (h *PrivateHandler) initUserRoutes(root fiber.Router) {
 // @Success 200 {object} response.BaseResponse{data=dto.UserDTO}
 // @Router /private/user/ [get]
 func (h *PrivateHandler) GetProfile(c *fiber.Ctx) error {
-	session := session_store.GetSessionData(c)
-	userID := session.UserID
-	user, err := h.services.UserService.GetProfile(c.Context(), userID)
+	userSession := session_store.GetSessionData(c)
+	user, err := h.services.UserService.GetProfile(c.Context(), userSession.UserID)
 	if err != nil {
 		return err
 	}
+
 	bestProgrammingLanguage, err := h.services.UserService.BestProgrammingLanguages(c.Context(), user.ID().String())
 	if err != nil {
 		return err
@@ -47,22 +47,19 @@ func (h *PrivateHandler) GetProfile(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/user/ [put]
 func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
-	session := session_store.GetSessionData(c)
-	userID := session.UserID
+	userSession := session_store.GetSessionData(c)
 	var update dto.UpdateUserDTO
 	if err := c.BodyParser(&update); err != nil {
 		return err
 	}
+
 	if err := h.services.UtilService.Validator().ValidateStruct(update); err != nil {
 		return err
 	}
-
-	if err := h.services.UserService.UpdateUser(c.Context(), userID, update.Password, update.Username, update.GithubProfile, update.Name, update.Surname); err != nil {
+	if err := h.services.UserService.UpdateUser(c.Context(), userSession.UserID, update.Password, update.Username, update.GithubProfile, update.Name, update.Surname); err != nil {
 		return err
 	}
-
-	//Update operation has been logged
-	if err := h.services.LogService.Add(c.Context(), userID, domains.TypeUser, domains.ContentProfile, 0, 0); err != nil {
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, "", "", domains.TypeUser, domains.ContentProfile); err != nil {
 		return err
 	}
 
@@ -78,22 +75,21 @@ func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/user/password [put]
 func (h *PrivateHandler) UpdatePassword(c *fiber.Ctx) error {
-	session := session_store.GetSessionData(c)
-	userID := session.UserID
+	userSession := session_store.GetSessionData(c)
 	var update dto.UpdatePasswordDTO
 	if err := c.BodyParser(&update); err != nil {
 		return err
 	}
+
 	if err := h.services.UtilService.Validator().ValidateStruct(update); err != nil {
 		return err
 	}
 
-	if err := h.services.UserService.UpdatePassword(c.Context(), userID, update.Password, update.NewPassword, update.ConfirmPassword); err != nil {
+	if err := h.services.UserService.UpdatePassword(c.Context(), userSession.UserID, update.Password, update.NewPassword, update.ConfirmPassword); err != nil {
 		return err
 	}
 
-	//Update operation has been logged
-	if err := h.services.LogService.Add(c.Context(), userID, domains.TypeUser, domains.ContentProfile, 0, 0); err != nil {
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, "", "", domains.TypeUser, domains.ContentProfile); err != nil {
 		return err
 	}
 

@@ -2,11 +2,11 @@ package domains
 
 // ILabService is the interface that provides the methods for the lab service.
 type ILabService interface {
-	GetLabsFilter(userID string, labId, programmingID int, isStarted, isFinished *bool) ([]Lab, error)
+	GetLabsFilter(userID, programmingID, labID string, isStarted, isFinished *bool) ([]Lab, error)
 	GetUserLanguageLabStats(userID string) (programmingLangugageStats []ProgrammingLanguageStats, err error)
 	GetUserLabDifficultyStats(userID string) (userLabDifficultyStats UserLabDifficultyStats, err error)
 	GetUserLabProgressStats(userID string) (userLabProgressStats *UserLabProgressStats, err error)
-	GetLabByID(userID string, labID int) (lab *Lab, err error)
+	GetLabByID(userID, labID string) (lab *Lab, err error)
 }
 
 // ProgrammingLanguageStats represents the statistics for a specific language lab.

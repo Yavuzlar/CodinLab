@@ -29,18 +29,16 @@ func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 // @Success 200 {object} response.BaseResponse{data=[]dto.LogDTO}
 // @Router /private/log [get]
 func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
-	userID := c.Query("userID")
-	programmingID := c.Query("programmingID")
-	labRoadID := c.Query("labRoadID")
-	content := c.Query("content")
 	logType := c.Query("type")
+	userID := c.Query("userID")
+	content := c.Query("content")
+	labRoadID := c.Query("labRoadID")
+	programmingID := c.Query("programmingID")
 
 	logs, err := h.services.LogService.GetAllLogs(c.Context(), userID, programmingID, labRoadID, logType, content)
 	if err != nil {
 		return err
 	}
-
-	// Converts to logDto for json tags
 	logDTOs := h.dtoManager.LogDTOManager.ToLogDTOs(logs)
 
 	return response.Response(200, "Status OK", logDTOs)
@@ -91,10 +89,8 @@ func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
 	// Dummy Data for testing
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 2, 1)
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 2, 1)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 1, 1)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, "1", "1", domains.TypeLab, domains.ContentStarted)
+	h.services.LogService.Add(c.Context(), userSession.UserID, "1", "1", domains.TypeLab, domains.ContentCompleted)
 
 	return response.Response(200, "Dummy Data Added", nil)
 }
@@ -110,11 +106,7 @@ func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
 	// Dummy Data for testing
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 2)
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 1)
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 2)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 1)
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, 1, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, "1", "1", domains.TypePath, domains.ContentStarted)
 
 	return response.Response(200, "Dummy Data Added", nil)
 }
@@ -128,7 +120,6 @@ func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
 // @Failure 400 {object} response.BaseResponse
 // @Router /private/log/rates [get]
 func (h *PrivateHandler) LanguageUsageRates(c *fiber.Ctx) error {
-
 	rateLogs, err := h.services.LogService.LanguageUsageRates(c.Context())
 	if err != nil {
 		return err

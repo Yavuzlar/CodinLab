@@ -19,14 +19,14 @@ type ILogRepository interface {
 
 // ILogService is the interface that provides the methods for the log service.
 type ILogService interface {
-	Add(ctx context.Context, userID, logType, content string, programmingID, labRoadID int32) (err error)
+	Add(ctx context.Context, userID, programmingID, labPathID, logType, content string) error
 	GetAllLogs(ctx context.Context, userID, programmingID, labRoadID, logType, content string) (logs []Log, err error)
 	GetByID(ctx context.Context, logID string) (log *Log, err error)
 	GetByUserID(ctx context.Context, userID string) (logs []Log, err error)
 	GetByType(ctx context.Context, logType string) (logs []Log, err error)
 	GetByContent(ctx context.Context, content string) (logs []Log, err error)
 	GetByProgrammingID(ctx context.Context, programmingID string) (logs []Log, err error)
-	IsExists(ctx context.Context, userID, logType, content string, programmingID, labPathID int32) (isExists bool, err error)
+	IsExists(ctx context.Context, userID, programmingID, labPathID, logType, content string) (isExists bool, err error)
 	CountSolutionsByDay(ctx context.Context) (solutions []SolutionsByDay, err error)
 	CountSolutionsHoursByProgrammingLast7Days(ctx context.Context) (solutions []SolutionsHoursByProgramming, err error)
 	LanguageUsageRates(ctx context.Context) (languageUsageRates []LanguageUsageRates, err error)

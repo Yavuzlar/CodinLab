@@ -20,8 +20,8 @@ func main(){
 
 ## CHECK
 
-result := $funcname$($input$)
-if (result != $output$){
-    fmt.Printf("Test Failed: Expected $out$, but got %v", result)
+result$rnd$ := $funcname$($input$)
+if (result$rnd$ != $output$){
+    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
     return
 }

@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 )
 
 type homeService struct {
@@ -42,6 +43,10 @@ func (s *homeService) GetInventory(ctx context.Context) (inventory []domains.Inv
 	for _, item := range inventoryP {
 		newInventory := *domains.NewInventory(item.ID, item.Name, item.IconPath)
 		inventory = append(inventory, newInventory)
+	}
+
+	if len(inventory) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(200, "Programming Languages not found")
 	}
 
 	return

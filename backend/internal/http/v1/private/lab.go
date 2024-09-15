@@ -2,7 +2,6 @@ package private
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -18,7 +17,7 @@ import (
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs", h.GetLabs)
 	root.Get("/lab/:labID", h.GetLabByID)
-	root.Get("/lab/reset/:labID", h.ResetLabHistory)
+	root.Get("/lab/reset/:programmingID/:labID", h.ResetLabHistory)
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
 	root.Get("/labs/difficulty/stats", h.GetUserLabDifficultyStats)
 	root.Get("/labs/progress/stats", h.GetUserLabProgressStats)
@@ -34,7 +33,6 @@ func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 // @Router /private/labs/general/stats [get]
 func (h *PrivateHandler) GetUserLanguageLabStats(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
-
 	stat, err := h.services.LabService.GetUserLanguageLabStats(userSession.UserID)
 	if err != nil {
 		return err
@@ -93,40 +91,21 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
 	programmingID := c.Query("programmingID")
-	language := c.Get("Language")
-	if language == "" {
-		language = "en"
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
+
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, "", programmingID, nil, nil)
+	if err != nil {
+		return err
 	}
 
-	var labData []domains.Lab
-	var err error
-	if programmingID != "" {
-		intProgrammingID, err := strconv.Atoi(programmingID)
-		if err != nil {
-			return response.Response(400, "Invalid Programming Language ID", nil)
-		}
-
-		labData, err = h.services.LabService.GetLabsFilter(userSession.UserID, 0, intProgrammingID, nil, nil)
-		if err != nil {
-			return err
-		}
-	} else {
-		labData, err = h.services.LabService.GetLabsFilter(userSession.UserID, 0, 0, nil, nil)
-		if err != nil {
-			return err
-		}
-	}
-
-	var labDTOList []dto.LabDTO
+	var labDTOs []dto.LabDTO
 	for _, labCollection := range labData {
 		languageDTO := h.dtoManager.LabDTOManager.ToLanguageDTO(labCollection.GetLanguages(), language)
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, languageDTO))
+		labDTOs = append(labDTOs, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, languageDTO))
 	}
-	if len(labDTOList) == 0 {
-		return response.Response(404, "Labs not found", nil)
-	}
+	labDTOs = h.dtoManager.LabDTOManager.FilterLabDTOs(labDTOs)
 
-	return response.Response(200, "GetLabs successful", labDTOList)
+	return response.Response(200, "GetLabs successful", labDTOs)
 }
 
 // @Tags Lab
@@ -142,40 +121,21 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
-	language := c.Get("Language")
-	if language == "" {
-		language = "en"
-	}
 	labID := c.Params("labID")
 	programmingID := c.Query("programmingID")
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	intProgrammingID, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalidd Programming Language ID", err)
-	}
-
-	intLabID, err := strconv.Atoi(labID)
-	if err != nil {
-		return response.Response(400, "Invalid Lab or Path ID", err)
-	}
-
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
-	if err != nil {
-		return response.Response(500, "Programming Language Information Error", err)
-	}
-	if inventoryInformation == nil {
-		return response.Response(404, "Programming Language Not Found", nil)
-	}
-
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, intProgrammingID, nil, nil)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
 		return err
 	}
-	if len(labData) == 0 {
-		return response.Response(404, "Lab not found", nil)
+
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, labID, programmingID, nil, nil)
+	if err != nil {
+		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypeLab, intProgrammingID, intLabID, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}
@@ -185,10 +145,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		languageDTO := h.dtoManager.LabDTOManager.ToLanguageDTO(labCollection.GetLanguages(), language)
 		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTO, frontendTemplate))
 	}
-	if len(labDTOList) == 0 {
-		return response.Response(404, "Labs not found", nil)
-	}
-	if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, int32(intProgrammingID), int32(intLabID)); err != nil {
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, labID, domains.TypeLab, domains.ContentStarted); err != nil {
 		return err
 	}
 
@@ -206,41 +163,29 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/lab/answer/{programmingID}/{labID} [post]
 func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
-	var answerLabDTO dto.AnswerLabDTO
-	if err := c.BodyParser(&answerLabDTO); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(400, "Invalid Format", err)
-	}
-
 	labID := c.Params("labID")
 	programmingID := c.Params("programmingID")
 	userSession := session_store.GetSessionData(c)
 
-	num, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalid Programming ID", nil)
+	var answerLabDTO dto.AnswerLabDTO
+	if err := c.BodyParser(&answerLabDTO); err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "Invalid Format", err)
+	}
+	if err := h.services.UtilService.Validator().ValidateStruct(answerLabDTO); err != nil {
+		return err
 	}
 
-	labIDInt, err := strconv.Atoi(labID)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
-		return response.Response(400, "Invalid Lab ID", nil)
-	}
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(num))
-	if err != nil {
-		return response.Response(500, "Programming Language Information Error", err)
-	}
-	if inventoryInformation == nil {
-		return response.Response(404, "Programming Language Not Found", nil)
+		return err
 	}
 
-	lab, err := h.services.LabService.GetLabByID(userSession.UserID, labIDInt)
+	lab, err := h.services.LabService.GetLabByID(userSession.UserID, labID)
 	if err != nil {
-		return response.Response(404, "Error While Getting Lab", err)
-	}
-	if lab == nil {
-		return response.Response(404, "Lab Not Found", nil)
+		return err
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, num, labIDInt, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
 	if err != nil {
 		return err
 	}
@@ -256,7 +201,6 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
 	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
 		return err
 	}
@@ -265,10 +209,9 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
 	if strings.Contains(logs, "Test Passed") {
-		if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, int32(num), int32(labIDInt)); err != nil {
-			return response.Response(500, "Docker Image Pull Error", nil)
+		if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, labID, domains.TypeLab, domains.ContentCompleted); err != nil {
+			return err
 		}
 	}
 
@@ -281,57 +224,34 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param labID path string true "Lab ID"
-// @Param programmingID query string false "Programming Language ID"
+// @Param programmingID path string true "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/lab/reset/{labID} [get]
+// @Router /private/lab/reset/{programmingID}/{labID} [get]
 func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
+	labID := c.Params("labID")
+	programmingID := c.Params("programmingID")
 	userSession := session_store.GetSessionData(c)
 
-	labID := c.Params("labID")
-	programmingID := c.Query("programmingID")
-
-	intProgrammingID, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalid Programming Language ID", err)
-	}
-
-	intLabID, err := strconv.Atoi(labID)
-	if err != nil {
-		return response.Response(400, "Invalid Lab ID", err)
-	}
-
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
-	if err != nil {
-		return response.Response(500, "Programming Language Information Error", err)
-	}
-
-	if inventoryInformation == nil {
-		return response.Response(404, "Programming Language Not Found", nil)
-	}
-
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, intLabID, intProgrammingID, nil, nil)
-	if err != nil {
-		return err
-	}
-	if len(labData) == 0 {
-		return response.Response(404, "Lab not found", nil)
-	}
-
-	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, domains.TypeLab, intProgrammingID, intLabID, inventoryInformation.GetFileExtension())
-	if err != nil {
-		return response.Response(500, "Frontend Template Reset Error", err)
-	}
-
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypeLab, intProgrammingID, intLabID, inventoryInformation.GetFileExtension())
+	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
 		return err
 	}
 
+	_, err = h.services.LabService.GetLabsFilter(userSession.UserID, programmingID, labID, nil, nil)
+	if err != nil {
+		return err
+	}
+
+	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension())
+	if err != nil {
+		return err
+	}
+
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension())
+	if err != nil {
+		return err
+	}
 	frontendTemplateDto := h.dtoManager.LabDTOManager.ToFrontendTemplateDto(frontendTemplate)
-
-	if len(frontendTemplateDto.Template) == 0 {
-		return response.Response(404, "Frontend Template could not be created ", nil)
-	}
 
 	return response.Response(200, "ResetLabHistory successful", frontendTemplateDto)
 }
