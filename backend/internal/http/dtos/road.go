@@ -134,6 +134,7 @@ func (m *RoadDTOManager) ToRoadStatsDTO(stats []domains.RoadStats) []RoadStatsDT
 		}
 		roadStatsDTO = append(roadStatsDTO, roadStats)
 	}
+
 	return roadStatsDTO
 }
 

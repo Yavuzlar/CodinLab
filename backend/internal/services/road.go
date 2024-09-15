@@ -3,8 +3,10 @@ package services
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 )
 
 type roadService struct {
@@ -74,6 +76,10 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.FileExtension, newPathList, roadCollection.Cmd, *isStarted, *isFinished))
 	}
 
+	if len(roads) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(404, "Road not found")
+	}
+
 	return roads, nil
 }
 
@@ -119,27 +125,44 @@ func (s *roadService) getPathStatuses(userID, programmingID, pathID string) (*bo
 	return &isStarted, &isFinished, err
 }
 
-func (s *roadService) GetRoadFilter(userID string, programmingID, pathId int, isStarted, isFinished *bool) ([]domains.Road, error) {
+func (s *roadService) GetRoadFilter(userID, programmingID, pathID string, isStarted, isFinished *bool) ([]domains.Road, error) {
+	var intProgrammingID, intPathID int
+	var err error
+
+	if programmingID != "" {
+		intProgrammingID, err = strconv.Atoi(programmingID)
+		if err != nil {
+			return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+		}
+	}
+
+	if pathID != "" {
+		intPathID, err = strconv.Atoi(pathID)
+		if err != nil {
+			return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Path ID")
+		}
+	}
+
 	allRoads, err := s.getAllRoads(userID)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && programmingID == 0 && pathId == 0 && isStarted == nil && isFinished == nil {
+	if userID == "" && intProgrammingID == 0 && intPathID == 0 && isStarted == nil && isFinished == nil {
 		return allRoads, nil
 	}
 
 	var filteredRoads []domains.Road
 	for _, roadCollection := range allRoads {
 
-		if roadCollection.GetID() != programmingID {
+		if roadCollection.GetID() != intProgrammingID {
 			continue
 		}
 
 		var newRoadList []domains.Path
 		for _, path := range roadCollection.GetPaths() {
-			if pathId != 0 && path.GetID() != pathId {
+			if intPathID != 0 && path.GetID() != intPathID {
 				continue
 			}
 
@@ -221,20 +244,34 @@ func (s *roadService) GetUserRoadProgressStats(userID string) (progressStats *do
 	return
 }
 
-func (s *roadService) GetRoadByID(userID string, programmingID, pathID int) (path *domains.Path, err error) {
+func (s *roadService) GetRoadByID(userID, programmingID, pathID string) (path *domains.Path, err error) {
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+	}
+
+	intPathID, err := strconv.Atoi(pathID)
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Path ID")
+	}
+
 	road, err := s.getAllRoads(userID)
 	if err != nil {
 		return nil, err
 	}
 	for _, roadCollection := range road {
-		if roadCollection.GetID() == int(programmingID) {
-			for _, path := range roadCollection.GetPaths() {
-				if path.GetID() == pathID {
-					return &path, nil
+		if roadCollection.GetID() == intProgrammingID {
+			for _, pathf := range roadCollection.GetPaths() {
+				if pathf.GetID() == intPathID {
+					path = &pathf
 				}
 			}
 		}
 	}
 
-	return nil, err
+	if path == nil {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "Path not Found")
+	}
+
+	return path, err
 }

@@ -89,11 +89,9 @@ func (h *PrivateHandler) GetUserLabProgressStats(c *fiber.Ctx) error {
 // @Router /private/labs/ [get]
 func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
+
 	programmingID := c.Query("programmingID")
-	language := c.Get("Language")
-	if language == "" {
-		language = "en"
-	}
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
 	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, "", programmingID, nil, nil)
 	if err != nil {
@@ -124,12 +122,10 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 // @Router /private/lab/{labID} [get]
 func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
+
 	labID := c.Params("labID")
 	programmingID := c.Query("programmingID")
-	language := c.Get("Language")
-	if language == "" {
-		language = "en"
-	}
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
@@ -173,10 +169,10 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	if err := c.BodyParser(&answerLabDTO); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "Invalid Format", err)
 	}
+	userSession := session_store.GetSessionData(c)
 
 	labID := c.Params("labID")
 	programmingID := c.Params("programmingID")
-	userSession := session_store.GetSessionData(c)
 
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
@@ -232,6 +228,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 // @Router /private/lab/reset/{programmingID}/{labID} [get]
 func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
+
 	labID := c.Params("labID")
 	programmingID := c.Params("programmingID")
 

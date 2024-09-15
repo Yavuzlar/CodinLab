@@ -157,7 +157,7 @@ func (s *labService) GetLabByID(userID, labID string) (lab *domains.Lab, err err
 		return nil, service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
 	}
 
-	return nil, err
+	return lab, err
 }
 
 // User lab level stats by programming language
