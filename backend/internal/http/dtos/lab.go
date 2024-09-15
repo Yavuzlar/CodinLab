@@ -99,6 +99,20 @@ func (m *LabDTOManager) ToLanguageDTO(languageLabs []domains.LanguageLab, langua
 	return newLanguage
 }
 
+func (m *LabDTOManager) FilterLabDTOs(labDTOs []LabDTO) []LabDTO {
+	idMap := make(map[int]bool)
+	var newLabDTOs []LabDTO
+
+	for _, labDTO := range labDTOs {
+		if !idMap[labDTO.ID] {
+			newLabDTOs = append(newLabDTOs, labDTO)
+			idMap[labDTO.ID] = true
+		}
+	}
+
+	return newLabDTOs
+}
+
 type UserProgrammingLanguageLabStatsDTO struct {
 	Name          string  `json:"name"`
 	IconPath      string  `json:"iconPath"`

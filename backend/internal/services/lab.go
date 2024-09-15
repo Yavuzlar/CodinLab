@@ -130,7 +130,7 @@ func (s *labService) GetLabsFilter(userID, programmingID, labID string, isStarte
 	}
 
 	if len(labs) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(404, "Lab not found")
+		return nil, service_errors.NewServiceErrorWithMessage(200, "Lab not found")
 	}
 
 	return labs, nil

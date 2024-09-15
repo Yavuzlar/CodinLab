@@ -63,11 +63,12 @@ func (h *PrivateHandler) GetAllUsers(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/admin/user/{userID} [post]
 func (h *PrivateHandler) UpdateUserAdmin(c *fiber.Ctx) error {
-	userID := c.Params("userID")
 	var user dto.AdminUpdateUsersDTO
 	if err := c.BodyParser(&user); err != nil {
 		return err
 	}
+	userID := c.Params("userID")
+
 	if err := h.services.UtilService.Validator().ValidateStruct(user); err != nil {
 		return err
 	}

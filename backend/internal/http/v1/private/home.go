@@ -24,10 +24,7 @@ func (h *PrivateHandler) initHomeRoutes(root fiber.Router) {
 // @Router /private/home/level [get]
 func (h *PrivateHandler) GetUserLevel(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
-	language := c.Get("Language")
-	if language == "" {
-		language = "en"
-	}
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
 	userLevel, err := h.services.HomeService.GetUserLevel(c.Context(), userSession.UserID)
 	if err != nil {
@@ -50,9 +47,6 @@ func (h *PrivateHandler) GetInventories(c *fiber.Ctx) error {
 	inventoryData, err := h.services.HomeService.GetInventory(c.Context())
 	if err != nil {
 		return err
-	}
-	if len(inventoryData) == 0 {
-		return response.Response(404, "Programming Languages not found", nil)
 	}
 	inventoryDTOs := h.dtoManager.HomeDTOManager.ToInventoryDTOs(inventoryData)
 

@@ -98,16 +98,14 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 		return err
 	}
 
-	var labDTOList []dto.LabDTO
+	var labDTOs []dto.LabDTO
 	for _, labCollection := range labData {
 		languageDTO := h.dtoManager.LabDTOManager.ToLanguageDTO(labCollection.GetLanguages(), language)
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, languageDTO))
+		labDTOs = append(labDTOs, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, languageDTO))
 	}
-	if len(labDTOList) == 0 {
-		return response.Response(404, "Labs not found", nil)
-	}
+	labDTOs = h.dtoManager.LabDTOManager.FilterLabDTOs(labDTOs)
 
-	return response.Response(200, "GetLabs successful", labDTOList)
+	return response.Response(200, "GetLabs successful", labDTOs)
 }
 
 // @Tags Lab
@@ -232,7 +230,7 @@ func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 	labID := c.Params("labID")
 	programmingID := c.Params("programmingID")
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
 		return err
 	}
@@ -242,12 +240,12 @@ func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 		return err
 	}
 
-	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension())
+	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}

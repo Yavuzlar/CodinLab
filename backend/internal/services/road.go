@@ -77,7 +77,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 	}
 
 	if len(roads) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(404, "Road not found")
+		return nil, service_errors.NewServiceErrorWithMessage(200, "Road not found")
 	}
 
 	return roads, nil
