@@ -204,7 +204,7 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 
 	for i, test := range tests {
 		tmp := check
-		tmp = strings.Replace(tmp, "result", fmt.Sprintf("result%v", i), -1)
+		tmp = strings.Replace(tmp, "$rnd$", fmt.Sprintf("%v", i), -1)
 
 		// Handle input replacement
 		var inputs []string
@@ -213,6 +213,14 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 			case string:
 				// Add double quotes around string inputs
 				inputs = append(inputs, `"`+v+`"`)
+			case []interface{}:
+				// If input is an array, format it correctly without square brackets
+				var arrayElements []string
+				for _, elem := range v {
+					arrayElements = append(arrayElements, fmt.Sprintf("%v", elem))
+				}
+				// Join array elements with a comma, without square brackets
+				inputs = append(inputs, strings.Join(arrayElements, ", "))
 			default:
 				// Directly use other types (int, etc.)
 				inputs = append(inputs, fmt.Sprintf("%v", v))
@@ -229,7 +237,14 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 				// Add double quotes around string outputs
 				outputs = append(outputs, `"`+v+`"`)
 				fails = append(fails, fmt.Sprintf("%v", v))
-
+			case []interface{}:
+				// If output is an array, format it correctly without square brackets
+				var arrayElements []string
+				for _, elem := range v {
+					arrayElements = append(arrayElements, fmt.Sprintf("%v", elem))
+				}
+				outputs = append(outputs, strings.Join(arrayElements, ", "))
+				fails = append(fails, strings.Join(arrayElements, ", "))
 			default:
 				// Directly use other types (int, etc.)
 				outputs = append(outputs, fmt.Sprintf("%v", v))
@@ -237,7 +252,7 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 			}
 		}
 		tmp = strings.Replace(tmp, "$output$", strings.Join(outputs, ", "), -1)
-		if strings.Contains(check, "$out$") { //in c++ strings should not contain "". This will correct it. Add $out$ instead of $output$ in failed message
+		if strings.Contains(check, "$out$") {
 			tmp = strings.Replace(tmp, "$out$", strings.Join(fails, ", "), -1)
 		}
 
