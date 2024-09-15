@@ -62,14 +62,14 @@ func (m *LabDTOManager) ToUserLabDifficultyStatsDto(stats domains.UserLabDifficu
 }
 
 type UserLabProgressStatsDto struct {
-	Progress  float32 `json:"progress"`
-	Completed float32 `json:"completed"`
+	Progress  int `json:"progress"`
+	Completed int `json:"completed"`
 }
 
 func (m *LabDTOManager) ToUserLabProgressStatsDto(stats domains.UserLabProgressStats) UserLabProgressStatsDto {
 	return UserLabProgressStatsDto{
-		Completed: stats.GetCompleted(),
-		Progress:  stats.GetProgress(),
+		Completed: int(stats.GetCompleted()),
+		Progress:  int(stats.GetProgress()),
 	}
 }
 

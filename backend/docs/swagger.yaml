@@ -424,7 +424,7 @@ paths:
       summary: Answer
       tags:
       - Lab
-  /private/lab/reset/{labID}:
+  /private/lab/reset/{programmingID}/{labID}:
     get:
       consumes:
       - application/json
@@ -436,8 +436,9 @@ paths:
         required: true
         type: string
       - description: Programming Language ID
-        in: query
+        in: path
         name: programmingID
+        required: true
         type: string
       produces:
       - application/json

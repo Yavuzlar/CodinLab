@@ -47,22 +47,21 @@ func (h *PrivateHandler) GetProfile(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/user/ [put]
 func (h *PrivateHandler) UpdateUser(c *fiber.Ctx) error {
-	session := session_store.GetSessionData(c)
-	userID := session.UserID
 	var update dto.UpdateUserDTO
 	if err := c.BodyParser(&update); err != nil {
 		return err
 	}
+	session := session_store.GetSessionData(c)
+
 	if err := h.services.UtilService.Validator().ValidateStruct(update); err != nil {
 		return err
 	}
 
-	if err := h.services.UserService.UpdateUser(c.Context(), userID, update.Password, update.Username, update.GithubProfile, update.Name, update.Surname); err != nil {
+	if err := h.services.UserService.UpdateUser(c.Context(), session.UserID, update.Password, update.Username, update.GithubProfile, update.Name, update.Surname); err != nil {
 		return err
 	}
 
-	//Update operation has been logged
-	if err := h.services.LogService.Add(c.Context(), userID, domains.TypeUser, domains.ContentProfile, 0, 0); err != nil {
+	if err := h.services.LogService.Add(c.Context(), session.UserID, "", "", domains.TypeUser, domains.ContentProfile); err != nil {
 		return err
 	}
 
@@ -92,8 +91,7 @@ func (h *PrivateHandler) UpdatePassword(c *fiber.Ctx) error {
 		return err
 	}
 
-	//Update operation has been logged
-	if err := h.services.LogService.Add(c.Context(), userID, domains.TypeUser, domains.ContentProfile, 0, 0); err != nil {
+	if err := h.services.LogService.Add(c.Context(), userID, "", "", domains.TypeUser, domains.ContentProfile); err != nil {
 		return err
 	}
 

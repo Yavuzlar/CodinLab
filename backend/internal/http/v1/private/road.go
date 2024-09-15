@@ -95,18 +95,12 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 		return response.Response(400, "Invalid Path ID", nil)
 	}
 
-	session := session_store.GetSessionData(c)
-	userID := session.UserID
-
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
-		return response.Response(500, "Programming Language Information Error", err)
-	}
-	if inventoryInformation == nil {
-		return response.Response(404, "Programming Language Not Found", nil)
+		return err
 	}
 
-	roadData, err := h.services.RoadService.GetRoadFilter(userID, intProgrammingID, intPathID, nil, nil)
+	roadData, err := h.services.RoadService.GetRoadFilter(userSession.UserID, intProgrammingID, intPathID, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -114,7 +108,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 		return response.Response(404, "Path not found", nil)
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypePath, intProgrammingID, intPathID, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}
@@ -129,7 +123,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO))
 	}
 
-	if err := h.services.LogService.Add(c.Context(), userID, domains.TypePath, domains.ContentStarted, int32(intProgrammingID), int32(intPathID)); err != nil {
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentStarted); err != nil {
 		return err
 	}
 
@@ -201,14 +195,12 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return response.Response(400, "Invalid Path ID", nil)
 	}
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
+	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
-		return response.Response(500, "Programming Language Information Error", nil)
+		return err
 	}
-	if inventoryInformation == nil {
-		return response.Response(404, "Programming Language Not Found", nil)
-	}
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, intProgrammingID, intPathID, domains.TypePath, inventoryInformation.GetFileExtension(), answerRoadDTO.UserCode)
+
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
 	if err != nil {
 		return err
 	}
@@ -226,13 +218,13 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
 		return err
 	}
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd())
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetCmd())
 	if err != nil {
 		return err
 	}
 	if strings.Contains(logs, "Test Passed") {
-		if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, int32(intProgrammingID), int32(intPathID)); err != nil {
-			return response.Response(500, "Docker Image Pull Error", nil)
+		if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentCompleted); err != nil {
+			return err
 		}
 	}
 
@@ -264,13 +256,9 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 		return response.Response(400, "Invalid Path ID", err)
 	}
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
-		return response.Response(500, "Programming Language Information Error", err)
-	}
-
-	if inventoryInformation == nil {
-		return response.Response(404, "Programming Language Not Found", nil)
+		return err
 	}
 
 	roadData, err := h.services.RoadService.GetRoadFilter(userSession.UserID, intProgrammingID, intPathID, nil, nil)
@@ -281,20 +269,16 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 		return response.Response(404, "Path not found", nil)
 	}
 
-	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, domains.TypePath, intProgrammingID, intPathID, inventoryInformation.GetFileExtension())
+	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return response.Response(500, "Frontend Template Reset Error", err)
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypePath, intProgrammingID, intPathID, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}
-
 	frontendTemplateDto := h.dtoManager.RoadDTOManager.ToFrontendTemplateDto(frontendTemplate)
-	if len(frontendTemplateDto.Template) == 0 {
-		return response.Response(404, "Frontend Template could not be created ", nil)
-	}
 
 	return response.Response(200, "ResetPathHistory successful", frontendTemplateDto)
 }

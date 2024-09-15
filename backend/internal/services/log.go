@@ -132,9 +132,26 @@ func (l *logService) GetByProgrammingID(ctx context.Context, programmingID strin
 }
 
 // Adds log
-func (l *logService) Add(ctx context.Context, userID, logType, content string, programmingID, labPathID int32) (err error) {
+func (l *logService) Add(ctx context.Context, userID, programmingID, labPathID, logType, content string) error {
+	// Error Control
+	var err error
+	var intProgrammingID, intLabPathID int
+	if programmingID != "" {
+		intProgrammingID, err = strconv.Atoi(programmingID)
+		if err != nil {
+			return service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+		}
+	}
+
+	if labPathID != "" {
+		intLabPathID, err = strconv.Atoi(labPathID)
+		if err != nil {
+			return service_errors.NewServiceErrorWithMessage(400, "Invalid Lab or Path ID")
+		}
+	}
+
 	// Creates new log
-	newLog, err := domains.NewLog(userID, logType, content, programmingID, labPathID)
+	newLog, err := domains.NewLog(userID, logType, content, int32(intProgrammingID), int32(intLabPathID))
 	if err != nil {
 		return err
 	}
@@ -144,11 +161,26 @@ func (l *logService) Add(ctx context.Context, userID, logType, content string, p
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while adding the log", err)
 	}
 
-	return
+	return nil
 }
 
-func (l *logService) IsExists(ctx context.Context, userID, logType, content string, programmingID, labPathID int32) (isExists bool, err error) {
-	log, err := domains.NewLog(userID, logType, content, programmingID, labPathID)
+func (l *logService) IsExists(ctx context.Context, userID, programmingID, labPathID, logType, content string) (isExists bool, err error) {
+	var intProgrammingID, intLabPathID int
+
+	if programmingID != "" {
+		intProgrammingID, err = strconv.Atoi(programmingID)
+		if err != nil {
+			return false, service_errors.NewServiceErrorWithMessage(400, "invalid language id")
+		}
+	}
+	if labPathID != "" {
+		intLabPathID, err = strconv.Atoi(labPathID)
+		if err != nil {
+			return false, service_errors.NewServiceErrorWithMessage(400, "invalid language id")
+		}
+	}
+
+	log, err := domains.NewLog(userID, logType, content, int32(intProgrammingID), int32(intLabPathID))
 	if err != nil {
 		return false, err
 	}

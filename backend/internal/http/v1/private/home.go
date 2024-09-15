@@ -12,10 +12,6 @@ func (h *PrivateHandler) initHomeRoutes(root fiber.Router) {
 	homeRoute.Get("/level", h.GetUserLevel)
 	homeRoute.Get("/development", h.GetUserDevelopment)
 	homeRoute.Get("/advancement", h.GetUserAdvancement)
-	//homeRoute.Get("/welcome", h.GetWelcomeContent)
-	//homeRoute.Get("/road", h.GetRoadContent)
-	//homeRoute.Get("/lab", h.GetLabContent)
-	// initialize routes
 }
 
 // @Tags Home
@@ -27,9 +23,7 @@ func (h *PrivateHandler) initHomeRoutes(root fiber.Router) {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/home/level [get]
 func (h *PrivateHandler) GetUserLevel(c *fiber.Ctx) error {
-
 	userSession := session_store.GetSessionData(c)
-
 	language := c.Get("Language")
 	if language == "" {
 		language = "en"
@@ -58,7 +52,7 @@ func (h *PrivateHandler) GetInventories(c *fiber.Ctx) error {
 		return err
 	}
 	if len(inventoryData) == 0 {
-		return response.Response(404, "Inventories not found", nil)
+		return response.Response(404, "Programming Languages not found", nil)
 	}
 	inventoryDTOs := h.dtoManager.HomeDTOManager.ToInventoryDTOs(inventoryData)
 

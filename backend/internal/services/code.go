@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -56,21 +57,41 @@ func (s *codeService) Pull(ctx context.Context, imageReference string) (err erro
 }
 
 func (s *codeService) IsImageExists(ctx context.Context, imageReference string) (isExsits bool, err error) {
-	return s.dockerSDK.Images().IsImageExists(ctx, imageReference)
+	isExsits, err = s.dockerSDK.Images().IsImageExists(ctx, imageReference)
+	if err != nil {
+		return false, service_errors.NewServiceErrorWithMessage(400, "Docker Image Is Exist Error")
+	}
+
+	return
 }
 
 func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error) {
-	return s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath, fileName)
+	logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath, fileName)
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
+	}
+
+	return logs, nil
 }
 
 // Bunu Answer Kısmınlarında Kullanacaksın.
-func (s *codeService) UploadUserCode(ctx context.Context, userID string, programmingLanguageID, PathLabID int, codeType, fileExtention, content string) (string, error) {
+func (s *codeService) UploadUserCode(ctx context.Context, userID, programmingID, labPathID string, codeType, fileExtention, content string) (string, error) {
 	if err := s.createCodeFile(userID); err != nil {
 		return "", err
 	}
 
-	codePath := s.generateUserCodePath(userID, codeType, programmingLanguageID, PathLabID, fileExtention)
-	codeTmpPath := s.generateUserCodeTmpPath(userID, codeType, programmingLanguageID, PathLabID, fileExtention)
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+	}
+
+	intLabPathID, err := strconv.Atoi(labPathID)
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+	}
+
+	codePath := s.generateUserCodePath(userID, codeType, intProgrammingID, intLabPathID, fileExtention)
+	codeTmpPath := s.generateUserCodeTmpPath(userID, codeType, intProgrammingID, intLabPathID, fileExtention)
 
 	if codeType == domains.TypeLab {
 		if err := s.CreateFileAndWrite(codePath, content); err != nil {
@@ -98,6 +119,10 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 	if err != nil {
 		return "", err
 	}
+	if !strings.Contains(userCode, funcName) {
+		return "", service_errors.NewServiceErrorWithMessage(400, fmt.Sprintf("Need %v function", funcName))
+	}
+
 	docker := templateMap["docker"]
 
 	checks := s.createChecks(templateMap["check"], tests)
@@ -122,22 +147,31 @@ func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName strin
 	return frontend, nil
 }
 
-func (s *codeService) GetFrontendTemplate(userID, labRoadType string, programmingID, labPathID int, fileExtention string) (string, error) {
-	var frontendTemplate string
+func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string) (string, error) {
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+	}
 
+	intLabPathID, err := strconv.Atoi(labPathID)
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+	}
+
+	var frontendTemplate string
 	if labRoadType == domains.TypeLab {
-		history := s.readFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention)
+		history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtention)
 		if len(history) > 0 {
 			return history, nil
 		}
 
-		lab, err := s.labService.GetLabByID(userID, labPathID)
+		lab, err := s.labService.GetLabByID(userID, programmingID)
 		if err != nil {
 			return "", service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
 		}
 
 		for _, ct := range lab.GetQuest().GetCodeTemplates() {
-			if ct.GetProgrammingID() == programmingID {
+			if ct.GetProgrammingID() == intProgrammingID {
 				frontendTemplate, err = s.CodeFrontendTemplateGenerator(ct.GetTemplatePath(), lab.GetQuest().GetFuncName())
 				if err != nil {
 					return "", service_errors.NewServiceErrorWithMessage(404, "Error while getting frontend template")
@@ -148,17 +182,17 @@ func (s *codeService) GetFrontendTemplate(userID, labRoadType string, programmin
 		}
 
 	} else if labRoadType == domains.TypePath {
-		history := s.readFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention)
+		history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtention)
 		if len(history) > 0 {
 			return history, nil
 		}
 
-		path, err := s.roadService.GetRoadByID(userID, programmingID, labPathID)
+		path, err := s.roadService.GetRoadByID(userID, intProgrammingID, intLabPathID)
 		if err != nil {
 			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
 		}
 		for _, ct := range path.GetQuest().GetCodeTemplates() {
-			if ct.GetProgrammingID() == programmingID {
+			if ct.GetProgrammingID() == intProgrammingID {
 				frontendTemplate, err = s.CodeFrontendTemplateGenerator(ct.GetTemplatePath(), path.GetQuest().GetFuncName())
 				if err != nil {
 					return "", service_errors.NewServiceErrorWithMessage(404, "Error while getting frontend template")
@@ -171,12 +205,25 @@ func (s *codeService) GetFrontendTemplate(userID, labRoadType string, programmin
 
 	}
 
+	if frontendTemplate == "" {
+		return "", service_errors.NewServiceErrorWithMessage(400, "Frontend Template could not be created")
+	}
+
 	return frontendTemplate, nil
 }
 
-func (s *codeService) DeleteFrontendTemplateHistory(userID, labRoadType string, programmingID, labPathID int, fileExtention string) (err error) {
+func (s *codeService) DeleteFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention string) (err error) {
+	intProgrammingID, err := strconv.Atoi(programmingID)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+	}
 
-	codePath := s.generateUserCodePath(userID, labRoadType, programmingID, labPathID, fileExtention)
+	intLabPathID, err := strconv.Atoi(labPathID)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+	}
+
+	codePath := s.generateUserCodePath(userID, labRoadType, intProgrammingID, intLabPathID, fileExtention)
 	if _, err := os.Stat(codePath); err == nil {
 		err := os.Remove(codePath)
 		if err != nil {
@@ -184,7 +231,7 @@ func (s *codeService) DeleteFrontendTemplateHistory(userID, labRoadType string, 
 		}
 	}
 
-	codeTmpPath := s.generateUserCodeTmpPath(userID, labRoadType, programmingID, labPathID, fileExtention)
+	codeTmpPath := s.generateUserCodeTmpPath(userID, labRoadType, intProgrammingID, intLabPathID, fileExtention)
 	if _, err := os.Stat(codeTmpPath); err == nil {
 		err := os.Remove(codeTmpPath)
 		if err != nil {
@@ -196,6 +243,10 @@ func (s *codeService) DeleteFrontendTemplateHistory(userID, labRoadType string, 
 }
 
 func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
+	err = file.CreateFileAndWrite(filePath, content)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessage(500, "Could not create file and write data into it")
+	}
 	return file.CreateFileAndWrite(filePath, content)
 }
 
@@ -303,7 +354,7 @@ func (s *codeService) readTemplate(templatePath string) (map[string]string, erro
 	// Dosyayı oku
 	templateData, err := os.ReadFile(templatePath)
 	if err != nil {
-		return nil, err
+		return nil, service_errors.NewServiceErrorWithMessage(500, "File could not be read")
 	}
 	content := string(templateData)
 
@@ -331,7 +382,6 @@ func (s *codeService) readTemplate(templatePath string) (map[string]string, erro
 }
 
 func (s *codeService) readFrontendTemplateHistory(userID string, programmingLanguageID, PathLabID int, codeType, fileExtention string) string {
-
 	mainDir := "usercodes"
 	userDir := mainDir + "/" + userID
 	labDir := fmt.Sprintf("%v/labs/", userDir)

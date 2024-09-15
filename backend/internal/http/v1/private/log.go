@@ -91,10 +91,8 @@ func (h *PrivateHandler) AddDummyLabData(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
 	// Dummy Data for testing
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 2, 1)
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 2, 1)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentStarted, 1, 1)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypeLab, domains.ContentCompleted, 1, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, "1", "1", domains.TypeLab, domains.ContentStarted)
+	h.services.LogService.Add(c.Context(), userSession.UserID, "1", "1", domains.TypeLab, domains.ContentCompleted)
 
 	return response.Response(200, "Dummy Data Added", nil)
 }
@@ -110,11 +108,7 @@ func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
 	// Dummy Data for testing
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 2)
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 1)
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 2, 2)
-	h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentStarted, 1, 1)
-	//h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, 1, 1)
+	h.services.LogService.Add(c.Context(), userSession.UserID, "1", "1", domains.TypePath, domains.ContentStarted)
 
 	return response.Response(200, "Dummy Data Added", nil)
 }
@@ -128,7 +122,6 @@ func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
 // @Failure 400 {object} response.BaseResponse
 // @Router /private/log/rates [get]
 func (h *PrivateHandler) LanguageUsageRates(c *fiber.Ctx) error {
-
 	rateLogs, err := h.services.LogService.LanguageUsageRates(c.Context())
 	if err != nil {
 		return err
