@@ -1,0 +1,27 @@
+## FRONTEND
+
+func $funcname$(s []bool) int {
+    // Write your code here
+
+    return -1
+}
+
+## DOCKER
+
+$usercode$
+
+func main(){
+    $checks$
+
+    fmt.Println("$success$")
+}
+
+## CHECK
+
+inputArr$rnd$ := []bool{$input$}
+
+result$rnd$ := $funcname$(inputArr$rnd$)
+if (result$rnd$ != $output$){
+    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    return
+}

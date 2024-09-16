@@ -1,0 +1,47 @@
+{
+	"id": 5,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Count True Values",
+			"description": "Given an array of boolean values, return the count of `true` values as an integer.",
+			"note": "Ensure that all `true` values are counted correctly.",
+			"hint": "Iterate through the array and count the number of `true` values."
+		},
+		{
+			"lang": "tr",
+			"title": "Doğru Değerleri Say",
+			"description": "Verilen boolean değerler array'inde `true` değerlerinin sayısını bir tam sayı olarak döndür.",
+			"note": "Tüm `true` değerlerinin doğru şekilde sayıldığından emin ol.",
+			"hint": "Array'i dolaşarak `true` değerlerini say."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "countTrueValues",
+		"tests": [
+			{
+				"input": [[true, false, true, false]],
+				"output": [2]
+			},
+			{
+				"input": [[true, true, true, true]],
+				"output": [4]
+			},
+			{
+				"input": [[false, false, false]],
+				"output": [0]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath": "object/labs/5/c++.txt"
+			},
+			{
+				"programmingID": 2,
+				"templatePath": "object/labs/5/go.txt"
+			}
+		]
+	}
+}

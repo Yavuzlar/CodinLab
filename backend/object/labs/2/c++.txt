@@ -1,0 +1,41 @@
+## FRONTEND
+
+#include <stdio.h>
+
+using namespace std;
+
+bool $funcname$(std::string s) {
+    // Write your code here
+
+    return false
+}
+
+## DOCKER
+
+$usercode$
+
+int main(){
+    $checks$
+
+    std::cout << "$success$" << std::endl;
+}
+
+## CHECK
+
+std::vector<int> inputArr$rnd$ = {$input$};
+std::vector<int> outputArr$rnd$ = {$output$};
+
+std::vector<int> result$rnd$ = $funcname$(inputArr$rnd$);
+if (result$rnd$ != outputArr$rnd$){
+    
+    cout << "Test Failed: Expected ";
+    for (int num : outputArr$rnd$) {
+        cout << num << " ";
+    }
+    cout << ", but got ";
+    for (int num : result$rnd$) {
+        cout << num << " ";
+    }
+    cout << endl;
+    exit($rnd$);
+}

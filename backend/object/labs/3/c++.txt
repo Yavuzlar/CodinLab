@@ -1,0 +1,30 @@
+## FRONTEND
+
+#include <iostream>
+
+using namespace std;
+
+string $funcname$(string s) {
+    // Write your code here
+
+    return "CodinLab"
+}
+
+## DOCKER
+
+$usercode$
+
+int main(){
+    $checks$
+
+    std::cout << "$success$" << std::endl;
+}
+
+## CHECK
+
+string result$rnd$ = $funcname$($input$);
+if (result$rnd$ != $output$){
+    std::cout << "Test Failed: Expected $out$, but got" << result$rnd$ << std::endl;
+
+    exit($rnd$);
+}

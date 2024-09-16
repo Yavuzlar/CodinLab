@@ -66,8 +66,10 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 }
 
 func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error) {
+
 	logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath, fileName)
 	if err != nil {
+		fmt.Println(err)
 		return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
 	}
 
@@ -263,13 +265,32 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 			case string:
 				// Add double quotes around string inputs
 				inputs = append(inputs, `"`+v+`"`)
+			case []string:
+				// If input is a []string, format it correctly with double quotes around each element
+				var quotedStrings []string
+				for _, elem := range v {
+					quotedStrings = append(quotedStrings, `"`+elem+`"`)
+				}
+				inputs = append(inputs, strings.Join(quotedStrings, ", "))
 			case []interface{}:
-				// If input is an array, format it correctly without square brackets
+				// Handle []interface{} with mixed types
 				var arrayElements []string
 				for _, elem := range v {
-					arrayElements = append(arrayElements, fmt.Sprintf("%v", elem))
+					switch e := elem.(type) {
+					case string:
+						arrayElements = append(arrayElements, `"`+e+`"`)
+					case []string:
+						// Handle nested []string within []interface{}
+						var quotedStrings []string
+						for _, s := range e {
+							quotedStrings = append(quotedStrings, `"`+s+`"`)
+						}
+						arrayElements = append(arrayElements, "["+strings.Join(quotedStrings, ", ")+"]")
+					default:
+						// Handle other types normally
+						arrayElements = append(arrayElements, fmt.Sprintf("%v", e))
+					}
 				}
-				// Join array elements with a comma, without square brackets
 				inputs = append(inputs, strings.Join(arrayElements, ", "))
 			default:
 				// Directly use other types (int, etc.)
@@ -287,11 +308,32 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 				// Add double quotes around string outputs
 				outputs = append(outputs, `"`+v+`"`)
 				fails = append(fails, fmt.Sprintf("%v", v))
+			case []string:
+				// If output is a []string, format it correctly with double quotes around each element
+				var quotedStrings []string
+				for _, elem := range v {
+					quotedStrings = append(quotedStrings, `"`+elem+`"`)
+				}
+				outputs = append(outputs, strings.Join(quotedStrings, ", "))
+				fails = append(fails, strings.Join(quotedStrings, ", "))
 			case []interface{}:
-				// If output is an array, format it correctly without square brackets
+				// Handle []interface{} with mixed types
 				var arrayElements []string
 				for _, elem := range v {
-					arrayElements = append(arrayElements, fmt.Sprintf("%v", elem))
+					switch e := elem.(type) {
+					case string:
+						arrayElements = append(arrayElements, `"`+e+`"`)
+					case []string:
+						// Handle nested []string within []interface{}
+						var quotedStrings []string
+						for _, s := range e {
+							quotedStrings = append(quotedStrings, `"`+s+`"`)
+						}
+						arrayElements = append(arrayElements, "["+strings.Join(quotedStrings, ", ")+"]")
+					default:
+						// Handle other types normally
+						arrayElements = append(arrayElements, fmt.Sprintf("%v", e))
+					}
 				}
 				outputs = append(outputs, strings.Join(arrayElements, ", "))
 				fails = append(fails, strings.Join(arrayElements, ", "))
