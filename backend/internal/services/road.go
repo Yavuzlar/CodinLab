@@ -263,9 +263,12 @@ func (s *roadService) GetRoadByID(userID, programmingID, pathID string) (path *d
 		if roadCollection.GetID() == intProgrammingID {
 			for _, pathf := range roadCollection.GetPaths() {
 				if pathf.GetID() == intPathID {
-					path = &pathf
+					pathCopy := pathf
+					path = &pathCopy
+					break
 				}
 			}
+			break
 		}
 	}
 

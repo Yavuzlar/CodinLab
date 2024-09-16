@@ -49,7 +49,6 @@ type Quest struct {
 	difficulty   int
 	funcName     string
 	tests        []Test
-	questImports []string
 	codeTemplate []CodeTemplate
 }
 
@@ -83,14 +82,6 @@ func (q *Quest) GetTests() []Test {
 
 func (q *Quest) SetTests(tests []Test) {
 	q.tests = tests
-}
-
-func (q *Quest) GetQuestImports() []string {
-	return q.questImports
-}
-
-func (q *Quest) SetQuestImports(questImports []string) {
-	q.questImports = questImports
 }
 
 // NewTest creates a new instance of Test
