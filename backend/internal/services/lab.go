@@ -149,7 +149,9 @@ func (s *labService) GetLabByID(userID, labID string) (lab *domains.Lab, err err
 
 	for _, labf := range allLabs {
 		if labf.GetID() == intLabID {
-			lab = &labf
+			labCopy := labf
+			lab = &labCopy
+			break
 		}
 	}
 

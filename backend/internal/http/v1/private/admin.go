@@ -12,6 +12,7 @@ func (h *PrivateHandler) initAdminRoutes(root fiber.Router) {
 	adminRoute.Use(h.adminAuthMiddleware)
 	adminRoute.Get("/user/:userID", h.GetUserProfile)
 	adminRoute.Get("/user", h.GetAllUsers)
+	adminRoute.Delete("/user/:userID", h.DeleteUserAdmin)
 	adminRoute.Post("/user/:userID", h.UpdateUserAdmin)
 }
 
@@ -78,4 +79,21 @@ func (h *PrivateHandler) UpdateUserAdmin(c *fiber.Ctx) error {
 	}
 
 	return response.Response(200, "Update successful", nil)
+}
+
+// @Tags Admin
+// @Summary Deletes User
+// @Description Deletes User
+// @Accept json
+// @Produce json
+// @Param userID path string true "User ID"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/admin/user/{userID} [delete]
+func (h *PrivateHandler) DeleteUserAdmin(c *fiber.Ctx) error {
+	userID := c.Params("userID")
+	if err := h.services.AdminService.DeleteUser(c.Context(), userID); err != nil {
+		return err
+	}
+
+	return response.Response(200, "Delete successful", nil)
 }

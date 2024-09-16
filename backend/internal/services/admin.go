@@ -168,12 +168,13 @@ func (s *adminService) DeleteUser(ctx context.Context, userID string) (err error
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}
 	if len(users) == 0 {
-		return service_errors.NewServiceErrorWithMessage(400, "invalid request")
+		return service_errors.NewServiceErrorWithMessage(400, "user not found")
 	}
 
 	if err = s.userRepositories.Delete(ctx, userIDU); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while deleting the user", err)
 	}
+
 	return
 }
 

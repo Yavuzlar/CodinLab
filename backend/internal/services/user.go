@@ -124,7 +124,7 @@ func (s *userService) GetProfile(ctx context.Context, userID string) (user *doma
 		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}
 	if len(users) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid request")
+		return nil, service_errors.NewServiceErrorWithMessage(400, "user not found")
 	}
 	user = &users[0]
 
@@ -230,7 +230,7 @@ func (s *userService) DeleteUser(ctx context.Context, userID string) (err error)
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}
 	if len(users) == 0 {
-		return service_errors.NewServiceErrorWithMessage(400, "invalid request")
+		return service_errors.NewServiceErrorWithMessage(400, "user not found")
 	}
 
 	if err = s.userRepositories.Delete(ctx, userIDU); err != nil {

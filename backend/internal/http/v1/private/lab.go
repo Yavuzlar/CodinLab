@@ -130,7 +130,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		return err
 	}
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, labID, programmingID, nil, nil)
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, programmingID, labID, nil, nil)
 	if err != nil {
 		return err
 	}

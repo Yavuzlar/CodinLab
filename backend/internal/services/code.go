@@ -165,7 +165,7 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 			return history, nil
 		}
 
-		lab, err := s.labService.GetLabByID(userID, programmingID)
+		lab, err := s.labService.GetLabByID(userID, labPathID)
 		if err != nil {
 			return "", service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
 		}
@@ -199,7 +199,6 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 				}
 
 				break
-
 			}
 		}
 
