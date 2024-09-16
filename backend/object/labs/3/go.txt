@@ -1,0 +1,25 @@
+## FRONTEND
+
+func $funcname$(s string) string {
+    // Write your code here
+
+    return "CodinLab"
+}
+
+## DOCKER
+
+$usercode$
+
+func main(){
+    $checks$
+
+    fmt.Println("$success$")
+}
+
+## CHECK
+
+result$rnd$ := $funcname$($input$)
+if (result$rnd$ != $output$){
+    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    return
+}

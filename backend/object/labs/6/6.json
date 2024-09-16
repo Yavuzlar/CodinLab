@@ -1,0 +1,63 @@
+{
+	"id": 6,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Nth Fibonacci Number",
+			"description": "Given an integer `n`, return the nth number in the Fibonacci sequence.",
+			"note": "The Fibonacci sequence is defined as follows: F(0) = 0, F(1) = 1, and F(n) = F(n-1) + F(n-2) for n > 1.",
+			"hint": "Use an iterative or recursive approach to compute the Fibonacci number."
+		},
+		{
+			"lang": "tr",
+			"title": "Nth Fibonacci Sayısı",
+			"description": "Bir tamsayı `n` verildiğinde, Fibonacci dizisindeki n'inci sayıyı döndür.",
+			"note": "Fibonacci dizisi şu şekilde tanımlanır: F(0) = 0, F(1) = 1 ve F(n) = F(n-1) + F(n-2) n > 1 için.",
+			"hint": "Fibonacci sayısını hesaplamak için iteratif veya rekürsif bir yaklaşım kullanabilirsiniz."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "nthFibonacci",
+		"tests": [
+			{
+				"input": [5],
+				"output": [5]
+			},
+			{
+				"input": [10],
+				"output": [55]
+			},
+			{
+				"input": [0],
+				"output": [0]
+			},
+			{
+				"input": [1],
+				"output": [1]
+			},
+			{
+				"input": [2],
+				"output": [1]
+			},
+			{
+				"input": [15],
+				"output": [610]
+			},
+			{
+				"input": [20],
+				"output": [6765]
+			},
+			{
+				"input": [25],
+				"output": [75025]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 2,
+				"templatePath": "object/labs/6/go.txt"
+			}
+		]
+	}
+}
