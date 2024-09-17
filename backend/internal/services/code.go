@@ -117,7 +117,7 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID, programmingID,
 	return codeTmpPath, nil
 }
 
-func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCode, language string, tests []domains.Test) (string, error) {
+func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []domains.Test) (string, error) {
 	templateMap, err := s.readTemplate(templatePath)
 	if err != nil {
 		return "", err
@@ -143,14 +143,14 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 
 	dockerImports, newDocker := extractor.ExtractImports(docker, false)
 
-	allImports := s.BindImports(dockerImports, frontImports, language)
+	allImports := s.bindImports(dockerImports, frontImports)
 
 	docker = strings.Replace(newDocker, "$imps$", allImports, -1)
 
 	return docker, nil
 }
 
-func (s *codeService) BindImports(dockerImports, frontImports, language string) string {
+func (s *codeService) bindImports(dockerImports, frontImports string) string {
 	dockerImportsLines := strings.Split(dockerImports, "\n")
 	frontImportsLines := strings.Split(frontImports, "\n")
 

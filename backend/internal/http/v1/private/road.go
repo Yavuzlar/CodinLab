@@ -176,7 +176,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	}
 	codeTmp := road.GetQuest().GetCodeTemplates()[0] // Çünkü road hangi dil için ise onun template'i kullanılıcak başka gerek yok.
 
-	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplatePath(), road.GetQuest().GetFuncName(), answerRoadDTO.UserCode, programmingInformation.GetName(), road.GetQuest().GetTests())
+	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplatePath(), road.GetQuest().GetFuncName(), answerRoadDTO.UserCode, road.GetQuest().GetTests())
 	if err != nil {
 		return err
 	}
