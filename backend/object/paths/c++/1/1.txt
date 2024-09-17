@@ -1,26 +1,20 @@
 ## FRONTEND
 
+#include <iostream>
+#include <string>
+
 using namespace std;
 
 string $funcname$() {
     // Write your code here
 
-    return "x"
+    return "x";
 }
 
 int main() {
-    std::string userInput;
+    std::string result = $funcname$();
     
-    // Kullanıcıdan girdi almak için
-    std::cout << "Bir değer girin: ";
-    std::getline(std::cin, userInput);
-
-    // funcname fonksiyonunu çağırıp sonucu alıyoruz
-    std::string result = funcname(userInput);
-
-    // Sonucu ekrana yazdırıyoruz
     std::cout << "Fonksiyondan dönen sonuç: " << result << std::endl;
-
     return 0;
 }
 
@@ -28,6 +22,8 @@ int main() {
 
 #include <iostream>
 #include <string>
+
+using namespace std;
 
 $usercode$
 
@@ -42,5 +38,5 @@ int main(){
 
 std::string result = $funcname$($input$);
 if (result != $output$){
-    std::cout << "Test Failed: Expected $out$, but got" << result << std::endl;
+    std::cout << "Test Failed: Expected $out$, but got " << result << std::endl;
 }

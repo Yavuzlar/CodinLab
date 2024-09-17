@@ -1,0 +1,35 @@
+{
+	"id": 1,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Basic Syntax",
+			"description": "Understanding the basic syntax of C++",
+			"content": "Learn about the basic structure of a C++ program, including headers, main function, and statements.",
+			"note": "Quest Note"
+		},
+		{
+			"lang": "tr",
+			"title": "Basit yazılış",
+			"description": "c++ 'In temellerini öğrenin.",
+			"content": "C++ ın basit yapısını öğrenin.",
+			"note": "Sorunun Notu"
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "helloWorld",
+		"tests": [
+			{
+				"input": [],
+				"output": ["Hello, World!"]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath": "object/paths/c++/1/1.txt"
+			}
+		]
+	}
+}
