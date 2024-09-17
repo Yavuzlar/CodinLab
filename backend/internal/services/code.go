@@ -127,17 +127,17 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 	}
 
 	frontImports, cleanedCode := extractor.ExtractImports(userCode, true)
-	newUserCode, err := extractor.ExtractMainFunction(cleanedCode)
+	/* newUserCode, err := extractor.ExtractMainFunction(cleanedCode)
 	if err != nil {
 		return "", err
-	}
+	} */
 
 	docker := templateMap["docker"]
 
 	checks := s.createChecks(templateMap["check"], tests)
 
 	docker = strings.Replace(docker, "$checks$", checks, -1)
-	docker = strings.Replace(docker, "$usercode$", newUserCode, -1)
+	docker = strings.Replace(docker, "$usercode$", cleanedCode, -1)
 	docker = strings.Replace(docker, "$funcname$", funcName, -1)
 	docker = strings.Replace(docker, "$success$", "Test Passed", -1)
 
@@ -164,7 +164,11 @@ func (s *codeService) BindImports(dockerImports, frontImports, language string) 
 				}
 			}
 			if len(frontImportsInside) > 0 {
-				return extractor.FormatToMultipleImports(frontImportsInside)
+				if len(frontImports) > 0 {
+					return extractor.FormatToMultipleImports(frontImportsInside)
+				} else {
+					return dockerImports
+				}
 			}
 		}
 		return frontImports

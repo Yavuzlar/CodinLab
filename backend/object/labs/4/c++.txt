@@ -10,29 +10,6 @@ string $funcname$(std::vector<string> s) {
     return "Codinglab"
 }
 
-int main() {
-    std::vector<std::string> stringVector;
-    std::string input;
-
-    std::cout << "String değerleri girin (bitiş için q girin):" << std::endl;
-
-    while (true) {
-        std::cout << "Bir değer girin: ";
-        std::getline(std::cin, input);
-
-        if (input == "q") {
-            break;
-        }
-
-        stringVector.push_back(input);
-    }
-
-    std::string result = funcname(stringVector);
-
-    std::cout << "Funcname sonucu: " << result << std::endl;
-
-    return 0;
-}
 
 ## DOCKER
 

@@ -10,16 +10,6 @@ string $funcname$(string s) {
     return "CodinLab"
 }
 
-int main() {
-    std::string input;
-
-    std::cout << "Bir string girin: ";
-    std::getline(std::cin, input); 
-
-    std::cout << std::string << isPalindrome(input) << std::endl;
-
-    return 0;
-}
 
 ## DOCKER
 
