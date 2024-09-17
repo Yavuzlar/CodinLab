@@ -12,6 +12,16 @@ bool $funcname$(std::string s) {
     return false;
 }
 
+int main() {
+    std::string input;
+
+    std::cout << "Bir string girin: ";
+    std::getline(std::cin, input); 
+
+    std::cout << std::boolalpha << $funcname$(input) << std::endl;
+
+    return 0;
+}
 
 ## DOCKER
 

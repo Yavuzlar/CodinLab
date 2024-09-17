@@ -90,6 +90,10 @@ func (m *Manager) ReadContainerLogs(ctx context.Context, containerID string) (st
 		}
 		logLine = strings.TrimSuffix(logLine, "\n")
 
+		re := regexp.MustCompile(`go: downloading[^#]*#`)
+
+		logLine = re.ReplaceAllString(logLine, "")
+
 		result.WriteString(logLine)
 	}
 

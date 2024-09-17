@@ -28,7 +28,7 @@
         "labDir": "object/labs",
         "pathDir": "object/paths/golang",
         "iconPath": "images/go.png",
-        "cmd": ["go", "run", "../main.go"],
+        "cmd": ["sh","-c","go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go && go run ../main.go"],
         "fileExtension": "go",
         "language": [
             {

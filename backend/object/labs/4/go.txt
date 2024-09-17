@@ -2,12 +2,36 @@
 
 package main;
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 func $funcname$(s []string) string {
     // Write your code here
 
     return "CodinLab"
+}
+
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Println("Enter strings (type 'done' when finished):")
+
+	var input []string
+
+	for {
+		scanner.Scan()
+		line := scanner.Text()
+
+		if line == "done" {
+			break
+		}
+
+		input = append(input, line)
+	}
+
+	fmt.Println("Output:", $funcname$(input))
 }
 
 ## DOCKER
