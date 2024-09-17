@@ -50,10 +50,9 @@ func ExtractMainFunction(code string) (string, error) {
 		}
 	}
 
-	if startIndex == -1 {
-		return "", fmt.Errorf("main function not found")
+	if startIndex != -1 {
+		lines = lines[:startIndex] //deletes main from code
 	}
-	lines = lines[:startIndex] //deletes main from code
 
 	newCode := strings.Join(lines, "\n")
 	return newCode, nil
