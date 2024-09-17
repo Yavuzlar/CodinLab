@@ -1,12 +1,51 @@
 ## FRONTEND
 
+package main;
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
+
 func $funcname$(s []bool) int {
     // Write your code here
 
     return -1
 }
 
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Println("Enter true/false values (type 'done' when finished):")
+
+	var input []bool
+
+	for {
+		scanner.Scan()
+		line := scanner.Text()
+
+		if line == "done" {
+			break
+		}
+
+		if b, err := strconv.ParseBool(strings.TrimSpace(line)); err == nil {
+			input = append(input, b)
+		} else {
+			fmt.Println("Invalid input, please enter 'true' or 'false'.")
+		}
+	}
+
+	fmt.Println("Output:", MyFunction(input))
+}
+
 ## DOCKER
+
+package main;
+
+import "fmt"
 
 $usercode$
 

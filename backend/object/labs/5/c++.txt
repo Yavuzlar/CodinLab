@@ -10,7 +10,40 @@ int $funcname$(std::vector<bool> s) {
     return -1
 }
 
+int main() {
+    std::string input;
+    std::vector<bool> boolVector;
+
+    std::cout << "Boolean değerleri girin (0 veya 1, bitiş için q girin): " << std::endl;
+
+    while (true) {
+        std::cout << "Bir değer girin: ";
+        std::getline(std::cin, input);
+
+        if (input == "q") {
+            break;
+        }
+
+        try {
+            bool value = (input == "1");
+            boolVector.push_back(value);
+        } catch (...) {
+            std::cout << "Geçersiz girdi. Lütfen 0 veya 1 girin veya q'ya basın." << std::endl;
+        }
+    }
+
+    int result = funcname(boolVector);
+
+    std::cout << "Funcname sonucunu: " << result << std::endl;
+
+    return 0;
+}
+
 ## DOCKER
+
+#include <stdio.h>
+
+using namespace std;
 
 $usercode$
 

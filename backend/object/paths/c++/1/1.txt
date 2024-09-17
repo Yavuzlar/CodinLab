@@ -8,6 +8,22 @@ string $funcname$() {
     return "x"
 }
 
+int main() {
+    std::string userInput;
+    
+    // Kullanıcıdan girdi almak için
+    std::cout << "Bir değer girin: ";
+    std::getline(std::cin, userInput);
+
+    // funcname fonksiyonunu çağırıp sonucu alıyoruz
+    std::string result = funcname(userInput);
+
+    // Sonucu ekrana yazdırıyoruz
+    std::cout << "Fonksiyondan dönen sonuç: " << result << std::endl;
+
+    return 0;
+}
+
 ## DOCKER
 
 #include <iostream>

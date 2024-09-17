@@ -9,6 +9,7 @@ import (
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
+	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 	"github.com/Yavuzlar/CodinLab/pkg/docker"
 	"github.com/Yavuzlar/CodinLab/pkg/file"
 )
@@ -125,12 +126,18 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 		return "", service_errors.NewServiceErrorWithMessage(400, fmt.Sprintf("Need %v function", funcName))
 	}
 
+	cleanedCode := extractor.ExtractImports(userCode)
+	newUserCode, err := extractor.ExtractMainFunction(cleanedCode)
+	if err != nil {
+		return "", err
+	}
+
 	docker := templateMap["docker"]
 
 	checks := s.createChecks(templateMap["check"], tests)
 
 	docker = strings.Replace(docker, "$checks$", checks, -1)
-	docker = strings.Replace(docker, "$usercode$", userCode, -1)
+	docker = strings.Replace(docker, "$usercode$", newUserCode, -1)
 	docker = strings.Replace(docker, "$funcname$", funcName, -1)
 	docker = strings.Replace(docker, "$success$", "Test Passed", -1)
 

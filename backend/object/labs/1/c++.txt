@@ -1,16 +1,35 @@
 ## FRONTEND
 
 #include <stdio.h>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
 bool $funcname$(std::string s) {
     // Write your code here
 
-    return false
+    return false;
+}
+
+int main() {
+    std::string input;
+
+    std::cout << "Bir string girin: ";
+    std::getline(std::cin, input); 
+
+    std::cout << std::boolalpha << $funcname$(input) << std::endl;
+
+    return 0;
 }
 
 ## DOCKER
+
+#include <stdio.h>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 $usercode$
 
@@ -24,5 +43,6 @@ int main(){
 
 bool result$rnd$ = $funcname$($input$);
 if (result$rnd$ != $output$){
-    std::cout << "Test Failed: Expected $out$, but got" << result$rnd$ << std::endl;
+    std::cout << "Test Failed: Expected $out$, but got " << result$rnd$ << std::endl;
+    return 0;
 }

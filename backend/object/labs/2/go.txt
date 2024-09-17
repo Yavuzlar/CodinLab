@@ -2,7 +2,7 @@
 
 package main;
 
-import "reflect"
+import "fmt"
 
 func $funcname$(s string) bool {
     // Write your code here
@@ -10,7 +10,21 @@ func $funcname$(s string) bool {
     return false
 }
 
+func main(){
+    var input string
+    fmt.Println("Lütfen bir string değer girin:")
+    fmt.Scan(&input) 
+    fmt.Println("Girdiğiniz string değer:", $funcname$(input))
+}
+
 ## DOCKER
+
+package main;
+
+import(
+    "reflect"
+    "fmt"
+)
 
 $usercode$
 
