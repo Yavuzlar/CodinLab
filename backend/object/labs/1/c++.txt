@@ -25,11 +25,9 @@ int main() {
 
 ## DOCKER
 
-#include <stdio.h>
-#include <string>
-#include <iostream>
+$imps$
 
-using namespace std;
+#include <iostream>
 
 $usercode$
 

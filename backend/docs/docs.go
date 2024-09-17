@@ -279,16 +279,16 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "labID",
+                        "name": "labID",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
                         "description": "programmingID",
                         "name": "programmingID",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "labID",
-                        "name": "labID",
-                        "in": "path"
                     },
                     {
                         "description": "Answer Lab DTO",

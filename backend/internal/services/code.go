@@ -117,7 +117,7 @@ func (s *codeService) UploadUserCode(ctx context.Context, userID, programmingID,
 	return codeTmpPath, nil
 }
 
-func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []domains.Test) (string, error) {
+func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCode, language string, tests []domains.Test) (string, error) {
 	templateMap, err := s.readTemplate(templatePath)
 	if err != nil {
 		return "", err
@@ -126,7 +126,7 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 		return "", service_errors.NewServiceErrorWithMessage(400, fmt.Sprintf("Need %v function", funcName))
 	}
 
-	cleanedCode := extractor.ExtractImports(userCode)
+	frontImports, cleanedCode := extractor.ExtractImports(userCode, true)
 	newUserCode, err := extractor.ExtractMainFunction(cleanedCode)
 	if err != nil {
 		return "", err
@@ -141,7 +141,41 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 	docker = strings.Replace(docker, "$funcname$", funcName, -1)
 	docker = strings.Replace(docker, "$success$", "Test Passed", -1)
 
+	dockerImports, newDocker := extractor.ExtractImports(docker, false)
+
+	allImports := s.BindImports(dockerImports, frontImports, language)
+
+	docker = strings.Replace(newDocker, "$imps$", allImports, -1)
+
 	return docker, nil
+}
+
+func (s *codeService) BindImports(dockerImports, frontImports, language string) string {
+	dockerImportsLines := strings.Split(dockerImports, "\n")
+	frontImportsLines := strings.Split(frontImports, "\n")
+
+	if strings.EqualFold(language, "GO") {
+		if len(dockerImports) > 0 {
+			frontImportsInside := extractor.ExtractImportsInsideParenthesis(frontImports)
+			dockerImportsInside := extractor.ExtractImportsInsideParenthesis(dockerImports)
+			for _, dockerImport := range dockerImportsInside {
+				if !strings.Contains(frontImports, dockerImport) {
+					frontImportsInside = append(frontImportsInside, dockerImport)
+				}
+			}
+			if len(frontImportsInside) > 0 {
+				return extractor.FormatToMultipleImports(frontImportsInside)
+			}
+		}
+		return frontImports
+	}
+	for _, dockerImport := range dockerImportsLines {
+		if !strings.Contains(frontImports, dockerImport) {
+			frontImportsLines = append(frontImportsLines, dockerImport)
+		}
+	}
+
+	return strings.Join(frontImportsLines, "\n")
 }
 
 func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName string) (string, error) {

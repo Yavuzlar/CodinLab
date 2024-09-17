@@ -4,6 +4,7 @@ package main;
 
 import "fmt"
 
+
 func $funcname$(s string) bool {
     // Write your code here
 
@@ -19,12 +20,11 @@ func main(){
 
 ## DOCKER
 
-package main;
+package main
 
-import(
-    "reflect"
-    "fmt"
-)
+$imps$
+
+import "reflect"
 
 $usercode$
 

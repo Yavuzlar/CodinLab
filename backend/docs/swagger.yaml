@@ -419,14 +419,14 @@ paths:
       - application/json
       description: This is for answering quests.
       parameters:
+      - description: labID
+        in: path
+        name: labID
+        type: string
       - description: programmingID
         in: path
         name: programmingID
         required: true
-        type: string
-      - description: labID
-        in: path
-        name: labID
         type: string
       - description: Answer Lab DTO
         in: body

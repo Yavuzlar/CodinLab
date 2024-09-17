@@ -37,9 +37,9 @@ func main() {
 
 ## DOCKER
 
-package main;
+package main
 
-import "fmt"
+$imps$
 
 $usercode$
 
