@@ -157,8 +157,8 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 // @Description This is for answering quests.
 // @Accept json
 // @Produce json
-// @Param programmingID path string true "programmingID"
 // @Param labID path string false "labID"
+// @Param programmingID path string true "programmingID"
 // @Param answerLabDTO body dto.AnswerLabDTO true "Answer Lab DTO"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/lab/answer/{programmingID}/{labID} [post]

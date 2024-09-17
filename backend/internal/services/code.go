@@ -9,6 +9,7 @@ import (
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
+	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 	"github.com/Yavuzlar/CodinLab/pkg/docker"
 	"github.com/Yavuzlar/CodinLab/pkg/file"
 )
@@ -125,16 +126,41 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 		return "", service_errors.NewServiceErrorWithMessage(400, fmt.Sprintf("Need %v function", funcName))
 	}
 
+	frontImports, cleanedCode := extractor.ExtractImports(userCode, true)
+	newUserCode, err := extractor.ExtractMainFunction(cleanedCode)
+	if err != nil {
+		return "", err
+	}
+
 	docker := templateMap["docker"]
 
 	checks := s.createChecks(templateMap["check"], tests)
 
 	docker = strings.Replace(docker, "$checks$", checks, -1)
-	docker = strings.Replace(docker, "$usercode$", userCode, -1)
+	docker = strings.Replace(docker, "$usercode$", newUserCode, -1)
 	docker = strings.Replace(docker, "$funcname$", funcName, -1)
 	docker = strings.Replace(docker, "$success$", "Test Passed", -1)
 
+	dockerImports, newDocker := extractor.ExtractImports(docker, false)
+
+	allImports := s.bindImports(dockerImports, frontImports)
+
+	docker = strings.Replace(newDocker, "$imps$", allImports, -1)
+
 	return docker, nil
+}
+
+func (s *codeService) bindImports(dockerImports, frontImports string) string {
+	dockerImportsLines := strings.Split(dockerImports, "\n")
+	frontImportsLines := strings.Split(frontImports, "\n")
+
+	for _, dockerImport := range dockerImportsLines {
+		if !strings.Contains(frontImports, dockerImport) {
+			frontImportsLines = append(frontImportsLines, dockerImport)
+		}
+	}
+
+	return strings.Join(frontImportsLines, "\n")
 }
 
 func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName string) (string, error) {

@@ -1,6 +1,8 @@
 package private
 
 import (
+	"fmt"
+
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -34,9 +36,12 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 	}
 
 	if !isExsits {
-		if err := h.services.CodeService.Pull(c.Context(), programmingInformation.GetDockerImage()); err != nil {
-			return err
-		}
+		go func() {
+			err = h.services.CodeService.Pull(c.Context(), programmingInformation.GetDockerImage())
+			if err != nil {
+				fmt.Printf("Error pulling Docker image: %v\n", err)
+			}
+		}()
 	}
 
 	ok, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, programmingID, "", domains.TypeProgrammingLanguage, domains.ContentStarted)

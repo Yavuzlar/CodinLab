@@ -1,12 +1,27 @@
 ## FRONTEND
 
+package main;
+
+import "fmt"
+
 func $funcname$(s string) string {
     // Write your code here
 
     return "CodinLab"
 }
 
+func main(){
+    var input string
+    fmt.Println("Lütfen bir string değer girin:")
+    fmt.Scan(&input) 
+    fmt
+    .Println("Girdiğiniz string değer:", $funcname$(input))
+}
 ## DOCKER
+
+package main
+
+$imps$
 
 $usercode$
 
