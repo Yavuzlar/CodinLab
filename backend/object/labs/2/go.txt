@@ -5,7 +5,7 @@ package main;
 import "fmt"
 
 
-func $funcname$(s string) bool {
+func $funcname$(s []int) bool {
     // Write your code here
 
     return false

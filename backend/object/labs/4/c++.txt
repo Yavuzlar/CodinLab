@@ -1,6 +1,9 @@
 ## FRONTEND
 
 #include <stdio.h>
+#include <vector>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -27,9 +30,9 @@ int main() {
         stringVector.push_back(input);
     }
 
-    std::string result = funcname(stringVector);
+    std::string result = $funcname$(stringVector);
 
-    std::cout << "Funcname sonucu: " << result << std::endl;
+    std::cout << "$funcname$ sonucu: " << result << std::endl;
 
     return 0;
 }
@@ -52,6 +55,6 @@ std::vector<string> inputArr$rnd$ = {$input$};
 
 std::string result$rnd$ = $funcname$(inputArr$rnd$);
 if (result$rnd$ != $output$){
-    std::cout << "Test Failed: Expected $out$, but got" << result$rnd$ << std::endl;
+    std::cout << "Test Failed: Expected $out$, but got " << result$rnd$ << std::endl;
     exit($rnd$);
 }

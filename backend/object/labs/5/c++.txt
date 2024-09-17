@@ -1,6 +1,8 @@
 ## FRONTEND
 
-#include <stdio.h>
+#include <vector>
+#include <iostream>
+
 
 using namespace std;
 
@@ -32,7 +34,7 @@ int main() {
         }
     }
 
-    int result = funcname(boolVector);
+    int result = $funcname$(boolVector);
 
     std::cout << "Funcname sonucunu: " << result << std::endl;
 
@@ -57,6 +59,6 @@ std::vector<bool> inputArr$rnd$ = {$input$};
 
 int result$rnd$ = $funcname$(inputArr$rnd$);
 if (result$rnd$ != $output$){
-    std::cout << "Test Failed: Expected $out$, but got" << result$rnd$ << std::endl;
+    std::cout << "Test Failed: Expected $out$, but got " << result$rnd$ << std::endl;
     exit($rnd$);
 }

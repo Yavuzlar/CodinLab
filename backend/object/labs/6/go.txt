@@ -14,7 +14,7 @@ func main(){
     var input string
     fmt.Println("Lütfen bir string değer girin:")
     fmt.Scan(&input) 
-    fmt.Println("Girdiğiniz string değer:", $funcname$(input))
+    fmt.Println("Girdiğiniz string değer: ", $funcname$(input))
 }
 
 ## DOCKER

@@ -1,6 +1,8 @@
 ## FRONTEND
 
 #include <iostream>
+#include <algorithm>
+#include <string>
 
 using namespace std;
 
@@ -37,7 +39,7 @@ int main(){
 
 string result$rnd$ = $funcname$($input$);
 if (result$rnd$ != $output$){
-    std::cout << "Test Failed: Expected $out$, but got" << result$rnd$ << std::endl;
+    std::cout << "Test Failed: Expected $out$, but got " << result$rnd$ << std::endl;
 
     exit($rnd$);
 }
