@@ -57,24 +57,59 @@ func (s *codeService) Pull(ctx context.Context, imageReference string) (err erro
 	}
 }
 
-func (s *codeService) IsImageExists(ctx context.Context, imageReference string) (isExsits bool, err error) {
-	isExsits, err = s.dockerSDK.Images().IsImageExists(ctx, imageReference)
-	if err != nil {
-		return false, service_errors.NewServiceErrorWithMessage(400, "Docker Image Is Exist Error")
-	}
+func (s *codeService) IsImageExists(ctx context.Context, imageReference string) (isExists bool, err error) {
+	resultChan := make(chan struct {
+		isExists bool
+		err      error
+	})
 
-	return
+	// Asenkron olarak Docker image existence kontrolünü başlatın
+	go func() {
+		isExists, err := s.dockerSDK.Images().IsImageExists(ctx, imageReference)
+		resultChan <- struct {
+			isExists bool
+			err      error
+		}{isExists, err}
+	}()
+
+	// İşlem tamamlandığında kanaldan sonuç alınır
+	select {
+	case result := <-resultChan:
+		if result.err != nil {
+			return false, service_errors.NewServiceErrorWithMessage(400, "Docker Image Is Exist Error")
+		}
+		return result.isExists, nil
+	case <-ctx.Done():
+		return false, ctx.Err() // Eğer context iptal edilirse
+	}
 }
 
 func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error) {
+	resultChan := make(chan struct {
+		logs string
+		err  error
+	})
 
-	logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath, fileName)
-	if err != nil {
-		fmt.Println(err)
-		return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
+	// Asenkron olarak container çalıştırma işlemini başlatın
+	go func() {
+		logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath, fileName)
+		resultChan <- struct {
+			logs string
+			err  error
+		}{logs, err}
+	}()
+
+	// İşlem tamamlandığında kanaldan sonuç alınır
+	select {
+	case result := <-resultChan:
+		if result.err != nil {
+			// fmt.Println(result.err)
+			return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
+		}
+		return result.logs, nil
+	case <-ctx.Done():
+		return "", ctx.Err() // Eğer context iptal edilirse
 	}
-
-	return logs, nil
 }
 
 // Bunu Answer Kısmınlarında Kullanacaksın.
