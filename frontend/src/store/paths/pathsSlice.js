@@ -15,6 +15,10 @@ export const fetchPaths = createAsyncThunk(
         const response = await axios({
             method: "GET",
             url: `/api/v1/private/road/${data.programmingid}`,
+            headers: {
+              'accept': 'application/json',
+              'Language': data.language,
+            }
         });
         if (response.status === 200) {
             return response.data.data;
@@ -42,7 +46,7 @@ export const startRoad = createAsyncThunk(
       return rejectWithValue(error.response.data.message || error.message);
     }
   }
-)
+);
 
 const pathsSlice = createSlice({
   name: "paths",
@@ -74,6 +78,6 @@ const pathsSlice = createSlice({
         state.error = action.payload;
     })
   }
-})
+});
 
 export default pathsSlice.reducer;
