@@ -2,18 +2,58 @@ import { useTheme } from "@mui/material/styles";
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import CodeEditor from "src/components/code-editor";
 import Output from "src/components/output";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CustomBreadcrumbs from "src/components/breadcrumbs";
 import DoneIcon from "src/assets/icons/icons8-done-100 (1).png";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { getProgrammingId } from "src/data/programmingIds";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPathById, resetPathById, sendAnswerById } from "src/store/path/pathSlice";
 
 const LanguageRoad = ({ language = "", pathId }) => {
   const [output, setOutput] = useState(""); // we will store the output here
 
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const [programmingId, setProgrammingId] = useState(null)
+
   const _language = language.toUpperCase();
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const dispatch = useDispatch();
+  const { path } = useSelector((state) => state);
+
+  useEffect(() => {
+    console.log("Language useEffect: ", language);
+    setProgrammingId(getProgrammingId[language]);
+  }, [language]);
+
+  useEffect(() => {
+    if (programmingId && pathId) {
+      console.log("i18n language ->", i18n.language);
+      dispatch(fetchPathById(
+        {
+          language: i18n.language,
+          programmingId: programmingId,
+          pathId: pathId,
+        }
+      ));
+    }
+  }, [programmingId, pathId, i18n.language]);
+
+  useEffect(() => {
+    if (path) {
+      console.log("Path fetched ->", path);
+
+      setError(path.error);
+      setLoading(path.loading);
+
+
+    }
+  }, [path]);
 
   const handleRun = (outputData) => {
     // this function will be called when the code is run
