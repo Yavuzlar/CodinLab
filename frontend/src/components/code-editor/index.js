@@ -13,8 +13,9 @@ import SunIcon from "src/assets/icons/sun.png";
 import MoonIcon from "src/assets/icons/moon.png";
 import MenuIconBlack from "src/assets/icons/menu-black.png";
 import MenuIconWhite from "src/assets/icons/menu-white.png";
+import axios from "axios";
 
-const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
+const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) => {
   const [value, setValue] = useState("");
   const [theme, setTheme] = useState("vs-dark");
   const [editorActionsWidth, setEditorActionsWidth] = useState(0);
@@ -29,13 +30,21 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title }) => {
   };
 
   // here we will add the run calls
-  const handleRun = () => {
+  const handleRun = async () => {
     // in the future, we will add the run api call here
-
-    setTimeout(() => {
-      const response = "Output from backend";
-      onRun(response);
-    }, 2000);
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/api/v1/private/${apiData.endPoint}/answer/${apiData.programmingId}/${apiData.pathId}`,
+        data: { userCode: value },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      onRun(response.data);
+    } catch (error) {
+      return onRun(error.response.data.message || error.message);
+    }
   };
 
   // here we will add the stop api calls

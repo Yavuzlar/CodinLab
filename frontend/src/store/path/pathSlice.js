@@ -29,25 +29,6 @@ export const fetchPathById = createAsyncThunk(
   }
 );
 
-export const sendAnswerById = createAsyncThunk(
-  "path/sendAnswerById",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await axios({
-        method: "POST",
-        url: `/api/v1/private/road/answer/${data.programmingid}/${data.pathId}`,
-        data: data,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data.message || error.message);
-    }
-  }
-);
-
 export const resetPathById = createAsyncThunk(
   "path/resetPathById",
   async (data, { rejectWithValue }) => {
@@ -79,18 +60,6 @@ const pathSlice = createSlice({
             state.loading = false;
         })
         .addCase(fetchPathById.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
-        })
-        .addCase(sendAnswerById.pending, (state) => {
-            state.loading = true;
-            state.error = false;
-        })
-        .addCase(sendAnswerById.fulfilled, (state, action) => {
-            state.data = action.payload;
-            state.loading = false;
-        })
-        .addCase(sendAnswerById.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         })
