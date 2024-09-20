@@ -1,9 +1,13 @@
 import { Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Output = ({ value, params }) => {
+
+  const { t } = useTranslation();
+
   value =
     value ||
-    "Output will be displayed here ";
+    t("codeEditor.output.display");
 
   const width = params.width ? params.width : "50%";
   const height = params.height ? params.height : "50%";
@@ -45,7 +49,7 @@ const Output = ({ value, params }) => {
             opacity: "1",
           }}
         >
-          Output
+          {t("codeEditor.output")}
         </Box>
       </Box>
       <Box
