@@ -106,5 +106,8 @@
   "labs.difficulty.medium": "Orta",
   "labs.difficulty.hard": "Zor",
   "labs.progress.stats.progress": "Devam ediyor",
-  "labs.progress.stats.completed": "Tamamlandı"
+  "labs.progress.stats.completed": "Tamamlandı",
+  "roads.path.restart.button": "Yolu baştan başlat",
+  "codeEditor.output": "Çıktı",
+  "codeEditor.output.display": "Çıktı burada görüntülenir"
 }

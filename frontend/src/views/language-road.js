@@ -165,7 +165,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
             </Box>
           )}
           {!isFinished && (
-            <Tooltip title="Restart the path">
+            <Tooltip title={t("roads.path.restart.button")}>
               <Button
                 sx={{
                   position: "absolute",

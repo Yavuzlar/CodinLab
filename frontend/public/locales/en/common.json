@@ -105,5 +105,8 @@
   "labs.difficulty.medium": "Medium",
   "labs.difficulty.hard": "Hard",
   "labs.progress.stats.progress": "In Progress",
-  "labs.progress.stats.completed": "Completed"
+  "labs.progress.stats.completed": "Completed",
+  "roads.path.restart.button": "Restart the path",
+  "codeEditor.output": "Output",
+  "codeEditor.output.display": "Output will be displayed here"
 }
