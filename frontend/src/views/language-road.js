@@ -1,5 +1,7 @@
 import { useTheme } from "@mui/material/styles";
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import Tooltip from "@mui/material/Tooltip";
 import CodeEditor from "src/components/code-editor";
 import Output from "src/components/output";
 import { useState, useEffect } from "react";
@@ -9,25 +11,25 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { getProgrammingId } from "src/data/programmingIds";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPathById, resetPathById } from "src/store/path/pathSlice";
+import { fetchPathById } from "src/store/path/pathSlice";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const LanguageRoad = ({ language = "", pathId }) => {
-  const [output, setOutput] = useState(""); // we will store the output here
+  const _language = language.toUpperCase();
+  const { t, i18n } = useTranslation();
+  const router = useRouter();
+  const theme = useTheme();
+
+  const dispatch = useDispatch();
+  const { path } = useSelector((state) => state);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [programmingId, setProgrammingId] = useState(null)
+  const [output, setOutput] = useState(""); // we will store the output here
 
-  const _language = language.toUpperCase();
-
-  const { t, i18n } = useTranslation();
-  const router = useRouter();
-
-
-  const dispatch = useDispatch();
-  const { path } = useSelector((state) => state);
+  const [programmingId, setProgrammingId] = useState(null);
 
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -36,33 +38,32 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [note, setNote] = useState("");
-  const [template, setTemplate] = useState("");
+  const [template, setTemplate] = useState("asd");
 
   useEffect(() => {
-    console.log("Language useEffect: ", language);
     setProgrammingId(getProgrammingId[language]);
   }, [language]);
 
   useEffect(() => {
     if (programmingId && pathId) {
-      console.log("i18n language ->", i18n.language);
-      dispatch(fetchPathById(
-        {
+      dispatch(
+        fetchPathById({
           language: i18n.language,
           programmingId: programmingId,
           pathId: pathId,
-        }
-      ));
+        })
+      );
     }
   }, [programmingId, pathId, i18n.language]);
 
   useEffect(() => {
     if (path) {
-
       if (path.data.data) {
-
         const pathData = path.data.data[0].paths[0];
+        console.log("Path data", pathData);
 
+        setIsStarted(pathData.isStarted);
+        setIsFinished(pathData.isFinished);
         setTitle(pathData.language.title);
         setDescription(pathData.language.description);
         setContent(pathData.language.content);
@@ -72,8 +73,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
       setError(path.error);
       setLoading(path.loading);
-
-
     }
   }, [path]);
 
@@ -90,24 +89,37 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const handleNextPath = () => {
     // here we will add the next path api call
-    router.push(`/roads/${language}/${pathId + 1}`);
+    router.push(`/roads/${language}/${parseInt(pathId) + 1}`);
   };
 
-  const theme = useTheme();
+  const handleReset = async () => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/api/v1/private/road/reset/${programmingId}/${pathId}`,
+      });
+      if (response.status === 200) {
+        console.log("Reset response success", response.data);
+      }
+    } catch (error) {
+      console.log("Reset response error", error);
+    }
+  };
 
+  // Parameters for the code editor
   const params = {
-    // these are the parameters for the component settings.
     height: "50vh",
     width: "50vw",
   };
 
+  // API data for the code editor
   const apiData = {
     programmingId: programmingId,
     pathId: pathId,
-    endPoint: "road"
-  }
+    endPoint: "road",
+  };
 
-  // Breadcrumbs
+  // Breadcrumbs for the page
   const breadcrums = [
     {
       path: "/roads",
@@ -152,6 +164,24 @@ const LanguageRoad = ({ language = "", pathId }) => {
               <Image src={DoneIcon} height={30} width={30} alt="done" />
             </Box>
           )}
+          {!isFinished && (
+            <Tooltip title="Restart the path">
+              <Button
+                sx={{
+                  position: "absolute",
+                  right: "1rem",
+                  top: "1rem",
+                  backgroundColor: "#fff",
+                  color: theme.palette.primary.dark,
+                  minWidth: "1rem",
+                }}
+                onClick={handleReset}
+              >
+                <RestartAltIcon />
+              </Button>
+            </Tooltip>
+          )}
+
           <Button
             sx={{
               position: "absolute",
@@ -175,6 +205,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
       </Card>
       <Box sx={{ display: "flex", gap: 2 }}>
         <CodeEditor
+          key={template}
           params={params}
           onRun={handleRun}
           onStop={handleStop}

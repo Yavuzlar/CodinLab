@@ -16,7 +16,8 @@ import MenuIconWhite from "src/assets/icons/menu-white.png";
 import axios from "axios";
 
 const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defValue);
+  const [defaultValue, setDefaultValue] = useState(defValue);
   const [theme, setTheme] = useState("vs-dark");
   const [editorActionsWidth, setEditorActionsWidth] = useState(0);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
@@ -43,7 +44,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
       });
       onRun(response.data);
     } catch (error) {
-      return onRun(error.response.data.message || error.message);
+      onRun(error.response.data?.message || error.message);
     }
   };
 
@@ -71,6 +72,11 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
       setEditorActionsWidth(editorActions.current.offsetWidth ?? 0);
     }
   }, [editorActions?.current?.offsetWidth]);
+
+  useEffect(() => {
+    setDefaultValue(defValue);
+    setValue(defValue);
+  }, [defValue])
 
   return (
     <Box
@@ -280,7 +286,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
       >
         <Editor
           language={leng || "javascript"}
-          defaultValue={defValue || "// Write your code here"}
+          defaultValue={defaultValue || "// Write your code here"}
           value={value}
           onChange={(newValue) => setValue(newValue)}
           onMount={onMount}
