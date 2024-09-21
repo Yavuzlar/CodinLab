@@ -105,5 +105,8 @@
   "labs.difficulty.medium": "Medium",
   "labs.difficulty.hard": "Hard",
   "labs.progress.stats.progress": "In Progress",
-  "labs.progress.stats.completed": "Completed"
+  "labs.progress.stats.completed": "Completed",
+  "userlist.action.name": "Action",
+  "userlist.edit.desc" :"User Edit",
+  "userlist.edit.content" :"Lütfen düzenlemek istediğiniz kullanıcının yeni bilgilerini girin."
 }
