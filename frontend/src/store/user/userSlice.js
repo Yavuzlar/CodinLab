@@ -78,6 +78,7 @@ export const getAdminUser = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
+        
         return response.data;
       }
     } catch (error) {

@@ -11,7 +11,7 @@ import {
   Paper,
   IconButton,
   TextField,
-  Button,
+  Button
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Image from "next/image";
@@ -30,16 +30,16 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { fetchUserById, updateUserById } from "src/store/admin/adminSlice";
+import { hexToRGBA } from "src/utils/hex-to-rgba";
 
 const UsersList = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { user: stateUser} = useSelector((state) => state);
+  const { user: stateUser } = useSelector((state) => state);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -66,11 +66,11 @@ const UsersList = () => {
       const fetchedUser = response.payload;
 
       setEditData({
-        githubProfile: fetchedUser.githubProfile,
-        name: fetchedUser.name,
-        surname: fetchedUser.surname,
-        role: fetchedUser.role,
-        username: fetchedUser.username,
+        githubProfile: fetchedUser?.githubProfile,
+        name: fetchedUser?.name,
+        surname: fetchedUser?.surname,
+        role: fetchedUser?.role,
+        username: fetchedUser?.username,
       });
 
       setSelectedUser(user);
@@ -85,6 +85,40 @@ const UsersList = () => {
 
   const handleDelete = (id) => {
     console.log("Delete user with id: ", id);
+  };
+
+  const inputStyle = {
+    borderRadius: "15px",
+    border: "2px solid #0A3B7A",
+
+    "& .MuiInputBase-root": {
+      backgroundColor: (theme) =>
+        `${theme.palette.background.default} !important`,
+    },
+
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "15px",
+      "&.Mui-focused fieldset": {
+        borderColor: (theme) => `${theme.palette.primary.dark} !important`,
+      },
+    },
+
+    "& .MuiInputBase-input": {
+      color: "#0A3B7A",
+      fontWeight: "bold",
+      marginTop: "5px",
+    },
+
+    "& .MuiInputLabel-root": {
+      color: (theme) => `${theme.palette.primary.dark} !important`,
+      fontWeight: "bold",
+    },
+
+    "& .Mui-focused": {
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#0A3B7A",
+      },
+    },
   };
 
   return (
@@ -148,7 +182,6 @@ const UsersList = () => {
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
                       gap: "0.5rem",
                     }}
                   >
@@ -229,7 +262,7 @@ const UsersList = () => {
                     whiteSpace: "nowrap",
                     width: "10%",
                   }}
-                  align="right"
+                  align="left"
                 >
                   <Translations text="userlist.action.name" />
                 </TableCell>
@@ -294,7 +327,7 @@ const UsersList = () => {
                     <LanguageIcon language={row.bestLanguage} />
                   </TableCell>
                   <TableCell
-                    align="right"
+                    align="left"
                     sx={{
                       borderBottom: "none",
                       padding: "10px 10px 10px 0px",
@@ -303,25 +336,25 @@ const UsersList = () => {
                     <IconButton
                       onClick={() => handleEdit(row)}
                       aria-label="edit"
-                      sx={{ color: theme.palette.info.main }}
                     >
                       <Image
                         src={EditIcon}
                         alt="Edit Icon"
-                        width={20}
-                        height={20}
+                        width={25}
+                        height={25}
+                        style={{ filter: 'invert(100%)' }} 
                       />
                     </IconButton>
                     <IconButton
                       onClick={() => handleDelete(row.id)}
                       aria-label="delete"
-                      sx={{ color: theme.palette.error.main }}
                     >
                       <Image
                         src={DeleteIcon}
                         alt="Delete Icon"
-                        width={20}
-                        height={20}
+                        width={25}
+                        height={25}
+                        style={{ filter: 'invert(100%)' }} 
                       />
                     </IconButton>
                   </TableCell>
@@ -336,38 +369,49 @@ const UsersList = () => {
         <DialogTitle>
           <Translations text="userlist.edit.desc" />
         </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            <Translations text="userlist.edit.content" />
+        <DialogContent
+          sx={{
+            color: (theme) => `${theme.palette.text.primary} !important`,
+          }}
+        >
+          <DialogContentText
+            sx={{
+              color: hexToRGBA(theme.palette.text.primary, 0.7),
+            }}
+          >
+            <Translations text="userlist.edit.content"/>
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            label="Name"
+            label={<Translations text="register.name"/>}
             type="text"
             fullWidth
-            variant="outlined"
+            variant="filled"
             value={editData.name}
             onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+            sx={{ ...inputStyle }}
           />
           <TextField
             margin="dense"
-            label="Surname"
+            label={<Translations text="register.surname"/>}
             type="text"
             fullWidth
-            variant="outlined"
+            variant="filled"
             value={editData.surname}
+            sx={{ ...inputStyle }}
             onChange={(e) =>
               setEditData({ ...editData, surname: e.target.value })
             }
           />
           <TextField
             margin="dense"
-            label="Username"
+            label={<Translations text="register.username"/>}
             type="text"
             fullWidth
-            variant="outlined"
+            variant="filled"
             value={editData.username}
+            sx={{ ...inputStyle }}
             onChange={(e) =>
               setEditData({ ...editData, username: e.target.value })
             }
@@ -377,29 +421,48 @@ const UsersList = () => {
             label="Level"
             type="text"
             fullWidth
-            variant="outlined"
+            variant="filled"
             value={editData.githubProfile}
+            sx={{ ...inputStyle }}
             onChange={(e) =>
               setEditData({ ...editData, githubProfile: e.target.value })
             }
           />
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Role</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
+              displayEmpty
               value={editData.role}
-              label="Role"
               onChange={(e) =>
                 setEditData({ ...editData, role: e.target.value })
               }
+              sx={{
+                ...inputStyle,
+                marginTop: "10px",
+                "& .MuiSelect-select": {
+                  color: "#0A3B7A",
+                  fontWeight: "bold",
+                },
+                "& .MuiSelect-icon": {
+                  color: "#0A3B7A",
+                },
+                backgroundColor: (theme) =>
+                  `${theme.palette.background.default} !important`,
+              }}
             >
               <MenuItem value={"admin"}>Admin</MenuItem>
               <MenuItem value={"user"}>User</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>
-        <DialogActions>
+        <DialogActions
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "24px",
+          }}
+        >
           <Button onClick={() => setOpenDialog(false)} variant="dark">
             <Translations text="dialog.button.cancel" />
           </Button>

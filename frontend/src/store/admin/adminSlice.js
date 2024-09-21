@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { showToast } from "src/utils/showToast";
+import { getAdminUser } from "../user/userSlice";
 
 
 const initialState = {
@@ -21,6 +22,8 @@ export const fetchUserById = createAsyncThunk(
       if (response.status === 200) {
         return response.data.data;
       }
+      
+     
     } catch (error) {
       return rejectWithValue(error.response.data.message || error.message);
     }
@@ -29,7 +32,7 @@ export const fetchUserById = createAsyncThunk(
 
 export const updateUserById = createAsyncThunk(
     "admin/updateUserById",
-    async ({ data, userid }, { rejectWithValue }) => {
+    async ({ data, userid }, { rejectWithValue,dispatch }) => {
       try {
         const response = await axios({
           method: "POST",
@@ -37,6 +40,7 @@ export const updateUserById = createAsyncThunk(
           data: data,
         });
         if (response.status === 200) {
+          dispatch(getAdminUser());
           return response.data.data;
         }
       } catch (error) {
@@ -67,7 +71,6 @@ const adminSlice = createSlice({
         state.error = false;
       })
       .addCase(updateUserById.fulfilled, (state, action) => {
-        state.data = action.payload;
         state.loading = false;
         showToast("dismiss");
         showToast("success", state.data?.message);
