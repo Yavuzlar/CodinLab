@@ -7,6 +7,7 @@ import statisticsSlice from './statistics/statisticsSlice.js'
 import languageSlice from './language/languageSlice' 
 import pathsSlice from './paths/pathsSlice.js'
 import pathSlice from "./path/pathSlice.js";
+import logSlice from "./log/logSlice.js";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     language : languageSlice,
     paths : pathsSlice,
     path: pathSlice,
+    log: logSlice
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

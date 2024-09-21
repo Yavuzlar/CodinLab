@@ -7,45 +7,32 @@ import Image from "next/image";
 import userIcon from "../assets/icons/icons8-male-user-100.png";
 import settingsIcon from "../assets/icons/icons8-settings-128.png";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
-import cImg from "../assets/icons/c.png";
-import cppImg from "../assets/icons/cpp.png";
-import goImg from "../assets/icons/go.png";
-import pythonImg from "../assets/icons/python.png";
-import jsImg from "../assets/icons/javascript.png";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { getLanguageUsageRates } from "src/store/log/logSlice";
+import { useEffect } from "react";
 
-const languageStatistics = [
-  {
-    image: cImg,
-    process: "50",
-  },
-  {
-    image: cppImg,
-    process: "90",
-  },
-  {
-    image: goImg,
-    process: "80",
-  },
-  {
-    image: pythonImg,
-    process: "80",
-  },
-  {
-    image: jsImg,
-    process: "80",
-  },
-];
+
+
 const Admin = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
-  let Deneme = [
-    {
-      name: "In progress", // String
-      value: 90, // Number
-      color: "#0A3B7A", // String
-    },
-  ];
+  const {  log: logStatistics } = useSelector(
+    (state) => state
+  );
+
+  useEffect(() => {
+    dispatch(getLanguageUsageRates());
+  }, [dispatch]);
+
+  console.log(logStatistics);
+
+  const progresses = logStatistics?.data?.data?.map((item) => ({
+    name: item.name,
+    value: item.usagePercentage,
+  })) || [];
+
 
   const router = useRouter();
   return (
@@ -170,16 +157,16 @@ const Admin = () => {
                     justifyContent: "center",
                   }}
                 >
-                  <CircularProgressStatistics progresses={Deneme} />
+                  <CircularProgressStatistics progresses={progresses} />
                 </Box>
-                {languageStatistics.map((item, index) => (
+                {logStatistics.data?.data?.map((item, index) => (
                   <Box
                     sx={{
                       mt: "0.5rem",
                       display: "flex",
                       alignItems: "center",
                       flexWrap: "",
-                      gap: 5,
+                      gap: 15,
                     }}
                     key={index}
                   >
@@ -191,11 +178,11 @@ const Admin = () => {
                         borderRadius: "50%",
                       }}
                     />
-                    <Image src={item.image} width={15} height={15} />
+                    <img src={"api/v1/"+item.iconPath} width={30} height={30} />
                     <Typography
                       sx={{ font: "normal normal normal 18px/23px Outfit" }}
                     >
-                      %{item.process}
+                      %{item.usagePercentage}
                     </Typography>
                   </Box>
                 ))}
