@@ -2,7 +2,6 @@ package private
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -16,6 +15,7 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
 	roadRoute.Get("/:programmingID", h.GetRoad)
 	roadRoute.Get("/path/:programmingID/:pathID", h.GetPath)
+	roadRoute.Get("/reset/:programmingID/:pathID", h.ResetPathHistory)
 	roadRoute.Get("/general/stats", h.GetUserLanguageRoadStats)
 	roadRoute.Get("/path/data", h.AddDummyRoadData)
 	roadRoute.Get("/progress/stats", h.GetUserRoadProgressStats)
@@ -27,33 +27,26 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 // @Description Get Road with Paths
 // @Accept json
 // @Produce json
+// @Param Language header string false "Language"
 // @Param programmingID path string true "programmingID"
 // @Success 200 {object} response.BaseResponse{data=dto.GetRoadDTO}
 // @Router /private/road/{programmingID} [get]
 func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
-
-	// Declare and assign roadID variable
 	programmingID := c.Params("programmingID")
-	num, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalid Programming ID", nil)
-	}
+	userSession := session_store.GetSessionData(c)
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, num, 0, nil, nil)
+	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, "", nil, nil)
 	if err != nil {
 		return err
-	}
-	if len(roads) == 0 {
-		return response.Response(404, "Road not found", nil)
 	}
 
 	var pathDTOs []dto.GetRoadPathDTO
 	var roadDTO dto.GetRoadDTO
 	for _, road := range roads {
 		for _, path := range road.GetPaths() {
-			languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageRoadDTOs(path.GetLanguages())
-			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToRoadPathDTO(path, languageDTOs))
+			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
+			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToRoadPathDTO(path, languageDTO))
 		}
 		roadDTO = h.dtoManager.RoadDTOManager.ToGetRoadDTO(road, pathDTOs)
 	}
@@ -66,37 +59,28 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 // @Description Get Path By ID
 // @Accept json
 // @Produce json
+// @Param Language header string false "Language"
 // @Param programmingID path string true "Programming ID"
 // @Param pathID path string true "Path ID"
 // @Success 200 {object} response.BaseResponse{data=dto.PathDTO}
 // @Router /private/road/path/{programmingID}/{pathID} [get]
 func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
-	userSession := session_store.GetSessionData(c)
-	programmingID := c.Params("programmingID")
 	pathID := c.Params("pathID")
+	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	intProgrammingID, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalid Programming ID", nil)
-	}
-
-	intPathID, err := strconv.Atoi(pathID)
-	if err != nil {
-		return response.Response(400, "Invalid Path ID", nil)
-	}
-
-	session := session_store.GetSessionData(c)
-	userID := session.UserID
-
-	roadData, err := h.services.RoadService.GetRoadFilter(userID, intProgrammingID, intPathID, nil, nil)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
 		return err
 	}
-	if len(roadData) == 0 {
-		return response.Response(404, "Path not found", nil)
+
+	roadData, err := h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, pathID, nil, nil)
+	if err != nil {
+		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, domains.TypePath, intProgrammingID, intPathID)
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}
@@ -105,13 +89,13 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	for _, road := range roadData {
 		var pathsDTO []dto.PathDTO
 		for _, path := range road.GetPaths() {
-			languageDTOs := h.dtoManager.RoadDTOManager.ToLanguageDTOs(path.GetLanguages())
-			pathsDTO = append(pathsDTO, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTOs, frontendTemplate))
+			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
+			pathsDTO = append(pathsDTO, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTO, frontendTemplate))
 		}
 		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO))
 	}
 
-	if err := h.services.LogService.Add(c.Context(), userID, domains.TypePath, domains.ContentStarted, int32(intProgrammingID), int32(intPathID)); err != nil {
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentStarted); err != nil {
 		return err
 	}
 
@@ -131,9 +115,9 @@ func (h *PrivateHandler) GetUserLanguageRoadStats(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	roadDTO := h.dtoManager.RoadDTOManager.ToRoadStatsDTO(roadStats)
+	roadStatsDTO := h.dtoManager.RoadDTOManager.ToRoadStatsDTO(roadStats)
 
-	return response.Response(200, "Get User Language Road Stats", roadDTO)
+	return response.Response(200, "Get User Language Road Stats", roadStatsDTO)
 }
 
 // @Tags Road
@@ -165,58 +149,88 @@ func (h *PrivateHandler) GetUserRoadProgressStats(c *fiber.Ctx) error {
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/road/answer/{programmingID}/{pathID} [post]
 func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
+	pathID := c.Params("pathID")
+	programmingID := c.Params("programmingID")
 	userSession := session_store.GetSessionData(c)
+
 	var answerRoadDTO dto.AnswerRoadDTO
 	if err := c.BodyParser(&answerRoadDTO); err != nil {
 		return err
 	}
-	programmingID := c.Params("programmingID")
-	pathID := c.Params("pathID")
-
-	intProgrammingID, err := strconv.Atoi(programmingID)
-	if err != nil {
-		return response.Response(400, "Invalid Programming ID", nil)
+	if err := h.services.UtilService.Validator().ValidateStruct(answerRoadDTO); err != nil {
+		return err
 	}
 
-	intPathID, err := strconv.Atoi(pathID)
-	if err != nil {
-		return response.Response(400, "Invalid Path ID", nil)
-	}
-
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(int32(intProgrammingID))
-	if err != nil {
-		return response.Response(500, "Programming Language Information Error", nil)
-	}
-	if inventoryInformation == nil {
-		return response.Response(404, "Programming Language Not Found", nil)
-	}
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, intProgrammingID, intPathID, domains.TypePath, inventoryInformation.GetFileExtension(), answerRoadDTO.UserCode)
+	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
 		return err
 	}
-	road, err := h.services.RoadService.GetRoadByID(userSession.UserID, intProgrammingID, intPathID)
+
+	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
 	if err != nil {
-		return response.Response(500, "Path Not Found", nil)
+		return err
 	}
-	codeTmp := road.GetQuest().GetCodeTemplates()[0]
+	road, err := h.services.RoadService.GetRoadByID(userSession.UserID, programmingID, pathID)
+	if err != nil {
+		return err
+	}
+	codeTmp := road.GetQuest().GetCodeTemplates()[0] // Çünkü road hangi dil için ise onun template'i kullanılıcak başka gerek yok.
 
 	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplatePath(), road.GetQuest().GetFuncName(), answerRoadDTO.UserCode, road.GetQuest().GetTests())
 	if err != nil {
 		return err
 	}
-
 	if err := h.services.CodeService.CreateFileAndWrite(tmpPath, tmpContent); err != nil {
 		return err
 	}
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd())
+
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetCmd())
 	if err != nil {
 		return err
 	}
 	if strings.Contains(logs, "Test Passed") {
-		if err := h.services.LogService.Add(c.Context(), userSession.UserID, domains.TypePath, domains.ContentCompleted, int32(intProgrammingID), int32(intPathID)); err != nil {
-			return response.Response(500, "Docker Image Pull Error", nil)
+		if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentCompleted); err != nil {
+			return err
 		}
 	}
 
 	return response.Response(200, logs, nil)
+}
+
+// @Tags Road
+// @Summary ResetPathHistory
+// @Description Reset Path By Programming Language ID & Path ID
+// @Accept json
+// @Produce json
+// @Param pathID path string true "Path ID"
+// @Param programmingID path string true "Programming Language ID"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/reset/{programmingID}/{pathID} [get]
+func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
+	pathID := c.Params("pathID")
+	programmingID := c.Params("programmingID")
+	userSession := session_store.GetSessionData(c)
+
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	if err != nil {
+		return err
+	}
+
+	_, err = h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, pathID, nil, nil)
+	if err != nil {
+		return err
+	}
+
+	err = h.services.CodeService.DeleteFrontendTemplateHistory(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
+	if err != nil {
+		return err
+	}
+
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
+	if err != nil {
+		return err
+	}
+	frontendTemplateDto := h.dtoManager.RoadDTOManager.ToFrontendTemplateDto(frontendTemplate)
+
+	return response.Response(200, "ResetPathHistory successful", frontendTemplateDto)
 }

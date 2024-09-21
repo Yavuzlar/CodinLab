@@ -1,0 +1,47 @@
+{
+	"id": 3,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Reverse a String",
+			"description": "Given a string, return the string reversed.",
+			"note": "Ensure that special characters and spaces remain in their respective positions after reversing.",
+			"hint": "You can iterate through the string backwards or use built-in methods to reverse it."
+		},
+		{
+			"lang": "tr",
+			"title": "Bir Stringi Ters Çevir",
+			"description": "Verilen stringi ters çevir ve geri döndür.",
+			"note": "Ters çevirirken özel karakterlerin ve boşlukların orijinal pozisyonlarını koruduğundan emin ol.",
+			"hint": "Stringi geriye doğru dolaşabilir veya yerleşik bir ters çevirme yöntemi kullanabilirsin."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "reverseString",
+		"tests": [
+			{
+				"input": ["hello"],
+				"output": ["olleh"]
+			},
+			{
+				"input": ["OpenAI"],
+				"output": ["IAnepO"]
+			},
+			{
+				"input": ["!world"],
+				"output": ["dlrow!"]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath": "object/labs/3/c++.txt"
+			},
+			{
+				"programmingID": 2,
+				"templatePath": "object/labs/3/go.txt"
+			}
+		]
+	}
+}

@@ -27,8 +27,8 @@ func CreateNewServices(
 
 ) *Services {
 	utilsService := newUtilService(validatorService)
-	logService := newLogService(logRepositories, utilsService)
 	parserService := newParserService(utilsService)
+	logService := newLogService(logRepositories, utilsService, parserService)
 	levelService := newLevelService(utilsService, logService, parserService, userRepositories)
 	userService := newUserService(userRepositories, logService, parserService, utilsService)
 	labService := newLabService(utilsService, logService, parserService)
@@ -69,6 +69,7 @@ func (s *Services) User() domains.IUserService {
 // ------------------ UTIL SERVICE ------------------
 type IUtilService interface {
 	Validator() IValidatorService
+	GetLanguageHeader(language string) string
 }
 
 // ------------------ VALIDATOR SERVICE ------------------
@@ -94,4 +95,16 @@ func newUtilService(
 
 func (s *utilService) Validator() IValidatorService {
 	return s.validatorService
+}
+
+func (s *utilService) GetLanguageHeader(language string) string {
+	if language == "" {
+		return "en"
+	}
+
+	if language != "en" && language != "tr" {
+		return "en"
+	}
+
+	return language
 }

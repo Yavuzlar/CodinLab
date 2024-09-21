@@ -1,0 +1,40 @@
+## FRONTEND
+
+package main;
+
+import "fmt"
+
+func $funcname$(s string) int {
+    // Write your code here
+
+    return -1
+}
+
+func main(){
+    var input string
+    fmt.Println("Lütfen bir string değer girin:")
+    fmt.Scan(&input) 
+    fmt.Println("Girdiğiniz string değer: ", $funcname$(input))
+}
+
+## DOCKER
+
+package main
+
+$imps$
+
+$usercode$
+
+func main(){
+    $checks$
+
+    fmt.Println("$success$")
+}
+
+## CHECK
+
+result$rnd$ := $funcname$($input$)
+if (result$rnd$ != $output$){
+    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    return
+}

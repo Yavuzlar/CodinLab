@@ -42,19 +42,17 @@ type dbModelSolutionsHoursByProgrammingLanguage struct {
 func (r *LogRepository) dbModelSolutionsByDayToAppModel(dbModelSolutionsByDay dbModelSolutionsByDay) (solutionsByDay domains.SolutionsByDay) {
 	date, _ := time.Parse("2006-01-02", dbModelSolutionsByDay.Date)
 
-	return domains.SolutionsByDay{
-		Date:      date,
-		RoadCount: dbModelSolutionsByDay.RoadCount,
-		LabCount:  dbModelSolutionsByDay.LabCount,
-	}
+	solutionsByDay.SetDate(date)
+	solutionsByDay.SetRoadCount(dbModelSolutionsByDay.RoadCount)
+	solutionsByDay.SetLabCount(dbModelSolutionsByDay.LabCount)
+	return
 }
 
 func (r *LogRepository) dbModelSolutionsHoursToAppModel(dbModel dbModelSolutionsHoursByProgrammingLanguage) (appModel domains.SolutionsHoursByProgramming) {
-	return domains.SolutionsHoursByProgramming{
-		ProgrammingID: dbModel.ProgrammingID,
-		LabHours:      dbModel.TotalLabHours,
-		RoadHours:     dbModel.TotalLabHours,
-	}
+	appModel.SetLabHours(dbModel.TotalLabHours)
+	appModel.SetProgrammingID(dbModel.ProgrammingID)
+	appModel.SetRoadHours(dbModel.TotalRoadHours)
+	return
 }
 
 // dbModelToAppModel converts dbModelLogs to domains.Log for application operations (e.g. return to client)

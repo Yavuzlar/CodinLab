@@ -1,0 +1,47 @@
+{
+	"id": 2,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Find Two Largest Numbers",
+			"description": "Find the two largest numbers in the given array and return them as an array.",
+			"note": "Question Note",
+			"hint": "Iterate through the array while keeping track of the two largest numbers."
+		},
+		{
+			"lang": "tr",
+			"title": "İki En Büyük Sayıyı Bul",
+			"description": "Verilen arraydeki iki en büyük sayıyı bul ve array olarak geri döndür.",
+			"note": "Sorunun Notu",
+			"hint": "Array'i gezerken iki en büyük sayıyı takip et."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "findTwoLargest",
+		"tests": [
+			{
+				"input": [[3, 5, 1, 8, 2]],
+				"output": [[8, 5]]
+			},
+			{
+				"input": [[12, 34, 10, 6, 40]],
+				"output": [[40, 34]]
+			},
+			{
+				"input": [[1, 2, 3, 4, 5]],
+				"output": [[5, 4]]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath" : "object/labs/2/c++.txt"
+			},
+			{
+				"programmingID": 2,
+				"templatePath" : "object/labs/2/go.txt"
+			}
+		]
+	}
+}

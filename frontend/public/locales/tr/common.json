@@ -109,5 +109,8 @@
   "labs.progress.stats.completed": "Tamamlandı",
   "userlist.action.name": "Aksiyon",
   "userlist.edit.desc" :"Kullanıcı Düzenle",
-  "userlist.edit.content" :"Lütfen kullanıcı bilgilerini düzenleyin"
+  "userlist.edit.content" :"Lütfen kullanıcı bilgilerini düzenleyin",
+  "roads.path.restart.button": "Yolu baştan başlat",
+  "codeEditor.output": "Çıktı",
+  "codeEditor.output.display": "Çıktı burada görüntülenir"
 }

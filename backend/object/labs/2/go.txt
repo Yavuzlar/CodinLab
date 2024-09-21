@@ -1,0 +1,46 @@
+## FRONTEND
+
+package main;
+
+import "fmt"
+
+
+func $funcname$(s []int) bool {
+    // Write your code here
+
+    return false
+}
+
+func main(){
+    var input string
+    fmt.Println("Lütfen bir string değer girin:")
+    fmt.Scan(&input) 
+    fmt.Println("Girdiğiniz string değer:", $funcname$(input))
+}
+
+## DOCKER
+
+package main
+
+$imps$
+
+import "reflect"
+
+$usercode$
+
+func main(){
+    $checks$
+
+    fmt.Println("$success$")
+}
+
+## CHECK
+
+inputArr$rnd$ := []int{$input$}
+outputArr$rnd$ := []int{$output$}
+
+result$rnd$ := $funcname$(inputArr$rnd$)
+if (!reflect.DeepEqual(result$rnd$, outputArr$rnd$) ){
+    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    return
+}

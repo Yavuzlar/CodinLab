@@ -1,0 +1,59 @@
+## FRONTEND
+
+package main;
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func $funcname$(s []string) string {
+    // Write your code here
+
+    return "CodinLab"
+}
+
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Println("Enter strings (type 'done' when finished):")
+
+	var input []string
+
+	for {
+		scanner.Scan()
+		line := scanner.Text()
+
+		if line == "done" {
+			break
+		}
+
+		input = append(input, line)
+	}
+
+	fmt.Println("Output:", $funcname$(input))
+}
+
+## DOCKER
+
+package main
+
+$imps$
+
+$usercode$
+
+func main(){
+    $checks$
+
+    fmt.Println("$success$")
+}
+
+## CHECK
+
+inputArr$rnd$ := []string{$input$}
+
+result$rnd$ := $funcname$(inputArr$rnd$)
+if (result$rnd$ != $output$){
+    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    return
+}

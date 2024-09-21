@@ -1,7 +1,7 @@
 package domains
 
 type ILabRoadService interface {
-	GetInventoryInformation(programmingID int32) (inventorys *InventoryInformation, err error)
+	GetInventoryInformation(programmingID string) (inventories *InventoryInformation, err error)
 }
 
 type InventoryInformation struct {

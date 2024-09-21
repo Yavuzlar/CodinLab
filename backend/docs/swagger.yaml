@@ -57,13 +57,11 @@ definitions:
       isStarted:
         type: boolean
       languages:
-        items:
-          $ref: '#/definitions/dto.LanguageRoadDTO'
-        type: array
+        $ref: '#/definitions/dto.LanguageRoadDTO'
       name:
         type: string
     type: object
-  dto.LanguageDTO:
+  dto.LanguageRoadDTO:
     properties:
       content:
         type: string
@@ -72,15 +70,6 @@ definitions:
       lang:
         type: string
       note:
-        type: string
-      title:
-        type: string
-    type: object
-  dto.LanguageRoadDTO:
-    properties:
-      description:
-        type: string
-      lang:
         type: string
       title:
         type: string
@@ -123,10 +112,8 @@ definitions:
         type: boolean
       isStarted:
         type: boolean
-      languages:
-        items:
-          $ref: '#/definitions/dto.LanguageDTO'
-        type: array
+      language:
+        $ref: '#/definitions/dto.LanguageRoadDTO'
       name:
         type: string
       template:
@@ -257,6 +244,26 @@ paths:
       tags:
       - Admin
   /private/admin/user/{userID}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes User
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Deletes User
+      tags:
+      - Admin
     get:
       consumes:
       - application/json
@@ -362,6 +369,11 @@ paths:
       consumes:
       - application/json
       description: Get User Level
+      parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       produces:
       - application/json
       responses:
@@ -378,6 +390,10 @@ paths:
       - application/json
       description: Get Lab By Programming Language ID & Lab ID
       parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       - description: Lab ID
         in: path
         name: labID
@@ -403,14 +419,14 @@ paths:
       - application/json
       description: This is for answering quests.
       parameters:
+      - description: labID
+        in: path
+        name: labID
+        type: string
       - description: programmingID
         in: path
         name: programmingID
         required: true
-        type: string
-      - description: labID
-        in: path
-        name: labID
         type: string
       - description: Answer Lab DTO
         in: body
@@ -428,12 +444,42 @@ paths:
       summary: Answer
       tags:
       - Lab
+  /private/lab/reset/{programmingID}/{labID}:
+    get:
+      consumes:
+      - application/json
+      description: Reset Lab By Programming Language ID & Lab ID
+      parameters:
+      - description: Lab ID
+        in: path
+        name: labID
+        required: true
+        type: string
+      - description: Programming Language ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: ResetLabHistory
+      tags:
+      - Lab
   /private/labs/:
     get:
       consumes:
       - application/json
       description: Get Labs
       parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       - description: Programming Language ID
         in: query
         name: programmingID
@@ -551,6 +597,25 @@ paths:
       summary: DummyLogData
       tags:
       - Log
+  /private/log/rates:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves language usage rates
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Language Usage Rates
+      tags:
+      - Log
   /private/log/road:
     get:
       consumes:
@@ -617,6 +682,10 @@ paths:
       - application/json
       description: Get Road with Paths
       parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       - description: programmingID
         in: path
         name: programmingID
@@ -690,6 +759,10 @@ paths:
       - application/json
       description: Get Path By ID
       parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
       - description: Programming ID
         in: path
         name: programmingID
@@ -728,6 +801,32 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: GetUserRoadProgressStats
+      tags:
+      - Road
+  /private/road/reset/{programmingID}/{pathID}:
+    get:
+      consumes:
+      - application/json
+      description: Reset Path By Programming Language ID & Path ID
+      parameters:
+      - description: Path ID
+        in: path
+        name: pathID
+        required: true
+        type: string
+      - description: Programming Language ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: ResetPathHistory
       tags:
       - Road
   /private/start/{programmingID}:

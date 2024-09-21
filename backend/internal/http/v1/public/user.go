@@ -87,5 +87,6 @@ func (h *PublicHandler) Logout(c *fiber.Ctx) error {
 	if err := sess.Destroy(); err != nil {
 		return response.Response(500, "Failed to destroy session", err)
 	}
+
 	return response.Response(200, "Logout successful", nil)
 }

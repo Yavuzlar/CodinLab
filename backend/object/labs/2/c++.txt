@@ -1,0 +1,57 @@
+## FRONTEND
+
+#include <stdio.h>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+bool $funcname$(std::string s) {
+    // Write your code here
+
+    return false
+}
+
+int main() {
+    std::string input;
+
+    std::cout << "Bir string girin: ";
+    std::getline(std::cin, input); 
+
+    std::cout << std::boolalpha << isPalindrome(input) << std::endl;
+
+    return 0;
+}
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+int main(){
+    $checks$
+
+    std::cout << "$success$" << std::endl;
+}
+
+## CHECK
+
+std::vector<int> inputArr$rnd$ = {$input$};
+std::vector<int> outputArr$rnd$ = {$output$};
+
+std::vector<int> result$rnd$ = $funcname$(inputArr$rnd$);
+if (result$rnd$ != outputArr$rnd$){
+    
+    cout << "Test Failed: Expected ";
+    for (int num : outputArr$rnd$) {
+        cout << num << " ";
+    }
+    cout << ", but got ";
+    for (int num : result$rnd$) {
+        cout << num << " ";
+    }
+    cout << endl;
+    exit($rnd$);
+}

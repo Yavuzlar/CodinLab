@@ -126,7 +126,7 @@ func (s *levelService) GetUserLevel(ctx context.Context, userID string) (userLev
 					language = append(language, domains.NewLanguageLevel(lang.Lang, lang.Description))
 				}
 				userLevel.SetLanguages(language)
-				if err = s.logService.Add(ctx, userID, domains.TypeUser, domains.ContentLevelUp, 0, 0); err != nil {
+				if err = s.logService.Add(ctx, userID, "", "", domains.TypeUser, domains.ContentLevelUp); err != nil {
 					return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while adding log", err)
 				}
 			}

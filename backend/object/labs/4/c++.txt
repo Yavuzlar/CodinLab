@@ -1,0 +1,60 @@
+## FRONTEND
+
+#include <stdio.h>
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+string $funcname$(std::vector<string> s) {
+    // Write your code here
+
+    return "Codinglab"
+}
+
+int main() {
+    std::vector<std::string> stringVector;
+    std::string input;
+
+    std::cout << "String değerleri girin (bitiş için q girin):" << std::endl;
+
+    while (true) {
+        std::cout << "Bir değer girin: ";
+        std::getline(std::cin, input);
+
+        if (input == "q") {
+            break;
+        }
+
+        stringVector.push_back(input);
+    }
+
+    std::string result = $funcname$(stringVector);
+
+    std::cout << "$funcname$ sonucu: " << result << std::endl;
+
+    return 0;
+}
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+int main(){
+    $checks$
+
+    std::cout << "$success$" << std::endl;
+}
+
+## CHECK
+
+std::vector<string> inputArr$rnd$ = {$input$};
+
+std::string result$rnd$ = $funcname$(inputArr$rnd$);
+if (result$rnd$ != $output$){
+    std::cout << "Test Failed: Expected $out$, but got " << result$rnd$ << std::endl;
+    exit($rnd$);
+}

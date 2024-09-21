@@ -2,9 +2,12 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 )
 
 type labService struct {
@@ -79,63 +82,84 @@ func (s *labService) getAllLabs(userID string) ([]domains.Lab, error) {
 }
 
 // Fetch labs by filters
-func (s *labService) GetLabsFilter(userID string, labId, programmingID int, isStarted, isFinished *bool) ([]domains.Lab, error) {
+func (s *labService) GetLabsFilter(userID, programmingID, labID string, isStarted, isFinished *bool) ([]domains.Lab, error) {
+	var intProgrammingID, intLabID int
+	var err error
+
+	if programmingID != "" {
+		intProgrammingID, err = strconv.Atoi(programmingID)
+		if err != nil {
+			return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+		}
+	}
+
+	if labID != "" {
+		intLabID, err = strconv.Atoi(labID)
+		if err != nil {
+			return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+		}
+	}
+
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if userID == "" && labId == 0 && isStarted == nil && isFinished == nil && programmingID == 0 {
+	if userID == "" && intLabID == 0 && isStarted == nil && isFinished == nil && intProgrammingID == 0 {
 		return allLabs, nil
 	}
 
 	var labs []domains.Lab
 	for _, lab := range allLabs {
-		//found := false
-		if labId != 0 && lab.GetID() != labId {
+		if intLabID != 0 && lab.GetID() != intLabID {
 			continue
 		}
+
 		if isStarted != nil && lab.GetIsStarted() != *isStarted {
 			continue
 		}
 		if isFinished != nil && lab.GetIsFinished() != *isFinished {
 			continue
 		}
-		if lab.GetProgrammingID() != programmingID {
+
+		if intProgrammingID != 0 && lab.GetProgrammingID() != intProgrammingID {
 			continue
 		}
-		/* if programmingID != 0 {
-			for _, ct := range lab.GetQuest().GetCodeTemplates() {
-				if ct.GetProgrammingID() == programmingID {
-					found = true
-					break
-				}
-			}
-			if !found {
-				continue
-			}
-		} */
 
 		labs = append(labs, lab)
+	}
 
+	if len(labs) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(200, "Lab not found")
 	}
 
 	return labs, nil
 }
 
-func (s *labService) GetLabByID(userID string, labID int) (lab *domains.Lab, err error) {
+func (s *labService) GetLabByID(userID, labID string) (lab *domains.Lab, err error) {
+	intLabID, err := strconv.Atoi(labID)
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+	}
+
 	allLabs, err := s.getAllLabs(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, lab := range allLabs {
-		if lab.GetID() == labID {
-			return &lab, nil
+	for _, labf := range allLabs {
+		if labf.GetID() == intLabID {
+			labCopy := labf
+			lab = &labCopy
+			break
 		}
 	}
 
-	return nil, err
+	if lab == nil {
+		return nil, service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
+	}
+
+	return lab, err
 }
 
 // User lab level stats by programming language
@@ -143,7 +167,7 @@ func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugag
 	programmingLangugages, _ := s.parserService.GetInventory()
 
 	for _, pl := range programmingLangugages {
-		allLabs, _ := s.GetLabsFilter(userID, 0, pl.ID, nil, nil)
+		allLabs, _ := s.GetLabsFilter(userID, "", fmt.Sprint(pl.ID), nil, nil)
 		completedLabs := 0
 
 		for _, lab := range allLabs {
@@ -182,7 +206,7 @@ func (s *labService) GetUserLabProgressStats(userID string) (userLabProgressStat
 	programmingLangugages, _ := s.parserService.GetInventory()
 
 	for _, pl := range programmingLangugages {
-		allLabs, _ := s.GetLabsFilter(userID, 0, pl.ID, nil, nil)
+		allLabs, _ := s.GetLabsFilter(userID, "", fmt.Sprint(pl.ID), nil, nil)
 
 		for _, lab := range allLabs {
 			if lab.GetIsStarted() && !lab.GetIsFinished() {

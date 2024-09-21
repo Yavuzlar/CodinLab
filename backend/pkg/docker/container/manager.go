@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/docker/docker/api/types"
@@ -89,10 +90,24 @@ func (m *Manager) ReadContainerLogs(ctx context.Context, containerID string) (st
 		}
 		logLine = strings.TrimSuffix(logLine, "\n")
 
+		re := regexp.MustCompile(`(?s).*?(#|Test)`)
+
+		logLine = re.ReplaceAllString(logLine, "$1")
+
 		result.WriteString(logLine)
 	}
 
-	return result.String(), nil
+	return m.cleanLogLine(result.String()), nil
+}
+
+func (m *Manager) cleanLogLine(line string) string {
+	rePointer := regexp.MustCompile(`\s*\|\s*\^+.*`)
+	reNonAscii := regexp.MustCompile(`[^\x20-\x7E]+`)
+
+	line = rePointer.ReplaceAllString(line, "")
+	line = reNonAscii.ReplaceAllString(line, "")
+
+	return line
 }
 
 func (m *Manager) ContainerIDByName(ctx context.Context, containerName string) (string, error) {

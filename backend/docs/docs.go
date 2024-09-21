@@ -131,6 +131,36 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Deletes User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Deletes User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
             }
         },
         "/private/home/advancement": {
@@ -215,6 +245,14 @@ const docTemplate = `{
                     "Home"
                 ],
                 "summary": "GetUserLevel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -241,16 +279,16 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "labID",
+                        "name": "labID",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
                         "description": "programmingID",
                         "name": "programmingID",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "labID",
-                        "name": "labID",
-                        "in": "path"
                     },
                     {
                         "description": "Answer Lab DTO",
@@ -260,6 +298,45 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.AnswerLabDTO"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/lab/reset/{programmingID}/{labID}": {
+            "get": {
+                "description": "Reset Lab By Programming Language ID \u0026 Lab ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "ResetLabHistory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Lab ID",
+                        "name": "labID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -286,6 +363,12 @@ const docTemplate = `{
                 ],
                 "summary": "GetLabByID",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Lab ID",
@@ -324,6 +407,12 @@ const docTemplate = `{
                 ],
                 "summary": "GetLabs",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Programming Language ID",
@@ -496,6 +585,35 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/log/rates": {
+            "get": {
+                "description": "Retrieves language usage rates",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Get Language Usage Rates",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/response.BaseResponse"
                         }
@@ -689,6 +807,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Programming ID",
                         "name": "programmingID",
                         "in": "path",
@@ -747,6 +871,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/road/reset/{programmingID}/{pathID}": {
+            "get": {
+                "description": "Reset Path By Programming Language ID \u0026 Path ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "ResetPathHistory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Path ID",
+                        "name": "pathID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/road/{programmingID}": {
             "get": {
                 "description": "Get Road with Paths",
@@ -761,6 +924,12 @@ const docTemplate = `{
                 ],
                 "summary": "GetRoads",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "programmingID",
@@ -1100,17 +1269,14 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "languages": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.LanguageRoadDTO"
-                    }
+                    "$ref": "#/definitions/dto.LanguageRoadDTO"
                 },
                 "name": {
                     "type": "string"
                 }
             }
         },
-        "dto.LanguageDTO": {
+        "dto.LanguageRoadDTO": {
             "type": "object",
             "properties": {
                 "content": {
@@ -1123,20 +1289,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "note": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.LanguageRoadDTO": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "lang": {
                     "type": "string"
                 },
                 "title": {
@@ -1200,11 +1352,8 @@ const docTemplate = `{
                 "isStarted": {
                     "type": "boolean"
                 },
-                "languages": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.LanguageDTO"
-                    }
+                "language": {
+                    "$ref": "#/definitions/dto.LanguageRoadDTO"
                 },
                 "name": {
                     "type": "string"

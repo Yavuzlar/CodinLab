@@ -1,11 +1,12 @@
 package images
 
 import (
+	"bytes"
 	"context"
+	"fmt"
 
 	"github.com/docker/docker/api/types/image"
 
-	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	"github.com/docker/docker/client"
 )
 
@@ -43,20 +44,20 @@ func (m *Manager) IsImageExists(ctx context.Context, imageReference string) (isE
 func (m *Manager) Pull(ctx context.Context, imageReference string) error {
 	out, err := m.cli.ImagePull(ctx, imageReference, image.PullOptions{})
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while pulling an image", err)
+		return fmt.Errorf("error while pulling an image ")
 	}
 	defer out.Close()
 
 	// İndirme işlemini görmek istiyorsan altı aç
 	// Read from the stream until it closes
-	/* buf := new(bytes.Buffer)
+	buf := new(bytes.Buffer)
 	_, err = buf.ReadFrom(out)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while reading image pull output", err)
+		return fmt.Errorf("error while reading image pull output")
 	}
 
-	// // Optionally, you can process the output if needed
-	fmt.Println(buf.String()) */
+	fmt.Println(buf.String())
 
 	return nil
+
 }
