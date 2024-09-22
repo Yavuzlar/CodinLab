@@ -105,17 +105,17 @@ func (s *codeService) ChangeCMD(cmd []string, tests []domains.Test, userID strin
 		}
 
 	}
-	var sonuc []string
+	var script []string
 
 	for _, c := range cmd {
 		if c != "sh" && c != "-c" {
-			sonuc = append(sonuc, c)
+			script = append(script, c)
 		}
 	}
 
 	testsStr := testsStrBuilder.String()
 	content = strings.Replace(content, "-tests-", testsStr, -1)
-	content = strings.Replace(content, "-cmd-", strings.Join(sonuc, " "), -1)
+	content = strings.Replace(content, "-cmd-", strings.Join(script, " "), -1)
 
 	file.CheckDir(fmt.Sprintf("usercodes/%v/paths", userID))
 
