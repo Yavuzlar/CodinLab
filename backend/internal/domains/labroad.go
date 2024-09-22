@@ -10,6 +10,7 @@ type InventoryInformation struct {
 	dockerImage   string
 	cmd           []string
 	shCmd         []string
+	pathDir       string
 	fileExtension string
 	templatePath  string
 }
@@ -34,6 +35,10 @@ func (i *InventoryInformation) GetShCmd() []string {
 	return i.shCmd
 }
 
+func (i *InventoryInformation) GetPathDir() string {
+	return i.pathDir
+}
+
 func (i *InventoryInformation) GetFileExtension() string {
 	return i.fileExtension
 }
@@ -42,7 +47,7 @@ func (i *InventoryInformation) GetTemplatePath() string {
 	return i.templatePath
 }
 
-func NewInventoryInformation(name, dockerImage, fileExtension string, ID int, cmd, shCmd []string) *InventoryInformation {
+func NewInventoryInformation(name, dockerImage, fileExtension, pathDir string, ID int, cmd, shCmd []string) *InventoryInformation {
 	return &InventoryInformation{
 		id:            ID,
 		name:          name,
@@ -50,5 +55,6 @@ func NewInventoryInformation(name, dockerImage, fileExtension string, ID int, cm
 		fileExtension: fileExtension,
 		cmd:           cmd,
 		shCmd:         shCmd,
+		pathDir:       pathDir,
 	}
 }

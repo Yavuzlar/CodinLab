@@ -84,8 +84,8 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 	}
 }
 
-func (s *codeService) ChangeCMD(cmd []string, tests []domains.Test, userID string) error {
-	templateData, err := os.ReadFile("object/paths/main.sh")
+func (s *codeService) CreateBashFile(cmd []string, tests []domains.Test, userID, pathDir string) error {
+	templateData, err := os.ReadFile(fmt.Sprintf("%s/main.sh", pathDir))
 	if err != nil {
 		return service_errors.NewServiceErrorWithMessage(500, "File could not be read")
 	}
@@ -105,19 +105,12 @@ func (s *codeService) ChangeCMD(cmd []string, tests []domains.Test, userID strin
 		}
 
 	}
-	var script []string
-
-	for _, c := range cmd {
-		if c != "sh" && c != "-c" {
-			script = append(script, c)
-		}
-	}
-
 	testsStr := testsStrBuilder.String()
 	content = strings.Replace(content, "-tests-", testsStr, -1)
-	content = strings.Replace(content, "-cmd-", strings.Join(script, " "), -1)
 
-	file.CheckDir(fmt.Sprintf("usercodes/%v/paths", userID))
+	if err := file.CheckDir(fmt.Sprintf("usercodes/%v/paths", userID)); err != nil {
+		return err
+	}
 
 	file.CreateFileAndWrite(fmt.Sprintf("usercodes/%v/paths/main.sh", userID), content)
 

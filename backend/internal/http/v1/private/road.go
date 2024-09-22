@@ -186,7 +186,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 
 	var logs string
 	if strings.EqualFold(road.GetQuest().GetFuncName(), "main") {
-		err = h.services.CodeService.ChangeCMD(programmingInformation.GetCmd(), road.GetQuest().GetTests(), userSession.UserID)
+		err = h.services.CodeService.CreateBashFile(programmingInformation.GetCmd(), road.GetQuest().GetTests(), userSession.UserID, programmingInformation.GetPathDir())
 		if err != nil {
 			return err
 		}
