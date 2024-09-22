@@ -1,0 +1,37 @@
+## FRONTEND
+
+package main;
+
+import "fmt"
+
+func $funcname$() string {
+    // Write your code here
+}
+
+func main() {
+    fmt.Println("Fonksiyondan dönen sonuç: ", $funcname$())
+}
+
+## DOCKER
+
+package main
+
+$imps$
+
+$usercode$
+
+func main(){
+    $checks$
+
+    fmt.Println("$success$")
+}
+
+## CHECK
+
+result$rnd$ := $funcname$()
+if (result$rnd$ != $output$){
+    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    return
+}
+
+
