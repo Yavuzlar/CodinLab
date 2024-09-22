@@ -7,9 +7,11 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 
+	"github.com/Yavuzlar/CodinLab/pkg/file"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
@@ -146,6 +148,14 @@ func (m *Manager) RunContainerWithTar(ctx context.Context, image string, cmd []s
 	// Copy file to container
 	if err := m.CopyToContainer(ctx, resp.ID, tmpCodePath, "/", fileName); err != nil {
 		return "", fmt.Errorf("error copying file to container: %w", err)
+	}
+	path, _ := filepath.Split(tmpCodePath)
+	path = path + "main.sh"
+
+	if err := file.CheckFile(path); err == nil {
+		if err := m.CopyToContainer(ctx, resp.ID, path, "/", "main.sh"); err != nil {
+			return "", fmt.Errorf("error copying file to container: %w", err)
+		}
 	}
 
 	// Start Container

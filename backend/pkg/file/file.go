@@ -37,3 +37,11 @@ func CreateFileAndWrite(filePath, content string) (err error) {
 
 	return nil
 }
+
+func CheckFile(filePath string) (err error) {
+	_, err = os.Stat(filePath)
+	if os.IsNotExist(err) {
+		return err
+	}
+	return nil
+}

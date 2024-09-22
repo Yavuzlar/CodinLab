@@ -1,21 +1,10 @@
 ## FRONTEND
 
-#include <iostream>
-#include <string>
 
-using namespace std;
+void $funcname$() {
 
-string $funcname$() {
     // Write your code here
 
-    return "x";
-}
-
-int main() {
-    std::string result = $funcname$();
-    
-    std::cout << "Fonksiyondan dönen sonuç: " << result << std::endl;
-    return 0;
 }
 
 ## DOCKER
@@ -25,15 +14,6 @@ $imps$
 $usercode$
 
 int main(){
-    $checks$
-
-    std::cout << "$success$" << std::endl;
-    return 0;
-}
-
-## CHECK
-
-std::string result = $funcname$($input$);
-if (result != $output$){
-    std::cout << "Test Failed: Expected $out$, but got " << result << std::endl;
+   $funcname$();
+   return 0;
 }
