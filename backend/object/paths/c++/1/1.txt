@@ -1,10 +1,11 @@
 ## FRONTEND
 
 
-void $funcname$() {
+int $funcname$() {
 
     // Write your code here
 
+ return 0;
 }
 
 ## DOCKER
