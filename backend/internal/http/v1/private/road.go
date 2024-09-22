@@ -184,10 +184,24 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetCmd())
-	if err != nil {
-		return err
+	var cmd []string
+	var logs string
+	if strings.EqualFold(road.GetQuest().GetFuncName(), "main") {
+		cmd, err = h.services.CodeService.ChangeCMD(programmingInformation.GetCmd(), road.GetQuest().GetTests(), userSession.UserID)
+		if err != nil {
+			return err
+		}
+		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), cmd)
+		if err != nil {
+			return err
+		}
+	} else {
+		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetCmd())
+		if err != nil {
+			return err
+		}
 	}
+
 	if strings.Contains(logs, "Test Passed") {
 		if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentCompleted); err != nil {
 			return err

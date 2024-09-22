@@ -84,6 +84,47 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 	}
 }
 
+func (s *codeService) ChangeCMD(cmd []string, tests []domains.Test, userID string) ([]string, error) {
+	templateData, err := os.ReadFile("object/paths/main.sh")
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessage(500, "File could not be read")
+	}
+	content := string(templateData)
+
+	var testsStrBuilder strings.Builder
+	for _, test := range tests {
+		for _, t := range test.GetOutput() {
+			switch v := t.(type) {
+			case int:
+				testsStrBuilder.WriteString(fmt.Sprintf(" %d", v))
+			case string:
+				testsStrBuilder.WriteString(fmt.Sprintf(" \"%s\"", v))
+			default:
+				testsStrBuilder.WriteString(fmt.Sprintf(" %v", v))
+			}
+		}
+
+	}
+	var script []string
+
+	for _, c := range cmd {
+		if c != "sh" && c != "-c" {
+			script = append(script, c)
+		}
+	}
+
+	testsStr := testsStrBuilder.String()
+	content = strings.Replace(content, "-tests-", testsStr, -1)
+	content = strings.Replace(content, "-cmd-", strings.Join(script, " "), -1)
+
+	file.CheckDir(fmt.Sprintf("usercodes/%v/paths", userID))
+
+	file.CreateFileAndWrite(fmt.Sprintf("usercodes/%v/paths/main.sh", userID), content)
+
+	newCmd := []string{"bash", "-c", "./main.sh"}
+	return newCmd, nil
+}
+
 func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error) {
 	resultChan := make(chan struct {
 		logs string
@@ -162,9 +203,14 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 	}
 
 	frontImports, cleanedCode := extractor.ExtractImports(userCode, true)
-	newUserCode, err := extractor.ExtractMainFunction(cleanedCode)
-	if err != nil {
-		return "", err
+	if !strings.EqualFold(funcName, "main") {
+		cleanedCode, err = extractor.ExtractMainFunction(cleanedCode)
+		if err != nil {
+			return "", err
+		}
+	} else {
+		funcName = "test"
+		cleanedCode = extractor.ExtractFuncName(cleanedCode, funcName)
 	}
 
 	docker := templateMap["docker"]
@@ -172,7 +218,7 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 	checks := s.createChecks(templateMap["check"], tests)
 
 	docker = strings.Replace(docker, "$checks$", checks, -1)
-	docker = strings.Replace(docker, "$usercode$", newUserCode, -1)
+	docker = strings.Replace(docker, "$usercode$", cleanedCode, -1)
 	docker = strings.Replace(docker, "$funcname$", funcName, -1)
 	docker = strings.Replace(docker, "$success$", "Test Passed", -1)
 
