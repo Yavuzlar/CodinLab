@@ -4,10 +4,10 @@ for i in "${!test[@]}"; do
     result=$(-cmd-) 
     echo "$result+1"
     if [[ "$result" == "$expected_result" ]]; then
-        echo "Test passed"
+        echo "Test Passed"
     else
-        echo "Test failed "
-        echo "Expected: $expected_result"
-        echo " Got: $result"
+        echo "Test Failed: "
+        echo "Expected: $expected_result ,"
+        echo " but got $result"
     fi
 done
