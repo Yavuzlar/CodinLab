@@ -73,7 +73,7 @@ func (s *roadService) getAllRoads(userID string) ([]domains.Road, error) {
 			return nil, err
 		}
 
-		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.FileExtension, newPathList, roadCollection.Cmd, *isStarted, *isFinished))
+		roads = append(roads, *domains.NewRoads(roadCollection.ID, roadCollection.Name, roadCollection.DockerImage, roadCollection.IconPath, roadCollection.FileExtension, newPathList, roadCollection.Cmd, roadCollection.ShCmd, *isStarted, *isFinished))
 	}
 
 	if len(roads) == 0 {
@@ -183,7 +183,7 @@ func (s *roadService) GetRoadFilter(userID, programmingID, pathID string, isStar
 		}
 
 		if len(newRoadList) > 0 {
-			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetFileExtension(), newRoadList, roadCollection.GetCmd(), *isStarted, *isFinished))
+			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetFileExtension(), newRoadList, roadCollection.GetCmd(), roadCollection.ShCmd, *isStarted, *isFinished))
 		}
 	}
 

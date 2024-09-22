@@ -7,6 +7,7 @@
         "pathDir": "object/paths/c++",
         "iconPath": "images/c++.png",
         "cmd": ["sh", "-c", "g++ -o main main.cpp && ./main"],
+        "bashCmd":  ["bash", "-c", "./main.sh"],
         "fileExtension": "cpp",
         "language": [
             {
@@ -29,6 +30,7 @@
         "pathDir": "object/paths/golang",
         "iconPath": "images/go.png",
         "cmd": ["sh","-c","go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go && go run ../main.go"],
+        "bashCmd":  ["bash", "-c", "../main.sh"],
         "fileExtension": "go",
         "language": [
             {

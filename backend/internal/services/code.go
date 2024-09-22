@@ -84,10 +84,10 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 	}
 }
 
-func (s *codeService) ChangeCMD(cmd []string, tests []domains.Test, userID string) ([]string, error) {
+func (s *codeService) ChangeCMD(cmd []string, tests []domains.Test, userID string) error {
 	templateData, err := os.ReadFile("object/paths/main.sh")
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessage(500, "File could not be read")
+		return service_errors.NewServiceErrorWithMessage(500, "File could not be read")
 	}
 	content := string(templateData)
 
@@ -121,8 +121,7 @@ func (s *codeService) ChangeCMD(cmd []string, tests []domains.Test, userID strin
 
 	file.CreateFileAndWrite(fmt.Sprintf("usercodes/%v/paths/main.sh", userID), content)
 
-	newCmd := []string{"bash", "-c", "./main.sh"}
-	return newCmd, nil
+	return nil
 }
 
 func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error) {

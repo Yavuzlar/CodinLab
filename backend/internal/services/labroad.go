@@ -31,7 +31,7 @@ func (s *labRoadService) GetInventoryInformation(programmingID string) (inventor
 	}
 	for _, inv := range inventory {
 		if inv.ID == intProgrammingID {
-			inventoryInformation = domains.NewInventoryInformation(inv.Name, inv.DockerImage, inv.FileExtension, inv.ID, inv.Cmd)
+			inventoryInformation = domains.NewInventoryInformation(inv.Name, inv.DockerImage, inv.FileExtension, inv.ID, inv.Cmd, inv.ShCmd)
 			break
 		}
 	}

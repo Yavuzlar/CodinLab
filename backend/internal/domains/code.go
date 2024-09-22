@@ -9,7 +9,7 @@ type ICodeService interface {
 	IsImageExists(ctx context.Context, imageReference string) (isExists bool, err error)
 	UploadUserCode(ctx context.Context, userID, programmingID, labPathID string, codeType, fileExtention, content string) (string, error)
 	RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error)
-	ChangeCMD(cmd []string, tests []Test, userID string) ([]string, error)
+	ChangeCMD(cmd []string, tests []Test, userID string) error
 	CreateFileAndWrite(filePath, content string) (err error)
 	CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []Test) (string, error)
 	CodeFrontendTemplateGenerator(templatePath, funcName string) (string, error)
