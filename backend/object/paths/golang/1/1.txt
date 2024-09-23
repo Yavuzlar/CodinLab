@@ -1,6 +1,6 @@
 ## FRONTEND
 
-package main;
+package main
 
 func $funcname$() {
     // Write your code here
