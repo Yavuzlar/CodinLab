@@ -42,8 +42,8 @@ type PathDTO struct {
 	Language   LanguageRoadDTO `json:"language"`
 	Template   string          `json:"template,omitempty"`
 	Difficulty int             `json:"difficulty"`
-	IsStarted  bool            `json:"isStarted"`
-	IsFinished bool            `json:"isFinished"`
+	IsStarted  bool            `json:"pathIsStarted"`
+	IsFinished bool            `json:"pathIsFinished"`
 }
 
 func (m *RoadDTOManager) ToPathDTO(path domains.Path, language LanguageRoadDTO, template string) PathDTO {
@@ -57,58 +57,23 @@ func (m *RoadDTOManager) ToPathDTO(path domains.Path, language LanguageRoadDTO, 
 	}
 }
 
-type GetRoadPathDTO struct {
-	ID         int             `json:"id,omitempty"`
-	Name       string          `json:"name,omitempty"`
-	Language   LanguageRoadDTO `json:"languages"`
-	Difficulty int             `json:"difficulty"`
-	IsStarted  bool            `json:"isStarted"`
-	IsFinished bool            `json:"isFinished"`
-}
-
-func (m *RoadDTOManager) ToRoadPathDTO(path domains.Path, language LanguageRoadDTO) GetRoadPathDTO {
-	return GetRoadPathDTO{
-		ID:         path.GetID(),
-		Language:   language,
-		Difficulty: path.GetQuest().GetDifficulty(),
-		IsFinished: path.GetIsFinished(),
-		IsStarted:  path.GetIsStarted(),
-	}
-}
-
 type RoadDTO struct {
-	Name       string    `json:"name"`
-	IconPath   string    `json:"iconPath"`
-	Paths      []PathDTO `json:"paths"`
-	IsStarted  bool      `json:"isStarted"`
-	IsFinished bool      `json:"isFinished"`
+	Name          string    `json:"name"`
+	IconPath      string    `json:"iconPath"`
+	IsStarted     bool      `json:"roadIsStarted"`
+	IsFinished    bool      `json:"roadIsFinished"`
+	IsImageExists bool      `json:"isImageExists"`
+	Paths         []PathDTO `json:"paths"`
 }
 
-func (m *RoadDTOManager) ToRoadDTO(road domains.Road, paths []PathDTO) RoadDTO {
+func (m *RoadDTOManager) ToRoadDTO(road domains.Road, paths []PathDTO, isImageExists bool) RoadDTO {
 	return RoadDTO{
-		Name:       road.GetName(),
-		IconPath:   road.GetIconPath(),
-		Paths:      paths,
-		IsStarted:  road.GetIsStarted(),
-		IsFinished: road.GetIsFinished(),
-	}
-}
-
-type GetRoadDTO struct {
-	Name       string           `json:"name"`
-	IconPath   string           `json:"iconPath"`
-	IsStarted  bool             `json:"isStarted"`
-	IsFinished bool             `json:"isFinished"`
-	Paths      []GetRoadPathDTO `json:"paths"`
-}
-
-func (m *RoadDTOManager) ToGetRoadDTO(road domains.Road, paths []GetRoadPathDTO) GetRoadDTO { //for get Roads API
-	return GetRoadDTO{
-		Name:       road.GetName(),
-		IconPath:   road.GetIconPath(),
-		IsStarted:  road.GetIsStarted(),
-		IsFinished: road.GetIsFinished(),
-		Paths:      paths,
+		Name:          road.GetName(),
+		IconPath:      road.GetIconPath(),
+		Paths:         paths,
+		IsStarted:     road.GetIsStarted(),
+		IsFinished:    road.GetIsFinished(),
+		IsImageExists: isImageExists,
 	}
 }
 

@@ -470,7 +470,7 @@ paths:
       summary: ResetLabHistory
       tags:
       - Lab
-  /private/labs/:
+  /private/labs/{programmingID}:
     get:
       consumes:
       - application/json
@@ -481,8 +481,9 @@ paths:
         name: Language
         type: string
       - description: Programming Language ID
-        in: query
+        in: path
         name: programmingID
+        required: true
         type: string
       produces:
       - application/json
