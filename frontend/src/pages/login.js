@@ -24,6 +24,8 @@ import { useTranslation } from "next-i18next";
 import themeConfig from "src/configs/themeConfig";
 import { useAuth } from "src/hooks/useAuth";
 import LanguageSelector from "src/layout/components/navigation/item/LanguageSelector";
+import { useRouter } from "next/router";
+
 const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Login = () => {
@@ -36,6 +38,7 @@ const Login = () => {
   const [visibleUsernameLabel, setVisibleUsernameLabel] = useState(false);
   const [visiblePasswordLabel, setVisiblePasswordLabel] = useState(false);
   const { login } = useAuth();
+  const router = useRouter();
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   // const handleMouseDownPassword = (event) => {
@@ -77,6 +80,10 @@ const Login = () => {
       await login(formData);
     } catch (error) {
     }
+  };
+
+  const goRegisterPage = () => {
+    router.push("register");
   };
 
   useEffect(() => {
@@ -405,6 +412,7 @@ const Login = () => {
                   justifyContent: "center",
                   flexDirection: sm_down ? "column" : "row",
                   mb: sm_down ? "1.563rem" : "",
+                  gap: 2,
                 }}
               >
                 <Typography
@@ -415,17 +423,18 @@ const Login = () => {
                 >
                   <Translations text={"login.new.on.platform"} />
                 </Typography>
-                <Typography
-                  sx={{
-                    ml: sm_up ? "0.938rem" : 0,
-                    mt: sm_down ? "0.938rem" : 0,
-                    color: "#0A3B7A",
-                    font: "normal normal 600 18px/23px Outfit",
-                    textAlign: "center",
-                  }}
-                >
-                  <Translations text={"login.create.new.account"} />
-                </Typography>
+                <Button onClick={goRegisterPage}>
+                  <Typography
+                    sx={{
+                      color: "#0A3B7A !important",
+
+                      font: "normal normal 600 18px/23px Outfit",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Translations text={"login.create.new.account"} />
+                  </Typography>
+                </Button>
               </Grid>
             </Grid>
           </CardContent>

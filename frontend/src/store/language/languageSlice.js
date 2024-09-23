@@ -13,18 +13,18 @@ const initialState = {
 };
 
 export const getInventories = createAsyncThunk(
-    "language/getInventories",
+  "language/getInventories",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios({ 
+      const response = await axios({
         url: "/api/v1/private/home/inventories",
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(response.message);
     }
   }
 );
@@ -63,24 +63,23 @@ export const getUserLanguageRoadStats = createAsyncThunk(
   }
 );
 
-
 const languageSlice = createSlice({
   name: "language",
   initialState: initialState,
   extraReducers: (builder) => {
     builder
-    .addCase(getInventories.pending, (state) => {  
-        state.loading = true; 
-        state.error = null; 
+      .addCase(getInventories.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-      .addCase(getInventories.fulfilled, (state, action) => { 
+      .addCase(getInventories.fulfilled, (state, action) => {
         state.data = action.payload;
-        state.loading = false; 
+        state.loading = false;
       })
-      .addCase(getInventories.rejected, (state, action) => { 
-        state.loading = false; 
-        state.error = action.payload; 
-      }) 
+      .addCase(getInventories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(getUserLanguageLabStats.pending, (state) => {
         state.userLanguageLabStatsLoading = true;
         state.error = null;
@@ -105,8 +104,7 @@ const languageSlice = createSlice({
         state.userLanguageRoadStatsLoading = false;
         state.error = action.payload;
       });
-      
-    }
+  },
 });
 
 export default languageSlice.reducer;
