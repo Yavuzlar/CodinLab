@@ -393,43 +393,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/labs/": {
-            "get": {
-                "description": "Get Labs",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Lab"
-                ],
-                "summary": "GetLabs",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Language",
-                        "name": "Language",
-                        "in": "header"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Programming Language ID",
-                        "name": "programmingID",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/private/labs/difficulty/stats": {
             "get": {
                 "description": "Get User Lab Difficulty Statistics",
@@ -489,6 +452,44 @@ const docTemplate = `{
                     "Lab"
                 ],
                 "summary": "GetUserLabProgressStats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/labs/{programmingID}": {
+            "get": {
+                "description": "Get Labs",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GetLabs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
