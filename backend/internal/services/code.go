@@ -136,7 +136,6 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 	select {
 	case result := <-resultChan:
 		if result.err != nil {
-			// fmt.Println(result.err)
 			return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
 		}
 		return result.logs, nil

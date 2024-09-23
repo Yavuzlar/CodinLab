@@ -102,6 +102,12 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	if !isExists {
+		// TODO: Socket yardımı ile eğer image indiyse frontend'e iletilecek
+		if err := h.services.CodeService.Pull(c.Context(), inventoryInformation.GetDockerImage()); err != nil {
+			return err
+		}
+	}
 
 	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, programmingID, "", nil, nil)
 	if err != nil {

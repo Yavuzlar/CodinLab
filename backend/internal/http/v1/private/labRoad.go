@@ -25,6 +25,8 @@ func (h *PrivateHandler) Start(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	userSession := session_store.GetSessionData(c)
 
+	// FIXME: Burası kalkıcak.
+
 	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
 		return err

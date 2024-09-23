@@ -45,6 +45,12 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	if !isExists {
+		// TODO: Socket yardımı ile eğer image indiyse frontend'e iletilecek
+		if err := h.services.CodeService.Pull(c.Context(), inventoryInformation.GetDockerImage()); err != nil {
+			return err
+		}
+	}
 
 	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, "", nil, nil)
 	if err != nil {
@@ -60,6 +66,8 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 		}
 		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs, isExists)
 	}
+
+	//  TODO: Start Road Endpoint geliyor. Orada road started log eklenicek
 
 	return response.Response(200, "GetRoads successful", roadDTO)
 }
@@ -79,6 +87,8 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
+
+	// TODO: En son çözülen pathin id'sine bakılıcak, Eğer gelen path ID db dekinden fazla ise izin verilmeyecek. Hata mesajı vericez.
 
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
