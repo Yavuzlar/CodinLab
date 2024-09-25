@@ -2,6 +2,7 @@ package private
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -13,6 +14,7 @@ import (
 
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
+	roadRoute.Post("/start", h.StartRoad)
 	roadRoute.Get("/:programmingID", h.GetRoad)
 	roadRoute.Get("/path/:programmingID/:pathID", h.GetPath)
 	roadRoute.Get("/reset/:programmingID/:pathID", h.ResetPathHistory)
@@ -23,13 +25,49 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 }
 
 // @Tags Road
+// @Summary StartRoad
+// @Description Start Road
+// @Accept json
+// @Produce json
+// @Param start body dto.StartDTO true "Start"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/start [post]
+func (h *PrivateHandler) StartRoad(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+	var startDTO dto.StartDTO
+
+	if err := c.BodyParser(&startDTO); err != nil {
+		return err
+	}
+
+	programmingID := strconv.Itoa(int(startDTO.ProgrammingID))
+
+	isStarted := false
+	_, err := h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, "", &isStarted, nil)
+	if err != nil {
+		return err
+	}
+	isExists, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, programmingID, "", domains.TypeRoad, domains.ContentStarted)
+	if err != nil {
+		return err
+	}
+	if isExists {
+		return response.Response(409, "Road was started already", nil)
+	}
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, "", domains.TypeRoad, domains.ContentStarted); err != nil {
+		return err
+	}
+	return response.Response(200, "Road Started successfully", nil)
+}
+
+// @Tags Road
 // @Summary GetRoads
 // @Description Get Road with Paths
 // @Accept json
 // @Produce json
 // @Param Language header string false "Language"
 // @Param programmingID path string true "programmingID"
-// @Success 200 {object} response.BaseResponse{data=dto.GetRoadDTO}
+// @Success 200 {object} response.BaseResponse{data=dto.RoadDTO}
 // @Router /private/road/{programmingID} [get]
 func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
@@ -47,9 +85,11 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	}
 	if !isExists {
 		// TODO: Socket yardımı ile eğer image indiyse frontend'e iletilecek
-		if err := h.services.CodeService.Pull(c.Context(), inventoryInformation.GetDockerImage()); err != nil {
-			return err
-		}
+		go func() {
+			if err := h.services.CodeService.Pull(c.Context(), inventoryInformation.GetDockerImage()); err != nil {
+				fmt.Printf("Error pulling Docker image: %v\n", err)
+			}
+		}()
 	}
 
 	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, "", nil, nil)
@@ -66,8 +106,6 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 		}
 		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs, isExists)
 	}
-
-	//  TODO: Start Road Endpoint geliyor. Orada road started log eklenicek
 
 	return response.Response(200, "GetRoads successful", roadDTO)
 }
@@ -87,8 +125,6 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
-
-	// TODO: En son çözülen pathin id'sine bakılıcak, Eğer gelen path ID db dekinden fazla ise izin verilmeyecek. Hata mesajı vericez.
 
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
@@ -198,7 +234,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	road, err := h.services.RoadService.GetRoadByID(userSession.UserID, programmingID, pathID)
+	road, err := h.services.RoadService.GetPathByID(userSession.UserID, programmingID, pathID)
 	if err != nil {
 		return err
 	}

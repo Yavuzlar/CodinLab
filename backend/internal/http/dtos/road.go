@@ -130,3 +130,6 @@ func (m *RoadDTOManager) ToFrontendTemplateDto(frontendTemplate string) RoadFron
 type RoadFrontendTemplateDto struct {
 	Template string `json:"template"`
 }
+type StartDTO struct {
+	ProgrammingID int32 `json:"programmingID"`
+}

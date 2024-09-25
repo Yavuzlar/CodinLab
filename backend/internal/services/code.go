@@ -297,7 +297,7 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 			return history, nil
 		}
 
-		path, err := s.roadService.GetRoadByID(userID, programmingID, labPathID)
+		path, err := s.roadService.GetPathByID(userID, programmingID, labPathID)
 		if err != nil {
 			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
 		}
