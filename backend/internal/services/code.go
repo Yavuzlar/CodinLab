@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -136,7 +137,15 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 	select {
 	case result := <-resultChan:
 		if result.err != nil {
-			// fmt.Println(result.err)
+			if strings.Contains(result.err.Error(), "No such image") {
+				re := regexp.MustCompile(`No such image: (.+)`)
+				matches := re.FindStringSubmatch(result.err.Error())
+				if len(matches) > 1 {
+					imageName := matches[1]
+					return "", service_errors.NewServiceErrorWithMessage(404, fmt.Sprintf("Image not found: %s", imageName))
+				}
+				return "", service_errors.NewServiceErrorWithMessage(404, "Image not found")
+			}
 			return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
 		}
 		return result.logs, nil
@@ -288,7 +297,7 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 			return history, nil
 		}
 
-		path, err := s.roadService.GetRoadByID(userID, programmingID, labPathID)
+		path, err := s.roadService.GetPathByID(userID, programmingID, labPathID)
 		if err != nil {
 			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
 		}
