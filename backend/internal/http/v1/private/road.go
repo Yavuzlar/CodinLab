@@ -126,8 +126,6 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	// TODO: En son çözülen pathin id'sine bakılıcak, Eğer gelen path ID db dekinden fazla ise izin verilmeyecek. Hata mesajı vericez.
-
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
 		return err
