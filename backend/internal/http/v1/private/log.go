@@ -107,6 +107,8 @@ func (h *PrivateHandler) AddDummyRoadData(c *fiber.Ctx) error {
 
 	// Dummy Data for testing
 	h.services.LogService.Add(c.Context(), userSession.UserID, "1", "1", domains.TypePath, domains.ContentStarted)
+	h.services.LogService.Add(c.Context(), userSession.UserID, "2", "1", domains.TypePath, domains.ContentStarted)
+	h.services.LogService.Add(c.Context(), userSession.UserID, "2", "1", domains.TypePath, domains.ContentCompleted)
 
 	return response.Response(200, "Dummy Data Added", nil)
 }

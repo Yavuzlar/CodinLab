@@ -31,36 +31,6 @@ definitions:
           \   `json:\"pathID\"`"
         type: string
     type: object
-  dto.GetRoadDTO:
-    properties:
-      iconPath:
-        type: string
-      isFinished:
-        type: boolean
-      isStarted:
-        type: boolean
-      name:
-        type: string
-      paths:
-        items:
-          $ref: '#/definitions/dto.GetRoadPathDTO'
-        type: array
-    type: object
-  dto.GetRoadPathDTO:
-    properties:
-      difficulty:
-        type: integer
-      id:
-        type: integer
-      isFinished:
-        type: boolean
-      isStarted:
-        type: boolean
-      languages:
-        $ref: '#/definitions/dto.LanguageRoadDTO'
-      name:
-        type: string
-    type: object
   dto.LanguageRoadDTO:
     properties:
       content:
@@ -108,14 +78,14 @@ definitions:
         type: integer
       id:
         type: integer
-      isFinished:
-        type: boolean
-      isStarted:
-        type: boolean
       language:
         $ref: '#/definitions/dto.LanguageRoadDTO'
       name:
         type: string
+      pathIsFinished:
+        type: boolean
+      pathIsStarted:
+        type: boolean
       template:
         type: string
     type: object
@@ -141,6 +111,23 @@ definitions:
     - surname
     - username
     type: object
+  dto.RoadDTO:
+    properties:
+      iconPath:
+        type: string
+      isImageExists:
+        type: boolean
+      name:
+        type: string
+      paths:
+        items:
+          $ref: '#/definitions/dto.PathDTO'
+        type: array
+      roadIsFinished:
+        type: boolean
+      roadIsStarted:
+        type: boolean
+    type: object
   dto.SolutionsByDayDTO:
     properties:
       date:
@@ -158,6 +145,11 @@ definitions:
         type: integer
       roadHours:
         type: number
+    type: object
+  dto.StartDTO:
+    properties:
+      programmingID:
+        type: integer
     type: object
   dto.UpdatePasswordDTO:
     properties:
@@ -702,7 +694,7 @@ paths:
             - $ref: '#/definitions/response.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/dto.GetRoadDTO'
+                  $ref: '#/definitions/dto.RoadDTO'
               type: object
       summary: GetRoads
       tags:
@@ -828,6 +820,28 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: ResetPathHistory
+      tags:
+      - Road
+  /private/road/start:
+    post:
+      consumes:
+      - application/json
+      description: Start Road
+      parameters:
+      - description: Start
+        in: body
+        name: start
+        required: true
+        schema:
+          $ref: '#/definitions/dto.StartDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: StartRoad
       tags:
       - Road
   /private/start/{programmingID}:
