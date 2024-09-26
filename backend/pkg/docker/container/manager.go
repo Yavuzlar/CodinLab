@@ -19,10 +19,11 @@ import (
 
 type IContainerManager interface {
 	CreateContainer(ctx context.Context, image string) (*container.CreateResponse, error)
+	CreateContainerWithCMD(ctx context.Context, image string, cmd []string) (*container.CreateResponse, error)
 	StartContainer(ctx context.Context, containerID string) error
 	StopContainer(ctx context.Context, containerID string) error
 	ReadContainerLogs(ctx context.Context, containerID string) (string, error)
-	RunContainerWithTar(ctx context.Context, image string, cmd []string, tmpCodePath, fileName string) (string, error)
+	RunContainerWithTar(ctx context.Context, tmpCodePath, fileName string, resp container.CreateResponse) (string, error)
 }
 
 // Manager, manages the docker containers
@@ -45,6 +46,21 @@ func (m *Manager) CreateContainer(ctx context.Context, image string) (*container
 	if err != nil {
 		return nil, fmt.Errorf("error creating container: %w", err)
 	}
+	return &resp, nil
+
+}
+
+func (m *Manager) CreateContainerWithCMD(ctx context.Context, image string, cmd []string) (*container.CreateResponse, error) {
+	resp, err := m.client.ContainerCreate(ctx, &container.Config{
+		Image:        image,
+		Cmd:          cmd,
+		AttachStdout: true,
+		AttachStderr: true,
+	}, nil, nil, nil, "")
+	if err != nil {
+		return nil, fmt.Errorf("error creating container with command: %w", err)
+	}
+
 	return &resp, nil
 }
 
@@ -133,18 +149,7 @@ func (m *Manager) ContainerIDByName(ctx context.Context, containerName string) (
 	return containerID, nil
 }
 
-func (m *Manager) RunContainerWithTar(ctx context.Context, image string, cmd []string, tmpCodePath, fileName string) (string, error) {
-	// Creates container
-	resp, err := m.client.ContainerCreate(ctx, &container.Config{
-		Image:        image,
-		Cmd:          cmd,
-		AttachStdout: true,
-		AttachStderr: true,
-	}, nil, nil, nil, "")
-	if err != nil {
-		return "", fmt.Errorf("error creating container with command: %w", err)
-	}
-
+func (m *Manager) RunContainerWithTar(ctx context.Context, tmpCodePath, fileName string, resp container.CreateResponse) (string, error) {
 	// Copy file to container
 	if err := m.CopyToContainer(ctx, resp.ID, tmpCodePath, "/", fileName); err != nil {
 		return "", fmt.Errorf("error copying file to container: %w", err)

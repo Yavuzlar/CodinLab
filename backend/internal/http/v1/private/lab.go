@@ -10,6 +10,7 @@ import (
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/websocket/v2"
 )
 
 // UserLanguageLabStatsDto represents the DTO for user language lab statistics
@@ -230,7 +231,18 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd())
+	var conn *websocket.Conn
+	for c, ok := range h.clients {
+		if c.GetUserID().String() == userSession.UserID && ok {
+			conn = c.GetConnection()
+			break
+		}
+	}
+	if conn == nil {
+		return response.Response(500, "This user was not found in socket.", nil)
+	}
+
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd(), conn)
 	if err != nil {
 		return err
 	}

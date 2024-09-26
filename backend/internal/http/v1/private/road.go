@@ -10,6 +10,7 @@ import (
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/websocket/v2"
 )
 
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
@@ -248,18 +249,29 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
+	var conn *websocket.Conn
+	for c, ok := range h.clients {
+		if c.GetUserID().String() == userSession.UserID && ok {
+			conn = c.GetConnection()
+			break
+		}
+	}
+	if conn == nil {
+		return response.Response(500, "This user was not found in socket.", nil)
+	}
+
 	var logs string
 	if strings.EqualFold(road.GetQuest().GetFuncName(), "main") {
 		err = h.services.CodeService.CreateBashFile(programmingInformation.GetCmd(), road.GetQuest().GetTests(), userSession.UserID, programmingInformation.GetPathDir())
 		if err != nil {
 			return err
 		}
-		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetShCmd())
+		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetShCmd(), conn)
 		if err != nil {
 			return err
 		}
 	} else {
-		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetCmd())
+		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetCmd(), conn)
 		if err != nil {
 			return err
 		}

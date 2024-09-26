@@ -40,6 +40,7 @@ func (h *PrivateHandler) handleWebSocket(c *websocket.Conn) {
 		return
 	}
 	userID := session_data.UserID
+	// userID := "b05ca195-c0a9-4ac9-905d-2409962b26bd" // This is for test
 
 	newClient, err := domains.NewClient(userID, c)
 	if err != nil {

@@ -311,6 +311,27 @@ paths:
       summary: Updates User
       tags:
       - Admin
+  /private/common/stop/{containerID}:
+    get:
+      consumes:
+      - application/json
+      description: Stops Quest Tests
+      parameters:
+      - description: Container ID
+        in: path
+        name: containerID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Stops Quest Tests
+      tags:
+      - Common
   /private/home/advancement:
     get:
       consumes:
