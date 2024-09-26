@@ -1,6 +1,9 @@
 package public
 
 import (
+	"sync"
+
+	"github.com/Yavuzlar/CodinLab/internal/domains"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/services"
@@ -12,18 +15,22 @@ type PublicHandler struct {
 	services      *services.Services
 	session_store *session.Store
 	dtoManager    *dto.DTOManager
+	clients       map[*domains.Client]bool
+	mu            sync.Mutex
 }
 
 func NewPublicHandler(
 	service *services.Services,
 	sessionStore *session.Store,
 	dtoManager *dto.DTOManager,
+	clients map[*domains.Client]bool,
 
 ) *PublicHandler {
 	return &PublicHandler{
 		services:      service,
 		session_store: sessionStore,
 		dtoManager:    dtoManager,
+		clients:       clients,
 	}
 }
 

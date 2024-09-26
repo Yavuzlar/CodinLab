@@ -844,27 +844,26 @@ paths:
       summary: StartRoad
       tags:
       - Road
-  /private/start/{programmingID}:
+  /private/socket/ws:
     get:
-      consumes:
-      - application/json
-      description: Start
-      parameters:
-      - description: programmingID
-        in: path
-        name: programmingID
-        required: true
-        type: string
-      produces:
-      - application/json
+      description: Initiates a WebSocket connection for real-time communication. Clients
+        can send and receive messages.
       responses:
-        "200":
-          description: OK
+        "101":
+          description: Connection Established
           schema:
-            $ref: '#/definitions/response.BaseResponse'
-      summary: Start
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Establish a WebSocket Connection
       tags:
-      - LabRoadCommon
+      - WebSocket
   /private/user/:
     get:
       consumes:
