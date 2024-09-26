@@ -1,7 +1,6 @@
 package private
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -52,8 +51,6 @@ func (h *PrivateHandler) handleWebSocket(c *websocket.Conn) {
 	h.mu.Lock()
 	h.clients[newClient] = true
 	h.mu.Unlock()
-
-	fmt.Println("Socket Client: ", h.clients)
 
 	// Bağlantı kapandığında client'ı map'ten çıkarmak için defer ile tanımlıyoruz
 	defer func() {
