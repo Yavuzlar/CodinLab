@@ -11,6 +11,11 @@ type Client struct {
 	connection *websocket.Conn
 }
 
+type Response struct {
+	Type string
+	Data any
+}
+
 func NewClient(
 	userID string,
 	connection *websocket.Conn,

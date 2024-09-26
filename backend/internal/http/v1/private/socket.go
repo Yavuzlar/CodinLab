@@ -1,6 +1,7 @@
 package private
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -40,6 +41,7 @@ func (h *PrivateHandler) handleWebSocket(c *websocket.Conn) {
 		return
 	}
 	userID := session_data.UserID
+	// userID := "b05ca195-c0a9-4ac9-905d-2409962b26bd" // This is for test
 
 	newClient, err := domains.NewClient(userID, c)
 	if err != nil {
@@ -50,6 +52,8 @@ func (h *PrivateHandler) handleWebSocket(c *websocket.Conn) {
 	h.mu.Lock()
 	h.clients[newClient] = true
 	h.mu.Unlock()
+
+	fmt.Println("Socket Client: ", h.clients)
 
 	// Bağlantı kapandığında client'ı map'ten çıkarmak için defer ile tanımlıyoruz
 	defer func() {

@@ -13,6 +13,8 @@ import (
 	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 	"github.com/Yavuzlar/CodinLab/pkg/docker"
 	"github.com/Yavuzlar/CodinLab/pkg/file"
+	"github.com/docker/docker/api/types/container"
+	"github.com/gofiber/websocket/v2"
 )
 
 type codeService struct {
@@ -85,6 +87,47 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 	}
 }
 
+func (s *codeService) StopContainer(ctx context.Context, containerID string) error {
+	errCh := make(chan error)
+
+	go func() {
+		errCh <- s.dockerSDK.Container().StopContainer(ctx, containerID)
+		close(errCh)
+	}()
+
+	select {
+	case err := <-errCh:
+		return service_errors.NewServiceErrorWithMessageAndError(500, "Container Stop Error", err)
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
+func (s *codeService) createContainerWithCMD(ctx context.Context, image string, cmd []string) (*container.CreateResponse, error) {
+	respCh := make(chan *container.CreateResponse)
+	errCh := make(chan error)
+
+	go func() {
+		resp, err := s.dockerSDK.Container().CreateContainerWithCMD(ctx, image, cmd)
+		if err != nil {
+			errCh <- err
+			close(errCh)
+		} else {
+			respCh <- resp
+			close(respCh)
+		}
+	}()
+
+	select {
+	case resp := <-respCh:
+		return resp, nil
+	case err := <-errCh:
+		return nil, err
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	}
+}
+
 func (s *codeService) CreateBashFile(cmd []string, tests []domains.Test, userID, pathDir string) error {
 	templateData, err := os.ReadFile(fmt.Sprintf("%s/main.sh", pathDir))
 	if err != nil {
@@ -118,7 +161,7 @@ func (s *codeService) CreateBashFile(cmd []string, tests []domains.Test, userID,
 	return nil
 }
 
-func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error) {
+func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string, conn *websocket.Conn) (string, error) {
 	resultChan := make(chan struct {
 		logs string
 		err  error
@@ -126,7 +169,30 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 
 	// Asenkron olarak container çalıştırma işlemini başlatın
 	go func() {
-		logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath, fileName)
+		resp, err := s.createContainerWithCMD(ctx, image, cmd)
+		if err != nil {
+			resultChan <- struct {
+				logs string
+				err  error
+			}{"", err}
+		}
+
+		err = conn.WriteJSON(domains.Response{
+			Type: "container",
+			Data: struct {
+				ID string `json:"id"`
+			}{
+				ID: resp.ID,
+			},
+		})
+		if err != nil {
+			resultChan <- struct {
+				logs string
+				err  error
+			}{"", err}
+		}
+
+		logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, tmpCodePath, fileName, *resp)
 		resultChan <- struct {
 			logs string
 			err  error
