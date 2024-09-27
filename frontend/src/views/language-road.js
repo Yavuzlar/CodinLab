@@ -167,12 +167,11 @@ const LanguageRoad = ({ language = "", pathId }) => {
           {!isFinished && (
             <Tooltip title={t("roads.path.restart.button")}>
               <Button
+              variant="dark"
                 sx={{
                   position: "absolute",
                   right: "1rem",
                   top: "1rem",
-                  backgroundColor: "#fff",
-                  color: theme.palette.primary.dark,
                   minWidth: "1rem",
                 }}
                 onClick={handleReset}
@@ -183,12 +182,11 @@ const LanguageRoad = ({ language = "", pathId }) => {
           )}
 
           <Button
+            variant="dark"
             sx={{
               position: "absolute",
               right: "1rem",
               bottom: "1rem",
-              backgroundColor: "#fff",
-              color: theme.palette.primary.dark,
               fontWeight: 700,
               fontFamily: "Outfit",
               textTransform: "capitalize",
