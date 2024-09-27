@@ -6,21 +6,17 @@ import Activity from "src/components/cards/Activity";
 import Image from "next/image";
 import userIcon from "../assets/icons/icons8-male-user-100.png";
 import settingsIcon from "../assets/icons/icons8-settings-128.png";
-import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { getLanguageUsageRates } from "src/store/log/logSlice";
 import { useEffect } from "react";
-
-
+import DonotProggresStatistic from "src/components/progress/DonotProggresStatistic";
 
 const Admin = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const {  log: logStatistics } = useSelector(
-    (state) => state
-  );
+  const { log: logStatistics } = useSelector((state) => state);
 
   useEffect(() => {
     dispatch(getLanguageUsageRates());
@@ -28,11 +24,15 @@ const Admin = () => {
 
   console.log(logStatistics);
 
-  const progresses = logStatistics?.data?.data?.map((item) => ({
-    name: item.name,
-    value: item.usagePercentage,
-  })) || [];
+  const progresses = {
+    values: logStatistics.data?.data?.map((item) => item.usagePercentage),
+    labels: logStatistics.data?.data?.map((item) => item.name),
+  };
 
+  const backgroundColors = [
+    theme.palette.primary.light,
+    theme.palette.info.dark,
+  ];
 
   const router = useRouter();
   return (
@@ -157,35 +157,56 @@ const Admin = () => {
                     justifyContent: "center",
                   }}
                 >
-                  <CircularProgressStatistics progresses={progresses} />
+                  {/* <CircularProgressStatistics progresses={progresses} /> */}
+                  <DonotProggresStatistic data={progresses} />
                 </Box>
-                {logStatistics.data?.data?.map((item, index) => (
-                  <Box
-                    sx={{
-                      mt: "0.5rem",
-                      display: "flex",
-                      alignItems: "center",
-                      flexWrap: "",
-                      gap: 15,
-                    }}
-                    key={index}
-                  >
+                <Box
+                  sx={{
+                    mt: "0.5rem",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "2rem",
+                  }}
+                >
+                  {logStatistics.data?.data?.map((item, index) => (
                     <Box
                       sx={{
-                        width: "15px",
-                        height: "15px",
-                        backgroundColor: theme.palette.primary.light,
-                        borderRadius: "50%",
+                        mt: "0.5rem",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1rem",
                       }}
-                    />
-                    <img src={"api/v1/"+item.iconPath} width={30} height={30} />
-                    <Typography
-                      sx={{ font: "normal normal normal 18px/23px Outfit" }}
+                      key={index}
                     >
-                      %{item.usagePercentage}
-                    </Typography>
-                  </Box>
-                ))}
+                      <Box
+                        sx={{
+                          width: "15px",
+                          height: "15px",
+                          backgroundColor: backgroundColors[index],
+                          borderRadius: "50%",
+                        }}
+                      />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: "0.5rem",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img
+                          src={"api/v1/" + item.iconPath}
+                          width={30}
+                          height={30}
+                        />
+                        <Typography
+                          sx={{ font: "normal normal normal 18px/23px Outfit" }}
+                        >
+                          %{item.usagePercentage}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
               </Box>
             </Card>
           </Box>
