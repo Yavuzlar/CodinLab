@@ -42,7 +42,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
           "Content-Type": "application/json",
         },
       });
-      onRun(response.data);
+      onRun(response.data?.message);
     } catch (error) {
       onRun(error.response?.data?.message || error.message);
     }

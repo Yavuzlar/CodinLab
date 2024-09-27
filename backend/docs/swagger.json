@@ -157,6 +157,38 @@
                 }
             }
         },
+        "/private/common/stop/{containerID}": {
+            "get": {
+                "description": "Stops Quest Tests",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Common"
+                ],
+                "summary": "Stops Quest Tests",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Container ID",
+                        "name": "containerID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/home/advancement": {
             "get": {
                 "description": "Get User Advancement",
@@ -989,33 +1021,30 @@
                 }
             }
         },
-        "/private/start/{programmingID}": {
+        "/private/socket/ws": {
             "get": {
-                "description": "Start",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Initiates a WebSocket connection for real-time communication. Clients can send and receive messages.",
                 "tags": [
-                    "LabRoadCommon"
+                    "WebSocket"
                 ],
-                "summary": "Start",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "programmingID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "Establish a WebSocket Connection",
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "101": {
+                        "description": "Connection Established",
                         "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
