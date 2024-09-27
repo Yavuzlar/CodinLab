@@ -1,0 +1,41 @@
+## FRONTEND
+
+
+string $funcname$(int n) {
+
+    // Write your code here
+
+}
+
+int main() {
+    int n;
+    
+    std::cout << "n değerini girin: ";
+    std::cin >> n;
+    
+    std::string result = $funcname$(n);
+    
+    std::cout << "Fonksiyondan dönen sonuç: " << result << std::endl;
+    return 0;
+}
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+int main(){
+    $checks$
+
+    std::cout << "$success$" << std::endl;
+    return 0;
+}
+
+## CHECK
+
+string result$rnd$ = $funcname$($input$);
+if (result$rnd$ != $output$){
+    std::cout << "Test Failed: Expected $out$, but got " << result$rnd$ << std::endl;
+    return 0;
+}

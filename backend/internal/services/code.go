@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -12,6 +13,8 @@ import (
 	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 	"github.com/Yavuzlar/CodinLab/pkg/docker"
 	"github.com/Yavuzlar/CodinLab/pkg/file"
+	"github.com/docker/docker/api/types/container"
+	"github.com/gofiber/websocket/v2"
 )
 
 type codeService struct {
@@ -84,7 +87,81 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 	}
 }
 
-func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error) {
+func (s *codeService) StopContainer(ctx context.Context, containerID string) error {
+	errCh := make(chan error)
+
+	go func() {
+		errCh <- s.dockerSDK.Container().StopContainer(ctx, containerID)
+		close(errCh)
+	}()
+
+	select {
+	case err := <-errCh:
+		return service_errors.NewServiceErrorWithMessageAndError(500, "Container Stop Error", err)
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
+func (s *codeService) createContainerWithCMD(ctx context.Context, image string, cmd []string) (*container.CreateResponse, error) {
+	respCh := make(chan *container.CreateResponse)
+	errCh := make(chan error)
+
+	go func() {
+		resp, err := s.dockerSDK.Container().CreateContainerWithCMD(ctx, image, cmd)
+		if err != nil {
+			errCh <- err
+			close(errCh)
+		} else {
+			respCh <- resp
+			close(respCh)
+		}
+	}()
+
+	select {
+	case resp := <-respCh:
+		return resp, nil
+	case err := <-errCh:
+		return nil, err
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	}
+}
+
+func (s *codeService) CreateBashFile(cmd []string, tests []domains.Test, userID, pathDir string) error {
+	templateData, err := os.ReadFile(fmt.Sprintf("%s/main.sh", pathDir))
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessage(500, "File could not be read")
+	}
+	content := string(templateData)
+
+	var testsStrBuilder strings.Builder
+	for _, test := range tests {
+		for _, t := range test.GetOutput() {
+			switch v := t.(type) {
+			case int:
+				testsStrBuilder.WriteString(fmt.Sprintf(" %d", v))
+			case string:
+				testsStrBuilder.WriteString(fmt.Sprintf(" \"%s\"", v))
+			default:
+				testsStrBuilder.WriteString(fmt.Sprintf(" %v", v))
+			}
+		}
+
+	}
+	testsStr := testsStrBuilder.String()
+	content = strings.Replace(content, "-tests-", testsStr, -1)
+
+	if err := file.CheckDir(fmt.Sprintf("usercodes/%v/paths", userID)); err != nil {
+		return err
+	}
+
+	file.CreateFileAndWrite(fmt.Sprintf("usercodes/%v/paths/main.sh", userID), content)
+
+	return nil
+}
+
+func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string, conn *websocket.Conn) (string, error) {
 	resultChan := make(chan struct {
 		logs string
 		err  error
@@ -92,7 +169,30 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 
 	// Asenkron olarak container çalıştırma işlemini başlatın
 	go func() {
-		logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath, fileName)
+		resp, err := s.createContainerWithCMD(ctx, image, cmd)
+		if err != nil {
+			resultChan <- struct {
+				logs string
+				err  error
+			}{"", err}
+		}
+
+		err = conn.WriteJSON(domains.Response{
+			Type: "container",
+			Data: struct {
+				ID string `json:"id"`
+			}{
+				ID: resp.ID,
+			},
+		})
+		if err != nil {
+			resultChan <- struct {
+				logs string
+				err  error
+			}{"", err}
+		}
+
+		logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, tmpCodePath, fileName, *resp)
 		resultChan <- struct {
 			logs string
 			err  error
@@ -103,7 +203,15 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 	select {
 	case result := <-resultChan:
 		if result.err != nil {
-			// fmt.Println(result.err)
+			if strings.Contains(result.err.Error(), "No such image") {
+				re := regexp.MustCompile(`No such image: (.+)`)
+				matches := re.FindStringSubmatch(result.err.Error())
+				if len(matches) > 1 {
+					imageName := matches[1]
+					return "", service_errors.NewServiceErrorWithMessage(404, fmt.Sprintf("Image not found: %s", imageName))
+				}
+				return "", service_errors.NewServiceErrorWithMessage(404, "Image not found")
+			}
 			return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
 		}
 		return result.logs, nil
@@ -162,9 +270,14 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 	}
 
 	frontImports, cleanedCode := extractor.ExtractImports(userCode, true)
-	newUserCode, err := extractor.ExtractMainFunction(cleanedCode)
-	if err != nil {
-		return "", err
+	if !strings.EqualFold(funcName, "main") {
+		cleanedCode, err = extractor.ExtractMainFunction(cleanedCode)
+		if err != nil {
+			return "", err
+		}
+	} else {
+		funcName = "test"
+		cleanedCode = extractor.ExtractFuncName(cleanedCode, funcName)
 	}
 
 	docker := templateMap["docker"]
@@ -172,7 +285,7 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 	checks := s.createChecks(templateMap["check"], tests)
 
 	docker = strings.Replace(docker, "$checks$", checks, -1)
-	docker = strings.Replace(docker, "$usercode$", newUserCode, -1)
+	docker = strings.Replace(docker, "$usercode$", cleanedCode, -1)
 	docker = strings.Replace(docker, "$funcname$", funcName, -1)
 	docker = strings.Replace(docker, "$success$", "Test Passed", -1)
 
@@ -250,7 +363,7 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 			return history, nil
 		}
 
-		path, err := s.roadService.GetRoadByID(userID, programmingID, labPathID)
+		path, err := s.roadService.GetPathByID(userID, programmingID, labPathID)
 		if err != nil {
 			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
 		}

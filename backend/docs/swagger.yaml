@@ -31,36 +31,6 @@ definitions:
           \   `json:\"pathID\"`"
         type: string
     type: object
-  dto.GetRoadDTO:
-    properties:
-      iconPath:
-        type: string
-      isFinished:
-        type: boolean
-      isStarted:
-        type: boolean
-      name:
-        type: string
-      paths:
-        items:
-          $ref: '#/definitions/dto.GetRoadPathDTO'
-        type: array
-    type: object
-  dto.GetRoadPathDTO:
-    properties:
-      difficulty:
-        type: integer
-      id:
-        type: integer
-      isFinished:
-        type: boolean
-      isStarted:
-        type: boolean
-      languages:
-        $ref: '#/definitions/dto.LanguageRoadDTO'
-      name:
-        type: string
-    type: object
   dto.LanguageRoadDTO:
     properties:
       content:
@@ -108,14 +78,14 @@ definitions:
         type: integer
       id:
         type: integer
-      isFinished:
-        type: boolean
-      isStarted:
-        type: boolean
       language:
         $ref: '#/definitions/dto.LanguageRoadDTO'
       name:
         type: string
+      pathIsFinished:
+        type: boolean
+      pathIsStarted:
+        type: boolean
       template:
         type: string
     type: object
@@ -141,6 +111,23 @@ definitions:
     - surname
     - username
     type: object
+  dto.RoadDTO:
+    properties:
+      iconPath:
+        type: string
+      isImageExists:
+        type: boolean
+      name:
+        type: string
+      paths:
+        items:
+          $ref: '#/definitions/dto.PathDTO'
+        type: array
+      roadIsFinished:
+        type: boolean
+      roadIsStarted:
+        type: boolean
+    type: object
   dto.SolutionsByDayDTO:
     properties:
       date:
@@ -158,6 +145,11 @@ definitions:
         type: integer
       roadHours:
         type: number
+    type: object
+  dto.StartDTO:
+    properties:
+      programmingID:
+        type: integer
     type: object
   dto.UpdatePasswordDTO:
     properties:
@@ -319,6 +311,27 @@ paths:
       summary: Updates User
       tags:
       - Admin
+  /private/common/stop/{containerID}:
+    get:
+      consumes:
+      - application/json
+      description: Stops Quest Tests
+      parameters:
+      - description: Container ID
+        in: path
+        name: containerID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Stops Quest Tests
+      tags:
+      - Common
   /private/home/advancement:
     get:
       consumes:
@@ -470,7 +483,7 @@ paths:
       summary: ResetLabHistory
       tags:
       - Lab
-  /private/labs/:
+  /private/labs/{programmingID}:
     get:
       consumes:
       - application/json
@@ -481,8 +494,9 @@ paths:
         name: Language
         type: string
       - description: Programming Language ID
-        in: query
+        in: path
         name: programmingID
+        required: true
         type: string
       produces:
       - application/json
@@ -701,7 +715,7 @@ paths:
             - $ref: '#/definitions/response.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/dto.GetRoadDTO'
+                  $ref: '#/definitions/dto.RoadDTO'
               type: object
       summary: GetRoads
       tags:
@@ -829,17 +843,18 @@ paths:
       summary: ResetPathHistory
       tags:
       - Road
-  /private/start/{programmingID}:
-    get:
+  /private/road/start:
+    post:
       consumes:
       - application/json
-      description: Start
+      description: Start Road
       parameters:
-      - description: programmingID
-        in: path
-        name: programmingID
+      - description: Start
+        in: body
+        name: start
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/dto.StartDTO'
       produces:
       - application/json
       responses:
@@ -847,9 +862,29 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: Start
+      summary: StartRoad
       tags:
-      - LabRoadCommon
+      - Road
+  /private/socket/ws:
+    get:
+      description: Initiates a WebSocket connection for real-time communication. Clients
+        can send and receive messages.
+      responses:
+        "101":
+          description: Connection Established
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Establish a WebSocket Connection
+      tags:
+      - WebSocket
   /private/user/:
     get:
       consumes:

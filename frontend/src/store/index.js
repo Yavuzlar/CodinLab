@@ -6,6 +6,7 @@ import userSlice from './user/userSlice'
 import statisticsSlice from './statistics/statisticsSlice.js'
 import languageSlice from './language/languageSlice' 
 import pathsSlice from './paths/pathsSlice.js'
+import adminSlice from './admin/adminSlice.js'
 import pathSlice from "./path/pathSlice.js";
 import logSlice from "./log/logSlice.js";
 
@@ -16,6 +17,7 @@ export const store = configureStore({
     statistics: statisticsSlice, 
     language : languageSlice,
     paths : pathsSlice,
+    admin: adminSlice,
     path: pathSlice,
     log: logSlice
   },

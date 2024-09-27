@@ -862,9 +862,6 @@ const settings = () => {
             borderColor: "#0A3B7A",
           },
         },
-
-       
-
       }}
 
       autoFocus

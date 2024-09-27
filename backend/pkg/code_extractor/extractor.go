@@ -57,3 +57,19 @@ func ExtractMainFunction(code string) (string, error) {
 	newCode := strings.Join(lines, "\n")
 	return newCode, nil
 }
+
+func ExtractFuncName(code, newFuncName string) string {
+	lines := strings.Split(code, "\n")
+
+	mainFuncRegex := regexp.MustCompile(`(?i)\bmain\b\s*(\(|{|$)`)
+
+	for i, line := range lines {
+		if mainFuncRegex.MatchString(line) {
+			lines[i] = strings.Replace(line, "main", newFuncName, 1)
+			break
+		}
+	}
+
+	newCode := strings.Join(lines, "\n")
+	return newCode
+}

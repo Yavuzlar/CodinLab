@@ -168,7 +168,15 @@ func (s *adminService) DeleteUser(ctx context.Context, userID string) (err error
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
 	}
 	if len(users) == 0 {
-		return service_errors.NewServiceErrorWithMessage(400, "user not found")
+		return service_errors.NewServiceErrorWithMessage(404, "user not found")
+	}
+
+	isAdmin, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{ID: userIDU, Role: "user"}, 1, 1)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+	}
+	if len(isAdmin) == 0 {
+		return service_errors.NewServiceErrorWithMessage(403, "no permission to delete")
 	}
 
 	if err = s.userRepositories.Delete(ctx, userIDU); err != nil {

@@ -19,28 +19,25 @@ type LabDTO struct {
 	IsFinished bool           `json:"isFinished"`
 	Difficulty int            `json:"difficulty"`
 }
+
 type LabsDTO struct {
-	ID         int              `json:"id"`
-	Languages  []LabLanguageDTO `json:"languages"`
-	IsStarted  bool             `json:"isStarted"`
-	IsFinished bool             `json:"isFinished"`
-	Difficulty int              `json:"difficulty"`
+	Labs          []LabDTO `json:"labs"`
+	IsImageExists bool     `json:"isImageExists"`
 }
 
+func (m *LabDTOManager) ToLabsDTO(labs []LabDTO, isImageExists bool) LabsDTO {
+	return LabsDTO{
+		Labs:          labs,
+		IsImageExists: isImageExists,
+	}
+}
+
+// This is for get lab by id
 func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, template string) LabDTO {
 	return LabDTO{
 		ID:         lab.GetID(),
 		Languages:  languagesDTO,
 		Template:   template,
-		IsStarted:  lab.GetIsStarted(),
-		IsFinished: lab.GetIsFinished(),
-		Difficulty: lab.GetQuest().GetDifficulty(),
-	}
-}
-func (m *LabDTOManager) ToLabsDTO(lab domains.Lab, languagesDTOs LabLanguageDTO) LabDTO {
-	return LabDTO{
-		ID:         lab.GetID(),
-		Languages:  languagesDTOs,
 		IsStarted:  lab.GetIsStarted(),
 		IsFinished: lab.GetIsFinished(),
 		Difficulty: lab.GetQuest().GetDifficulty(),

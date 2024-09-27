@@ -3,7 +3,7 @@ package domains
 // IRoadService is the interface that provides the methods for the road service.
 type IRoadService interface {
 	GetRoadFilter(userID, programmingID, pathID string, isStarted, isFinished *bool) ([]Road, error)
-	GetRoadByID(userID, programmingID, pathID string) (path *Path, err error)
+	GetPathByID(userID, programmingID, pathID string) (path *Path, err error)
 	GetUserLanguageRoadStats(userID string) ([]RoadStats, error)
 	GetUserRoadProgressStats(userID string) (progressStats *RoadProgressStats, err error)
 }
@@ -137,6 +137,7 @@ type Road struct {
 	dockerImage   string
 	iconPath      string
 	cmd           []string
+	ShCmd         []string
 	fileExtension string
 	paths         []Path
 	isStarted     bool
@@ -184,6 +185,14 @@ func (r *Road) SetCmd(cmd []string) {
 	r.cmd = cmd
 }
 
+func (r *Road) GetShCmd() []string {
+	return r.ShCmd
+}
+
+func (r *Road) SetShCmd(shCmd []string) {
+	r.ShCmd = shCmd
+}
+
 func (r *Road) GetFileExtension() string {
 	return r.fileExtension
 }
@@ -217,13 +226,14 @@ func (r *Road) SetIsFinished(ok bool) {
 }
 
 // NewRoads creates a new instance of Roads
-func NewRoads(id int, name, dockerImage, iconPath, fileExtension string, paths []Path, cmd []string, isStarted, isFinished bool) *Road {
+func NewRoads(id int, name, dockerImage, iconPath, fileExtension string, paths []Path, cmd, shCmd []string, isStarted, isFinished bool) *Road {
 	return &Road{
 		id:            id,
 		name:          name,
 		dockerImage:   dockerImage,
 		iconPath:      iconPath,
 		cmd:           cmd,
+		ShCmd:         shCmd,
 		fileExtension: fileExtension,
 		paths:         paths,
 		isStarted:     isStarted,

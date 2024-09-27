@@ -2,6 +2,7 @@ package private
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -9,10 +10,12 @@ import (
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/websocket/v2"
 )
 
 func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 	roadRoute := root.Group("/road")
+	roadRoute.Post("/start", h.StartRoad)
 	roadRoute.Get("/:programmingID", h.GetRoad)
 	roadRoute.Get("/path/:programmingID/:pathID", h.GetPath)
 	roadRoute.Get("/reset/:programmingID/:pathID", h.ResetPathHistory)
@@ -23,32 +26,86 @@ func (h *PrivateHandler) initRoadRoutes(root fiber.Router) {
 }
 
 // @Tags Road
+// @Summary StartRoad
+// @Description Start Road
+// @Accept json
+// @Produce json
+// @Param start body dto.StartDTO true "Start"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/road/start [post]
+func (h *PrivateHandler) StartRoad(c *fiber.Ctx) error {
+	userSession := session_store.GetSessionData(c)
+	var startDTO dto.StartDTO
+
+	if err := c.BodyParser(&startDTO); err != nil {
+		return err
+	}
+
+	programmingID := strconv.Itoa(int(startDTO.ProgrammingID))
+
+	isStarted := false
+	_, err := h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, "", &isStarted, nil)
+	if err != nil {
+		return err
+	}
+	isExists, err := h.services.LogService.IsExists(c.Context(), userSession.UserID, programmingID, "", domains.TypeRoad, domains.ContentStarted)
+	if err != nil {
+		return err
+	}
+	if isExists {
+		return response.Response(409, "Road was started already", nil)
+	}
+	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, "", domains.TypeRoad, domains.ContentStarted); err != nil {
+		return err
+	}
+	return response.Response(200, "Road Started successfully", nil)
+}
+
+// @Tags Road
 // @Summary GetRoads
 // @Description Get Road with Paths
 // @Accept json
 // @Produce json
 // @Param Language header string false "Language"
 // @Param programmingID path string true "programmingID"
-// @Success 200 {object} response.BaseResponse{data=dto.GetRoadDTO}
+// @Success 200 {object} response.BaseResponse{data=dto.RoadDTO}
 // @Router /private/road/{programmingID} [get]
 func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	if err != nil {
+		return err
+	}
+
+	isExists, err := h.services.CodeService.IsImageExists(c.Context(), inventoryInformation.GetDockerImage())
+	if err != nil {
+		return err
+	}
+	if !isExists {
+		// TODO: Socket yardımı ile eğer image indiyse frontend'e iletilecek
+		go func() {
+			if err := h.services.CodeService.Pull(c.Context(), inventoryInformation.GetDockerImage()); err != nil {
+				fmt.Printf("Error pulling Docker image: %v\n", err)
+			}
+		}()
+	}
+
 	roads, err := h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, "", nil, nil)
 	if err != nil {
 		return err
 	}
 
-	var pathDTOs []dto.GetRoadPathDTO
-	var roadDTO dto.GetRoadDTO
+	var pathDTOs []dto.PathDTO
+	var roadDTO dto.RoadDTO
 	for _, road := range roads {
 		for _, path := range road.GetPaths() {
 			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
-			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToRoadPathDTO(path, languageDTO))
+			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTO, ""))
 		}
-		roadDTO = h.dtoManager.RoadDTOManager.ToGetRoadDTO(road, pathDTOs)
+		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs, isExists)
 	}
 
 	return response.Response(200, "GetRoads successful", roadDTO)
@@ -75,6 +132,14 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 		return err
 	}
 
+	isExists, err := h.services.CodeService.IsImageExists(c.Context(), inventoryInformation.GetDockerImage())
+	if err != nil {
+		return err
+	}
+	if !isExists {
+		return response.Response(400, fmt.Sprintf("%s image does not exist. Please visit the homepage to download it.", inventoryInformation.GetDockerImage()), nil)
+	}
+
 	roadData, err := h.services.RoadService.GetRoadFilter(userSession.UserID, programmingID, pathID, nil, nil)
 	if err != nil {
 		return err
@@ -92,7 +157,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
 			pathsDTO = append(pathsDTO, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTO, frontendTemplate))
 		}
-		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO))
+		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO, false))
 	}
 
 	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentStarted); err != nil {
@@ -170,7 +235,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	road, err := h.services.RoadService.GetRoadByID(userSession.UserID, programmingID, pathID)
+	road, err := h.services.RoadService.GetPathByID(userSession.UserID, programmingID, pathID)
 	if err != nil {
 		return err
 	}
@@ -184,10 +249,34 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetCmd())
-	if err != nil {
-		return err
+	var conn *websocket.Conn
+	for c, ok := range h.clients {
+		if c.GetUserID().String() == userSession.UserID && ok {
+			conn = c.GetConnection()
+			break
+		}
 	}
+	if conn == nil {
+		return response.Response(500, "This user was not found in socket.", nil)
+	}
+
+	var logs string
+	if strings.EqualFold(road.GetQuest().GetFuncName(), "main") {
+		err = h.services.CodeService.CreateBashFile(programmingInformation.GetCmd(), road.GetQuest().GetTests(), userSession.UserID, programmingInformation.GetPathDir())
+		if err != nil {
+			return err
+		}
+		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetShCmd(), conn)
+		if err != nil {
+			return err
+		}
+	} else {
+		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetCmd(), conn)
+		if err != nil {
+			return err
+		}
+	}
+
 	if strings.Contains(logs, "Test Passed") {
 		if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentCompleted); err != nil {
 			return err

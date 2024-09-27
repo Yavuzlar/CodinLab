@@ -20,6 +20,7 @@ type InventoryP struct {
 	LabDir        string      `json:"labDir"`
 	IconPath      string      `json:"iconPath"`
 	Cmd           []string    `json:"cmd"`
+	ShCmd         []string    `json:"bashCmd"`
 	FileExtension string      `json:"fileExtension"`
 	Languages     []LanguageP `json:"languages"`
 }
@@ -74,6 +75,7 @@ type RoadP struct {
 	DockerImage   string
 	IconPath      string
 	Cmd           []string
+	ShCmd         []string
 	FileExtension string
 	Paths         []PathP
 }

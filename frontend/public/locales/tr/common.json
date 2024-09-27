@@ -13,6 +13,8 @@
   "home.labs.content": "Laboratuvarlar ile algoritma ve programlama becerilerinizi geliştirin, pratik deneyim kazanın ve kodlama bilginizi uygulamaya geçirin!",
   "roads.title": "Yol haritaları",
   "roads.content": "Yazılım dillerinin temelini sağlam bir şekilde atın ve Yol haritaları ile kodlama evreninde adım adım ilerleyin!",
+  "register.name": "İsim",
+  "register.surname": "Soyisim",
   "register.username": "Kullanıcı adı",
   "register.githubProfile": "Github kullanıcı adı",
   "register.githubProfileError": "Github kullanıcı adı gereklidir",
@@ -107,6 +109,9 @@
   "labs.difficulty.hard": "Zor",
   "labs.progress.stats.progress": "Devam ediyor",
   "labs.progress.stats.completed": "Tamamlandı",
+  "userlist.action.name": "Aksiyon",
+  "userlist.edit.desc" :"Kullanıcı Düzenle",
+  "userlist.edit.content" :"Lütfen düzenlemek istediğiniz kullanıcının yeni bilgilerini girin.",
   "roads.path.restart.button": "Yolu baştan başlat",
   "codeEditor.output": "Çıktı",
   "codeEditor.output.display": "Çıktı burada görüntülenir"

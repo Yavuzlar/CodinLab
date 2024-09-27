@@ -1,0 +1,35 @@
+{
+	"id": 2,
+	"languages": [
+		{
+            "lang": "en",
+            "title": "Function Definition and Usage",
+            "description": "Learn how to define and use functions.",
+            "content": "This task will help you understand how to use functions in Go.",
+            "note": "1. A function is a block of code that performs a specific task and can be reused in your program.\n2. If you want to send values to your function, you need to pass parameters between the parentheses, but this is not mandatory; you can also define a function without parameters.\n3. Functions in Go are always defined with a return type, even if it's just `void` (represented as `func`). If your function will return a value, you must specify the data type you want to return (for example: `int`, `float`). If it does not return a value, it should not have a return type.\n\n4. In this task, you need to write a function called 'getMessage' that does not take any parameters and returns a value. This function should return a message of type `string`.\n\n5. In the body of the function, you should use the `return` statement to define the message you want to return. For example: `return \"Hello, this is a message!\"`.\n\n6. After defining the function, you should call it within the `main` function to print the returned message. In this task, the main function is already provided and called for you. Your task is to ensure that the function returns the string \"Learning Go is fun!\".\n7. Don't forget to add necessary imports."
+        },
+		{
+            "lang": "tr",
+            "title": "Fonksiyon Tanımı ve Kullanımı",
+            "description": "Fonksiyonları nasıl tanımlayacağınızı ve kullanacağınızı öğrenin.",
+            "content": "Bu görev, Go dilinde fonksiyonların nasıl kullanılacağını anlamanıza yardımcı olacaktır.",
+            "note": "1. Fonksiyon, belirli bir görevi yerine getiren ve programınızda tekrar kullanılabilen bir kod bloğudur.\n2. Eğer fonksiyonunuza değer göndermek istiyorsanız, parantezler arasına parametre adı verilen değerler göndermeniz gerekmektedir ancak bu zorunlu değildir; parametresiz fonksiyon da tanımlanabilmektedir.\n3. Go dilinde fonksiyonlar her zaman bir dönüş tipi ile tanımlanır. Eğer fonksiyon bir değer döndürecekse, döndürmek istediğiniz veri tipini yazmalısınız (örneğin: `int`, `float`). Döndürmeyecekse, dönüş tipi belirtilmez.\n\n4. Bu görevde, parametre almayan ve geriye değer döndüren 'getMessage' adlı bir fonksiyon yazmanız gerekiyor. Bu fonksiyon, bir mesajı geri döndürecek ve `string` veri tipinde bir değer döndürmelidir.\n\n5. Fonksiyonun içeriğinde, geri döndürmek için `return` ifadesini kullanarak bir mesaj tanımlamalısınız. Örneğin: `return \"Hello, this is a message!\"` ifadesini kullanabilirsiniz.\n\n6. Fonksiyonu tanımladıktan sonra, onu `main` fonksiyonu içinde çağırarak dönen mesajı ekrana yazdırmalısınız. Bu görevde, main fonksiyonu içerisinde zaten çağrılıp size verilmiştir. Sizin yapmanız gereken fonksiyonun geriye \"Learning Go is fun!\" stringini döndürmesini sağlamaktır.\n7. Gerekli importları yazmayı unutmayın!"
+        }
+	],
+	"quest": {
+		"difficulty": 2,
+		"funcName": "getMessage",
+		"tests": [
+			{
+				"input": [],
+				"output": ["Learning Go is fun!"]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 2,
+				"templatePath": "object/paths/golang/2/2.txt"
+			}
+		]
+	}
+}
