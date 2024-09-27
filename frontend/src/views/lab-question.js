@@ -58,7 +58,6 @@ const LabQuestion = ({ language = "", questionId }) => {
   const programmingID = getProgrammingId[language];
 
 
-  console.log("selamun aelykum", questionId);
   const apiData = {
     programmingId: programmingID,
     pathId: questionId,
