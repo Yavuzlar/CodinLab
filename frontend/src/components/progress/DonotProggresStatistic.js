@@ -8,7 +8,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 
 const DonotProggresStatistic = ({ data }) => {
   const [chartData, setChartData] = useState({
-    series: data.values,
+    series: data?.values,
 
     options: {
       stroke: {
@@ -18,7 +18,7 @@ const DonotProggresStatistic = ({ data }) => {
         type: "donut",
       },
 
-      labels: data.labels,
+      labels: data?.labels,
       colors: [theme.palette.info.dark, theme.palette.primary.light],
       plotOptions: {
         pie: {
@@ -60,8 +60,8 @@ const DonotProggresStatistic = ({ data }) => {
       {isClient && (
         <div id="chart">
           <ReactApexChart
-            options={chartData.options}
-            series={chartData.series}
+            options={chartData?.options}
+            series={chartData?.series}
             type="donut"
             height={350}
           />
