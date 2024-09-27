@@ -76,10 +76,6 @@ const LabQuestion = ({ language = "", questionId }) => {
   }, [language, questionId]);
 
   useEffect(() => {
-    console.log(labSlice);
-  }, [labSlice]);
-
-  useEffect(() => {
     if (labSlice.data) {
       setLabData({
         title: labSlice.data[0]?.language?.title,
@@ -380,17 +376,18 @@ const LabQuestion = ({ language = "", questionId }) => {
           )}
 
           {/* Expected output card */}
-          <Card
-            sx={{
-              width: "100%",
-              backgroundColor: isSubmitted ? "#0A3B7A" : "",
-            }}
-          >
-            <CardContent
-              sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
-            >
+         
               {/* Output */}
               {isSubmitted && (
+                 <Card
+                 sx={{
+                   width: "100%",
+                   backgroundColor: isSubmitted ? "#0A3B7A" : "",
+                 }}
+               >
+                 <CardContent
+                   sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
+                 >
                 <Box
                   sx={{
                     display: "flex",
@@ -422,31 +419,9 @@ const LabQuestion = ({ language = "", questionId }) => {
                     </Typography>
                   </Box>
                 </Box>
+              </CardContent>
+            </Card>
               )}
-              <Box sx={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                <Typography variant="body1" fontWeight={"bold"}>
-                  {t("labs.question.expected")}{" "}
-                </Typography>
-                <Box
-                  sx={{
-                    width: "100%",
-                    borderRadius: "0.6rem",
-                    backgroundColor: isSubmitted ? "#C3FFD3" : "#DAF0FE",
-                    px: 2,
-                    py: 1,
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    fontFamily={"Cascadia Code"}
-                    color={"black"}
-                  >
-                    "{labData.expectedOutput}"
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
         </Box>
       </Box>
     </>
