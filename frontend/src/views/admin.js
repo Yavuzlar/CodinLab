@@ -6,45 +6,32 @@ import Activity from "src/components/cards/Activity";
 import Image from "next/image";
 import userIcon from "../assets/icons/icons8-male-user-100.png";
 import settingsIcon from "../assets/icons/icons8-settings-128.png";
-import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
-import cImg from "../assets/icons/c.png";
-import cppImg from "../assets/icons/cpp.png";
-import goImg from "../assets/icons/go.png";
-import pythonImg from "../assets/icons/python.png";
-import jsImg from "../assets/icons/javascript.png";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { getLanguageUsageRates } from "src/store/log/logSlice";
+import { useEffect } from "react";
+import DonotProggresStatistic from "src/components/progress/DonotProggresStatistic";
 
-const languageStatistics = [
-  {
-    image: cImg,
-    process: "50",
-  },
-  {
-    image: cppImg,
-    process: "90",
-  },
-  {
-    image: goImg,
-    process: "80",
-  },
-  {
-    image: pythonImg,
-    process: "80",
-  },
-  {
-    image: jsImg,
-    process: "80",
-  },
-];
 const Admin = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
-  let Deneme = [
-    {
-      name: "In progress", // String
-      value: 90, // Number
-      color: "#0A3B7A", // String
-    },
+  const { log: logStatistics } = useSelector((state) => state);
+
+  useEffect(() => {
+    dispatch(getLanguageUsageRates());
+  }, [dispatch]);
+
+  console.log(logStatistics);
+
+  const progresses = {
+    values: logStatistics.data?.data?.map((item) => item.usagePercentage),
+    labels: logStatistics.data?.data?.map((item) => item.name),
+  };
+
+  const backgroundColors = [
+    theme.palette.primary.light,
+    theme.palette.info.dark,
   ];
 
   const router = useRouter();
@@ -170,35 +157,56 @@ const Admin = () => {
                     justifyContent: "center",
                   }}
                 >
-                  <CircularProgressStatistics progresses={Deneme} />
+                  {/* <CircularProgressStatistics progresses={progresses} /> */}
+                  <DonotProggresStatistic data={progresses} />
                 </Box>
-                {languageStatistics.map((item, index) => (
-                  <Box
-                    sx={{
-                      mt: "0.5rem",
-                      display: "flex",
-                      alignItems: "center",
-                      flexWrap: "",
-                      gap: 5,
-                    }}
-                    key={index}
-                  >
+                <Box
+                  sx={{
+                    mt: "0.5rem",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "2rem",
+                  }}
+                >
+                  {logStatistics.data?.data?.map((item, index) => (
                     <Box
                       sx={{
-                        width: "15px",
-                        height: "15px",
-                        backgroundColor: theme.palette.primary.light,
-                        borderRadius: "50%",
+                        mt: "0.5rem",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1rem",
                       }}
-                    />
-                    <Image src={item.image} width={15} height={15} />
-                    <Typography
-                      sx={{ font: "normal normal normal 18px/23px Outfit" }}
+                      key={index}
                     >
-                      %{item.process}
-                    </Typography>
-                  </Box>
-                ))}
+                      <Box
+                        sx={{
+                          width: "15px",
+                          height: "15px",
+                          backgroundColor: backgroundColors[index],
+                          borderRadius: "50%",
+                        }}
+                      />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: "0.5rem",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img
+                          src={"api/v1/" + item.iconPath}
+                          width={30}
+                          height={30}
+                        />
+                        <Typography
+                          sx={{ font: "normal normal normal 18px/23px Outfit" }}
+                        >
+                          %{item.usagePercentage}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
               </Box>
             </Card>
           </Box>
