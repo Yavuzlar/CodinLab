@@ -238,9 +238,10 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 			break
 		}
 	}
-	if conn == nil {
-		return response.Response(500, "This user was not found in socket.", nil)
-	}
+	// TODO: Belki Getirebilirsin
+	// if conn == nil {
+	// 	return response.Response(500, "This user was not found in socket.", nil)
+	// }
 
 	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd(), conn)
 	if err != nil {

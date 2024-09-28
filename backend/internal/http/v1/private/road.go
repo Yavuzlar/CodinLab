@@ -256,9 +256,10 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 			break
 		}
 	}
-	if conn == nil {
-		return response.Response(500, "This user was not found in socket.", nil)
-	}
+	// TODO: Belki Getirebilirsin
+	// if conn == nil {
+	// 	return response.Response(500, "This user was not found in socket.", nil)
+	// }
 
 	var logs string
 	if strings.EqualFold(road.GetQuest().GetFuncName(), "main") {

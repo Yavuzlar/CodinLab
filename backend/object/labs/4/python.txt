@@ -1,0 +1,33 @@
+## FRONTEND
+
+def $funcname$(s: list) -> str:
+    # Write your code here
+    return "Codinglab"
+
+if __name__ == "__main__":
+    string_list = []
+    while True:
+        input_value = input("String değerleri girin (bitiş için 'q' girin): ")
+        if input_value == "q":
+            break
+        string_list.append(input_value)
+
+    result = $funcname$(string_list)
+    print(f"${{funcname}}$ sonucu: {result}")
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+$checks$
+print("$success$")
+
+## CHECK
+
+input_arr$rnd$ = [$input$]
+result$rnd$ = $funcname$(input_arr$rnd$)
+if result$rnd$ != $output$:
+    print(f"Test Failed: Expected $out$, but got {result$rnd$}")
+    exit($rnd$)

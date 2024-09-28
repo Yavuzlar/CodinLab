@@ -1,0 +1,26 @@
+## FRONTEND
+
+def $funcname$(s: str) -> str:
+    # Write your code here
+    return "CodinLab"
+
+if __name__ == "__main__":
+    input_str = input("Bir string girin: ")
+    print($funcname$(input_str))
+
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+$checks$
+print("$success$")
+
+## CHECK
+
+result$rnd$ = $funcname$($input$)
+if result$rnd$ != $output$:
+    print(f"Test Failed: Expected $out$, but got {result$rnd$}")
+    exit($rnd$)
