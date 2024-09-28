@@ -44,7 +44,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
       });
       onRun(response.data?.message);
     } catch (error) {
-      onRun(error.response.data?.message || error.message);
+      onRun(error.response?.data?.message || error.message);
     }
   };
 
