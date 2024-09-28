@@ -10,7 +10,6 @@ import NextPathIcon from "src/assets/icons/icons8-signpost-100.png"
 import Image from "next/image";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
 import { useEffect, useState } from "react";
-import SkeletonLoader from "src/components/skeleton/SkeletonLoader.js";
 import LinearProgess from "src/components/progress/LinearProgess";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,7 +53,6 @@ const RoadDetails = ({ language = "" }) => {
   };
 
   useEffect(() => {
-    console.log("Language useEffect: ", language);
     setProgrammingId(getProgrammingId[language]);
   }, [language]);
 
@@ -77,7 +75,6 @@ const RoadDetails = ({ language = "" }) => {
 
         const pathsData = paths.data.paths;
 
-        console.log("Paths data: ", pathsData);
 
         // Amount of completed paths
         const completedPaths = pathsData.filter((path) => path.isFinished);

@@ -1,22 +1,18 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import CircleIcon from "@mui/icons-material/Circle";
 import themeConfig from "src/configs/themeConfig";
 import navigation from "src/navigation";
 import NavItem from "./navigation/item/NavItem";
 import LanguageSelector from "./navigation/item/LanguageSelector";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button, Divider } from "@mui/material";
+import { Divider, IconButton } from "@mui/material";
 import { useAuth } from "src/hooks/useAuth";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/router";
 import { useNav } from "src/hooks/useNav";
 import Logo from "../../assets/logo/codinlab-logo-light.png";
 import Image from "next/image";
@@ -29,7 +25,6 @@ function ResponsiveAppBar() {
     try {
       await logout();
     } catch (error) {
-      console.log(error);
     }
   };
 

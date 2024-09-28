@@ -1,6 +1,6 @@
-import { Box, Card, CardContent, createTheme, ThemeProvider, Typography } from "@mui/material";
+import { Box, createTheme, ThemeProvider, Typography } from "@mui/material";
 import CircularProgress, {
-  circularProgressClasses,
+  circularProgressClasses
 } from "@mui/material/CircularProgress";
 import CircleIcon from '@mui/icons-material/Circle';
 /*

@@ -33,7 +33,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { fetchUserById, updateUserById } from "src/store/admin/adminSlice";
+import { deleteUserById, fetchUserById, updateUserById } from "src/store/admin/adminSlice";
 import { hexToRGBA } from "src/utils/hex-to-rgba";
 
 const UsersList = () => {
@@ -84,7 +84,7 @@ const UsersList = () => {
   };
 
   const handleDelete = (id) => {
-    console.log("Delete user with id: ", id);
+    dispatch(deleteUserById(id));
   };
 
   const inputStyle = {
@@ -346,7 +346,7 @@ const UsersList = () => {
                       />
                     </IconButton>
                     <IconButton
-                      onClick={() => handleDelete(row.id)}
+                      onClick={() => handleDelete(row.userID)}
                       aria-label="delete"
                     >
                       <Image

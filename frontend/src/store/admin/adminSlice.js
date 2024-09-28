@@ -49,6 +49,24 @@ export const updateUserById = createAsyncThunk(
     }
   );
 
+  export const deleteUserById = createAsyncThunk(
+    "admin/deleteUserById",
+    async (data, { rejectWithValue,dispatch }) => {
+      try {
+        const response = await axios({
+          method: "DELETE",
+          url: `/api/v1/private/admin/user/${data}`,
+        });
+        if (response.status === 200) {
+          dispatch(getAdminUser());
+          return response.data.data;
+        }
+      } catch (error) {
+        return rejectWithValue(error.response.data.message || error.message);
+      }
+    }
+  );
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: initialState,
@@ -72,10 +90,27 @@ const adminSlice = createSlice({
       })
       .addCase(updateUserById.fulfilled, (state, action) => {
         state.loading = false;
+        state.data = action.payload
         showToast("dismiss");
-        showToast("success", state.data?.message);
+        showToast("success", action.payload?.message);
       })
       .addCase(updateUserById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        showToast("dismiss");
+        showToast("error", state.error);
+      })
+      .addCase(deleteUserById.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(deleteUserById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload;
+        showToast("dismiss");
+        showToast("success", action.payload?.message);
+      })
+      .addCase(deleteUserById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         showToast("dismiss");

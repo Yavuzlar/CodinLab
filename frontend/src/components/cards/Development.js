@@ -31,7 +31,6 @@ const Development = () => {
     },
   ];
 
-  console.log(stateStatistics);
 
   return (
     <Box
