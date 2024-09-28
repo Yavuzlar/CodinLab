@@ -177,19 +177,21 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 			}{"", err}
 		}
 
-		err = conn.WriteJSON(domains.Response{
-			Type: "container",
-			Data: struct {
-				ID string `json:"id"`
-			}{
-				ID: resp.ID,
-			},
-		})
-		if err != nil {
-			resultChan <- struct {
-				logs string
-				err  error
-			}{"", err}
+		if conn != nil {
+			err = conn.WriteJSON(domains.Response{
+				Type: "container",
+				Data: struct {
+					ID string `json:"id"`
+				}{
+					ID: resp.ID,
+				},
+			})
+			if err != nil {
+				resultChan <- struct {
+					logs string
+					err  error
+				}{"", err}
+			}
 		}
 
 		logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, tmpCodePath, fileName, *resp)
@@ -522,7 +524,7 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 			tmp = strings.Replace(tmp, "$out$", strings.Join(fails, ", "), -1)
 		}
 
-		checks.WriteString(tmp + "\n       ")
+		checks.WriteString(tmp + "\n")
 	}
 
 	return checks.String()

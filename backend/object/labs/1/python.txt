@@ -1,0 +1,34 @@
+## FRONTEND
+
+def $funcname$(s: str) -> bool:
+    # Write your code here
+
+    return False
+
+def main():
+    input_str = input("Lütfen bir string değer girin: ")
+    print("Girdiğiniz string değer:", $funcname$(input_str))
+
+if __name__ == "__main__":
+    main()
+
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+$checks$
+print("$success$")
+
+## CHECK
+
+result$rnd$ = $funcname$($input$)
+
+# JSON'dan gelen true/false değerini Python True/False değerine çeviriyoruz
+expected_output = True if '$output$' == 'true' else False
+
+if result$rnd$ != expected_output:
+    print(f"Test Failed: Expected {expected_output}, but got {result$rnd$}")
+    exit(1)
