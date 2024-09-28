@@ -6,20 +6,15 @@ import {
   CardContent,
   Typography,
   Box,
-  Checkbox,
-  FormControlLabel,
-  Divider,
   IconButton,
   InputAdornment,
   Grid,
-  useMediaQuery,
+  useMediaQuery
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import Translations from "src/components/Translations";
 import { loginValidation } from "src/configs/validation/loginSchema";
 import rocketImg from "../assets/3d/3d-casual-life-space-white-starship.png";
-import googleIcon from "../assets/icons/icons8-google-100.png";
-import githubIcon from "../assets/icons/icons8-github-144.png";
 import visibilityOnIcon from "../assets/icons/icons8-eye-1.png";
 import visibilityOffIcon from "../assets/icons/eye-hidden.png";
 import CodinLabLogo from "../assets/logo/codinlab-logo-main.png";
@@ -81,7 +76,6 @@ const Login = () => {
     try {
       await login(formData);
     } catch (error) {
-      console.log(error);
     }
   };
 

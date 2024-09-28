@@ -60,7 +60,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
     if (path) {
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
-        console.log("Path data", pathData);
 
         setIsStarted(pathData.isStarted);
         setIsFinished(pathData.isFinished);

@@ -74,7 +74,6 @@ const Register = () => {
     try {
       await register(formData);
     } catch (error) {
-      console.log(error);
     }
   };
 

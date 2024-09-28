@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import authConfig from "src/configs/auth";
 import axios from "axios";
@@ -27,14 +27,48 @@ const AuthProvider = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(
     defaultProvider.isInitialized
   );
+  const ws = useRef(null);
 
   const router = useRouter();
+
+  const webSocket = () => {
+    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+      console.log("WebSocket is already connected");
+      return;
+    }
+    console.log("Bağlanılıyor...");
+    ws.current = new WebSocket("ws://localhost/api/v1/private/socket/ws");
+
+    ws.current.onopen = () => {
+      console.log("Connected to WebSocket");
+    };
+
+    ws.current.onmessage = (e) => {
+      console.log("Message from server:", e.data);
+    };
+
+    ws.current.onclose = () => {
+      console.log("WebSocket disconnected. Attempting to reconnect...");
+      setTimeout(webSocket, 5000);
+    };
+
+    ws.current.onerror = (error) => {
+      console.error("WebSocket error observed:", error);
+    };
+  };
+
+  const closeWebSocket = () => {
+    if (ws.current) {
+      ws.current.close();
+      ws.current = null;
+      console.log("WebSocket bağlantısı kapatıldı");
+    }
+  };
 
   const deleteStorage = () => {
     setUser(null);
     setLoading(false);
-    // window.localStorage.removeItem(authConfig.userDataName);
-
+    closeWebSocket();
     const firstPath = router.pathname.split("/")[1];
     if (firstPath !== "login") router.replace("/login");
   };
@@ -59,7 +93,7 @@ const AuthProvider = ({ children }) => {
 
   const initAuth = () => {
     setLoading(true);
-    setIsInitialized(false)
+    setIsInitialized(false);
 
     axios({
       url: authConfig.account,
@@ -70,15 +104,15 @@ const AuthProvider = ({ children }) => {
           const user = response?.data?.data;
 
           if (user && user?.role) {
-            setIsInitialized(true)
+            setIsInitialized(true);
             setUser(user);
 
-            if (router.pathname == "/login" || router.pathname == "/register") {
-              router.push("/").then(() => router.reload())
+            if (router.pathname === "/login" || router.pathname === "/register") {
+              router.push("/").then(() => router.reload());
             } else {
               setLoading(false);
+              webSocket(); 
             }
-
           } else {
             setLoading(false);
             handleLogout();
@@ -95,7 +129,7 @@ const AuthProvider = ({ children }) => {
         showToast("dismiss");
         showToast("error", t(error?.response?.data?.message ?? ""));
         handleLogout();
-      })
+      });
   };
 
   const handleRegister = async (formData) => {
@@ -128,14 +162,12 @@ const AuthProvider = ({ children }) => {
         method: "POST",
         data: formData,
       });
+
       if (response.status === 200) {
         const user = response?.data?.data;
-        // window.localStorage.setItem(
-        //   authConfig.userDataName,
-        //   JSON.stringify(user)
-        // );
         setUser(user);
         router.push("/home");
+        webSocket(); 
       } else {
         showToast("dismiss");
         showToast("error", response.data.message);
@@ -147,7 +179,6 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-
     initAuth();
   }, []);
 

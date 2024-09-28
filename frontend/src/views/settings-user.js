@@ -7,7 +7,7 @@ import {
   Grid,
   IconButton,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import Image from "next/image";
 import ComputerImage from "../assets/3d/3d-casual-life-website-browser-window-in-laptop.png";
@@ -22,13 +22,11 @@ import { profileSettingsValidation } from "src/configs/validation/profileSetting
 import { changePasswordValidation } from "src/configs/validation/changePassSchema";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfileUser } from "src/store/user/userSlice";
-
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { data } from "src/data/activityDataExample";
 import { changePassword, changeProfile } from "src/store/user/userSlice";
 
 const settings = () => {
@@ -161,7 +159,6 @@ const settings = () => {
       infoSettingsData
     );
     setErrorInfo(validationInfoErrors);
-    console.log("validationInfoErrors", validationInfoErrors);
     if(!validationInfoErrors || Object.keys(validationInfoErrors).length === 0
     ){
       setOpenDialog(true);

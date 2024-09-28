@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useState } from "react";
 
 const defaultProvider = {
   anchorElNav: null,
@@ -26,7 +26,6 @@ const NavProvider = ({ children }) => {
 
   const handleChangePage = () => {
     setAnchorElNav(null);
-    console.log("page changed");
   };
 
   React.useEffect(() => {
