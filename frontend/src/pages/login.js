@@ -227,19 +227,20 @@ const Login = () => {
                         "& input::placeholder": {
                           fontWeight: "bold",
                         },
-                        "& fieldset": {
-                          color: "#0A3B7A",
-                          // fontWeight: "bold",
-                        },
-                        "&:hover fieldset": {
-                          color: "#0A3B7A",
-                          // fontWeight: "bold",
-                        },
-                        "&.Mui-focused": {
-                          color: "#0A3B7A",
-                          // fontWeight: "bold",
-                        },
+                        // "& fieldset": {
+                        //   color: "#0A3B7A",
+                        //   // fontWeight: "bold",
+                        // },
+                        // "&:hover fieldset": {
+                        //   color: "#0A3B7A",
+                        //   // fontWeight: "bold",
+                        // },
+                        // "&.Mui-focused": {
+                        //   color: "#0A3B7A",
+                        //   // fontWeight: "bold",
+                        // },
                       },
+
                       width: "100%",
                       height: "3.125rem",
                     }}
