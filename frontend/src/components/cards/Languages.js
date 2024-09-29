@@ -3,25 +3,36 @@ import {
   Card,
   Typography,
   CardContent,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 import roadsIcon from "../../assets/icons/icons8-path-100.png";
 import labsIcon from "../../assets/icons/icons8-test-tube-100.png";
+import { useRouter } from "next/router";
+
 
 const Languages = ({ language }) => {
   const [hovered, setHovered] = useState(false);
   const _md = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const _xl = useMediaQuery((theme) => theme.breakpoints.down("xl"));
+  const router = useRouter();
+
+
+  const goToRoads = (name) => {
+    router.push(`/roads/${name}`);
+  };
+
+  const goToLabs = (name) => {
+    router.push(`/labs/${name}`);
+  };
 
   return (
-
-  //   {
-  //     "id": 1,
-  //     "name": "c++",
-  //     "iconPath": "object/icons/c++.png"
-  // }
+    //   {
+    //     "id": 1,
+    //     "name": "c++",
+    //     "iconPath": "object/icons/c++.png"
+    // }
 
     <Card
       // onMouseEnter={() => setHovered(true)}
@@ -42,7 +53,7 @@ const Languages = ({ language }) => {
         },
         "&:hover": {
           ".LanguageNameBox": {
-            opacity: 0
+            opacity: 0,
           },
           ".RoadsButton, .LabsButton": {
             width: "50%",
@@ -51,15 +62,15 @@ const Languages = ({ language }) => {
             "& .languageButtonIcon": {
               opacity: "1 !important",
               // display: 'block !important'
-            }
+            },
           },
           ".RoadsButton": {
-            left: 0
+            left: 0,
           },
           ".LabsButton": {
-            right: 0
-          }
-        }
+            right: 0,
+          },
+        },
       }}
     >
       <CardContent
@@ -75,9 +86,7 @@ const Languages = ({ language }) => {
         }}
       >
         <img
-          src={"api/v1/"+
-          language.iconPath
-          }
+          src={"api/v1/" + language.iconPath}
           alt={language.name}
           width={50}
           height={50}
@@ -103,11 +112,12 @@ const Languages = ({ language }) => {
         }}
       > */}
       <Button
+        onClick={()=> goToRoads(language.name.toLowerCase())}
         className="RoadsButton"
         variant="dark"
         color="primary"
         sx={{
-          position: 'absolute',
+          position: "absolute",
           left: "-100%",
           height: "100%",
           opacity: 0,
@@ -120,14 +130,22 @@ const Languages = ({ language }) => {
           },
         }}
       >
-        <Image className="languageButtonIcon" src={roadsIcon} alt={"roadsIcon"} width={60} height={60} style={{ opacity: 0 }} />
+        <Image
+          className="languageButtonIcon"
+          src={roadsIcon}
+          alt={"roadsIcon"}
+          width={60}
+          height={60}
+          style={{ opacity: 0 }}
+        />
       </Button>
 
       <Button
+      onClick={()=> goToLabs(language.name.toLowerCase())}
         className="LabsButton"
         variant="dark"
         sx={{
-          position: 'absolute',
+          position: "absolute",
           right: "-100%",
           height: "100%",
           opacity: 0,
@@ -140,7 +158,14 @@ const Languages = ({ language }) => {
           },
         }}
       >
-        <Image className="languageButtonIcon" src={labsIcon} alt={"labsIcon"} width={60} height={60} style={{ opacity: 0 }} />
+        <Image
+          className="languageButtonIcon"
+          src={labsIcon}
+          alt={"labsIcon"}
+          width={60}
+          height={60}
+          style={{ opacity: 0 }}
+        />
       </Button>
       {/* </Box> */}
     </Card>

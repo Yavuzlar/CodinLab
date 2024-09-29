@@ -8,17 +8,15 @@ const textfield = (theme) => {
             borderRadius: "1rem",
             backgroundColor: "#FFF",
           },
-          // text color
           "& .MuiInputBase-input": {
             color: theme.palette.common.black,
-            zIndex: 9,
+            zIndex: 1,
           },
           // variant={filled}
           ...(ownerState.variant === "filled" && {
             "& input, & textarea": {
               border: "unset !important",
             },
-            // when input focused
             "&:focus-within": {
               backgroundColor: theme.palette.primary.light,
               borderRadius: "15px",
@@ -40,6 +38,13 @@ const textfield = (theme) => {
           ...(ownerState.variant === "outlined" && {
             "& .MuiInputBase-root": {
               "&.Mui-focused fieldset": {
+                border: "2px solid #0A3B7A",
+              },
+              "& input:-webkit-autofill": {
+                borderRadius: "15px",
+              },
+              "& input:-webkit-autofill:focus": {
+                borderRadius: "15px",
                 border: "2px solid #0A3B7A",
               },
             },

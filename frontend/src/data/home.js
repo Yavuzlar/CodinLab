@@ -19,32 +19,36 @@ const languages = [
     name: "C",
     image: C,
     progress: 10,
+    path: "/roads/c",
   },
 
   {
     name: "C++",
     image: Cpp,
     progress: 0,
+    path: "/roads/c++",
   },
 
   {
     name: "Go",
     image: Go,
     progress: 0,
+    path: "/roads/go",
   },
 
   {
     name: "JavaScript",
     image: Js,
     progress: 0,
+    path: "/roads/js",
   },
 
   {
     name: "Python",
     image: Python,
     progress: 0,
+    path: "/roads/python",
   },
-  
 ];
 
 const roads = {

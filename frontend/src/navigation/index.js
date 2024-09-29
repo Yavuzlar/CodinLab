@@ -9,26 +9,27 @@
         children: array(item)
     }
 */
+import Translations from "src/components/Translations";
 
 const navigation = [
   {
     path: "/home",
-    title: "Home",
+    title: <Translations text={"nav.home"} />,
     permission: "home",
   },
   {
     path: "/admin",
-    title: "Admin",
+    title: <Translations text={"nav.admin"} />,
     permission: "admin",
   },
   {
     path: "/roads",
-    title: "Roads",
+    title: <Translations text={"nav.roads"} />,
     permission: "roads",
   },
   {
     path: "/labs",
-    title: "Labs",
+    title: <Translations text={"nav.labs"} />,
     permission: "labs",
   },
   // { // item with children
