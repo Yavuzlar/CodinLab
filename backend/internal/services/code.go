@@ -42,22 +42,62 @@ func newCodeService(
 	}
 }
 
-func (s *codeService) Pull(ctx context.Context, imageReference string) (err error) {
-	resultChan := make(chan error)
-
-	// Asenkron olarak Docker image pull işlemini başlatın
-	go func() {
-		err := s.dockerSDK.Images().Pull(ctx, imageReference)
-		resultChan <- err
-	}()
-
-	// İndirme işlemi tamamlandığında kanaldan hata bilgisi alınır
-	select {
-	case err := <-resultChan:
-		return err
-	case <-ctx.Done():
-		return ctx.Err() // Eğer context iptal edilirse, bu hata döndürülür
+func (s *codeService) Pull(ctx context.Context, imageReference, programmingLanguage string, conn *websocket.Conn) error {
+	if conn != nil {
+		errSocket := conn.WriteJSON(domains.Response{
+			Type: "Pull",
+			Data: struct {
+				Status              int    `json:"status"`
+				ProgrammingLanguage string `json:"programminglanguage"`
+				Message             string `json:"message"`
+			}{
+				Status:              200,
+				ProgrammingLanguage: programmingLanguage,
+				Message:             "Started",
+			},
+		})
+		if errSocket != nil {
+			return errSocket
+		}
 	}
+	//Docker image pull işlemini başlatın
+	err := s.dockerSDK.Images().Pull(ctx, imageReference)
+	if conn != nil {
+		if err != nil {
+			errSocket := conn.WriteJSON(domains.Response{
+				Type: "Pull",
+				Data: struct {
+					Status              int    `json:"status"`
+					ProgrammingLanguage string `json:"programminglanguage"`
+					Message             string `json:"message"`
+				}{
+					Status:              400,
+					ProgrammingLanguage: programmingLanguage,
+					Message:             err.Error(),
+				},
+			})
+			if errSocket != nil {
+				return errSocket
+			}
+		} else {
+			errSocket := conn.WriteJSON(domains.Response{
+				Type: "Pull",
+				Data: struct {
+					Status              int    `json:"status"`
+					ProgrammingLanguage string `json:"programminglanguage"`
+					Message             string `json:"message"`
+				}{
+					Status:              200,
+					ProgrammingLanguage: programmingLanguage,
+					Message:             "Finished",
+				},
+			})
+			if errSocket != nil {
+				return errSocket
+			}
+		}
+	}
+	return err
 }
 
 func (s *codeService) IsImageExists(ctx context.Context, imageReference string) (isExists bool, err error) {
