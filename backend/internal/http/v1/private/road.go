@@ -84,10 +84,17 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	var conn *websocket.Conn
+	for c, ok := range h.clients {
+		if c.GetUserID().String() == userSession.UserID && ok {
+			conn = c.GetConnection()
+			break
+		}
+	}
+
 	if !isExists {
-		// TODO: Socket yardımı ile eğer image indiyse frontend'e iletilecek
 		go func() {
-			if err := h.services.CodeService.Pull(c.Context(), inventoryInformation.GetDockerImage()); err != nil {
+			if err := h.services.CodeService.Pull(c.Context(), inventoryInformation.GetDockerImage(), inventoryInformation.GetName(), conn); err != nil {
 				fmt.Printf("Error pulling Docker image: %v\n", err)
 			}
 		}()

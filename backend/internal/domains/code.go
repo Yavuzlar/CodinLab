@@ -7,7 +7,7 @@ import (
 )
 
 type ICodeService interface {
-	Pull(ctx context.Context, imageReference string) (err error)
+	Pull(ctx context.Context, imageReference, programmingLanguage string, conn *websocket.Conn) (err error)
 	IsImageExists(ctx context.Context, imageReference string) (isExists bool, err error)
 	UploadUserCode(ctx context.Context, userID, programmingID, labPathID string, codeType, fileExtention, content string) (string, error)
 	RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string, conn *websocket.Conn) (string, error)
