@@ -184,6 +184,7 @@ func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugag
 		}
 
 		programmingLanguageStat := domains.NewProgrammingLanguageStats(
+			pl.ID,
 			pl.Name,
 			pl.IconPath,
 			len(allLabs),

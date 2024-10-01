@@ -111,6 +111,7 @@ func (m *LabDTOManager) FilterLabDTOs(labDTOs []LabDTO) []LabDTO {
 }
 
 type UserProgrammingLanguageLabStatsDTO struct {
+	ID            int     `json:"id"`
 	Name          string  `json:"name"`
 	IconPath      string  `json:"iconPath"`
 	TotalLabs     int     `json:"totalLabs"`
@@ -120,6 +121,7 @@ type UserProgrammingLanguageLabStatsDTO struct {
 
 func (m *LabDTOManager) ToUserProgrammingLanguageStatDTO(stat *domains.ProgrammingLanguageStats) UserProgrammingLanguageLabStatsDTO {
 	return UserProgrammingLanguageLabStatsDTO{
+		ID:            stat.GetID(),
 		Name:          stat.GetName(),
 		IconPath:      stat.GetIconPath(),
 		TotalLabs:     stat.GetTotalLabs(),
