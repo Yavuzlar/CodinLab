@@ -45,6 +45,16 @@ const AuthProvider = ({ children }) => {
 
     ws.current.onmessage = (e) => {
       console.log("Message from server:", e.data);
+
+      const data = JSON.parse(e.data);
+      if (data.type === "container") {
+        const containerId = data?.data?.id;
+        console.log("Container ID:", containerId);
+  
+        if (containerId) {
+          localStorage.setItem('containerId', containerId);
+        }
+      }
     };
 
     ws.current.onclose = () => {
