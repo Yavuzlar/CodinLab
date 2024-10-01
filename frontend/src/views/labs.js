@@ -9,9 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserLanguageLabStats } from "src/store/language/languageSlice";
 import {
   getDifficultyStatistics,
-  getLabsProgressStats,
+  getLabsProgressStats
 } from "src/store/statistics/statisticsSlice";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
+import { useRouter } from "next/router";
 
 const Labs = () => {
   const [filters, setFilters] = useState({
@@ -26,6 +27,10 @@ const Labs = () => {
   const { language: stateLanguage, statistics: stateStatistics } = useSelector(
     (state) => state
   );
+  
+  const rotuer = useRouter();
+
+  
 
   useEffect(() => {
     dispatch(getUserLanguageLabStats());
@@ -33,14 +38,9 @@ const Labs = () => {
     dispatch(getLabsProgressStats());
   }, [dispatch]);
 
-  const labsStatsData = [
-    {
-      id: 1,
-      totalLabs: stateLanguage.userLanguageLabStatsData.data?.totalLabs,
-      completedLabs: stateLanguage.userLanguageLabStatsData.data?.completedLabs,
-      percentage: stateLanguage.userLanguageLabStatsData.data?.percentage,
-    },
-  ];
+  console.log("stateLanguage", stateLanguage);
+
+  const labsStatsData = stateLanguage.userLanguageLabStatsData?.data;
 
   const difficultyStats = [
     {
@@ -280,7 +280,7 @@ const Labs = () => {
           overflow: "auto",
         }}
       >
-        {labsStatsData.map((language, index) => (
+        {labsStatsData?.map((language, index) => (
           <Grid item xs={12} key={index}>
             <LanguageProgress language={language} type="lab" />
           </Grid>
