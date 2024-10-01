@@ -20,13 +20,32 @@ type LabDTO struct {
 	Difficulty int            `json:"difficulty"`
 }
 
+type LabForAllDTO struct {
+	ID         int                  `json:"id"`
+	Languages  LabLanguageForAllDTO `json:"language"`
+	IsFinished bool                 `json:"isFinished"`
+	Difficulty int                  `json:"difficulty"`
+}
+
 type LabsDTO struct {
 	Labs          []LabDTO `json:"labs"`
 	IsImageExists bool     `json:"isImageExists"`
 }
 
+type LabsForAllDTO struct {
+	Labs          []LabForAllDTO `json:"labs"`
+	IsImageExists bool           `json:"isImageExists"`
+}
+
 func (m *LabDTOManager) ToLabsDTO(labs []LabDTO, isImageExists bool) LabsDTO {
 	return LabsDTO{
+		Labs:          labs,
+		IsImageExists: isImageExists,
+	}
+}
+
+func (m *LabDTOManager) ToLabsForAllDTO(labs []LabForAllDTO, isImageExists bool) LabsForAllDTO {
+	return LabsForAllDTO{
 		Labs:          labs,
 		IsImageExists: isImageExists,
 	}
@@ -39,6 +58,15 @@ func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, t
 		Languages:  languagesDTO,
 		Template:   template,
 		IsStarted:  lab.GetIsStarted(),
+		IsFinished: lab.GetIsFinished(),
+		Difficulty: lab.GetQuest().GetDifficulty(),
+	}
+}
+
+func (m *LabDTOManager) ToLabForAllDTO(lab domains.Lab, languagesDTO LabLanguageForAllDTO) LabForAllDTO {
+	return LabForAllDTO{
+		ID:         lab.GetID(),
+		Languages:  languagesDTO,
 		IsFinished: lab.GetIsFinished(),
 		Difficulty: lab.GetQuest().GetDifficulty(),
 	}
@@ -78,6 +106,11 @@ type LabLanguageDTO struct {
 	Hint        string `json:"hint"`
 }
 
+type LabLanguageForAllDTO struct {
+	Lang  string `json:"lang"`
+	Title string `json:"title"`
+}
+
 func (m *LabDTOManager) ToLanguageDTO(languageLabs []domains.LanguageLab, language string) LabLanguageDTO {
 	var newLanguage LabLanguageDTO
 
@@ -96,9 +129,38 @@ func (m *LabDTOManager) ToLanguageDTO(languageLabs []domains.LanguageLab, langua
 	return newLanguage
 }
 
+func (m *LabDTOManager) ToLanguageForAllDTO(languageLabs []domains.LanguageLab, language string) LabLanguageForAllDTO {
+	var newLanguage LabLanguageForAllDTO
+
+	for _, languageLab := range languageLabs {
+		if languageLab.GetLang() == language {
+			newLanguage = LabLanguageForAllDTO{
+				Lang:  languageLab.GetLang(),
+				Title: languageLab.GetTitle(),
+			}
+		}
+	}
+
+	return newLanguage
+}
+
 func (m *LabDTOManager) FilterLabDTOs(labDTOs []LabDTO) []LabDTO {
 	idMap := make(map[int]bool)
 	var newLabDTOs []LabDTO
+
+	for _, labDTO := range labDTOs {
+		if !idMap[labDTO.ID] {
+			newLabDTOs = append(newLabDTOs, labDTO)
+			idMap[labDTO.ID] = true
+		}
+	}
+
+	return newLabDTOs
+}
+
+func (m *LabDTOManager) FilterLabForAllDTOs(labDTOs []LabForAllDTO) []LabForAllDTO {
+	idMap := make(map[int]bool)
+	var newLabDTOs []LabForAllDTO
 
 	for _, labDTO := range labDTOs {
 		if !idMap[labDTO.ID] {

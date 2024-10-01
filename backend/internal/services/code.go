@@ -202,64 +202,41 @@ func (s *codeService) CreateBashFile(cmd []string, tests []domains.Test, userID,
 }
 
 func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string, conn *websocket.Conn) (string, error) {
-	resultChan := make(chan struct {
-		logs string
-		err  error
-	})
-
-	// Asenkron olarak container çalıştırma işlemini başlatın
-	go func() {
-		resp, err := s.createContainerWithCMD(ctx, image, cmd)
-		if err != nil {
-			resultChan <- struct {
-				logs string
-				err  error
-			}{"", err}
-		}
-
-		if conn != nil {
-			err = conn.WriteJSON(domains.Response{
-				Type: "container",
-				Data: struct {
-					ID string `json:"id"`
-				}{
-					ID: resp.ID,
-				},
-			})
-			if err != nil {
-				resultChan <- struct {
-					logs string
-					err  error
-				}{"", err}
-			}
-		}
-
-		logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, tmpCodePath, fileName, *resp)
-		resultChan <- struct {
-			logs string
-			err  error
-		}{logs, err}
-	}()
-
-	// İşlem tamamlandığında kanaldan sonuç alınır
-	select {
-	case result := <-resultChan:
-		if result.err != nil {
-			if strings.Contains(result.err.Error(), "No such image") {
-				re := regexp.MustCompile(`No such image: (.+)`)
-				matches := re.FindStringSubmatch(result.err.Error())
-				if len(matches) > 1 {
-					imageName := matches[1]
-					return "", service_errors.NewServiceErrorWithMessage(404, fmt.Sprintf("Image not found: %s", imageName))
-				}
-				return "", service_errors.NewServiceErrorWithMessage(404, "Image not found")
-			}
-			return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
-		}
-		return result.logs, nil
-	case <-ctx.Done():
-		return "", ctx.Err() // Eğer context iptal edilirse
+	// Container çalıştırma işlemini başlatın
+	resp, err := s.createContainerWithCMD(ctx, image, cmd)
+	if err != nil {
+		return "", err
 	}
+
+	if conn != nil {
+		err = conn.WriteJSON(domains.Response{
+			Type: "container",
+			Data: struct {
+				ID string `json:"id"`
+			}{
+				ID: resp.ID,
+			},
+		})
+		if err != nil {
+			return "", err
+		}
+	}
+
+	logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, tmpCodePath, fileName, *resp)
+	if err != nil {
+		if strings.Contains(err.Error(), "No such image") {
+			re := regexp.MustCompile(`No such image: (.+)`)
+			matches := re.FindStringSubmatch(err.Error())
+			if len(matches) > 1 {
+				imageName := matches[1]
+				return "", service_errors.NewServiceErrorWithMessage(404, fmt.Sprintf("Image not found: %s", imageName))
+			}
+			return "", service_errors.NewServiceErrorWithMessage(404, "Image not found")
+		}
+		return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
+	}
+
+	return logs, nil
 }
 
 // Bunu Answer Kısmınlarında Kullanacaksın.
