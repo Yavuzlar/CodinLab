@@ -1,0 +1,35 @@
+{
+	"id": 1,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Basic Syntax",
+			"description": "Understanding the basic syntax of Go",
+			"content": "Learn about the basic structure of a Go program, including package declaration, import statements, and main function.",
+			"note": "1. To complete this task, you need to ensure that the provided main function prints 'Hello, World!' to the console.\n2. First, make sure to include the necessary import statements:\n\n\t**import \"fmt\"**: This is required for using 'fmt.Println' to print output to the console.\n3. Use the following statement to print to the console: `fmt.Println(\"Hello, World!\")` This line sends the 'Hello, World!' message to the console and adds a new line.\n4. In Go, semicolons are automatically added at the end of each statement, so you don't need to manually add them."
+		},
+		{
+			"lang": "tr",
+			"title": "Basit yazılış",
+			"description": "Go dilinin temellerini öğrenin.",
+			"content": "Go dilinin basit yapısını öğrenin.",
+			"note": "1. Bu görevi tamamlamak için size vermiş olduğumuz main fonksiyonunun 'Hello, World!' ifadesini ekrana basmasını sağlamanız gerekmektedir.\n2. İlk olarak gerekli import ifadelerini eklediğinizden emin olun:\n\n\t**import \"fmt\"**: Konsola çıktı yazdırmak için 'fmt.Println' kullanabilmeniz için gereklidir.\n3. Konsola yazdırmak için şu ifadeyi kullanın: `fmt.Println(\"Hello, World!\")` Bu ifade 'Hello, World!' mesajını konsola gönderir ve yeni bir satır ekler.\n4. Go dilinde, noktalı virgüller otomatik olarak eklenir, bu yüzden manuel olarak eklemenize gerek yoktur."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "main",
+		"tests": [
+			{
+				"input": [],
+				"output": ["Hello, World!"]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 2,
+				"templatePath": "object/paths/python/1/1.txt"
+			}
+		]
+	}
+}
