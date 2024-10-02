@@ -38,7 +38,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [note, setNote] = useState("");
-  const [template, setTemplate] = useState("asd");
+  const [template, setTemplate] = useState("");
 
   useEffect(() => {
     setProgrammingId(getProgrammingId[language]);
@@ -77,7 +77,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const handleRun = (outputData) => {
     // this function will be called when the code is run
-
     setOutput(outputData);
   };
 
@@ -98,6 +97,8 @@ const LanguageRoad = ({ language = "", pathId }) => {
         url: `/api/v1/private/road/reset/${programmingId}/${pathId}`,
       });
       if (response.status === 200) {
+        // Reset template with the response data
+        setTemplate(response.data.template || "");
         console.log("Reset response success", response.data);
       }
     } catch (error) {
@@ -130,7 +131,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
       title: _language,
       permission: "roads",
     },
-
     {
       path: `/roads`,
       title: title,
@@ -166,7 +166,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
           {!isFinished && (
             <Tooltip title={t("roads.path.restart.button")}>
               <Button
-              variant="dark"
+                variant="dark"
                 sx={{
                   position: "absolute",
                   right: "1rem",
@@ -202,7 +202,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
       </Card>
       <Box sx={{ display: "flex", gap: 2 }}>
         <CodeEditor
-          key={template}
+          key={template} 
           params={params}
           onRun={handleRun}
           onStop={handleStop}
