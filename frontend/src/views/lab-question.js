@@ -21,6 +21,7 @@ import { getProgrammingId } from "src/data/programmingIds";
 import { useDispatch, useSelector } from "react-redux";
 import { getLabByProgramingId } from "src/store/lab/labSlice";
 import { data } from "autoprefixer";
+import { getStop } from "src/store/code/codeSlice";
 
 const LabQuestion = ({ language = "", questionId }) => {
   const { lab: labSlice } = useSelector((state) => state);
@@ -91,11 +92,9 @@ const LabQuestion = ({ language = "", questionId }) => {
   }, [labSlice.data]);
 
   const handleRun = (outputData) => {
-    // this function will be called when the code is run
     setOutput(outputData);
     setIsSubmitted(true);
 
-    // check if the output is correct
     if (true) {
       setIsCompleted(true);
     } else {
@@ -104,7 +103,10 @@ const LabQuestion = ({ language = "", questionId }) => {
   };
 
   const handleStop = (outputData) => {
-    // this function will be called when the code is stopped
+    // this api for get stop code component (stop code component is the last component in the container)
+    // but not use it in this component
+    // dispatch(getStop())
+    
     setOutput(outputData);
     setIsSubmitted(false);
     setIsCompleted(false);
