@@ -156,8 +156,16 @@ const LanguageProgress = ({ language, type }) => {
                   variant="dark"
                   sx={{ textTransform: "none", minWidth: "80px" }}
                   onClick={() => {
-                    if (type === " ") {
-                      router.push(`/road/${language.id}`);
+                    if (type === "road") {
+                      // router.push(`/roads/${language.id}`);
+                      // this router will be changed to the following cuse this is not true.
+                      if(language.id === 1){
+                        router.push(`/roads/c++`);
+                      }else if(language.id === 2){
+                        router.push(`/roads/go`);
+                      }else if(language.id === 3){
+                        router.push(`/roads/python`);
+                      }
                     } else if (type === "lab") {
                       router.push(`/labs/${language.id}`);
                     }

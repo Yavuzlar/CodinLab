@@ -274,15 +274,15 @@ const RoadDetails = ({ language = "" }) => {
                 fontWeight={600}
                 color={!path.isFinished ? "#fff" : "#0A3B7A"}
               >
-                {" "}
-                {path.languages.title}:{" "}
+               
+                {path.language.title}:
               </Typography>
               <Typography
                 variant="body1"
                 color={!path.isFinished ? "#fff" : "#0A3B7A"}
               >
-                {" "}
-                {path.languages.description}
+               
+                {path.language.description}
               </Typography>
             </Box>
           </Box>
