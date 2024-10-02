@@ -10,18 +10,98 @@ import {
   useMediaQuery,
   Button,
   Modal,
+  Tooltip,
 } from "@mui/material";
 import TestTubeGreen from "src/assets/icons/icons8-test-tube-100-green.png";
 import TestTubeOrange from "src/assets/icons/icons8-test-tube-100-orange.png";
 import TestTubeRed from "src/assets/icons/icons8-test-tube-100-red.png";
 import LightBulb from "src/assets/icons/light-bulb.png";
 import Image from "next/image";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { getProgrammingId } from "src/data/programmingIds";
 import { useDispatch, useSelector } from "react-redux";
 import { getLabByProgramingId } from "src/store/lab/labSlice";
 import { data } from "autoprefixer";
 import { getStop } from "src/store/code/codeSlice";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import axios from "axios";
+
+const renderDifficulty = (difficulty) => {
+  switch (difficulty) {
+    case "easy":
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            gap: "0.4rem",
+            backgroundColor: "#BDEEAF",
+            borderRadius: "0.7rem",
+            py: 1,
+            px: 2,
+          }}
+        >
+          <Image src={TestTubeGreen} alt="easy" width={25} height={25} />
+          <Typography
+            variant="body1"
+            color={"#39CE19"}
+            fontWeight={500}
+            sx={{ textTransform: "capitalize" }}
+          >
+            {" "}
+            {difficulty}{" "}
+          </Typography>
+        </Box>
+      );
+    case "medium":
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            gap: "0.4rem",
+            backgroundColor: "#F3C9A5",
+            borderRadius: "0.7rem",
+            py: 1,
+            px: 2,
+          }}
+        >
+          <Image src={TestTubeOrange} alt="easy" width={25} height={25} />
+          <Typography
+            variant="body1"
+            color={"#F07C1C"}
+            fontWeight={500}
+            sx={{ textTransform: "capitalize" }}
+          >
+            {" "}
+            {difficulty}{" "}
+          </Typography>
+        </Box>
+      );
+    case "hard":
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            gap: "0.4rem",
+            backgroundColor: "#F3B3B3",
+            borderRadius: "0.7rem",
+            py: 1,
+            px: 2,
+          }}
+        >
+          <Image src={TestTubeRed} alt="easy" width={25} height={25} />
+          <Typography
+            variant="body1"
+            color={"#E00404"}
+            fontWeight={500}
+            sx={{ textTransform: "capitalize" }}
+          >
+            {" "}
+            {difficulty}{" "}
+          </Typography>
+        </Box>
+      );
+  }
+};
 
 const LabQuestion = ({ language = "", questionId }) => {
   const { lab: labSlice } = useSelector((state) => state);
@@ -29,8 +109,6 @@ const LabQuestion = ({ language = "", questionId }) => {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
-
-
 
   const [output, setOutput] = useState(""); // we will store the output here
 
@@ -42,10 +120,13 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const [labData, setLabData] = useState({
     title: "",
-    difficulty: "",
+    difficulty:"",
     description: "",
-    questionNote: "",
+    questionNote:"",
+    expectedOutputNote: "",
     expectedOutput: "",
+    hint: "",
+    template: ""
   });
 
   const [open, setOpen] = useState(false);
@@ -65,18 +146,11 @@ const LabQuestion = ({ language = "", questionId }) => {
     endPoint: 'lab'
   };
 
+  const editorRef = useRef(null);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(
-      getLabByProgramingId({
-        labID: questionId,
-        programmingID: programmingID,
-        language: i18n.language,
-      })
-    );
-  }, [language, questionId]);
 
   useEffect(() => {
+    
     if (labSlice.data) {
       setLabData({
         title: labSlice.data[0]?.language?.title,
@@ -101,6 +175,7 @@ const LabQuestion = ({ language = "", questionId }) => {
       setIsFailed(true);
     }
   };
+  
 
   const handleStop = (outputData) => {
     // this api for get stop code component (stop code component is the last component in the container)
@@ -112,82 +187,40 @@ const LabQuestion = ({ language = "", questionId }) => {
     setIsCompleted(false);
   };
 
-  const renderDifficulty = (difficulty) => {
-    switch (difficulty) {
-      case "easy":
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              gap: "0.4rem",
-              backgroundColor: "#BDEEAF",
-              borderRadius: "0.7rem",
-              py: 1,
-              px: 2,
-            }}
-          >
-            <Image src={TestTubeGreen} alt="easy" width={25} height={25} />
-            <Typography
-              variant="body1"
-              color={"#39CE19"}
-              fontWeight={500}
-              sx={{ textTransform: "capitalize" }}
-            >
-              {" "}
-              {difficulty}{" "}
-            </Typography>
-          </Box>
-        );
-      case "medium":
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              gap: "0.4rem",
-              backgroundColor: "#F3C9A5",
-              borderRadius: "0.7rem",
-              py: 1,
-              px: 2,
-            }}
-          >
-            <Image src={TestTubeOrange} alt="easy" width={25} height={25} />
-            <Typography
-              variant="body1"
-              color={"#F07C1C"}
-              fontWeight={500}
-              sx={{ textTransform: "capitalize" }}
-            >
-              {" "}
-              {difficulty}{" "}
-            </Typography>
-          </Box>
-        );
-      case "hard":
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              gap: "0.4rem",
-              backgroundColor: "#F3B3B3",
-              borderRadius: "0.7rem",
-              py: 1,
-              px: 2,
-            }}
-          >
-            <Image src={TestTubeRed} alt="easy" width={25} height={25} />
-            <Typography
-              variant="body1"
-              color={"#E00404"}
-              fontWeight={500}
-              sx={{ textTransform: "capitalize" }}
-            >
-              {" "}
-              {difficulty}{" "}
-            </Typography>
-          </Box>
-        );
+  const handleReset = async () => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/api/v1/private/lab/reset/${programmingID}/${questionId}`,
+      });
+  
+      if (response.status === 200) {
+        const apiTemplate = response.data?.data?.template || "";
+        // const prevData = labData;
+        // setLabData({
+        //   ...labData,
+        //   template: apiTemplate,
+        // });
+        editorRef.current.setValue(apiTemplate);
+        console.log("Reset response success", labData);
+  
+      }
+    } catch (error) {
+      console.log("Reset response error", error);
     }
   };
+  
+  
+  useEffect(() => {
+    dispatch(
+      getLabByProgramingId({
+        labID: questionId,
+        programmingID: programmingID,
+        language: i18n.language,
+      })
+    );
+  }, [language, questionId]);
+
 
   // Breadcrumbs
   const breadcrums = [
@@ -280,6 +313,17 @@ const LabQuestion = ({ language = "", questionId }) => {
                   {t("labs.question.hint")}{" "}
                 </Typography>
               </Button>
+              <Tooltip title={t("roads.path.restart.button")}>
+              <Button
+                variant="dark"
+                sx={{
+                  
+                }}
+                onClick={() => handleReset()}
+              >
+                <RestartAltIcon />
+              </Button>
+            </Tooltip>
             </Box>
            
             <Modal
@@ -347,9 +391,11 @@ const LabQuestion = ({ language = "", questionId }) => {
             onRun={handleRun}
             onStop={handleStop}
             leng={language}
-            defValue={labData.template}
+            // defValue={labData.template}
             title={labData.title}
             apiData={apiData}
+            val={labData?.template}
+            editorRef={editorRef}
           />
 
           {/* Compilation messages after submitting */}

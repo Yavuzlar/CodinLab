@@ -4,7 +4,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Tooltip from "@mui/material/Tooltip";
 import CodeEditor from "src/components/code-editor";
 import Output from "src/components/output";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CustomBreadcrumbs from "src/components/breadcrumbs";
 import DoneIcon from "src/assets/icons/icons8-done-100 (1).png";
 import Image from "next/image";
@@ -23,6 +23,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const dispatch = useDispatch();
   const { path } = useSelector((state) => state);
+  const editorRef = useRef(null);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -97,9 +98,8 @@ const LanguageRoad = ({ language = "", pathId }) => {
         url: `/api/v1/private/road/reset/${programmingId}/${pathId}`,
       });
       if (response.status === 200) {
-        // Reset template with the response data
-        setTemplate(response.data.template || "");
-        console.log("Reset response success", response.data);
+        const apiTemplate = response.data?.data?.template || "";
+        editorRef.current.setValue(apiTemplate);
       }
     } catch (error) {
       console.log("Reset response error", error);
@@ -207,9 +207,12 @@ const LanguageRoad = ({ language = "", pathId }) => {
           onRun={handleRun}
           onStop={handleStop}
           leng={language}
-          defValue={template}
+          // defValue={template}
           title={"example.c"}
           apiData={apiData}
+          editorRef={editorRef}
+          val={template}
+
         />
         <Output value={output} params={params} />
       </Box>
@@ -218,3 +221,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
 };
 
 export default LanguageRoad;
+
+
+
