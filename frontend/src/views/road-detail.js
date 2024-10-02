@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPaths, startRoad } from "src/store/paths/pathsSlice";
 import { getProgrammingId } from "src/data/programmingIds";
+import { set } from "nprogress";
 
 
 const RoadDetails = ({ language = "" }) => {
@@ -35,6 +36,8 @@ const RoadDetails = ({ language = "" }) => {
   const [amountOfInProgressPaths, setAmountOfInProgressPaths] = useState(0); // Amount of in progress paths
   const [amountOfCompletedPaths, setAmountOfCompletedPaths] = useState(0); // Amount of completed paths // Path icon path
   const [programmingIcon, setProgrammingIcon] = useState("images/c.png"); // Programming icon path
+  const [title, setTitle] = useState(""); // Road title
+  const [description, setDescription] = useState(""); // Road description
 
   const handleStartRoad = () => {
     // Redirect to the first path of the road
@@ -72,6 +75,9 @@ const RoadDetails = ({ language = "" }) => {
 
       if (paths.data.paths) {
         setProgrammingIcon(paths.data.iconPath);
+
+        setTitle(paths.data.name);
+        setDescription(paths.data.description);
 
         const pathsData = paths.data.paths;
 
@@ -125,9 +131,6 @@ const RoadDetails = ({ language = "" }) => {
   ];
 
   // TODO: Get the title and description from front-end side
-  const title = "What is /C/?";
-  const description =
-    "/C/ is a programming language created by Dennis Ritchie at Bell Laboratories in 1972. It is a popular language due to its foundational nature and close association with UNIX.";
 
   return (
     <Box>
