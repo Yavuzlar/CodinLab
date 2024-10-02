@@ -45,6 +45,17 @@ const AuthProvider = ({ children }) => {
 
     ws.current.onmessage = (e) => {
       console.log("Message from server:", e.data);
+
+
+      // this part is for get container id from websocket but not used in this project
+      // const data = JSON.parse(e.data); // 
+      // if (data.Type === "container") {
+      //   const containerId = data?.Data?.id;
+  
+      //   if (containerId) {
+      //     localStorage.setItem('containerId', containerId);
+      //   }
+      // }
     };
 
     ws.current.onclose = () => {

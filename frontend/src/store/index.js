@@ -10,6 +10,7 @@ import adminSlice from './admin/adminSlice.js'
 import pathSlice from "./path/pathSlice.js";
 import labSlice from "./lab/labSlice.js";
 import logSlice from "./log/logSlice.js";
+import codeSlice from "./code/codeSlice.js";
 
 export const store = configureStore({
   reducer: {
@@ -21,7 +22,8 @@ export const store = configureStore({
     admin: adminSlice,
     path: pathSlice,
     lab: labSlice,
-    log: logSlice
+    log: logSlice,
+    code: codeSlice
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
