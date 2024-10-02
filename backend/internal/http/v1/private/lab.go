@@ -94,7 +94,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -152,7 +152,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	programmingID := c.Query("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -200,6 +200,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	labID := c.Params("labID")
 	programmingID := c.Params("programmingID")
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 	userSession := session_store.GetSessionData(c)
 
 	var answerLabDTO dto.AnswerLabDTO
@@ -210,7 +211,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -277,9 +278,11 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 	labID := c.Params("labID")
 	programmingID := c.Params("programmingID")
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
+
 	userSession := session_store.GetSessionData(c)
 
-	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}

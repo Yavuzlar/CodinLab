@@ -75,7 +75,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -112,7 +112,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
 			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTO, ""))
 		}
-		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs, isExists)
+		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs, isExists, *inventoryInformation.GetLanguage())
 	}
 
 	return response.Response(200, "GetRoads successful", roadDTO)
@@ -134,7 +134,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -164,7 +164,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
 			pathsDTO = append(pathsDTO, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTO, frontendTemplate))
 		}
-		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO, false))
+		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO, isExists, *inventoryInformation.GetLanguage()))
 	}
 
 	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentStarted); err != nil {
@@ -216,6 +216,7 @@ func (h *PrivateHandler) GetUserRoadProgressStats(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param programmingID path string true "Programming ID"
+// @Param Language header string false "Language"
 // @Param pathID path string true "Path ID"
 // @Param answerRoadDTO body dto.AnswerRoadDTO true "Answer Road DTO"
 // @Success 200 {object} response.BaseResponse{}
@@ -224,6 +225,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 	pathID := c.Params("pathID")
 	programmingID := c.Params("programmingID")
 	userSession := session_store.GetSessionData(c)
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
 	var answerRoadDTO dto.AnswerRoadDTO
 	if err := c.BodyParser(&answerRoadDTO); err != nil {
@@ -233,7 +235,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -301,14 +303,17 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 // @Produce json
 // @Param pathID path string true "Path ID"
 // @Param programmingID path string true "Programming Language ID"
+// @Param Language header string false "Language"
 // @Success 200 {object} response.BaseResponse{}
 // @Router /private/road/reset/{programmingID}/{pathID} [get]
 func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 	pathID := c.Params("pathID")
 	programmingID := c.Params("programmingID")
+	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
+
 	userSession := session_store.GetSessionData(c)
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}

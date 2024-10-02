@@ -58,6 +58,8 @@ func (m *RoadDTOManager) ToPathDTO(path domains.Path, language LanguageRoadDTO, 
 }
 
 type RoadDTO struct {
+	Title         string    `json:"title"`
+	Description   string    `json:"description"`
 	Name          string    `json:"name"`
 	IconPath      string    `json:"iconPath"`
 	IsStarted     bool      `json:"roadIsStarted"`
@@ -66,8 +68,10 @@ type RoadDTO struct {
 	Paths         []PathDTO `json:"paths"`
 }
 
-func (m *RoadDTOManager) ToRoadDTO(road domains.Road, paths []PathDTO, isImageExists bool) RoadDTO {
+func (m *RoadDTOManager) ToRoadDTO(road domains.Road, paths []PathDTO, isImageExists bool, inventoryLanguage domains.InventoryLanguage) RoadDTO {
 	return RoadDTO{
+		Title:         inventoryLanguage.GetLang(),
+		Description:   inventoryLanguage.GetDescription(),
 		Name:          road.GetName(),
 		IconPath:      road.GetIconPath(),
 		Paths:         paths,

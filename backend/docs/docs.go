@@ -776,6 +776,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Path ID",
                         "name": "pathID",
                         "in": "path",
@@ -931,6 +937,12 @@ const docTemplate = `{
                         "name": "programmingID",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
                     }
                 ],
                 "responses": {
@@ -1414,6 +1426,9 @@ const docTemplate = `{
         "dto.RoadDTO": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string"
+                },
                 "iconPath": {
                     "type": "string"
                 },
@@ -1434,6 +1449,9 @@ const docTemplate = `{
                 },
                 "roadIsStarted": {
                     "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },

@@ -113,6 +113,8 @@ definitions:
     type: object
   dto.RoadDTO:
     properties:
+      description:
+        type: string
       iconPath:
         type: string
       isImageExists:
@@ -127,6 +129,8 @@ definitions:
         type: boolean
       roadIsStarted:
         type: boolean
+      title:
+        type: string
     type: object
   dto.SolutionsByDayDTO:
     properties:
@@ -731,6 +735,10 @@ paths:
         name: programmingID
         required: true
         type: string
+      - description: Language
+        in: header
+        name: Language
+        type: string
       - description: Path ID
         in: path
         name: pathID
@@ -832,6 +840,10 @@ paths:
         in: path
         name: programmingID
         required: true
+        type: string
+      - description: Language
+        in: header
+        name: Language
         type: string
       produces:
       - application/json

@@ -19,7 +19,7 @@ func newLabRoadService(
 	}
 }
 
-func (s *labRoadService) GetInventoryInformation(programmingID string) (inventoryInformation *domains.InventoryInformation, err error) {
+func (s *labRoadService) GetInventoryInformation(programmingID, language string) (inventoryInformation *domains.InventoryInformation, err error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
@@ -31,7 +31,16 @@ func (s *labRoadService) GetInventoryInformation(programmingID string) (inventor
 	}
 	for _, inv := range inventory {
 		if inv.ID == intProgrammingID {
-			inventoryInformation = domains.NewInventoryInformation(inv.Name, inv.DockerImage, inv.FileExtension, inv.PathDir, inv.ID, inv.Cmd, inv.ShCmd)
+			var langInfo domains.InventoryLanguage
+			for _, infoL := range inv.Languages {
+				if infoL.Lang == language {
+					langInfo.SetLang(infoL.Lang)
+					langInfo.SetTitle(infoL.Title)
+					langInfo.SetDescription(infoL.Description)
+				}
+			}
+
+			inventoryInformation = domains.NewInventoryInformation(inv.Name, inv.DockerImage, inv.FileExtension, inv.PathDir, inv.ID, inv.Cmd, inv.ShCmd, langInfo)
 			break
 		}
 	}

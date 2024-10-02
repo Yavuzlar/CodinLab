@@ -28,7 +28,7 @@ type InventoryP struct {
 // Language represents the details of a programming language.
 type LanguageP struct {
 	Lang        string `json:"lang"`
-	Title       string `json:"title,omitempty"`
+	Title       string `json:"title"`
 	Description string `json:"description"`
 	Note        string `json:"note,omitempty"`
 	Hint        string `json:"hint,omitempty"`
