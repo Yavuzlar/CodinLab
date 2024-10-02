@@ -15,13 +15,22 @@ import MenuIconBlack from "src/assets/icons/menu-black.png";
 import MenuIconWhite from "src/assets/icons/menu-white.png";
 import axios from "axios";
 
-const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) => {
-  const [value, setValue] = useState(defValue);
+const CodeEditor = ({
+  params,
+  onRun,
+  onStop,
+  leng,
+  defValue,
+  title,
+  apiData,
+  val,
+  editorRef
+}) => {
+  const [value, setValue] = useState(null);
   const [defaultValue, setDefaultValue] = useState(defValue);
   const [theme, setTheme] = useState("vs-dark");
   const [editorActionsWidth, setEditorActionsWidth] = useState(0);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
-  const editorRef = useRef(null);
   const editorActions = useRef(null);
 
   // here we will add the onMount function
@@ -42,9 +51,9 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
           "Content-Type": "application/json",
         },
       });
-      onRun(response.data);
+      onRun(response.data?.message);
     } catch (error) {
-      onRun(error.response.data?.message || error.message);
+      onRun(error.response?.data?.message || error.message);
     }
   };
 
@@ -74,9 +83,8 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
   }, [editorActions?.current?.offsetWidth]);
 
   useEffect(() => {
-    setDefaultValue(defValue);
-    setValue(defValue);
-  }, [defValue])
+    setValue(val);
+  }, [val]);
 
   return (
     <Box
@@ -158,59 +166,64 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
                   onClick={openMobileMenu}
                 />
               </Tooltip>
-                <Menu
-                  anchorEl={mobileMenuAnchor}
-                  open={Boolean(mobileMenuAnchor)}
-                  onClose={closeMobileMenu}
+              <Menu
+                anchorEl={mobileMenuAnchor}
+                open={Boolean(mobileMenuAnchor)}
+                onClose={closeMobileMenu}
+              >
+                <MenuItem
+                  onClick={() => {
+                    handleRun();
+                    closeMobileMenu();
+                  }}
                 >
-                  <MenuItem
-                    onClick={() => {
-                      handleRun();
-                      closeMobileMenu();
-                    }}
-                  >
-                    <Image
-                      src={theme === "vs-dark" ? PlayIconWhite : PlayIconBlack}
-                      alt="My SVG"
-                      width={30}
-                      height={30}
-                      sx={{ cursor: "pointer",
-                      }}
-                    />
-                    <Typography variant="span" sx={{ ml: 1 }}>Run</Typography>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      handleStop();
-                      closeMobileMenu();
-                    }}
-                  >
-                    <Image
-                      src={theme === "vs-dark" ? StopIconWhite : StopIconBlack}
-                      alt="My SVG"
-                      width={30}
-                      height={30}
-                      sx={{ cursor: "pointer" }}
-                    />
-                    <Typography variant="span" sx={{ ml: 1 }}>Stop</Typography>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      setTheme(theme === "vs-dark" ? "light" : "vs-dark");
-                      closeMobileMenu();
-                    }}
-                  >
-                      <Image
-                        src={theme === "vs-dark" ? SunIcon : MoonIcon}
-                        alt="My SVG"
-                        width={30}
-                        height={30}
-                        sx={{ cursor: "pointer" }}
-                      />
-                    
-                    <Typography variant="span" sx={{ ml: 1 }}>Change Theme</Typography>                 
-                  </MenuItem>
-                </Menu>
+                  <Image
+                    src={theme === "vs-dark" ? PlayIconWhite : PlayIconBlack}
+                    alt="My SVG"
+                    width={30}
+                    height={30}
+                    sx={{ cursor: "pointer" }}
+                  />
+                  <Typography variant="span" sx={{ ml: 1 }}>
+                    Run
+                  </Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleStop();
+                    closeMobileMenu();
+                  }}
+                >
+                  <Image
+                    src={theme === "vs-dark" ? StopIconWhite : StopIconBlack}
+                    alt="My SVG"
+                    width={30}
+                    height={30}
+                    sx={{ cursor: "pointer" }}
+                  />
+                  <Typography variant="span" sx={{ ml: 1 }}>
+                    Stop
+                  </Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setTheme(theme === "vs-dark" ? "light" : "vs-dark");
+                    closeMobileMenu();
+                  }}
+                >
+                  <Image
+                    src={theme === "vs-dark" ? SunIcon : MoonIcon}
+                    alt="My SVG"
+                    width={30}
+                    height={30}
+                    sx={{ cursor: "pointer" }}
+                  />
+
+                  <Typography variant="span" sx={{ ml: 1 }}>
+                    Change Theme
+                  </Typography>
+                </MenuItem>
+              </Menu>
             </div>
           ) : (
             <div
@@ -286,7 +299,8 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
       >
         <Editor
           language={leng || "javascript"}
-          defaultValue={defaultValue || "// Write your code here"}
+          // defaultValue={defaultValue || "// Write your code here"}
+          defaultValue={"// Write your code here"}
           value={value}
           onChange={(newValue) => setValue(newValue)}
           onMount={onMount}

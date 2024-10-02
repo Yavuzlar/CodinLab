@@ -4,7 +4,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Tooltip from "@mui/material/Tooltip";
 import CodeEditor from "src/components/code-editor";
 import Output from "src/components/output";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CustomBreadcrumbs from "src/components/breadcrumbs";
 import DoneIcon from "src/assets/icons/icons8-done-100 (1).png";
 import Image from "next/image";
@@ -23,6 +23,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const dispatch = useDispatch();
   const { path } = useSelector((state) => state);
+  const editorRef = useRef(null);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,7 +39,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [note, setNote] = useState("");
-  const [template, setTemplate] = useState("asd");
+  const [template, setTemplate] = useState("");
 
   useEffect(() => {
     setProgrammingId(getProgrammingId[language]);
@@ -60,7 +61,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
     if (path) {
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
-        console.log("Path data", pathData);
 
         setIsStarted(pathData.isStarted);
         setIsFinished(pathData.isFinished);
@@ -78,7 +78,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const handleRun = (outputData) => {
     // this function will be called when the code is run
-
     setOutput(outputData);
   };
 
@@ -99,7 +98,8 @@ const LanguageRoad = ({ language = "", pathId }) => {
         url: `/api/v1/private/road/reset/${programmingId}/${pathId}`,
       });
       if (response.status === 200) {
-        console.log("Reset response success", response.data);
+        const apiTemplate = response.data?.data?.template || "";
+        editorRef.current.setValue(apiTemplate);
       }
     } catch (error) {
       console.log("Reset response error", error);
@@ -131,7 +131,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
       title: _language,
       permission: "roads",
     },
-
     {
       path: `/roads`,
       title: title,
@@ -167,12 +166,11 @@ const LanguageRoad = ({ language = "", pathId }) => {
           {!isFinished && (
             <Tooltip title={t("roads.path.restart.button")}>
               <Button
+                variant="dark"
                 sx={{
                   position: "absolute",
                   right: "1rem",
                   top: "1rem",
-                  backgroundColor: "#fff",
-                  color: theme.palette.primary.dark,
                   minWidth: "1rem",
                 }}
                 onClick={handleReset}
@@ -183,12 +181,11 @@ const LanguageRoad = ({ language = "", pathId }) => {
           )}
 
           <Button
+            variant="dark"
             sx={{
               position: "absolute",
               right: "1rem",
               bottom: "1rem",
-              backgroundColor: "#fff",
-              color: theme.palette.primary.dark,
               fontWeight: 700,
               fontFamily: "Outfit",
               textTransform: "capitalize",
@@ -205,14 +202,17 @@ const LanguageRoad = ({ language = "", pathId }) => {
       </Card>
       <Box sx={{ display: "flex", gap: 2 }}>
         <CodeEditor
-          key={template}
+          key={template} 
           params={params}
           onRun={handleRun}
           onStop={handleStop}
           leng={language}
-          defValue={template}
+          // defValue={template}
           title={"example.c"}
           apiData={apiData}
+          editorRef={editorRef}
+          val={template}
+
         />
         <Output value={output} params={params} />
       </Box>
@@ -221,3 +221,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
 };
 
 export default LanguageRoad;
+
+
+
