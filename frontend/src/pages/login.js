@@ -6,20 +6,15 @@ import {
   CardContent,
   Typography,
   Box,
-  Checkbox,
-  FormControlLabel,
-  Divider,
   IconButton,
   InputAdornment,
   Grid,
-  useMediaQuery,
+  useMediaQuery
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import Translations from "src/components/Translations";
 import { loginValidation } from "src/configs/validation/loginSchema";
 import rocketImg from "../assets/3d/3d-casual-life-space-white-starship.png";
-import googleIcon from "../assets/icons/icons8-google-100.png";
-import githubIcon from "../assets/icons/icons8-github-144.png";
 import visibilityOnIcon from "../assets/icons/icons8-eye-1.png";
 import visibilityOffIcon from "../assets/icons/eye-hidden.png";
 import CodinLabLogo from "../assets/logo/codinlab-logo-main.png";
@@ -29,6 +24,8 @@ import { useTranslation } from "next-i18next";
 import themeConfig from "src/configs/themeConfig";
 import { useAuth } from "src/hooks/useAuth";
 import LanguageSelector from "src/layout/components/navigation/item/LanguageSelector";
+import { useRouter } from "next/router";
+
 const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Login = () => {
@@ -41,6 +38,7 @@ const Login = () => {
   const [visibleUsernameLabel, setVisibleUsernameLabel] = useState(false);
   const [visiblePasswordLabel, setVisiblePasswordLabel] = useState(false);
   const { login } = useAuth();
+  const router = useRouter();
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   // const handleMouseDownPassword = (event) => {
@@ -81,8 +79,11 @@ const Login = () => {
     try {
       await login(formData);
     } catch (error) {
-      console.log(error);
     }
+  };
+
+  const goRegisterPage = () => {
+    router.push("register");
   };
 
   useEffect(() => {
@@ -226,19 +227,20 @@ const Login = () => {
                         "& input::placeholder": {
                           fontWeight: "bold",
                         },
-                        "& fieldset": {
-                          color: "#0A3B7A",
-                          // fontWeight: "bold",
-                        },
-                        "&:hover fieldset": {
-                          color: "#0A3B7A",
-                          // fontWeight: "bold",
-                        },
-                        "&.Mui-focused": {
-                          color: "#0A3B7A",
-                          // fontWeight: "bold",
-                        },
+                        // "& fieldset": {
+                        //   color: "#0A3B7A",
+                        //   // fontWeight: "bold",
+                        // },
+                        // "&:hover fieldset": {
+                        //   color: "#0A3B7A",
+                        //   // fontWeight: "bold",
+                        // },
+                        // "&.Mui-focused": {
+                        //   color: "#0A3B7A",
+                        //   // fontWeight: "bold",
+                        // },
                       },
+
                       width: "100%",
                       height: "3.125rem",
                     }}
@@ -411,6 +413,7 @@ const Login = () => {
                   justifyContent: "center",
                   flexDirection: sm_down ? "column" : "row",
                   mb: sm_down ? "1.563rem" : "",
+                  gap: 2,
                 }}
               >
                 <Typography
@@ -421,17 +424,18 @@ const Login = () => {
                 >
                   <Translations text={"login.new.on.platform"} />
                 </Typography>
-                <Typography
-                  sx={{
-                    ml: sm_up ? "0.938rem" : 0,
-                    mt: sm_down ? "0.938rem" : 0,
-                    color: "#0A3B7A",
-                    font: "normal normal 600 18px/23px Outfit",
-                    textAlign: "center",
-                  }}
-                >
-                  <Translations text={"login.create.new.account"} />
-                </Typography>
+                <Button onClick={goRegisterPage}>
+                  <Typography
+                    sx={{
+                      color: "#0A3B7A !important",
+
+                      font: "normal normal 600 18px/23px Outfit",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Translations text={"login.create.new.account"} />
+                  </Typography>
+                </Button>
               </Grid>
             </Grid>
           </CardContent>

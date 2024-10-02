@@ -161,7 +161,7 @@ func (s *roadService) GetRoadFilter(userID, programmingID, pathID string, isStar
 		}
 
 		var newRoadList []domains.Path
-		for _, path := range roadCollection.GetPaths() {
+		for i, path := range roadCollection.GetPaths() {
 			if intPathID != 0 && path.GetID() != intPathID {
 				continue
 			}
@@ -172,6 +172,12 @@ func (s *roadService) GetRoadFilter(userID, programmingID, pathID string, isStar
 
 			if isFinished != nil && path.GetIsFinished() != *isFinished {
 				continue
+			}
+			if i != 0 && !roadCollection.GetPaths()[i-1].GetIsFinished() && pathID != "" {
+				return nil, service_errors.NewServiceErrorWithMessage(400, fmt.Sprintf("You need to solve %d. path first", i))
+			}
+			if !roadCollection.GetIsStarted() && pathID != "" {
+				return nil, service_errors.NewServiceErrorWithMessage(400, "You need to start road")
 			}
 
 			newRoadList = append(newRoadList, path)
@@ -185,6 +191,10 @@ func (s *roadService) GetRoadFilter(userID, programmingID, pathID string, isStar
 		if len(newRoadList) > 0 {
 			filteredRoads = append(filteredRoads, *domains.NewRoads(roadCollection.GetID(), roadCollection.GetName(), roadCollection.GetDockerImage(), roadCollection.GetIconPath(), roadCollection.GetFileExtension(), newRoadList, roadCollection.GetCmd(), roadCollection.ShCmd, *isStarted, *isFinished))
 		}
+	}
+
+	if len(filteredRoads) == 0 && pathID == "" {
+		return nil, service_errors.NewServiceErrorWithMessage(404, "Road not found")
 	}
 
 	return filteredRoads, nil
@@ -244,7 +254,7 @@ func (s *roadService) GetUserRoadProgressStats(userID string) (progressStats *do
 	return
 }
 
-func (s *roadService) GetRoadByID(userID, programmingID, pathID string) (path *domains.Path, err error) {
+func (s *roadService) GetPathByID(userID, programmingID, pathID string) (path *domains.Path, err error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")

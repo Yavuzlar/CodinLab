@@ -4,69 +4,27 @@ import TestTubeOrange from "../../assets/icons/orange.png";
 import TestTubeGreen from "../../assets/icons/green.png";
 import Image from "next/image";
 import Translations from "../Translations";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getLabsById } from "src/store/lab/labSlice";
+import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
 const LabInfo = ({ programingId }) => {
-  const labs = [
-    {
-      difficulty: "Easy",
-      title: "Lab 1",
-      finished: false,
-    },
-    {
-      difficulty: "Medium",
-      title: "Lab 2",
-      finished: true,
-    },
-    {
-      difficulty: "Easy",
-      title: "Lab 3",
-      finished: false,
-    },
-    {
-      difficulty: "Hard",
-      title: "Lab 4",
-      finished: false,
-    },
-    {
-      difficulty: "Medium",
-      title: "Lab 5",
-      finished: true,
-    },
-    {
-      difficulty: "Hard",
-      title: "Lab 6",
-      finished: true,
-    },
-    {
-      difficulty: "Easy",
-      title: "Lab 7",
-      finished: false,
-    },
-    {
-      difficulty: "Medium",
-      title: "Lab 8",
-      finished: true,
-    },
-    {
-      difficulty: "Easy",
-      title: "Lab 9",
-      finished: false,
-    },
-    {
-      difficulty: "Hard",
-      title: "Lab 10",
-      finished: false,
-    },
-    {
-      difficulty: "Medium",
-      title: "Lab 11",
-      finished: true,
-    },
-    {
-      difficulty: "Hard",
-      title: "Lab 12",
-      finished: true,
-    },
-  ];
+  const dispatch = useDispatch();
+  const { lab: stateLabs } = useSelector((state) => state);
+
+  const router = useRouter();
+
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    dispatch(
+      getLabsById({
+        programmingID: programingId,
+        language: i18n.language,
+      })
+    );
+  }, [dispatch, programingId, i18n.language]);
 
   return (
     <Box
@@ -77,7 +35,7 @@ const LabInfo = ({ programingId }) => {
         justifyContent: "center",
       }}
     >
-      {labs.map((lab, index) => (
+      {stateLabs.data?.labs?.map((lab, index) => (
         <Card
           sx={{
             width: "375px",
@@ -102,9 +60,9 @@ const LabInfo = ({ programingId }) => {
           >
             <Image
               src={
-                lab.difficulty === "Easy"
+                lab.difficulty === 1
                   ? TestTubeGreen
-                  : lab.difficulty === "Medium"
+                  : lab.difficulty === 2
                   ? TestTubeOrange
                   : TestTubeRed
               }
@@ -112,7 +70,7 @@ const LabInfo = ({ programingId }) => {
               width={40}
               height={40}
             />
-
+            {/* difficulty   */}
             <Typography
               variant="h5"
               sx={{
@@ -124,7 +82,7 @@ const LabInfo = ({ programingId }) => {
                 marginTop: "20px",
               }}
             >
-              {lab.title}
+              {lab.language.title}
             </Typography>
 
             <Button
@@ -140,8 +98,25 @@ const LabInfo = ({ programingId }) => {
                 fontFamily: "Outfit",
                 letterSpacing: "0",
               }}
+              onClick={() => {
+                // this router sistem will be changed to the following cuse this is not true.
+                // this is the try to solve the problem of the router.
+                // router.push(`/labs/${programingId}/${lab.id}`);
+                if(programingId === "1"){
+                  router.push(`/labs/c++/${lab.id}`);
+                }else if(programingId === "2"){
+                  router.push(`/labs/go/${lab.id}`);
+                }else if(programingId === "3"){
+                  router.push(`/labs/python/${lab.id}`);
+                }
+              }
+              }
             >
-              <Translations text={"lab.button.solve"} />
+              {lab.isFinished ? (
+                <Translations text={"lab.button.review"} />
+              ) : (
+                <Translations text={"lab.button.solve"} />
+              )}
             </Button>
           </Box>
         </Card>

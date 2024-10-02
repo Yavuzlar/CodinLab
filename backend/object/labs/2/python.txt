@@ -1,0 +1,28 @@
+## FRONTEND
+
+def $funcname$(s: list[int]) -> bool:
+    # Write your code here
+    return False
+
+def main():
+    input_str = input("Lütfen bir string değer girin: ")
+    print(f"Girdiğiniz string değer: { $funcname$(input_str) }")
+
+## DOCKER
+
+import $imps$
+
+$usercode$
+
+$checks$
+print("$success$")
+
+## CHECK
+
+input_arr$rnd$ = [$input$]
+output_arr$rnd$ = [$output$]
+
+result$rnd$ = $funcname$(input_arr$rnd$)
+if result$rnd$ != output_arr$rnd$:
+    print(f"Test Failed: Expected {output_arr$rnd$}, but got {result$rnd$}")
+

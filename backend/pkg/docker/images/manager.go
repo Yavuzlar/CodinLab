@@ -56,7 +56,7 @@ func (m *Manager) Pull(ctx context.Context, imageReference string) error {
 		return fmt.Errorf("error while reading image pull output")
 	}
 
-	fmt.Println(buf.String())
+	// fmt.Println(buf.String())
 
 	return nil
 

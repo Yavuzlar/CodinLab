@@ -10,12 +10,13 @@ import (
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/websocket/v2"
 )
 
 // UserLanguageLabStatsDto represents the DTO for user language lab statistics
 
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
-	root.Get("/labs", h.GetLabs)
+	root.Get("/labs/:programmingID", h.GetLabs)
 	root.Get("/lab/:labID", h.GetLabByID)
 	root.Get("/lab/reset/:programmingID/:labID", h.ResetLabHistory)
 	root.Get("/labs/general/stats", h.GetUserLanguageLabStats)
@@ -84,28 +85,54 @@ func (h *PrivateHandler) GetUserLabProgressStats(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param Language header string false "Language"
-// @Param programmingID query string false "Programming Language ID"
+// @Param programmingID path string true "Programming Language ID"
 // @Success 200 {object} response.BaseResponse{}
-// @Router /private/labs/ [get]
+// @Router /private/labs/{programmingID} [get]
 func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
-	programmingID := c.Query("programmingID")
+	programmingID := c.Params("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, "", programmingID, nil, nil)
+	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
 		return err
 	}
 
-	var labDTOs []dto.LabDTO
-	for _, labCollection := range labData {
-		languageDTO := h.dtoManager.LabDTOManager.ToLanguageDTO(labCollection.GetLanguages(), language)
-		labDTOs = append(labDTOs, h.dtoManager.LabDTOManager.ToLabsDTO(labCollection, languageDTO))
+	isExists, err := h.services.CodeService.IsImageExists(c.Context(), inventoryInformation.GetDockerImage())
+	if err != nil {
+		return err
 	}
-	labDTOs = h.dtoManager.LabDTOManager.FilterLabDTOs(labDTOs)
+	var conn *websocket.Conn
+	for c, ok := range h.clients {
+		if c.GetUserID().String() == userSession.UserID && ok {
+			conn = c.GetConnection()
+			break
+		}
+	}
 
-	return response.Response(200, "GetLabs successful", labDTOs)
+	if !isExists {
+		go func() {
+			if err := h.services.CodeService.Pull(c.Context(), inventoryInformation.GetDockerImage(), inventoryInformation.GetName(), conn); err != nil {
+				fmt.Printf("Error pulling Docker image: %v\n", err)
+			}
+		}()
+	}
+
+	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, programmingID, "", nil, nil)
+	if err != nil {
+		return err
+	}
+
+	var labDTOs []dto.LabForAllDTO
+	for _, labCollection := range labData {
+		languageDTO := h.dtoManager.LabDTOManager.ToLanguageForAllDTO(labCollection.GetLanguages(), language)
+		labDTOs = append(labDTOs, h.dtoManager.LabDTOManager.ToLabForAllDTO(labCollection, languageDTO))
+	}
+	labDTOs = h.dtoManager.LabDTOManager.FilterLabForAllDTOs(labDTOs)
+	labsDTO := h.dtoManager.LabDTOManager.ToLabsForAllDTO(labDTOs, isExists)
+
+	return response.Response(200, "GetLabs successful", labsDTO)
 }
 
 // @Tags Lab
@@ -128,6 +155,14 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
 	if err != nil {
 		return err
+	}
+
+	isExists, err := h.services.CodeService.IsImageExists(c.Context(), inventoryInformation.GetDockerImage())
+	if err != nil {
+		return err
+	}
+	if !isExists {
+		return response.Response(400, fmt.Sprintf("%s image does not exist. Please visit the homepage to download it.", inventoryInformation.GetDockerImage()), nil)
 	}
 
 	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, programmingID, labID, nil, nil)
@@ -205,7 +240,19 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd())
+	var conn *websocket.Conn
+	for c, ok := range h.clients {
+		if c.GetUserID().String() == userSession.UserID && ok {
+			conn = c.GetConnection()
+			break
+		}
+	}
+	// TODO: Belki Getirebilirsin
+	// if conn == nil {
+	// 	return response.Response(500, "This user was not found in socket.", nil)
+	// }
+
+	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd(), conn)
 	if err != nil {
 		return err
 	}

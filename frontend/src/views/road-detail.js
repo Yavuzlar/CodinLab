@@ -10,7 +10,6 @@ import NextPathIcon from "src/assets/icons/icons8-signpost-100.png"
 import Image from "next/image";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
 import { useEffect, useState } from "react";
-import SkeletonLoader from "src/components/skeleton/SkeletonLoader.js";
 import LinearProgess from "src/components/progress/LinearProgess";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +31,7 @@ const RoadDetails = ({ language = "" }) => {
   const [programmingId, setProgrammingId] = useState(null);
 
   const [pathsDataContent, setPathsDataContent] = useState([]);
-  const [isStarted, setIsStarted] = useState(false); // Set this to true if the user has started the road on useEffect()
+  const [pathIsStarted, setpathIsStarted] = useState(false); // Set this to true if the user has started the road on useEffect()
   const [amountOfInProgressPaths, setAmountOfInProgressPaths] = useState(0); // Amount of in progress paths
   const [amountOfCompletedPaths, setAmountOfCompletedPaths] = useState(0); // Amount of completed paths // Path icon path
   const [programmingIcon, setProgrammingIcon] = useState("images/c.png"); // Programming icon path
@@ -44,9 +43,9 @@ const RoadDetails = ({ language = "" }) => {
   };
 
   const renderPathIcon = (path) => {
-    if (path.isFinished) {
+    if (path.pathIsFinished) {
       return DoneIcon;
-    } else if (path.isStarted && !path.isFinished) {
+    } else if (path.pathIsStarted && !path.pathIsFinished) {
       return NextPathIcon;
     } else {
       return LockIcon;
@@ -54,7 +53,6 @@ const RoadDetails = ({ language = "" }) => {
   };
 
   useEffect(() => {
-    console.log("Language useEffect: ", language);
     setProgrammingId(getProgrammingId[language]);
   }, [language]);
 
@@ -77,18 +75,17 @@ const RoadDetails = ({ language = "" }) => {
 
         const pathsData = paths.data.paths;
 
-        console.log("Paths data: ", pathsData);
 
         // Amount of completed paths
-        const completedPaths = pathsData.filter((path) => path.isFinished);
+        const completedPaths = pathsData.filter((path) => path.pathIsFinished);
 
         // Amount of in progress paths
         const inProgressPaths = pathsData.filter(
-          (path) => !path.isFinished && path.isStarted
+          (path) => !path.pathIsFinished && path.pathIsFinished
         );
 
         if (inProgressPaths.length > 0 || completedPaths.length > 0) {
-          setIsStarted(true);
+          setpathIsStarted(true);
         }
 
         setAmountOfInProgressPaths(inProgressPaths.length);
@@ -158,7 +155,7 @@ const RoadDetails = ({ language = "" }) => {
                   width={80}
                   height={80}
                 />
-                {!isStarted ? (
+                {!pathIsStarted ? (
                   <>
                     <Box>
                       <Typography variant="h4" fontWeight={600}>
@@ -234,13 +231,12 @@ const RoadDetails = ({ language = "" }) => {
         </Grid>
       </Box>
 
-      {/* Road Paths */}
       {pathsDataContent.map((path, index) => (
         <Box key={index}>
           <Box
             sx={{
               borderWidth: 6,
-              borderColor: path.isFinished
+              borderColor: path.pathIsFinished
                 ? "#39CE19"
                 : theme.palette.primary.dark,
               borderStyle:
@@ -257,9 +253,9 @@ const RoadDetails = ({ language = "" }) => {
                 display: "flex",
                 gap: 2,
                 alignItems: "center",
-                border: path.isFinished ? "3px solid #39CE19" : "none",
+                border: path.pathIsFinished ? "3px solid #39CE19" : "none",
                 borderRadius: 6,
-                backgroundColor: path.isFinished
+                backgroundColor: path.pathIsFinished
                   ? "#fff"
                   : theme.palette.primary.dark,
                 p: 3,
@@ -275,17 +271,17 @@ const RoadDetails = ({ language = "" }) => {
               <Typography
                 variant="body1"
                 fontWeight={600}
-                color={!path.isFinished ? "#fff" : "#0A3B7A"}
+                color={!path.pathIsFinished ? "#fff" : "#0A3B7A"}
               >
-                {" "}
-                {path.languages.title}:{" "}
+               
+                {path.language.title}:
               </Typography>
               <Typography
                 variant="body1"
-                color={!path.isFinished ? "#fff" : "#0A3B7A"}
+                color={!path.pathIsFinished ? "#fff" : "#0A3B7A"}
               >
-                {" "}
-                {path.languages.description}
+               
+                {path.language.description}
               </Typography>
             </Box>
           </Box>

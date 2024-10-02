@@ -1,11 +1,5 @@
 import { useTheme } from "@emotion/react";
-import {
-  Circle,
-  Google,
-  GitHub,
-  Visibility,
-  VisibilityOff,
-} from "@mui/icons-material";
+import { Circle, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Checkbox,
@@ -21,7 +15,6 @@ import {
   Link,
   Button,
   Divider,
-  Stack,
   IconButton,
 } from "@mui/material";
 import Image from "next/image";
@@ -32,6 +25,7 @@ import GirlImage from "src/assets/3d/3d-casual-life-girl-holding-laptop-and-havi
 import themeConfig from "src/configs/themeConfig";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "src/hooks/useAuth";
+const { default: BlankLayout } = require("src/layout/BlankLayout");
 
 const Register = () => {
   const [formData, setFormData] = useState();
@@ -73,9 +67,7 @@ const Register = () => {
     // Call API
     try {
       await register(formData);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -284,7 +276,8 @@ const Register = () => {
                       ),
                     }}
                   />
-                  <FormControlLabel
+                  {/* CheckBox Start */}
+                  {/* <FormControlLabel
                     control={
                       <Checkbox
                         name="checkbox"
@@ -317,10 +310,11 @@ const Register = () => {
                         </Link>
                       </Typography>
                     }
-                  />
+                  /> */}
+                  {/* CheckBox End */}
                   <Button
+                    variant="dark"
                     sx={{
-                      bgcolor: bgColor,
                       font: "normal normal 18px/23px Outfit",
                       fontWeight: "600",
                       textTransform: "capitalize",
@@ -333,15 +327,17 @@ const Register = () => {
                   </Button>
                 </Grid>
               </FormControl>
-              <Divider sx={{ mt: 3 }}> {t("register.or")}</Divider>
-              <Stack direction="row" justifyContent="center" gap={3} mt={3}>
+              {/* Divider and Google & GitHub Buttuns Start */}
+              {/* <Divider sx={{ mt: 3 }}> {t("register.or")}</Divider> */}
+              {/* <Stack direction="row" justifyContent="center" gap={3} mt={3}>
                 <IconButton variant="contained" sx={iconBtnStyle}>
                   <Google sx={iconSize} />
                 </IconButton>
                 <IconButton variant="contained" sx={iconBtnStyle}>
                   <GitHub sx={iconSize} />
                 </IconButton>
-              </Stack>
+              </Stack> */}
+              {/* Divider and Google & GitHub Buttuns End */}
               <Typography
                 variant="body1"
                 textAlign={"center"}
@@ -364,5 +360,8 @@ const Register = () => {
     </Box>
   );
 };
+
+Register.guestGuard = true;
+Register.getLayout = (page) => <BlankLayout>{page}</BlankLayout>;
 
 export default Register;

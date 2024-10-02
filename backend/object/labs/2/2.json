@@ -41,6 +41,10 @@
 			{
 				"programmingID": 2,
 				"templatePath" : "object/labs/2/go.txt"
+			},
+			{
+				"programmingID": 3,
+				"templatePath" : "object/labs/2/python.txt"
 			}
 		]
 	}

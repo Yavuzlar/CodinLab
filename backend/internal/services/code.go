@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -12,6 +13,8 @@ import (
 	extractor "github.com/Yavuzlar/CodinLab/pkg/code_extractor"
 	"github.com/Yavuzlar/CodinLab/pkg/docker"
 	"github.com/Yavuzlar/CodinLab/pkg/file"
+	"github.com/docker/docker/api/types/container"
+	"github.com/gofiber/websocket/v2"
 )
 
 type codeService struct {
@@ -39,22 +42,62 @@ func newCodeService(
 	}
 }
 
-func (s *codeService) Pull(ctx context.Context, imageReference string) (err error) {
-	resultChan := make(chan error)
-
-	// Asenkron olarak Docker image pull işlemini başlatın
-	go func() {
-		err := s.dockerSDK.Images().Pull(ctx, imageReference)
-		resultChan <- err
-	}()
-
-	// İndirme işlemi tamamlandığında kanaldan hata bilgisi alınır
-	select {
-	case err := <-resultChan:
-		return err
-	case <-ctx.Done():
-		return ctx.Err() // Eğer context iptal edilirse, bu hata döndürülür
+func (s *codeService) Pull(ctx context.Context, imageReference, programmingLanguage string, conn *websocket.Conn) error {
+	if conn != nil {
+		errSocket := conn.WriteJSON(domains.Response{
+			Type: "Pull",
+			Data: struct {
+				Status              int    `json:"status"`
+				ProgrammingLanguage string `json:"programminglanguage"`
+				Message             string `json:"message"`
+			}{
+				Status:              200,
+				ProgrammingLanguage: programmingLanguage,
+				Message:             "Started",
+			},
+		})
+		if errSocket != nil {
+			return errSocket
+		}
 	}
+	//Docker image pull işlemini başlatın
+	err := s.dockerSDK.Images().Pull(ctx, imageReference)
+	if conn != nil {
+		if err != nil {
+			errSocket := conn.WriteJSON(domains.Response{
+				Type: "Pull",
+				Data: struct {
+					Status              int    `json:"status"`
+					ProgrammingLanguage string `json:"programminglanguage"`
+					Message             string `json:"message"`
+				}{
+					Status:              400,
+					ProgrammingLanguage: programmingLanguage,
+					Message:             err.Error(),
+				},
+			})
+			if errSocket != nil {
+				return errSocket
+			}
+		} else {
+			errSocket := conn.WriteJSON(domains.Response{
+				Type: "Pull",
+				Data: struct {
+					Status              int    `json:"status"`
+					ProgrammingLanguage string `json:"programminglanguage"`
+					Message             string `json:"message"`
+				}{
+					Status:              200,
+					ProgrammingLanguage: programmingLanguage,
+					Message:             "Finished",
+				},
+			})
+			if errSocket != nil {
+				return errSocket
+			}
+		}
+	}
+	return err
 }
 
 func (s *codeService) IsImageExists(ctx context.Context, imageReference string) (isExists bool, err error) {
@@ -81,6 +124,47 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 		return result.isExists, nil
 	case <-ctx.Done():
 		return false, ctx.Err() // Eğer context iptal edilirse
+	}
+}
+
+func (s *codeService) StopContainer(ctx context.Context, containerID string) error {
+	errCh := make(chan error)
+
+	go func() {
+		errCh <- s.dockerSDK.Container().StopContainer(ctx, containerID)
+		close(errCh)
+	}()
+
+	select {
+	case err := <-errCh:
+		return service_errors.NewServiceErrorWithMessageAndError(500, "Container Stop Error", err)
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
+func (s *codeService) createContainerWithCMD(ctx context.Context, image string, cmd []string) (*container.CreateResponse, error) {
+	respCh := make(chan *container.CreateResponse)
+	errCh := make(chan error)
+
+	go func() {
+		resp, err := s.dockerSDK.Container().CreateContainerWithCMD(ctx, image, cmd)
+		if err != nil {
+			errCh <- err
+			close(errCh)
+		} else {
+			respCh <- resp
+			close(respCh)
+		}
+	}()
+
+	select {
+	case resp := <-respCh:
+		return resp, nil
+	case err := <-errCh:
+		return nil, err
+	case <-ctx.Done():
+		return nil, ctx.Err()
 	}
 }
 
@@ -117,32 +201,42 @@ func (s *codeService) CreateBashFile(cmd []string, tests []domains.Test, userID,
 	return nil
 }
 
-func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string) (string, error) {
-	resultChan := make(chan struct {
-		logs string
-		err  error
-	})
-
-	// Asenkron olarak container çalıştırma işlemini başlatın
-	go func() {
-		logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, image, cmd, tmpCodePath, fileName)
-		resultChan <- struct {
-			logs string
-			err  error
-		}{logs, err}
-	}()
-
-	// İşlem tamamlandığında kanaldan sonuç alınır
-	select {
-	case result := <-resultChan:
-		if result.err != nil {
-			// fmt.Println(result.err)
-			return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
-		}
-		return result.logs, nil
-	case <-ctx.Done():
-		return "", ctx.Err() // Eğer context iptal edilirse
+func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string, conn *websocket.Conn) (string, error) {
+	// Container çalıştırma işlemini başlatın
+	resp, err := s.createContainerWithCMD(ctx, image, cmd)
+	if err != nil {
+		return "", err
 	}
+
+	if conn != nil {
+		err = conn.WriteJSON(domains.Response{
+			Type: "container",
+			Data: struct {
+				ID string `json:"id"`
+			}{
+				ID: resp.ID,
+			},
+		})
+		if err != nil {
+			return "", err
+		}
+	}
+
+	logs, err := s.dockerSDK.Container().RunContainerWithTar(ctx, tmpCodePath, fileName, *resp)
+	if err != nil {
+		if strings.Contains(err.Error(), "No such image") {
+			re := regexp.MustCompile(`No such image: (.+)`)
+			matches := re.FindStringSubmatch(err.Error())
+			if len(matches) > 1 {
+				imageName := matches[1]
+				return "", service_errors.NewServiceErrorWithMessage(404, fmt.Sprintf("Image not found: %s", imageName))
+			}
+			return "", service_errors.NewServiceErrorWithMessage(404, "Image not found")
+		}
+		return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
+	}
+
+	return logs, nil
 }
 
 // Bunu Answer Kısmınlarında Kullanacaksın.
@@ -288,7 +382,7 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 			return history, nil
 		}
 
-		path, err := s.roadService.GetRoadByID(userID, programmingID, labPathID)
+		path, err := s.roadService.GetPathByID(userID, programmingID, labPathID)
 		if err != nil {
 			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
 		}
@@ -447,7 +541,7 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 			tmp = strings.Replace(tmp, "$out$", strings.Join(fails, ", "), -1)
 		}
 
-		checks.WriteString(tmp + "\n       ")
+		checks.WriteString(tmp + "\n")
 	}
 
 	return checks.String()

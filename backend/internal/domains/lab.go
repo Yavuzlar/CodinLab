@@ -232,8 +232,9 @@ func (l *Lab) SetIsFinished(isFinished bool) {
 }
 
 // NewProgrammingLanguageStats creates a new instance of ProgrammingLanguageStats
-func NewProgrammingLanguageStats(name, iconPath string, totalLabs, completedLabs int, percentage float32) *ProgrammingLanguageStats {
+func NewProgrammingLanguageStats(id int, name, iconPath string, totalLabs, completedLabs int, percentage float32) *ProgrammingLanguageStats {
 	return &ProgrammingLanguageStats{
+		id:            id,
 		name:          name,
 		iconPath:      iconPath,
 		totalLabs:     totalLabs,

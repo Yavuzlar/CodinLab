@@ -163,6 +163,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/common/stop/{containerID}": {
+            "get": {
+                "description": "Stops Quest Tests",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Common"
+                ],
+                "summary": "Stops Quest Tests",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Container ID",
+                        "name": "containerID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/home/advancement": {
             "get": {
                 "description": "Get User Advancement",
@@ -393,43 +425,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/labs/": {
-            "get": {
-                "description": "Get Labs",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Lab"
-                ],
-                "summary": "GetLabs",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Language",
-                        "name": "Language",
-                        "in": "header"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Programming Language ID",
-                        "name": "programmingID",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/private/labs/difficulty/stats": {
             "get": {
                 "description": "Get User Lab Difficulty Statistics",
@@ -489,6 +484,44 @@ const docTemplate = `{
                     "Lab"
                 ],
                 "summary": "GetUserLabProgressStats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/labs/{programmingID}": {
+            "get": {
+                "description": "Get Labs",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lab"
+                ],
+                "summary": "GetLabs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Programming Language ID",
+                        "name": "programmingID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -910,6 +943,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/road/start": {
+            "post": {
+                "description": "Start Road",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Road"
+                ],
+                "summary": "StartRoad",
+                "parameters": [
+                    {
+                        "description": "Start",
+                        "name": "start",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.StartDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/road/{programmingID}": {
             "get": {
                 "description": "Get Road with Paths",
@@ -950,7 +1017,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.GetRoadDTO"
+                                            "$ref": "#/definitions/dto.RoadDTO"
                                         }
                                     }
                                 }
@@ -960,33 +1027,30 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/start/{programmingID}": {
+        "/private/socket/ws": {
             "get": {
-                "description": "Start",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
+                "description": "Initiates a WebSocket connection for real-time communication. Clients can send and receive messages.",
                 "tags": [
-                    "LabRoadCommon"
+                    "WebSocket"
                 ],
-                "summary": "Start",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "programmingID",
-                        "name": "programmingID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "Establish a WebSocket Connection",
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "101": {
+                        "description": "Connection Established",
                         "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -1230,52 +1294,6 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.GetRoadDTO": {
-            "type": "object",
-            "properties": {
-                "iconPath": {
-                    "type": "string"
-                },
-                "isFinished": {
-                    "type": "boolean"
-                },
-                "isStarted": {
-                    "type": "boolean"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "paths": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.GetRoadPathDTO"
-                    }
-                }
-            }
-        },
-        "dto.GetRoadPathDTO": {
-            "type": "object",
-            "properties": {
-                "difficulty": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "isFinished": {
-                    "type": "boolean"
-                },
-                "isStarted": {
-                    "type": "boolean"
-                },
-                "languages": {
-                    "$ref": "#/definitions/dto.LanguageRoadDTO"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "dto.LanguageRoadDTO": {
             "type": "object",
             "properties": {
@@ -1346,17 +1364,17 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "isFinished": {
-                    "type": "boolean"
-                },
-                "isStarted": {
-                    "type": "boolean"
-                },
                 "language": {
                     "$ref": "#/definitions/dto.LanguageRoadDTO"
                 },
                 "name": {
                     "type": "string"
+                },
+                "pathIsFinished": {
+                    "type": "boolean"
+                },
+                "pathIsStarted": {
+                    "type": "boolean"
                 },
                 "template": {
                     "type": "string"
@@ -1393,6 +1411,32 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.RoadDTO": {
+            "type": "object",
+            "properties": {
+                "iconPath": {
+                    "type": "string"
+                },
+                "isImageExists": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "paths": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.PathDTO"
+                    }
+                },
+                "roadIsFinished": {
+                    "type": "boolean"
+                },
+                "roadIsStarted": {
+                    "type": "boolean"
+                }
+            }
+        },
         "dto.SolutionsByDayDTO": {
             "type": "object",
             "properties": {
@@ -1418,6 +1462,14 @@ const docTemplate = `{
                 },
                 "roadHours": {
                     "type": "number"
+                }
+            }
+        },
+        "dto.StartDTO": {
+            "type": "object",
+            "properties": {
+                "programmingID": {
+                    "type": "integer"
                 }
             }
         },

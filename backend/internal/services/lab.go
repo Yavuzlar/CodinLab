@@ -167,15 +167,13 @@ func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugag
 	programmingLangugages, _ := s.parserService.GetInventory()
 
 	for _, pl := range programmingLangugages {
-		allLabs, _ := s.GetLabsFilter(userID, "", fmt.Sprint(pl.ID), nil, nil)
+		allLabs, _ := s.GetLabsFilter(userID, fmt.Sprint(pl.ID), "", nil, nil)
 		completedLabs := 0
-
 		for _, lab := range allLabs {
 			if lab.GetIsStarted() && lab.GetIsFinished() {
 				completedLabs++
 			}
 		}
-
 		var completionRate float32
 		if len(allLabs) > 0 {
 			completionRate = float32((float32(completedLabs) / float32(len(allLabs))) * 100)
@@ -184,6 +182,7 @@ func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugag
 		}
 
 		programmingLanguageStat := domains.NewProgrammingLanguageStats(
+			pl.ID,
 			pl.Name,
 			pl.IconPath,
 			len(allLabs),
