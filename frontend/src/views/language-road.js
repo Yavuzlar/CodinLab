@@ -42,7 +42,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [template, setTemplate] = useState("");
 
   useEffect(() => {
-    setProgrammingId(getProgrammingId[language]);
+    setProgrammingId(language);
   }, [language]);
 
   useEffect(() => {
