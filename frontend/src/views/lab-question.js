@@ -137,7 +137,7 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const _language = language.toUpperCase();
 
-  const programmingID = getProgrammingId[language];
+  const programmingID = language;
 
 
   const apiData = {

@@ -102,13 +102,7 @@ const LabInfo = ({ programingId }) => {
                 // this router sistem will be changed to the following cuse this is not true.
                 // this is the try to solve the problem of the router.
                 // router.push(`/labs/${programingId}/${lab.id}`);
-                if(programingId === "1"){
-                  router.push(`/labs/c++/${lab.id}`);
-                }else if(programingId === "2"){
-                  router.push(`/labs/go/${lab.id}`);
-                }else if(programingId === "3"){
-                  router.push(`/labs/python/${lab.id}`);
-                }
+              router.push(`/labs/${programingId}/${lab.id}`);
               }
               }
             >
