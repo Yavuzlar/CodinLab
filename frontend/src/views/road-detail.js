@@ -56,7 +56,7 @@ const RoadDetails = ({ language = "" }) => {
   };
 
   useEffect(() => {
-    setProgrammingId(getProgrammingId[language]);
+    setProgrammingId(language);
   }, [language]);
 
   useEffect(() => {

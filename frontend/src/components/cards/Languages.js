@@ -19,12 +19,12 @@ const Languages = ({ language }) => {
   const router = useRouter();
 
 
-  const goToRoads = (name) => {
-    router.push(`/roads/${name}`);
+  const goToRoads = (id) => {
+    router.push(`/roads/${id}`);
   };
 
-  const goToLabs = (name) => {
-    router.push(`/labs/${name}`);
+  const goToLabs = (id) => {
+    router.push(`/labs/${id}`);
   };
 
   return (
@@ -112,7 +112,7 @@ const Languages = ({ language }) => {
         }}
       > */}
       <Button
-        onClick={()=> goToRoads(language.name.toLowerCase())}
+        onClick={()=> goToRoads(language.id)}
         className="RoadsButton"
         variant="dark"
         color="primary"
@@ -141,7 +141,7 @@ const Languages = ({ language }) => {
       </Button>
 
       <Button
-      onClick={()=> goToLabs(language.name.toLowerCase())}
+      onClick={()=> goToLabs(language.id)}
         className="LabsButton"
         variant="dark"
         sx={{
