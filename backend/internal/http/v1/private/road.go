@@ -75,7 +75,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -134,7 +134,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -151,8 +151,14 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
+	var conn *websocket.Conn
+	for c, ok := range h.clients {
+		if c.GetUserID().String() == userSession.UserID && ok {
+			conn = c.GetConnection()
+			break
+		}
+	}
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension(), conn)
 	if err != nil {
 		return err
 	}
@@ -235,7 +241,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	programmingInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -313,7 +319,7 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 
 	userSession := session_store.GetSessionData(c)
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -328,7 +334,7 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension(), nil)
 	if err != nil {
 		return err
 	}

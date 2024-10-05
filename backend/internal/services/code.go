@@ -19,13 +19,13 @@ import (
 
 type codeService struct {
 	dockerSDK      docker.IDockerSDK
-	labRoadService domains.ILabRoadService
+	labRoadService domains.ICommonService
 	labService     domains.ILabService
 	roadService    domains.IRoadService
 }
 
 func newCodeService(
-	labRoadService domains.ILabRoadService,
+	labRoadService domains.ICommonService,
 	labService domains.ILabService,
 	roadService domains.IRoadService,
 ) domains.ICodeService {
@@ -342,7 +342,7 @@ func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName strin
 	return frontend, nil
 }
 
-func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string) (string, error) {
+func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string, conn *websocket.Conn) (string, error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
@@ -351,6 +351,20 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 	intLabPathID, err := strconv.Atoi(labPathID)
 	if err != nil {
 		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+	}
+
+	if conn != nil {
+		var req domains.UserCodeRequest
+		errSocket := conn.ReadJSON(&req)
+		if errSocket != nil {
+			return "", errSocket
+		}
+		codePath := s.generateUserCodePath(userID, labRoadType, intProgrammingID, intLabPathID, fileExtention)
+		if _, err := os.Stat(codePath); err == nil {
+			if err := file.CreateFileAndWrite(codePath, req.UserCode); err != nil {
+				return "", err
+			}
+		}
 	}
 
 	var frontendTemplate string

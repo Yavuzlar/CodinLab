@@ -15,7 +15,12 @@ type ICodeService interface {
 	CreateFileAndWrite(filePath, content string) (err error)
 	CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []Test) (string, error)
 	CodeFrontendTemplateGenerator(templatePath, funcName string) (string, error)
-	GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string) (string, error)
+	GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string, conn *websocket.Conn) (string, error)
 	DeleteFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention string) (err error)
 	StopContainer(ctx context.Context, containerID string) error
+}
+
+type UserCodeRequest struct {
+	Type     string
+	UserCode string `json:"userCode"`
 }

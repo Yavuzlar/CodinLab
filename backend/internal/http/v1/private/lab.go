@@ -94,7 +94,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -152,7 +152,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	programmingID := c.Query("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -169,8 +169,15 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	var conn *websocket.Conn
+	for c, ok := range h.clients {
+		if c.GetUserID().String() == userSession.UserID && ok {
+			conn = c.GetConnection()
+			break
+		}
+	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), conn)
 	if err != nil {
 		return err
 	}
@@ -211,7 +218,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -282,7 +289,7 @@ func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 
 	userSession := session_store.GetSessionData(c)
 
-	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	programmingInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -297,7 +304,7 @@ func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension(), nil)
 	if err != nil {
 		return err
 	}
