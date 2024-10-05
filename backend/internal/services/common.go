@@ -7,19 +7,19 @@ import (
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 )
 
-type labRoadService struct {
+type commonService struct {
 	parserService domains.IParserService
 }
 
-func newLabRoadService(
+func newCommonService(
 	parserService domains.IParserService,
-) domains.ILabRoadService {
-	return &labRoadService{
+) domains.ICommonService {
+	return &commonService{
 		parserService: parserService,
 	}
 }
 
-func (s *labRoadService) GetInventoryInformation(programmingID, language string) (inventoryInformation *domains.InventoryInformation, err error) {
+func (s *commonService) GetInventoryInformation(programmingID, language string) (inventoryInformation *domains.InventoryInformation, err error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")

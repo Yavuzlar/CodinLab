@@ -151,14 +151,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	var conn *websocket.Conn
-	for c, ok := range h.clients {
-		if c.GetUserID().String() == userSession.UserID && ok {
-			conn = c.GetConnection()
-			break
-		}
-	}
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension(), conn)
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}
@@ -246,7 +239,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
+	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
 	if err != nil {
 		return err
 	}
@@ -334,7 +327,7 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension(), nil)
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return err
 	}

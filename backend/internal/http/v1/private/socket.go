@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 )
@@ -30,16 +31,16 @@ func (h *PrivateHandler) handleWebSocketConnection(c *fiber.Ctx) error {
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /private/socket/ws [get]
 func (h *PrivateHandler) handleWebSocket(c *websocket.Conn) {
-	/* 	user := c.Locals("user")
-	   	if user == nil {
-	   		return
-	   	}
-	   	session_data, ok := user.(session_store.SessionData)
-	   	if !ok {
-	   		return
-	   	}
-	   	userID := session_data.UserID */
-	userID := "b05ca195-c0a9-4ac9-905d-2409962b26bd" // This is for test
+	user := c.Locals("user")
+	if user == nil {
+		return
+	}
+	session_data, ok := user.(session_store.SessionData)
+	if !ok {
+		return
+	}
+	userID := session_data.UserID
+	//userID := "b05ca195-c0a9-4ac9-905d-2409962b26bd" // This is for test
 
 	newClient, err := domains.NewClient(userID, c)
 	if err != nil {
@@ -63,9 +64,22 @@ func (h *PrivateHandler) handleWebSocket(c *websocket.Conn) {
 
 	log.Printf("New WebSocket Connection: %s", userID)
 	for {
-		_, _, err := c.ReadMessage()
+		_, messages, err := c.ReadMessage()
 		if err != nil {
 			break
 		}
+		if err = h.services.CodeService.SaveUserHistory(c, messages, userID); err != nil {
+			c.WriteJSON(domains.Response{
+				Type: "close",
+				Data: struct {
+					Status  int    `json:"status"`
+					Message string `json:"message"`
+				}{
+					Status:  400,
+					Message: err.Error(),
+				},
+			})
+		}
+
 	}
 }

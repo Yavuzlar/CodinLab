@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"regexp"
@@ -18,14 +19,14 @@ import (
 )
 
 type codeService struct {
-	dockerSDK      docker.IDockerSDK
-	labRoadService domains.ICommonService
-	labService     domains.ILabService
-	roadService    domains.IRoadService
+	dockerSDK     docker.IDockerSDK
+	commonService domains.ICommonService
+	labService    domains.ILabService
+	roadService   domains.IRoadService
 }
 
 func newCodeService(
-	labRoadService domains.ICommonService,
+	commonService domains.ICommonService,
 	labService domains.ILabService,
 	roadService domains.IRoadService,
 ) domains.ICodeService {
@@ -35,10 +36,10 @@ func newCodeService(
 	}
 
 	return &codeService{
-		dockerSDK:      dockerSDK,
-		labRoadService: labRoadService,
-		labService:     labService,
-		roadService:    roadService,
+		dockerSDK:     dockerSDK,
+		commonService: commonService,
+		labService:    labService,
+		roadService:   roadService,
 	}
 }
 
@@ -239,8 +240,7 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 	return logs, nil
 }
 
-// Bunu Answer Kısmınlarında Kullanacaksın.
-func (s *codeService) UploadUserCode(ctx context.Context, userID, programmingID, labPathID string, codeType, fileExtention, content string) (string, error) {
+func (s *codeService) UploadUserCode(userID, programmingID, labPathID, codeType, fileExtention, content string) (string, error) {
 	if err := s.createCodeFile(userID); err != nil {
 		return "", err
 	}
@@ -342,7 +342,7 @@ func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName strin
 	return frontend, nil
 }
 
-func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string, conn *websocket.Conn) (string, error) {
+func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string) (string, error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
@@ -351,20 +351,6 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 	intLabPathID, err := strconv.Atoi(labPathID)
 	if err != nil {
 		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
-	}
-
-	if conn != nil {
-		var req domains.UserCodeRequest
-		errSocket := conn.ReadJSON(&req)
-		if errSocket != nil {
-			return "", errSocket
-		}
-		codePath := s.generateUserCodePath(userID, labRoadType, intProgrammingID, intLabPathID, fileExtention)
-		if _, err := os.Stat(codePath); err == nil {
-			if err := file.CreateFileAndWrite(codePath, req.UserCode); err != nil {
-				return "", err
-			}
-		}
 	}
 
 	var frontendTemplate string
@@ -687,4 +673,49 @@ func (s *codeService) generateUserCodeTmpPath(userID, labRoadType string, progra
 	}
 
 	return codeTmpPath
+}
+
+func (s *codeService) SaveUserHistory(conn *websocket.Conn, messages []byte, userID string) error {
+	var req domains.UserCodeRequest
+	err := json.Unmarshal(messages, &req)
+	if err != nil {
+		return err
+	}
+	if conn != nil {
+		if req.Type == "close" {
+			stringProgrammingID := strconv.Itoa(int(req.Data.ProgrammingID))
+			stringLabPathID := strconv.Itoa(int(req.Data.LabPathID))
+			programmingInformation, err := s.commonService.GetInventoryInformation(stringProgrammingID, "")
+			if err != nil {
+				return err
+			}
+
+			if strings.EqualFold(req.Data.LabPathType, domains.TypeLab) {
+				req.Data.LabPathType = domains.TypeLab
+			} else if strings.EqualFold(req.Data.LabPathType, domains.TypePath) {
+				req.Data.LabPathType = domains.TypePath
+			} else {
+				return service_errors.NewServiceErrorWithMessage(400, "invalid type")
+			}
+
+			if _, err := s.UploadUserCode(userID, stringProgrammingID, stringLabPathID, req.Data.LabPathType, programmingInformation.GetFileExtension(), req.Data.UserCode); err != nil {
+				return err
+			}
+
+		}
+	}
+	errSocket := conn.WriteJSON(domains.Response{
+		Type: "close",
+		Data: struct {
+			Status  int    `json:"status"`
+			Message string `json:"message"`
+		}{
+			Status:  200,
+			Message: "History Saved Successfully",
+		},
+	})
+	if errSocket != nil {
+		return errSocket
+	}
+	return nil
 }
