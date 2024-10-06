@@ -1,6 +1,6 @@
 package domains
 
-type ILabRoadService interface {
+type ICommonService interface {
 	GetInventoryInformation(programmingID, language string) (inventories *InventoryInformation, err error)
 }
 

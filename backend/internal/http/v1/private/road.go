@@ -75,7 +75,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -134,7 +134,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -151,7 +151,6 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
 	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
 	if err != nil {
 		return err
@@ -235,12 +234,12 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	programmingInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
+	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
 	if err != nil {
 		return err
 	}
@@ -313,7 +312,7 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 
 	userSession := session_store.GetSessionData(c)
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}

@@ -40,7 +40,7 @@ func (h *PrivateHandler) handleWebSocket(c *websocket.Conn) {
 		return
 	}
 	userID := session_data.UserID
-	// userID := "b05ca195-c0a9-4ac9-905d-2409962b26bd" // This is for test
+	//userID := "b05ca195-c0a9-4ac9-905d-2409962b26bd" // This is for test
 
 	newClient, err := domains.NewClient(userID, c)
 	if err != nil {
@@ -64,9 +64,22 @@ func (h *PrivateHandler) handleWebSocket(c *websocket.Conn) {
 
 	log.Printf("New WebSocket Connection: %s", userID)
 	for {
-		_, _, err := c.ReadMessage()
+		_, messages, err := c.ReadMessage()
 		if err != nil {
 			break
 		}
+		if err = h.services.CodeService.SaveUserHistory(c, messages, userID); err != nil {
+			c.WriteJSON(domains.Response{
+				Type: "close",
+				Data: struct {
+					Status  int    `json:"status"`
+					Message string `json:"message"`
+				}{
+					Status:  400,
+					Message: err.Error(),
+				},
+			})
+		}
+
 	}
 }

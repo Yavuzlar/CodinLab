@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine3.19 as builder
+FROM golang:1.23-alpine3.19 AS builder
 RUN mkdir /app
 WORKDIR /app
 ENV CGO_ENABLED=1

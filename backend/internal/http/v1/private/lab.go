@@ -94,7 +94,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -152,7 +152,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	programmingID := c.Query("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -211,7 +211,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
@@ -221,7 +221,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(c.Context(), userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
+	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
 	if err != nil {
 		return err
 	}
@@ -282,7 +282,7 @@ func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 
 	userSession := session_store.GetSessionData(c)
 
-	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
+	programmingInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
