@@ -70,6 +70,12 @@ const Register = () => {
     } catch (error) {}
   };
 
+  addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  });
+
   useEffect(() => {
     const validate = async () => {
       if (formSubmit) {
