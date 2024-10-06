@@ -9,7 +9,7 @@ import {
   IconButton,
   InputAdornment,
   Grid,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import Translations from "src/components/Translations";
@@ -39,6 +39,12 @@ const Login = () => {
   const [visiblePasswordLabel, setVisiblePasswordLabel] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
+  // enter tuşu ile login olma
+  addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  });
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   // const handleMouseDownPassword = (event) => {
@@ -78,8 +84,7 @@ const Login = () => {
     // Call API
     try {
       await login(formData);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const goRegisterPage = () => {
