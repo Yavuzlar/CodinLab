@@ -2,11 +2,11 @@
 
 ## Table of Contents
 
-- [About CODINLAB](#about-codinlab)
+- [What is CODINLAB?](#what-is-codinlab)
+- [Features](#features)
+- [Installation](#installation)
 - [Roadmaps](#roadmaps)
 - [Labs](#labs)
-- [Getting Started](#getting-started)
-  - [Installation](#installation)
 - [Contributing](#contributing)
 
 ## What is CODINLAB?
