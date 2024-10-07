@@ -1,4 +1,4 @@
-# ![](https://github.com/codinlab/codinlab/blob/master/static/img/logo.png?raw=true)
+# ![](https://github.com/Yavuzlar/CodinLab/blob/main/frontend/src/assets/logo/codinlab-logo-main.png?raw=true)
 
 ## What is CODINLAB?
 
