@@ -1,5 +1,14 @@
 <img src="https://github.com/Yavuzlar/CodinLab/blob/main/frontend/src/assets/logo/codinlab-logo-main.png?raw=true" alt="CodinLab Logo" width="300" height="450">
 
+## Table of Contents
+
+- [About CODINLAB](#about-codinlab)
+- [Roadmaps](#roadmaps)
+- [Labs](#labs)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+- [Contributing](#contributing)
+
 ## What is CODINLAB?
 
 CODINLAB is an **open-source software lab** designed to help users learn programming from scratch. Developed with **Golang** as the backend and **React.js** for the frontend, CODINLAB provides comprehensive **roadmaps** and **hands-on labs** that allow users to grasp the syntax and structure of various programming languages, along with a focus on specific topics within those languages. 
