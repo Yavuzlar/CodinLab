@@ -79,7 +79,7 @@ CODINLAB provides two types of labs:
 
 ## Contributing
 
-We welcome contributions from the community! Whether you want to add new roadmaps, develop labs, or fix bugs, your efforts are invaluable. Check out our [Contributing Guide](CONTRIBUTING.md) for more details on how to get involved.
+We welcome contributions from the community! Whether you want to add new roadmaps, develop labs, or fix bugs, your efforts are invaluable. 
 
 ---
 
