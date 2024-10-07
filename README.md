@@ -42,7 +42,7 @@ To run CODINLAB locally, follow these steps:
 
     ```bash
     git clone https://github.com/codinlab/codinlab.git
-    cd codinlab
+    cd codinlab/docker
     ```
 
 2. Use Docker Compose to launch the application:
