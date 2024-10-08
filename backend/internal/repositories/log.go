@@ -27,31 +27,30 @@ type dbModelLogs struct {
 
 // lab and road numbers solved day by day
 type dbModelSolutionsByDay struct {
-	Date      string `db:"date"`
-	RoadCount int    `db:"road_count"`
-	LabCount  int    `db:"lab_count"`
+	Date  string `db:"date"`
+	Count int    `db:"count"`
 }
 
-// SolutionsHoursByLanguage represents the total hours spent on lab and road solutions for each language.
-type dbModelSolutionsHoursByProgrammingLanguage struct {
-	ProgrammingID  int32   `db:"programming_id"`
-	TotalLabHours  float64 `db:"total_lab_hours"`
-	TotalRoadHours float64 `db:"total_road_hours"`
+// SolutionsByLanguage represents the total count from lab and road solutions for each language.
+type dbModelSolutionsByProgrammingLanguage struct {
+	ProgrammingID  int32 `db:"programming_id"`
+	TotalLabCount  int   `db:"total_lab_count"`
+	TotalRoadCount int   `db:"total_road_count"`
 }
 
 func (r *LogRepository) dbModelSolutionsByDayToAppModel(dbModelSolutionsByDay dbModelSolutionsByDay) (solutionsByDay domains.SolutionsByDay) {
 	date, _ := time.Parse("2006-01-02", dbModelSolutionsByDay.Date)
 
 	solutionsByDay.SetDate(date)
-	solutionsByDay.SetRoadCount(dbModelSolutionsByDay.RoadCount)
-	solutionsByDay.SetLabCount(dbModelSolutionsByDay.LabCount)
+	solutionsByDay.SetCount(dbModelSolutionsByDay.Count)
+	solutionsByDay.SetLevel(0)
 	return
 }
 
-func (r *LogRepository) dbModelSolutionsHoursToAppModel(dbModel dbModelSolutionsHoursByProgrammingLanguage) (appModel domains.SolutionsHoursByProgramming) {
-	appModel.SetLabHours(dbModel.TotalLabHours)
+func (r *LogRepository) dbModelSolutionsCountToAppModel(dbModel dbModelSolutionsByProgrammingLanguage) (appModel domains.SolutionsByProgramming) {
+	appModel.SetLabCount(dbModel.TotalLabCount)
 	appModel.SetProgrammingID(dbModel.ProgrammingID)
-	appModel.SetRoadHours(dbModel.TotalRoadHours)
+	appModel.SetRoadCount(dbModel.TotalRoadCount)
 	return
 }
 
@@ -227,25 +226,25 @@ func (r *LogRepository) IsExists(ctx context.Context, log *domains.Log) (exists 
 }
 
 // CountSolutionsByDay counts the number of lab and road solutions completed each day.
-func (r *LogRepository) CountSolutionsByDay(ctx context.Context) (solutions []domains.SolutionsByDay, err error) {
+func (r *LogRepository) CountSolutionsByDay(ctx context.Context, year string) (solutions []domains.SolutionsByDay, err error) {
 	var dbModelSolutions []dbModelSolutionsByDay
 
 	query := `
-    SELECT 
-        DATE(created_at) AS date,
-        SUM(CASE WHEN type = 'Path' AND content = 'Completed' THEN 1 ELSE 0 END) AS road_count,
-        SUM(CASE WHEN type = 'Lab' AND content = 'Completed' THEN 1 ELSE 0 END) AS lab_count
-    FROM 
-        t_logs
-    WHERE
-        content = 'Completed'
-    GROUP BY 
-        DATE(created_at)
-    ORDER BY 
-        DATE(created_at) DESC
-    `
+	SELECT 
+		DATE(created_at) AS date,
+		SUM(CASE WHEN type = 'Lab' AND content = 'Completed' THEN 1 ELSE 0 END) AS count
+	FROM 
+		t_logs
+	WHERE
+		content = 'Completed'
+		AND strftime('%Y', created_at) = ?
+	GROUP BY 
+		DATE(created_at)
+	ORDER BY 
+		DATE(created_at) DESC
+	`
 
-	err = r.db.SelectContext(ctx, &dbModelSolutions, query)
+	err = r.db.SelectContext(ctx, &dbModelSolutions, query, year)
 	if err != nil {
 		return nil, err
 	}
@@ -257,42 +256,42 @@ func (r *LogRepository) CountSolutionsByDay(ctx context.Context) (solutions []do
 	return solutions, nil
 }
 
-// CountSolutionsHoursByLanguageLast7Days counts the total hours spent on lab and road solutions in the last 7 days for each language.
-func (r *LogRepository) CountSolutionsHoursByProgrammingLast7Days(ctx context.Context) (solutionsHours []domains.SolutionsHoursByProgramming, err error) {
+// CountSolutionsByLanguageLast7Days counts the solved lab and road solutions in the last 7 days for each language.
+func (r *LogRepository) CountSolutionsByProgrammingLast7Days(ctx context.Context) (solutionsCount []domains.SolutionsByProgramming, err error) {
 	query := `
-	SELECT
-		l1.programming_id,
-		SUM(CASE WHEN l1.type = 'Lab' THEN (JULIANDAY(l2.created_at) - JULIANDAY(l1.created_at)) * 24 ELSE 0 END) AS total_lab_hours,
-		SUM(CASE WHEN l1.type = 'Path' THEN (JULIANDAY(l2.created_at) - JULIANDAY(l1.created_at)) * 24 ELSE 0 END) AS total_road_hours
-	FROM
-		t_logs l1
-	JOIN
-		t_logs l2 ON l1.user_id = l2.user_id
-	             AND l1.programming_id = l2.programming_id
-	             AND l1.lab_path_id = l2.lab_path_id
-	             AND l1.type = l2.type
-	             AND l1.content = 'Started'
-	             AND l2.content = 'Completed'
-	             AND l1.created_at < l2.created_at
-	WHERE
-		l1.type IN ('Path', 'Lab')
-		AND l1.created_at >= DATE('now', '-7 days')
-	GROUP BY
-		l1.programming_id
-	`
+    SELECT
+        l1.programming_id,
+        COUNT(CASE WHEN l1.type = 'Lab' THEN 1 ELSE NULL END) AS total_lab_count,
+        COUNT(CASE WHEN l1.type = 'Path' THEN 1 ELSE NULL END) AS total_road_count
+    FROM
+        t_logs l1
+    JOIN
+        t_logs l2 ON l1.user_id = l2.user_id
+                 AND l1.programming_id = l2.programming_id
+                 AND l1.lab_path_id = l2.lab_path_id
+                 AND l1.type = l2.type
+                 AND l1.content = 'Started'
+                 AND l2.content = 'Completed'
+                 AND l1.created_at < l2.created_at
+    WHERE
+        l1.type IN ('Path', 'Lab')
+        AND l1.created_at >= DATE('now', '-7 days')
+    GROUP BY
+        l1.programming_id
+`
 
-	var dbModelSolutionsHours []dbModelSolutionsHoursByProgrammingLanguage
+	var dbModelSolutionsCount []dbModelSolutionsByProgrammingLanguage
 
-	err = r.db.SelectContext(ctx, &dbModelSolutionsHours, query)
+	err = r.db.SelectContext(ctx, &dbModelSolutionsCount, query)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, result := range dbModelSolutionsHours {
-		solutionsHours = append(solutionsHours, r.dbModelSolutionsHoursToAppModel(result))
+	for _, result := range dbModelSolutionsCount {
+		solutionsCount = append(solutionsCount, r.dbModelSolutionsCountToAppModel(result))
 	}
 
-	return solutionsHours, nil
+	return solutionsCount, nil
 }
 
 func canMultipleLogExists(logType string) bool {

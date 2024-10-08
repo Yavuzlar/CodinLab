@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -193,19 +194,45 @@ func (l *logService) IsExists(ctx context.Context, userID, programmingID, labPat
 	return
 }
 
-func (l *logService) CountSolutionsByDay(ctx context.Context) (solutions []domains.SolutionsByDay, err error) {
-	solutions, err = l.logRepositories.CountSolutionsByDay(ctx)
+func (l *logService) CountSolutionsByDay(ctx context.Context, year string) (solutions *[]domains.SolutionsByDay, err error) {
+	*solutions, err = l.logRepositories.CountSolutionsByDay(ctx, year)
 	if err != nil {
 		return nil, err
 	}
 
-	return solutions, err
+	if len(*solutions) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(404, fmt.Sprintf("Activities not found in %s ", year))
+	}
+	for _, s := range *solutions { //Checks the count to specify a level (from low to high solve rate).
+		switch {
+		case s.GetCount() <= 3:
+			s.SetLevel(1)
+
+		case s.GetCount() <= 6:
+			s.SetLevel(2)
+
+		case s.GetCount() <= 9:
+			s.SetLevel(3)
+
+		case s.GetCount() <= 12:
+			s.SetLevel(4)
+
+		case s.GetCount() >= 13:
+			s.SetLevel(5)
+		}
+	}
+
+	return
 }
 
-func (l *logService) CountSolutionsHoursByProgrammingLast7Days(ctx context.Context) (solutions []domains.SolutionsHoursByProgramming, err error) {
-	solutions, err = l.logRepositories.CountSolutionsHoursByProgrammingLast7Days(ctx)
+func (l *logService) CountSolutionsByProgrammingLast7Days(ctx context.Context) (solutions []domains.SolutionsByProgramming, err error) {
+	solutions, err = l.logRepositories.CountSolutionsByProgrammingLast7Days(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(solutions) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(404, "Soulutions not found ")
 	}
 
 	return solutions, err
