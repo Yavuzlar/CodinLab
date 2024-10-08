@@ -1,8 +1,8 @@
 import { Box, createTheme, ThemeProvider, Typography } from "@mui/material";
 import CircularProgress, {
-  circularProgressClasses
+  circularProgressClasses,
 } from "@mui/material/CircularProgress";
-import CircleIcon from '@mui/icons-material/Circle';
+import CircleIcon from "@mui/icons-material/Circle";
 /*
 Takes an array of object to shown as a prop.
 progresses = [
@@ -14,8 +14,7 @@ progresses = [
 ]
 */
 
-export const CircularProgressStatistics = ({ progresses }) => {
-
+export const CircularProgressStatistics = ({ progresses, flexDirection }) => {
   if (!progresses) {
     return (
       <Box>
@@ -156,22 +155,34 @@ export const CircularProgressStatistics = ({ progresses }) => {
           )}
         </Box>
       </ThemeProvider>
-    )
-  }
+    );
+  };
 
   return (
-    <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", gap: 3}}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 2,
+        flexDirection: { flexDirection },
+      }}
+    >
+      <CircularProgressNoNames progresses={progresses} />
 
-    <CircularProgressNoNames progresses={progresses} />
-
-    <Box sx={{display: "flex", flexDirection: "column", gap: 2}}>
-      {progresses.map((progress, index) => (
-        <Box sx={{display: "flex", gap: 2, alignItems: "center"}} key={index}>
-            <CircleIcon sx={{color: progress.color ? progress.color : "#0A3B7A"}} />
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        {progresses.map((progress, index) => (
+          <Box
+            sx={{ display: "flex", gap: 1, alignItems: "center" }}
+            key={index}
+          >
+            <CircleIcon
+              sx={{ color: progress.color ? progress.color : "#0A3B7A" }}
+            />
             <Typography variant="body1">{progress.name}</Typography>
             <Typography variant="body1">%{progress.value}</Typography>
-        </Box>
-      ))}
+          </Box>
+        ))}
       </Box>
     </Box>
   );
