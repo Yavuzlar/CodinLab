@@ -133,7 +133,6 @@ func (l *logService) GetByProgrammingID(ctx context.Context, programmingID strin
 
 // Adds log
 func (l *logService) Add(ctx context.Context, userID, programmingID, labPathID, logType, content string) error {
-	// Error Control
 	var err error
 	var intProgrammingID, intLabPathID int
 	if programmingID != "" {
@@ -193,19 +192,45 @@ func (l *logService) IsExists(ctx context.Context, userID, programmingID, labPat
 	return
 }
 
-func (l *logService) CountSolutionsByDay(ctx context.Context) (solutions []domains.SolutionsByDay, err error) {
-	solutions, err = l.logRepositories.CountSolutionsByDay(ctx)
+func (l *logService) CountSolutionsByDay(ctx context.Context, year string) (solutionsByDay []domains.SolutionsByDay, err error) {
+	solutions, err := l.logRepositories.CountSolutionsByDay(ctx, year)
 	if err != nil {
 		return nil, err
 	}
 
-	return solutions, err
+	if len(solutions) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrActivityNotFound)
+	}
+	for _, s := range solutions { //Checks the count to specify a level (from low to high solve rate)
+		switch {
+		case s.GetCount() <= domains.Low:
+			s.SetLevel(1)
+
+		case s.GetCount() <= domains.LowMid:
+			s.SetLevel(2)
+
+		case s.GetCount() <= domains.Middle:
+			s.SetLevel(3)
+
+		case s.GetCount() <= domains.MidHigh:
+			s.SetLevel(4)
+
+		case s.GetCount() >= domains.High:
+			s.SetLevel(5)
+		}
+		solutionsByDay = append(solutionsByDay, s)
+	}
+
+	return solutionsByDay, nil
 }
 
-func (l *logService) CountSolutionsHoursByProgrammingLast7Days(ctx context.Context) (solutions []domains.SolutionsHoursByProgramming, err error) {
-	solutions, err = l.logRepositories.CountSolutionsHoursByProgrammingLast7Days(ctx)
+func (l *logService) CountSolutionsByProgrammingLast7Days(ctx context.Context) (solutions []domains.SolutionsByProgramming, err error) {
+	solutions, err = l.logRepositories.CountSolutionsByProgrammingLast7Days(ctx)
 	if err != nil {
 		return nil, err
+	}
+	if len(solutions) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrSolutionsNotFound)
 	}
 
 	return solutions, err

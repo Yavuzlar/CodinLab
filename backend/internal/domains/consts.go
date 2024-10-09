@@ -32,6 +32,8 @@ const (
 	ErrUserCodeNotFound            = "ERR_USERCODE_NOT_FOUND"
 	ErrTemplateNotFound            = "ERR_TEMPLATE_NOT_FOUND"
 	ErrRoadNotFound                = "ERR_ROAD_NOT_FOUND"
+	ErrSolutionsNotFound           = "ERR_SOLUTIONS_NOT_FOUND"
+	ErrActivityNotFound            = "ERR_ACTIVITY_NOT_FOUND"
 )
 
 // 500
@@ -74,4 +76,13 @@ var (
 	ContentCompleted = "Completed"
 	ContentProfile   = "Profile Updated"
 	ContentLevelUp   = "Level Up"
+)
+
+//Solve Rates
+var (
+	Low     = 3  //max -level1
+	LowMid  = 6  //max -level2
+	Middle  = 12 //max -level3
+	MidHigh = 9  //max -level4
+	High    = 13 //min -level5
 )

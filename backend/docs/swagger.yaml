@@ -134,21 +134,23 @@ definitions:
     type: object
   dto.SolutionsByDayDTO:
     properties:
+      count:
+        type: integer
       date:
         type: string
+      level:
+        type: integer
+    type: object
+  dto.SolutionsByProgrammingDTO:
+    properties:
       labCount:
+        type: integer
+      programmingID:
         type: integer
       roadCount:
         type: integer
-    type: object
-  dto.SolutionsHoursByProgrammingDTO:
-    properties:
-      labHours:
-        type: number
-      programmingID:
+      totalCount:
         type: integer
-      roadHours:
-        type: number
     type: object
   dto.StartDTO:
     properties:
@@ -649,11 +651,17 @@ paths:
       summary: DummyLogData
       tags:
       - Log
-  /private/log/solution/byday:
+  /private/log/solution/byday/{year}:
     get:
       consumes:
       - application/json
       description: Retrieves the number of lab and road solutions solved day by day.
+      parameters:
+      - description: Desired Year
+        in: path
+        name: year
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -671,11 +679,11 @@ paths:
       summary: GetSolutionsByDay
       tags:
       - Log
-  /private/log/solution/hours:
+  /private/log/solution/week:
     get:
       consumes:
       - application/json
-      description: Retrieves the total hours spent on lab and road solutions for each
+      description: Retrieves the total counts for lab and road solutions for each
         programming language in the last week.
       produces:
       - application/json
@@ -688,10 +696,10 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/dto.SolutionsHoursByProgrammingDTO'
+                    $ref: '#/definitions/dto.SolutionsByProgrammingDTO'
                   type: array
               type: object
-      summary: GetSolutionsHoursByProgramming
+      summary: GetSolutionsByProgramming
       tags:
       - Log
   /private/road/{programmingID}:

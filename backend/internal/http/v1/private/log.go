@@ -8,12 +8,13 @@ import (
 )
 
 func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
-	root.Get("/log", h.GetAllLogs)
-	root.Get("/log/solution/byday", h.GetSolutionsByDay)
-	root.Get("/log/solution/hours", h.GetSolutionsHoursByProgramming)
-	root.Get("/log/lab", h.AddDummyLabData)
-	root.Get("/log/road", h.AddDummyRoadData)
-	root.Get("/log/rates", h.LanguageUsageRates)
+	logRoutes := root.Group("/log")
+	logRoutes.Get("/", h.GetAllLogs)
+	logRoutes.Get("/solution/byday/:year", h.GetSolutionsByDay)
+	logRoutes.Get("/solution/week", h.GetSolutionsByProgramming)
+	logRoutes.Get("/lab", h.AddDummyLabData)
+	logRoutes.Get("/road", h.AddDummyRoadData)
+	logRoutes.Get("/rates", h.LanguageUsageRates)
 }
 
 // @Tags Log
@@ -49,10 +50,12 @@ func (h *PrivateHandler) GetAllLogs(c *fiber.Ctx) error {
 // @Description Retrieves the number of lab and road solutions solved day by day.
 // @Accept json
 // @Produce json
+// @Param year path string true "Desired Year"
 // @Success 200 {object} response.BaseResponse{data=[]dto.SolutionsByDayDTO}
-// @Router /private/log/solution/byday [get]
+// @Router /private/log/solution/byday/{year} [get]
 func (h *PrivateHandler) GetSolutionsByDay(c *fiber.Ctx) error {
-	solutionsByDay, err := h.services.LogService.CountSolutionsByDay(c.Context())
+	year := c.Params("year")
+	solutionsByDay, err := h.services.LogService.CountSolutionsByDay(c.Context(), year)
 	if err != nil {
 		return err
 	}
@@ -62,20 +65,20 @@ func (h *PrivateHandler) GetSolutionsByDay(c *fiber.Ctx) error {
 }
 
 // @Tags Log
-// @Summary GetSolutionsHoursByProgramming
-// @Description Retrieves the total hours spent on lab and road solutions for each programming language in the last week.
+// @Summary GetSolutionsByProgramming
+// @Description Retrieves the total counts for lab and road solutions for each programming language in the last week.
 // @Accept json
 // @Produce json
-// @Success 200 {object} response.BaseResponse{data=[]dto.SolutionsHoursByProgrammingDTO}
-// @Router /private/log/solution/hours [get]
-func (h *PrivateHandler) GetSolutionsHoursByProgramming(c *fiber.Ctx) error {
-	solutionsHours, err := h.services.LogService.CountSolutionsHoursByProgrammingLast7Days(c.Context())
+// @Success 200 {object} response.BaseResponse{data=[]dto.SolutionsByProgrammingDTO}
+// @Router /private/log/solution/week [get]
+func (h *PrivateHandler) GetSolutionsByProgramming(c *fiber.Ctx) error {
+	solutions, err := h.services.LogService.CountSolutionsByProgrammingLast7Days(c.Context())
 	if err != nil {
 		return err
 	}
-	solutionsHoursDTOs := h.dtoManager.LogDTOManager.ToSolutionsHoursByProgrammingDTOs(solutionsHours)
+	solutionsDTOs := h.dtoManager.LogDTOManager.ToSolutionsByProgrammingDTOs(solutions)
 
-	return response.Response(200, "Status OK", solutionsHoursDTOs)
+	return response.Response(200, "Status OK", solutionsDTOs)
 }
 
 // @Tags Log
