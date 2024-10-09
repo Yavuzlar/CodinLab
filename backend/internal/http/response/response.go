@@ -30,6 +30,14 @@ func ResponseHandler(c *fiber.Ctx, err error) error {
 	base := &BaseResponse{}
 	//BaseResponse
 	if errors.As(err, &base) {
+		if base.StatusCode == 500 {
+			return c.Status(500).JSON(
+				&BaseResponse{
+					StatusCode: 500,
+					Message:    "INTERNAL_SERVER_ERROR",
+				},
+			)
+		}
 		return c.Status(err.(*BaseResponse).StatusCode).JSON(err)
 	}
 
@@ -39,7 +47,7 @@ func ResponseHandler(c *fiber.Ctx, err error) error {
 		return c.Status(400).JSON(
 			&BaseResponse{
 				StatusCode: 400,
-				Message:    "validation error",
+				Message:    "VALIDATION_ERROR",
 				Errors:     errs,
 			},
 		)
@@ -48,26 +56,37 @@ func ResponseHandler(c *fiber.Ctx, err error) error {
 	//fiber errors
 	fiberErr := &fiber.Error{}
 	if errors.As(err, &fiberErr) {
-		if fiberErr.Code == 404 {
-			return c.Status(404).JSON(&BaseResponse{
-				StatusCode: 404,
-				Message:    "not found",
-			})
+		if fiberErr.Code == 500 {
+			return c.Status(500).JSON(
+				&BaseResponse{
+					StatusCode: 500,
+					Message:    "INTERNAL_SERVER_ERROR",
+				})
 		} else {
-			return c.Status(err.(*fiber.Error).Code).JSON(&BaseResponse{
-				StatusCode: err.(*fiber.Error).Code,
-				Message:    err.(*fiber.Error).Message,
-			})
+			return c.Status(err.(*fiber.Error).Code).JSON(
+				&BaseResponse{
+					StatusCode: err.(*fiber.Error).Code,
+					Message:    err.(*fiber.Error).Message,
+				})
 		}
 	}
 
 	//service errors
 	serviceErr := &service_errors.ServiceError{}
 	if errors.As(err, &serviceErr) {
-		resp := &BaseResponse{
-			StatusCode: serviceErr.Code,
-			Message:    serviceErr.Message,
+		var resp *BaseResponse
+		if serviceErr.Code == 500 {
+			resp = &BaseResponse{
+				StatusCode: serviceErr.Code,
+				Message:    "INTERNAL_SERVER_ERROR",
+			}
+		} else {
+			resp = &BaseResponse{
+				StatusCode: serviceErr.Code,
+				Message:    serviceErr.Message,
+			}
 		}
+
 		if serviceErr.Error() != "" {
 			resp.Errors = serviceErr.Error()
 		}
@@ -77,7 +96,7 @@ func ResponseHandler(c *fiber.Ctx, err error) error {
 	//unknown errors
 	return c.Status(500).JSON(&BaseResponse{
 		StatusCode: 500,
-		Message:    "Internal Server Error (Unknown)",
+		Message:    "INTERNAL_SERVER_ERROR_UNKNOWN",
 		Errors:     err.Error(),
 	})
 }
