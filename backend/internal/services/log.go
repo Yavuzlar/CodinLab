@@ -33,21 +33,21 @@ func (l *logService) GetAllLogs(ctx context.Context, userID, programmingID, labP
 	if userID != "" {
 		userIDU, err = uuid.Parse(userID)
 		if err != nil {
-			return nil, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+			return nil, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 		}
 	}
 
 	if programmingID != "" {
 		programmingIDInt, err = strconv.Atoi(programmingID)
 		if err != nil {
-			return nil, service_errors.NewServiceErrorWithMessage(400, "invalid language id")
+			return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 		}
 	}
 
 	if labPathID != "" {
 		labPathIDInt, err = strconv.Atoi(labPathID)
 		if err != nil {
-			return nil, service_errors.NewServiceErrorWithMessage(400, "invalid lab or path id")
+			return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabOrPathID)
 		}
 	}
 
@@ -61,7 +61,7 @@ func (l *logService) GetAllLogs(ctx context.Context, userID, programmingID, labP
 
 	logs, _, err = l.logRepositories.Filter(ctx, logFilter)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringLogs, err)
 	}
 
 	return
@@ -70,12 +70,12 @@ func (l *logService) GetAllLogs(ctx context.Context, userID, programmingID, labP
 func (l *logService) GetByID(ctx context.Context, logID string) (log *domains.Log, err error) {
 	logIDU, err := uuid.Parse(logID)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(400, "invalid log id", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidLogID, err)
 	}
 
 	logs, _, err := l.logRepositories.Filter(ctx, domains.LogFilter{ID: logIDU})
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringLogs, err)
 	}
 	log = &logs[0]
 
@@ -85,12 +85,12 @@ func (l *logService) GetByID(ctx context.Context, logID string) (log *domains.Lo
 func (l *logService) GetByUserID(ctx context.Context, userID string) (logs []domains.Log, err error) {
 	userIDU, err := uuid.Parse(userID)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
 	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{UserID: userIDU})
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringLogs, err)
 	}
 
 	return
@@ -100,7 +100,7 @@ func (l *logService) GetByUserID(ctx context.Context, userID string) (logs []dom
 func (l *logService) GetByType(ctx context.Context, logType string) (logs []domains.Log, err error) {
 	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{LType: logType})
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringLogs, err)
 	}
 
 	return
@@ -110,7 +110,7 @@ func (l *logService) GetByType(ctx context.Context, logType string) (logs []doma
 func (l *logService) GetByContent(ctx context.Context, content string) (logs []domains.Log, err error) {
 	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{Content: content})
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringLogs, err)
 	}
 
 	return
@@ -120,12 +120,12 @@ func (l *logService) GetByContent(ctx context.Context, content string) (logs []d
 func (l *logService) GetByProgrammingID(ctx context.Context, programmingID string) (logs []domains.Log, err error) {
 	programmingIDInt, err := strconv.Atoi(programmingID)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid lab or road id")
+		return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabOrPathID)
 	}
 
 	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{ProgrammingID: int32(programmingIDInt)})
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering logs", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringLogs, err)
 	}
 
 	return
@@ -139,14 +139,14 @@ func (l *logService) Add(ctx context.Context, userID, programmingID, labPathID, 
 	if programmingID != "" {
 		intProgrammingID, err = strconv.Atoi(programmingID)
 		if err != nil {
-			return service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+			return service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 		}
 	}
 
 	if labPathID != "" {
 		intLabPathID, err = strconv.Atoi(labPathID)
 		if err != nil {
-			return service_errors.NewServiceErrorWithMessage(400, "Invalid Lab or Path ID")
+			return service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabOrPathID)
 		}
 	}
 
@@ -158,7 +158,7 @@ func (l *logService) Add(ctx context.Context, userID, programmingID, labPathID, 
 
 	// We save the new log to the database
 	if err = l.logRepositories.Add(ctx, newLog); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while adding the log", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrAddingLog, err)
 	}
 
 	return nil
@@ -170,13 +170,13 @@ func (l *logService) IsExists(ctx context.Context, userID, programmingID, labPat
 	if programmingID != "" {
 		intProgrammingID, err = strconv.Atoi(programmingID)
 		if err != nil {
-			return false, service_errors.NewServiceErrorWithMessage(400, "invalid language id")
+			return false, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 		}
 	}
 	if labPathID != "" {
 		intLabPathID, err = strconv.Atoi(labPathID)
 		if err != nil {
-			return false, service_errors.NewServiceErrorWithMessage(400, "invalid language id")
+			return false, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 		}
 	}
 

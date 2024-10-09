@@ -89,14 +89,14 @@ func (s *labService) GetLabsFilter(userID, programmingID, labID string, isStarte
 	if programmingID != "" {
 		intProgrammingID, err = strconv.Atoi(programmingID)
 		if err != nil {
-			return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+			return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 		}
 	}
 
 	if labID != "" {
 		intLabID, err = strconv.Atoi(labID)
 		if err != nil {
-			return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+			return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabID)
 		}
 	}
 
@@ -130,7 +130,7 @@ func (s *labService) GetLabsFilter(userID, programmingID, labID string, isStarte
 	}
 
 	if len(labs) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(200, "Lab not found")
+		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrLabNotFound)
 	}
 
 	return labs, nil
@@ -139,7 +139,7 @@ func (s *labService) GetLabsFilter(userID, programmingID, labID string, isStarte
 func (s *labService) GetLabByID(userID, labID string) (lab *domains.Lab, err error) {
 	intLabID, err := strconv.Atoi(labID)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+		return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabID)
 	}
 
 	allLabs, err := s.getAllLabs(userID)
@@ -156,7 +156,7 @@ func (s *labService) GetLabByID(userID, labID string) (lab *domains.Lab, err err
 	}
 
 	if lab == nil {
-		return nil, service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
+		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrLabNotFound)
 	}
 
 	return lab, err

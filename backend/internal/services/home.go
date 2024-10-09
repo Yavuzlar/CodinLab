@@ -46,7 +46,7 @@ func (s *homeService) GetInventory(ctx context.Context) (inventory []domains.Inv
 	}
 
 	if len(inventory) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(200, "Programming Languages not found")
+		return nil, service_errors.NewServiceErrorWithMessage(200, domains.ErrProgrammingLanguageNotFound)
 	}
 
 	return

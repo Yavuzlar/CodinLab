@@ -33,15 +33,15 @@ func (s *levelService) updateUserPoint(ctx context.Context, userID string) (oldP
 
 	logs, err := s.logService.GetByUserID(ctx, userID)
 	if err != nil {
-		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(500, "error while getting logs", err)
+		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrGettingLogs, err)
 	}
 	labs, err := s.parserService.GetLabs()
 	if err != nil {
-		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(500, "error while getting labs", err)
+		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrGettingLabs, err)
 	}
 	roads, err := s.parserService.GetRoads()
 	if err != nil {
-		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(500, "error while getting roads", err)
+		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrGettingRoads, err)
 	}
 
 	for _, log := range logs { //calculates userpoints via completed labs and paths
@@ -68,16 +68,16 @@ func (s *levelService) updateUserPoint(ctx context.Context, userID string) (oldP
 
 	userIDU, err := uuid.Parse(userID)
 	if err != nil {
-		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
 	user, _, err := s.userRepository.Filter(ctx, domains.UserFilter{ID: userIDU}, 1, 1)
 	if err != nil {
-		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
 	if len(user) == 0 {
-		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
 	u := &user[0]
@@ -89,7 +89,7 @@ func (s *levelService) updateUserPoint(ctx context.Context, userID string) (oldP
 	u.SetTotalPoints(newPoint)
 
 	if err = s.userRepository.Update(ctx, u); err != nil {
-		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(500, "error while updating user points", err)
+		return 0, 0, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrUpdatingUser, err)
 	}
 
 	return
@@ -100,7 +100,7 @@ func (s *levelService) GetUserLevel(ctx context.Context, userID string) (userLev
 	levels, err := s.parserService.GetLevels()
 	var language []domains.LanguageLevel
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while getting levels", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrGettingLevels, err)
 	}
 	oldPoint, newPoint, err := s.updateUserPoint(ctx, userID)
 	if err != nil {
@@ -127,7 +127,7 @@ func (s *levelService) GetUserLevel(ctx context.Context, userID string) (userLev
 				}
 				userLevel.SetLanguages(language)
 				if err = s.logService.Add(ctx, userID, "", "", domains.TypeUser, domains.ContentLevelUp); err != nil {
-					return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while adding log", err)
+					return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrAddingLog, err)
 				}
 			}
 			levelPercentage := ((newPoint - level.MinPoints) * 100) / (level.MaxPoints - level.MinPoints)
