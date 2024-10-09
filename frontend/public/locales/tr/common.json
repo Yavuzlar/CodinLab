@@ -15,6 +15,7 @@
   "home.roads.content": "Yazılım dillerinin temelini sağlam bir şekilde atın ve Yol haritası ile kodlama evreninde adım adım ilerleyin!",
   "home.labs.title": "Laboratuvarlar",
   "home.labs.content": "Laboratuvarlar ile algoritma ve programlama becerilerinizi geliştirin, pratik deneyim kazanın ve kodlama bilginizi uygulamaya geçirin!",
+  "home.advancement.title": "İlerleme",
   "roads.title": "Yol haritaları",
   "roads.content": "Yazılım dillerinin temelini sağlam bir şekilde atın ve Yol haritaları ile kodlama evreninde adım adım ilerleyin!",
   "register.name": "İsim",
@@ -118,5 +119,8 @@
   "userlist.edit.content": "Lütfen düzenlemek istediğiniz kullanıcının yeni bilgilerini girin.",
   "roads.path.restart.button": "Yolu baştan başlat",
   "codeEditor.output": "Çıktı",
-  "codeEditor.output.display": "Çıktı burada görüntülenir"
+  "codeEditor.output.display": "Çıktı burada görüntülenir",
+  "home.development.title": "Geliştirme",
+  "home.development.roads": "Yol Haritaları",
+  "home.development.labs": "Labaratuvarlar"
 }

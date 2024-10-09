@@ -4,6 +4,7 @@ import { useTheme } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchAdvancement } from "src/store/statistics/statisticsSlice";
+import { useTranslation } from "react-i18next";
 
 const Advancement = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,9 @@ const Advancement = () => {
   }, [dispatch]);
 
   const theme = useTheme();
+
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -29,31 +33,44 @@ const Advancement = () => {
       >
         <CardContent
           sx={{
+            height: "calc(100% - 1.5rem)",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
-            height: "100%",
           }}
         >
           <Box sx={{ textAlign: "center" }}>
-            <Typography variant="title">Advancement</Typography>
+            <Typography variant="title">
+              {t("home.advancement.title")}
+            </Typography>
           </Box>
           <Box
             sx={{
-              flexGrow: 1,
+              width: "100%",
+              height: "100%",
+              overflowX: "hidden",
+              overflowY: "auto",
+              "&::-webkit-scrollbar": {
+                width: "0.4rem",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "transparent",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: theme.palette.primary.main,
+              },
             }}
           >
             {stateStatistics.advancementData?.data?.map((languages, index) => (
               <Box
                 sx={{
                   display: "flex",
-                  px: "1rem",
+                  px: ".5rem",
                   flexDirection: "row",
                   alignContent: "center",
                   alignItems: "center",
-                  height: "50px",
-                  mt: "3rem",
-                  mb: "2rem",
+                  justifyContent: "center",
+                  mt: "1rem",
+                  mb: "1rem",
                 }}
                 key={index}
               >
@@ -62,10 +79,12 @@ const Advancement = () => {
                     src={"/api/v1/" + languages.iconPath}
                     width={50}
                     height={50}
+                    alt={languages.name}
+                    style={{ marginTop: "31px" }}
                   />
                 </Box>
                 <Box sx={{ width: "100%" }}>
-                  <Typography sx={{ mt: "1rem" }}>{languages.name}</Typography>
+                  <Typography sx={{}}>{languages.name}</Typography>
                   <LinearProgess
                     progress={languages.roadPercentage}
                     backgroundColor={theme.palette.primary.dark}

@@ -210,20 +210,3 @@ func (l *Log) Content() string {
 func (l *Log) CreatedAt() time.Time {
 	return l.createdAt
 }
-
-// Log Types
-var (
-	TypeRoad                = "Road"
-	TypePath                = "Path"
-	TypeLab                 = "Lab"
-	TypeUser                = "User"
-	TypeProgrammingLanguage = "ProgrammingLanguage"
-)
-
-// Log Content
-var (
-	ContentStarted   = "Started"
-	ContentCompleted = "Completed"
-	ContentProfile   = "Profile Updated"
-	ContentLevelUp   = "Level Up"
-)

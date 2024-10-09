@@ -1,8 +1,15 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { CircularProgressStatistics } from "../progress/CircularProgressStatistics";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getUserDevelopment } from "../../store/statistics/statisticsSlice";
+import { useTranslation } from "react-i18next";
 
 const Development = () => {
   // let Deneme = [
@@ -15,6 +22,8 @@ const Development = () => {
 
   const dispatch = useDispatch();
   const { statistics: stateStatistics } = useSelector((state) => state);
+  const { t } = useTranslation();
+  const _sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   useEffect(() => {
     dispatch(getUserDevelopment());
@@ -22,15 +31,14 @@ const Development = () => {
 
   const progresses = [
     {
-      name: "Roads", //when de CicrularProgressStatistics.js is changed, this name should be changed too
+      name: t("home.development.roads"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
       value: stateStatistics.data?.data?.roadPercentage,
     },
     {
-      name: "Labs", //when de CicrularProgressStatistics.js is changed, this name should be changed too
+      name: t("home.development.labs"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
       value: stateStatistics.data?.data?.labPercantage,
     },
   ];
-
 
   return (
     <Box
@@ -49,23 +57,27 @@ const Development = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
-            height: "100%",
-            textAlign: "center",
+            height: "calc(100% - 1.5rem)",
           }}
         >
           <Box sx={{ textAlign: "center" }}>
-            <Typography variant="title">Development</Typography>
+            <Typography variant="title">
+              {t("home.development.title")}
+            </Typography>
           </Box>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              justifyContent: "center",
               flexGrow: 1,
             }}
           >
-            <CircularProgressStatistics progresses={progresses} />
+            <CircularProgressStatistics
+              progresses={progresses}
+              flexDirection={_sm ? "column" : "row"}
+            />
           </Box>
         </CardContent>
       </Card>
