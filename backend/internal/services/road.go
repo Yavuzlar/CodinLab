@@ -173,7 +173,8 @@ func (s *roadService) GetRoadFilter(userID, programmingID, pathID string, isStar
 				continue
 			}
 			if i != 0 && !roadCollection.GetPaths()[i-1].GetIsFinished() && pathID != "" {
-				return nil, service_errors.NewServiceErrorWithMessage(400, fmt.Sprintf(domains.ErrSolvePath, i))
+				// Burada normalde kaçıncı path'i yani i yi çözmelisin diyordu
+				return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrSolvePath)
 			}
 			if !roadCollection.GetIsStarted() && pathID != "" {
 				return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrStartRoad)
