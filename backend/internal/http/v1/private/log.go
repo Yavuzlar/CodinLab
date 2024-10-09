@@ -1,8 +1,6 @@
 package private
 
 import (
-	"fmt"
-
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -13,7 +11,7 @@ func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 	logRoutes := root.Group("/log")
 	logRoutes.Get("/", h.GetAllLogs)
 	logRoutes.Get("/solution/byday/:year", h.GetSolutionsByDay)
-	logRoutes.Get("/week", h.GetSolutionsByProgramming)
+	logRoutes.Get("/solution/week", h.GetSolutionsByProgramming)
 	logRoutes.Get("/lab", h.AddDummyLabData)
 	logRoutes.Get("/road", h.AddDummyRoadData)
 	logRoutes.Get("/rates", h.LanguageUsageRates)
@@ -61,7 +59,7 @@ func (h *PrivateHandler) GetSolutionsByDay(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	solutionsByDayDTOs := h.dtoManager.LogDTOManager.ToSolutionsByDayDTOs(*solutionsByDay)
+	solutionsByDayDTOs := h.dtoManager.LogDTOManager.ToSolutionsByDayDTOs(solutionsByDay)
 
 	return response.Response(200, "Status OK", solutionsByDayDTOs)
 }
@@ -72,9 +70,8 @@ func (h *PrivateHandler) GetSolutionsByDay(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Success 200 {object} response.BaseResponse{data=[]dto.SolutionsByProgrammingDTO}
-// @Router /private/log/week [get]
+// @Router /private/log/solution/week [get]
 func (h *PrivateHandler) GetSolutionsByProgramming(c *fiber.Ctx) error {
-	fmt.Println("hata ne abi")
 	solutions, err := h.services.LogService.CountSolutionsByProgrammingLast7Days(c.Context())
 	if err != nil {
 		return err

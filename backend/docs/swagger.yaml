@@ -149,6 +149,8 @@ definitions:
         type: integer
       roadCount:
         type: integer
+      totalCount:
+        type: integer
     type: object
   dto.StartDTO:
     properties:
@@ -677,7 +679,7 @@ paths:
       summary: GetSolutionsByDay
       tags:
       - Log
-  /private/log/week:
+  /private/log/solution/week:
     get:
       consumes:
       - application/json

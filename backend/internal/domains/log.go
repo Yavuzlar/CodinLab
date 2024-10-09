@@ -27,7 +27,7 @@ type ILogService interface {
 	GetByContent(ctx context.Context, content string) (logs []Log, err error)
 	GetByProgrammingID(ctx context.Context, programmingID string) (logs []Log, err error)
 	IsExists(ctx context.Context, userID, programmingID, labPathID, logType, content string) (isExists bool, err error)
-	CountSolutionsByDay(ctx context.Context, year string) (solutions *[]SolutionsByDay, err error)
+	CountSolutionsByDay(ctx context.Context, year string) (solutions []SolutionsByDay, err error)
 	CountSolutionsByProgrammingLast7Days(ctx context.Context) (solutions []SolutionsByProgramming, err error)
 	LanguageUsageRates(ctx context.Context) (languageUsageRates []LanguageUsageRates, err error)
 }
@@ -87,6 +87,7 @@ type SolutionsByProgramming struct {
 	programmingID int32
 	labCount      int
 	roadCount     int
+	totalCount    int
 }
 
 func (s *SolutionsByProgramming) GetProgrammingID() int32 {
@@ -111,6 +112,14 @@ func (s *SolutionsByProgramming) GetRoadCount() int {
 
 func (s *SolutionsByProgramming) SetRoadCount(roadCount int) {
 	s.roadCount = roadCount
+}
+
+func (s *SolutionsByProgramming) GetTotalCount() int {
+	return s.totalCount
+}
+
+func (s *SolutionsByProgramming) SetTotalCount(totalCount int) {
+	s.totalCount = totalCount
 }
 
 type LanguageUsageRates struct {

@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -134,7 +133,6 @@ func (l *logService) GetByProgrammingID(ctx context.Context, programmingID strin
 
 // Adds log
 func (l *logService) Add(ctx context.Context, userID, programmingID, labPathID, logType, content string) error {
-	// Error Control
 	var err error
 	var intProgrammingID, intLabPathID int
 	if programmingID != "" {
@@ -194,35 +192,36 @@ func (l *logService) IsExists(ctx context.Context, userID, programmingID, labPat
 	return
 }
 
-func (l *logService) CountSolutionsByDay(ctx context.Context, year string) (solutions *[]domains.SolutionsByDay, err error) {
-	*solutions, err = l.logRepositories.CountSolutionsByDay(ctx, year)
+func (l *logService) CountSolutionsByDay(ctx context.Context, year string) (solutionsByDay []domains.SolutionsByDay, err error) {
+	solutions, err := l.logRepositories.CountSolutionsByDay(ctx, year)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(*solutions) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(404, fmt.Sprintf("Activities not found in %s ", year))
+	if len(solutions) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrActivityNotFound)
 	}
-	for _, s := range *solutions { //Checks the count to specify a level (from low to high solve rate).
+	for _, s := range solutions { //Checks the count to specify a level (from low to high solve rate)
 		switch {
-		case s.GetCount() <= 3:
+		case s.GetCount() <= domains.Low:
 			s.SetLevel(1)
 
-		case s.GetCount() <= 6:
+		case s.GetCount() <= domains.LowMid:
 			s.SetLevel(2)
 
-		case s.GetCount() <= 9:
+		case s.GetCount() <= domains.Middle:
 			s.SetLevel(3)
 
-		case s.GetCount() <= 12:
+		case s.GetCount() <= domains.MidHigh:
 			s.SetLevel(4)
 
-		case s.GetCount() >= 13:
+		case s.GetCount() >= domains.High:
 			s.SetLevel(5)
 		}
+		solutionsByDay = append(solutionsByDay, s)
 	}
 
-	return
+	return solutionsByDay, nil
 }
 
 func (l *logService) CountSolutionsByProgrammingLast7Days(ctx context.Context) (solutions []domains.SolutionsByProgramming, err error) {
@@ -230,9 +229,8 @@ func (l *logService) CountSolutionsByProgrammingLast7Days(ctx context.Context) (
 	if err != nil {
 		return nil, err
 	}
-
 	if len(solutions) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(404, "Soulutions not found ")
+		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrSolutionsNotFound)
 	}
 
 	return solutions, err

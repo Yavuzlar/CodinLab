@@ -34,6 +34,7 @@ type SolutionsByProgrammingDTO struct {
 	ProgrammingID int32 `json:"programmingID"`
 	LabCount      int   `json:"labCount"`
 	RoadCount     int   `json:"roadCount"`
+	TotalCount    int   `json:"totalCount"`
 }
 
 type LanguageUsageRatesDTO struct {
@@ -97,6 +98,7 @@ func (m *LogDTOManager) ToSolutionsByProgrammingDTO(domain domains.SolutionsByPr
 		ProgrammingID: domain.GetProgrammingID(),
 		RoadCount:     domain.GetRoadCount(),
 		LabCount:      domain.GetLabCount(),
+		TotalCount:    domain.GetTotalCount(),
 	}
 }
 

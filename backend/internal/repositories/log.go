@@ -36,6 +36,7 @@ type dbModelSolutionsByProgrammingLanguage struct {
 	ProgrammingID  int32 `db:"programming_id"`
 	TotalLabCount  int   `db:"total_lab_count"`
 	TotalRoadCount int   `db:"total_road_count"`
+	TotalCount     int   `db:"total_count"`
 }
 
 func (r *LogRepository) dbModelSolutionsByDayToAppModel(dbModelSolutionsByDay dbModelSolutionsByDay) (solutionsByDay domains.SolutionsByDay) {
@@ -51,6 +52,7 @@ func (r *LogRepository) dbModelSolutionsCountToAppModel(dbModel dbModelSolutions
 	appModel.SetLabCount(dbModel.TotalLabCount)
 	appModel.SetProgrammingID(dbModel.ProgrammingID)
 	appModel.SetRoadCount(dbModel.TotalRoadCount)
+	appModel.SetTotalCount(dbModel.TotalCount)
 	return
 }
 
@@ -262,7 +264,8 @@ func (r *LogRepository) CountSolutionsByProgrammingLast7Days(ctx context.Context
     SELECT
         l1.programming_id,
         COUNT(CASE WHEN l1.type = 'Lab' THEN 1 ELSE NULL END) AS total_lab_count,
-        COUNT(CASE WHEN l1.type = 'Path' THEN 1 ELSE NULL END) AS total_road_count
+        COUNT(CASE WHEN l1.type = 'Path' THEN 1 ELSE NULL END) AS total_road_count,
+		COUNT(CASE WHEN l1.type IN ('Lab', 'Path') THEN 1 ELSE NULL END) AS total_count
     FROM
         t_logs l1
     JOIN
@@ -272,7 +275,6 @@ func (r *LogRepository) CountSolutionsByProgrammingLast7Days(ctx context.Context
                  AND l1.type = l2.type
                  AND l1.content = 'Started'
                  AND l2.content = 'Completed'
-                 AND l1.created_at < l2.created_at
     WHERE
         l1.type IN ('Path', 'Lab')
         AND l1.created_at >= DATE('now', '-7 days')

@@ -724,7 +724,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/log/week": {
+        "/private/log/solution/week": {
             "get": {
                 "description": "Retrieves the total counts for lab and road solutions for each programming language in the last week.",
                 "consumes": [
@@ -1488,6 +1488,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "roadCount": {
+                    "type": "integer"
+                },
+                "totalCount": {
                     "type": "integer"
                 }
             }
