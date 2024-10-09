@@ -35,18 +35,18 @@ func (s *userService) Login(ctx context.Context, username, password string) (use
 		Username: username,
 	}, 1, 1)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(users) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "username or password not match")
+		return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidCreds)
 	}
 	user = &users[0]
 	ok, err := hasher_service.CompareHashAndPassword(user.Password(), password)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while comparing password", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrComparingPasswords, err)
 	}
 	if !ok {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "username or password not match")
+		return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidCreds)
 	}
 	return user, nil
 }
@@ -55,10 +55,10 @@ func (s *userService) Register(ctx context.Context, username, name, surname, pas
 	// Checking the username is already being used
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Username: username}, 1, 1)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(users) != 0 {
-		return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
+		return service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrUsernameUsing, err)
 	}
 
 	// Creating New User Model
@@ -69,7 +69,7 @@ func (s *userService) Register(ctx context.Context, username, name, surname, pas
 
 	// We save the new user to the database
 	if err = s.userRepositories.Add(ctx, newUser); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while adding the user", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrAddingUser, err)
 	}
 
 	return
@@ -80,10 +80,10 @@ func (s *userService) CreateUser(ctx context.Context, username, name, surname, p
 		Username: username,
 	}, 1, 1)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(users) != 0 {
-		return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
+		return service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrUsernameUsing, err)
 	}
 
 	newUser, err := domains.NewUser(username, password, name, surname, "", githubProfile, 0)
@@ -92,7 +92,7 @@ func (s *userService) CreateUser(ctx context.Context, username, name, surname, p
 	}
 
 	if err = s.userRepositories.Add(ctx, newUser); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while adding the user", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrAddingUser, err)
 	}
 
 	return
@@ -104,7 +104,7 @@ func (s *userService) GetAllUsers(ctx context.Context) (users []domains.User, er
 		Role: "user",
 	}, 1000000, 1)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 
 	return
@@ -113,7 +113,7 @@ func (s *userService) GetAllUsers(ctx context.Context) (users []domains.User, er
 func (s *userService) GetProfile(ctx context.Context, userID string) (user *domains.User, err error) {
 	userIDU, err := uuid.Parse(userID)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
 	//Checking if the user exists and retrieving user
@@ -121,10 +121,10 @@ func (s *userService) GetProfile(ctx context.Context, userID string) (user *doma
 		ID: userIDU,
 	}, 1, 1)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(users) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "user not found")
+		return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrUserNotFound)
 	}
 	user = &users[0]
 
@@ -146,12 +146,12 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, username
 		//Checking the username is already being used
 		filter, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Username: username}, 1, 1)
 		if err != nil {
-			return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+			return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 		}
 		if len(filter) > 0 {
 			oldUsername := user.Username()
 			if oldUsername != filter[0].Username() {
-				return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
+				return service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrUsernameUsing, err)
 			}
 		}
 		if err := user.SetUsername(username); err != nil {
@@ -174,7 +174,7 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, username
 	}
 
 	if err = s.userRepositories.Update(ctx, user); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while updating user", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrUpdatingUser, err)
 	}
 
 	return
@@ -193,7 +193,7 @@ func (s *userService) UpdatePassword(ctx context.Context, userID, password, newP
 	// Checking if password is being updated & password match with confirm password
 	if newPassword != "" {
 		if newPassword != confirmPassword {
-			return service_errors.NewServiceErrorWithMessage(400, "password do not match")
+			return service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidCreds)
 		}
 		if err := user.SetPassword(newPassword); err != nil {
 			return err
@@ -201,7 +201,7 @@ func (s *userService) UpdatePassword(ctx context.Context, userID, password, newP
 	}
 
 	if err = s.userRepositories.Update(ctx, user); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while updating user", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrUpdatingUser, err)
 	}
 	return
 
@@ -211,10 +211,10 @@ func (s *userService) checkPassword(userPassword, password string) (err error) {
 	// Checking if password matches
 	ok, err := hasher_service.CompareHashAndPassword(userPassword, password)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while comparing password", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrComparingPasswords, err)
 	}
 	if !ok {
-		return service_errors.NewServiceErrorWithMessage(400, "wrong password")
+		return service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidCreds)
 	}
 	return
 }
@@ -222,19 +222,19 @@ func (s *userService) checkPassword(userPassword, password string) (err error) {
 func (s *userService) DeleteUser(ctx context.Context, userID string) (err error) {
 	userIDU, err := uuid.Parse(userID)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+		return service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{ID: userIDU}, 1, 1)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(users) == 0 {
-		return service_errors.NewServiceErrorWithMessage(400, "user not found")
+		return service_errors.NewServiceErrorWithMessage(400, domains.ErrUserNotFound)
 	}
 
 	if err = s.userRepositories.Delete(ctx, userIDU); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while deleting the user", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrDeletingUser, err)
 	}
 	return
 }
@@ -243,7 +243,7 @@ func (s *userService) DeleteUser(ctx context.Context, userID string) (err error)
 func (s *userService) BestProgrammingLanguages(ctx context.Context, userID string) (bestProgrammingLanguage string, err error) {
 	programmingLanguageCount := make(map[int32]int)
 	if logs, err := s.logService.GetByUserID(ctx, userID); err != nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting logs", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrGettingLogs, err)
 	} else {
 		for _, log := range logs {
 			programmingLanguageCount[log.ProgrammingID()]++
@@ -259,10 +259,10 @@ func (s *userService) BestProgrammingLanguages(ctx context.Context, userID strin
 	}
 	languages, err := s.parserService.GetInventory()
 	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting languages", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrGettingProgrammingLanguages, err)
 	}
 	if languages == nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "languages list is nil", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(404, domains.ErrProgrammingLanguageNotFound, err)
 	}
 	for _, programming := range languages {
 		if programming.ID == int(mostUsedProgrammingLanguageID) {

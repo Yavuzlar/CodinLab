@@ -37,17 +37,17 @@ func newAdminService(
 
 func (s *adminService) CreateUser(ctx context.Context, username, name, surname, password, role, githubProfile string) (err error) {
 	if role != "admin" && role != "user" {
-		return service_errors.NewServiceErrorWithMessageAndError(400, "invalid role", err)
+		return service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidRole, err)
 	}
 
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
 		Username: username,
 	}, 1, 1)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(users) != 0 {
-		return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
+		return service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrUsernameUsing, err)
 	}
 
 	newUser, err := domains.NewUser(username, password, name, surname, "", githubProfile, 0)
@@ -56,7 +56,7 @@ func (s *adminService) CreateUser(ctx context.Context, username, name, surname, 
 	}
 
 	if err = s.userRepositories.Add(ctx, newUser); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while adding the user", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrAddingUser, err)
 	}
 
 	return
@@ -68,10 +68,10 @@ func (s *adminService) GetAllUsers(ctx context.Context) ([]domains.AdminUserDeta
 		Role: "user",
 	}, 1000000, 1)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(users) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(404, "user list is empty", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(404, domains.ErrUserNotFound, err)
 	}
 
 	for i, user := range users {
@@ -95,7 +95,7 @@ func (s *adminService) GetAllUsers(ctx context.Context) ([]domains.AdminUserDeta
 func (s *adminService) GetProfile(ctx context.Context, userID string) (user *domains.User, err error) {
 	userIDU, err := uuid.Parse(userID)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
 	//Checking if the user exists and retrieving user
@@ -103,10 +103,10 @@ func (s *adminService) GetProfile(ctx context.Context, userID string) (user *dom
 		ID: userIDU,
 	}, 1, 1)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(users) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "user not found")
+		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrUserNotFound)
 	}
 	user = &users[0]
 
@@ -124,12 +124,12 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, role, username, g
 		//Checking the username is already being used
 		filter, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Username: username}, 1, 1)
 		if err != nil {
-			return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+			return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 		}
 		if len(filter) > 0 {
 			oldUsername := user.Username()
 			if oldUsername != filter[0].Username() {
-				return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
+				return service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrUsernameUsing, err)
 			}
 		}
 		if err := user.SetUsername(username); err != nil {
@@ -151,7 +151,7 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, role, username, g
 	}
 
 	if err = s.userRepositories.AdminUpdate(ctx, user); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while updating user", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrUpdatingUser, err)
 	}
 
 	return
@@ -160,27 +160,27 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, role, username, g
 func (s *adminService) DeleteUser(ctx context.Context, userID string) (err error) {
 	userIDU, err := uuid.Parse(userID)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(400, "invalid user id", err)
+		return service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{ID: userIDU}, 1, 1)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(users) == 0 {
-		return service_errors.NewServiceErrorWithMessage(404, "user not found")
+		return service_errors.NewServiceErrorWithMessage(404, domains.ErrUserNotFound)
 	}
 
 	isAdmin, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{ID: userIDU, Role: "user"}, 1, 1)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
 	}
 	if len(isAdmin) == 0 {
-		return service_errors.NewServiceErrorWithMessage(403, "no permission to delete")
+		return service_errors.NewServiceErrorWithMessage(403, domains.ErrNoPermissionDelete)
 	}
 
 	if err = s.userRepositories.Delete(ctx, userIDU); err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while deleting the user", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrDeletingUser, err)
 	}
 
 	return
@@ -189,11 +189,8 @@ func (s *adminService) DeleteUser(ctx context.Context, userID string) (err error
 // Find users most used languages
 func (s *adminService) BestProgrammingLanguage(ctx context.Context, userID string) (bestLanguage string, err error) {
 	languageCount := make(map[int32]int)
-	if s.logService == nil || s.parserService == nil {
-		return "", service_errors.NewServiceErrorWithMessage(500, "service is not initialized")
-	}
 	if logs, err := s.logService.GetByUserID(ctx, userID); err != nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting logs", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringLogs, err)
 	} else {
 		for _, log := range logs {
 			languageCount[log.ProgrammingID()]++
@@ -209,10 +206,10 @@ func (s *adminService) BestProgrammingLanguage(ctx context.Context, userID strin
 	}
 	languages, err := s.parserService.GetInventory()
 	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting languages", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrGettingProgrammingLanguages, err)
 	}
 	if languages == nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "languages list is nil", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(404, domains.ErrProgrammingLanguageNotFound, err)
 	}
 	for _, lang := range languages {
 		if lang.ID == int(mostUsedLanguageID) {

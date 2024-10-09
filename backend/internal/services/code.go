@@ -120,7 +120,7 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 	select {
 	case result := <-resultChan:
 		if result.err != nil {
-			return false, service_errors.NewServiceErrorWithMessage(400, "Docker Image Is Exist Error")
+			return false, service_errors.NewServiceErrorWithMessage(500, domains.ErrDockerImage)
 		}
 		return result.isExists, nil
 	case <-ctx.Done():
@@ -138,7 +138,7 @@ func (s *codeService) StopContainer(ctx context.Context, containerID string) err
 
 	select {
 	case err := <-errCh:
-		return service_errors.NewServiceErrorWithMessageAndError(500, "Container Stop Error", err)
+		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrDockerContainerStop, err)
 	case <-ctx.Done():
 		return ctx.Err()
 	}
@@ -172,7 +172,7 @@ func (s *codeService) createContainerWithCMD(ctx context.Context, image string, 
 func (s *codeService) CreateBashFile(cmd []string, tests []domains.Test, userID, pathDir string) error {
 	templateData, err := os.ReadFile(fmt.Sprintf("%s/main.sh", pathDir))
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessage(500, "File could not be read")
+		return service_errors.NewServiceErrorWithMessage(404, domains.ErrRoadMainSHNotFound)
 	}
 	content := string(templateData)
 
@@ -230,11 +230,11 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 			matches := re.FindStringSubmatch(err.Error())
 			if len(matches) > 1 {
 				imageName := matches[1]
-				return "", service_errors.NewServiceErrorWithMessage(404, fmt.Sprintf("Image not found: %s", imageName))
+				return "", service_errors.NewServiceErrorWithMessage(404, fmt.Sprintln(domains.ErrDockerImageNotFound, imageName))
 			}
-			return "", service_errors.NewServiceErrorWithMessage(404, "Image not found")
+			return "", service_errors.NewServiceErrorWithMessage(404, domains.ErrDockerImageNotFound)
 		}
-		return "", service_errors.NewServiceErrorWithMessage(500, "Unable to read docker logs")
+		return "", service_errors.NewServiceErrorWithMessage(500, domains.ErrDockerLogs)
 	}
 
 	return logs, nil
@@ -247,12 +247,12 @@ func (s *codeService) UploadUserCode(userID, programmingID, labPathID, codeType,
 
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+		return "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 	}
 
 	intLabPathID, err := strconv.Atoi(labPathID)
 	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+		return "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabID)
 	}
 
 	codePath := s.generateUserCodePath(userID, codeType, intProgrammingID, intLabPathID, fileExtention)
@@ -345,12 +345,12 @@ func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName strin
 func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string) (string, error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+		return "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 	}
 
 	intLabPathID, err := strconv.Atoi(labPathID)
 	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+		return "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabID)
 	}
 
 	var frontendTemplate string
@@ -362,14 +362,14 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 
 		lab, err := s.labService.GetLabByID(userID, labPathID)
 		if err != nil {
-			return "", service_errors.NewServiceErrorWithMessage(404, "Lab Not Found")
+			return "", service_errors.NewServiceErrorWithMessage(404, domains.ErrLabNotFound)
 		}
 
 		for _, ct := range lab.GetQuest().GetCodeTemplates() {
 			if ct.GetProgrammingID() == intProgrammingID {
 				frontendTemplate, err = s.CodeFrontendTemplateGenerator(ct.GetTemplatePath(), lab.GetQuest().GetFuncName())
 				if err != nil {
-					return "", service_errors.NewServiceErrorWithMessage(404, "Error while getting frontend template")
+					return "", service_errors.NewServiceErrorWithMessage(500, domains.ErrGettingFrontendTemplate)
 				}
 
 				break
@@ -384,13 +384,13 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 
 		path, err := s.roadService.GetPathByID(userID, programmingID, labPathID)
 		if err != nil {
-			return "", service_errors.NewServiceErrorWithMessage(404, "Path Not Found")
+			return "", service_errors.NewServiceErrorWithMessage(404, domains.ErrPathNotFound)
 		}
 		for _, ct := range path.GetQuest().GetCodeTemplates() {
 			if ct.GetProgrammingID() == intProgrammingID {
 				frontendTemplate, err = s.CodeFrontendTemplateGenerator(ct.GetTemplatePath(), path.GetQuest().GetFuncName())
 				if err != nil {
-					return "", service_errors.NewServiceErrorWithMessage(404, "Error while getting frontend template")
+					return "", service_errors.NewServiceErrorWithMessage(500, domains.ErrGettingFrontendTemplate)
 				}
 
 				break
@@ -400,7 +400,7 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 	}
 
 	if frontendTemplate == "" {
-		return "", service_errors.NewServiceErrorWithMessage(400, "Frontend Template could not be created")
+		return "", service_errors.NewServiceErrorWithMessage(404, domains.ErrTemplateNotFound)
 	}
 
 	return frontendTemplate, nil
@@ -409,19 +409,19 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 func (s *codeService) DeleteFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention string) (err error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+		return service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 	}
 
 	intLabPathID, err := strconv.Atoi(labPathID)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessage(400, "Invalid Lab ID")
+		return service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabID)
 	}
 
 	codePath := s.generateUserCodePath(userID, labRoadType, intProgrammingID, intLabPathID, fileExtention)
 	if _, err := os.Stat(codePath); err == nil {
 		err := os.Remove(codePath)
 		if err != nil {
-			return service_errors.NewServiceErrorWithMessage(500, "Failed to delete file")
+			return service_errors.NewServiceErrorWithMessage(404, domains.ErrUserCodeNotFound)
 		}
 	}
 
@@ -429,7 +429,7 @@ func (s *codeService) DeleteFrontendTemplateHistory(userID, programmingID, labPa
 	if _, err := os.Stat(codeTmpPath); err == nil {
 		err := os.Remove(codeTmpPath)
 		if err != nil {
-			return service_errors.NewServiceErrorWithMessage(500, "Failed to delete file")
+			return service_errors.NewServiceErrorWithMessage(404, domains.ErrUserCodeNotFound)
 		}
 	}
 
@@ -439,7 +439,7 @@ func (s *codeService) DeleteFrontendTemplateHistory(userID, programmingID, labPa
 func (s *codeService) CreateFileAndWrite(filePath, content string) (err error) {
 	err = file.CreateFileAndWrite(filePath, content)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessage(500, "Could not create file and write data into it")
+		return service_errors.NewServiceErrorWithMessage(500, domains.ErrDockerCouldNotCreateFile)
 	}
 	return file.CreateFileAndWrite(filePath, content)
 }
@@ -556,28 +556,28 @@ func (s *codeService) createCodeFile(userID string) (err error) {
 	// Check and create mainDir if not exists
 	if err := file.CheckDir(mainDir); err != nil {
 		if err = file.CreateDir(mainDir); err != nil {
-			return err
+			return service_errors.NewServiceErrorWithMessage(500, domains.ErrDockerFileError)
 		}
 	}
 
 	// Check and create userDir, labDir, pathDir
 	if err := file.CheckDir(userDir); err != nil {
 		if err = file.CreateDir(userDir); err != nil {
-			return err
+			return service_errors.NewServiceErrorWithMessage(500, domains.ErrDockerFileError)
 		}
 	}
 
 	// Check and create labDir if not exists
 	if err := file.CheckDir(labDir); err != nil {
 		if err = file.CreateDir(labDir); err != nil {
-			return err
+			return service_errors.NewServiceErrorWithMessage(500, domains.ErrDockerFileError)
 		}
 	}
 
 	// Check and create pathDir if not exists
 	if err := file.CheckDir(pathDir); err != nil {
 		if err = file.CreateDir(pathDir); err != nil {
-			return err
+			return service_errors.NewServiceErrorWithMessage(500, domains.ErrDockerFileError)
 		}
 	}
 
@@ -588,7 +588,7 @@ func (s *codeService) readTemplate(templatePath string) (map[string]string, erro
 	// Dosyayı oku
 	templateData, err := os.ReadFile(templatePath)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessage(500, "File could not be read")
+		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrTemplateNotFound)
 	}
 	content := string(templateData)
 
