@@ -26,6 +26,9 @@ const LabInfo = ({ programingId }) => {
     );
   }, [dispatch, programingId, i18n.language]);
 
+  const isImageExist = stateLabs.data?.isImageExists
+
+
   return (
     <Box
       sx={{
@@ -86,7 +89,8 @@ const LabInfo = ({ programingId }) => {
             </Typography>
 
             <Button
-              variant={lab.finished ? "dark" : "light"}
+              variant={lab.finished ? "dark" : "light"} 
+              disabled={!isImageExist}
               sx={{
                 borderRadius: "16px",
                 marginTop: "20px",
@@ -99,9 +103,6 @@ const LabInfo = ({ programingId }) => {
                 letterSpacing: "0",
               }}
               onClick={() => {
-                // this router sistem will be changed to the following cuse this is not true.
-                // this is the try to solve the problem of the router.
-                // router.push(`/labs/${programingId}/${lab.id}`);
               router.push(`/labs/${programingId}/${lab.id}`);
               }
               }

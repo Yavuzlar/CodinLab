@@ -1,14 +1,14 @@
-import { Box, Card, Divider, Grid } from "@mui/material";
+import { Box, Card, CardContent, Divider, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import { roads} from "src/data/home";
+import { roads } from "src/data/home";
 import InfoCard from "src/components/cards/Info";
 import LanguageProgress from "src/components/cards/LanguageProgress";
 import Filter from "src/components/filter/Filter";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserLanguageRoadStats } from "src/store/language/languageSlice";
-
-
+import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
+import { getRoadProgressStats } from "src/store/statistics/statisticsSlice";
 
 const Roads = () => {
   const [filters, setFilters] = useState({
@@ -18,14 +18,32 @@ const Roads = () => {
   });
 
   const { t } = useTranslation();
-  const searchPlaceholder = t("roads.search.placeholder")
+  const searchPlaceholder = t("roads.search.placeholder");
 
   const dispatch = useDispatch();
-  const { language: stateLanguage } = useSelector((state) => state);
+  const { language: stateLanguage, statistics: stateStatistics } = useSelector(
+    (state) => state
+  );
 
   useEffect(() => {
     dispatch(getUserLanguageRoadStats());
+    dispatch(getRoadProgressStats());
   }, [dispatch]);
+
+  const roadProgressStats = [
+    {
+      id: 1,
+      name: t("labs.progress.stats.progress"),
+      value: stateStatistics.roadProgressStatsData.data?.progress,
+      color: "#8FDDFD",
+    },
+    {
+      id: 2,
+      name: t("labs.progress.stats.completed"),
+      value: stateStatistics.roadProgressStatsData.data?.completed,
+      color: "#0A3B7A",
+    },
+  ];
 
   return (
     <>
@@ -36,17 +54,38 @@ const Roads = () => {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <Card sx={{ height: "212px" }}></Card>
+            <Card sx={{ height: "212px" }}>
+              <CardContent
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+
+                }}
+              >
+              <CircularProgressStatistics progresses={roadProgressStats} />
+              </CardContent>
+            </Card>
           </Grid>
         </Grid>
 
         <Grid item xs={12}>
-          <Filter filters={filters} setFilters={setFilters} searchPlaceholder={searchPlaceholder} />
+          <Filter
+            filters={filters}
+            setFilters={setFilters}
+            searchPlaceholder={searchPlaceholder}
+          />
         </Grid>
 
-        <Grid item xs={12} sx={{ p: "0 !important", justifyContent: 'center', display: 'flex' }}>
+        <Grid
+          item
+          xs={12}
+          sx={{ p: "0 !important", justifyContent: "center", display: "flex" }}
+        >
           <Box sx={{ width: "95%" }}>
-            <Divider sx={{ borderColor: theme => theme.palette.primary.dark }} />
+            <Divider
+              sx={{ borderColor: (theme) => theme.palette.primary.dark }}
+            />
           </Box>
         </Grid>
 
@@ -57,14 +96,13 @@ const Roads = () => {
           spacing={2}
           sx={{ maxHeight: "calc(100vh - 143px)", pt: "0px !important" }}
         >
-         {stateLanguage.userLanguageRoadStatsData?.data?.map((language, index) => (
-            <Grid item xs={12} md={12} key={index}>
-              <LanguageProgress
-                language={language}
-                type = "road"
-              />
-            </Grid>
-          ))}
+          {stateLanguage.userLanguageRoadStatsData?.data?.map(
+            (language, index) => (
+              <Grid item xs={12} md={12} key={index}>
+                <LanguageProgress language={language} type="road" />
+              </Grid>
+            )
+          )}
           <Box sx={{ width: "100%", height: "2px" }}></Box>
         </Grid>
       </Grid>

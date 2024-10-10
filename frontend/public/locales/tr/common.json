@@ -122,5 +122,8 @@
   "codeEditor.output.display": "Çıktı burada görüntülenir",
   "home.development.title": "Geliştirme",
   "home.development.roads": "Yol Haritaları",
-  "home.development.labs": "Labaratuvarlar"
+  "home.development.labs": "Labaratuvarlar",
+   "runCode" : "Kod Çalıştırılıyor...",
+  "succsesCode" : "Kod Başarıyla Çalıştırıldı",
+   "lab.button.review": "İncele"
 }

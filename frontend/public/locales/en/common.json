@@ -120,6 +120,9 @@
   "codeEditor.output.display": "Output will be displayed here",
   "home.development.title": "Development",
   "home.development.roads": "Roads",
-  "home.development.labs": "Labs"
+  "home.development.labs": "Labs",
+  "runCode" : "Code Running...",
+  "succsesCode" : "Code Successfully Run",
+  "lab.button.review": "Review"
 
 }

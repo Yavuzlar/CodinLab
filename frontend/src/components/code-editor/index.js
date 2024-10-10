@@ -14,6 +14,9 @@ import MoonIcon from "src/assets/icons/moon.png";
 import MenuIconBlack from "src/assets/icons/menu-black.png";
 import MenuIconWhite from "src/assets/icons/menu-white.png";
 import axios from "axios";
+import { t } from "i18next";
+import { showToast } from "src/utils/showToast";
+import toast from "react-hot-toast";
 
 const CodeEditor = ({
   params,
@@ -41,7 +44,10 @@ const CodeEditor = ({
 
   // here we will add the run calls
   const handleRun = async () => {
-    // in the future, we will add the run api call here
+    // const toastId = toast.loading(t("runCode")); 
+    showToast("dismiss")
+    showToast("loading", t("runCode"));
+    
     try {
       const response = await axios({
         method: "POST",
@@ -51,11 +57,15 @@ const CodeEditor = ({
           "Content-Type": "application/json",
         },
       });
+      showToast("dismiss")
+      showToast("success", t("succsesCode"));
       onRun(response.data?.message);
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message, { id: toastId }); 
       onRun(error.response?.data?.message || error.message);
     }
   };
+  
 
   // here we will add the stop api calls
   const handleStop = () => {

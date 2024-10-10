@@ -38,7 +38,6 @@ const Labs = () => {
     dispatch(getLabsProgressStats());
   }, [dispatch]);
 
-  console.log("stateLanguage", stateLanguage);
 
   const labsStatsData = stateLanguage.userLanguageLabStatsData?.data;
 
@@ -47,62 +46,39 @@ const Labs = () => {
       id: 1,
       name: t("labs.difficulty.easy"),
       value: stateStatistics.difficultyStatsData.data?.easyPercentage,
+      color: "#39CE19",
     },
     {
       id: 2,
       name: t("labs.difficulty.medium"),
       value: stateStatistics.difficultyStatsData.data?.mediumPercentage,
+      color: "#EE7A19",
     },
     {
       id: 3,
       name: t("labs.difficulty.hard"),
       value: stateStatistics.difficultyStatsData.data?.hardPercentage,
-    },
-  ];
-
-  const difficultyProgresses = [
-    {
-      name: "Easy", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.difficultyStatsData.data?.easyPercentage,
-      color: "#39CE19",
-    },
-    {
-      name: "Medium", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.difficultyStatsData.data?.mediumPercentage,
-      color: "#EE7A19",
-    },
-    {
-      name: "Hard", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.difficultyStatsData.data?.hardPercentage,
       color: "#DC0101",
     },
   ];
+
 
   const labsProgressStats = [
     {
       id: 1,
       name: t("labs.progress.stats.progress"),
       value: stateStatistics.labsProgressStatsData.data?.progress,
+      color: "#8FDDFD",
     },
     {
       id: 2,
       name: t("labs.progress.stats.completed"),
       value: stateStatistics.labsProgressStatsData.data?.completed,
-    },
-  ];
-
-  const labsProgresses = [
-    {
-      name: "Progress", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.labsProgressStatsData.data?.progress,
-      color: "#8FDDFD",
-    },
-    {
-      name: "Completed", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.labsProgressStatsData.data?.completed,
       color: "#0A3B7A",
     },
   ];
+
+ 
 
   return (
     <Grid container spacing={2}>
@@ -137,10 +113,10 @@ const Labs = () => {
                         justifyContent: "center",
                       }}
                     >
-                      <CircularProgressStatistics progresses={labsProgresses} />
+                      <CircularProgressStatistics progresses={labsProgressStats} />
                     </Box>
 
-                    {labsProgressStats.map((progress) => (
+                    {/* {labsProgressStats.map((progress) => (
                       <Box
                         key={progress.id}
                         sx={{
@@ -190,7 +166,7 @@ const Labs = () => {
                           </Typography>
                         </Box>
                       </Box>
-                    ))}
+                    ))} */}
                   </CardContent>
                 </Card>
               </Grid>
@@ -206,11 +182,11 @@ const Labs = () => {
                       }}
                     >
                       <CircularProgressStatistics
-                        progresses={difficultyProgresses}
+                        progresses={difficultyStats}
                       />
                     </Box>
 
-                    {difficultyStats.map((difficulty) => (
+                    {/* {difficultyStats.map((difficulty) => (
                       <Box
                         key={difficulty.id}
                         sx={{
@@ -260,7 +236,7 @@ const Labs = () => {
                           </Typography>
                         </Box>
                       </Box>
-                    ))}
+                    ))} */}
                   </CardContent>
                 </Card>
               </Grid>
