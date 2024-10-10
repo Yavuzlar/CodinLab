@@ -2,11 +2,19 @@ import { useTheme } from "@mui/material/styles";
 import CustomBreadcrumbs from "src/components/breadcrumbs";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
-import { Box, Button, Card, CardContent, Grid, Typography, Stack } from "@mui/material";
-import LockIcon from "src/assets/icons/padlock.png"
-import PathIcon from "src/assets/icons/icons8-path-100.png"
-import DoneIcon from "src/assets/icons/icons8-done-100 (1).png"
-import NextPathIcon from "src/assets/icons/icons8-signpost-100.png"
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  Stack,
+} from "@mui/material";
+import LockIcon from "src/assets/icons/padlock.png";
+import PathIcon from "src/assets/icons/icons8-path-100.png";
+import DoneIcon from "src/assets/icons/icons8-done-100 (1).png";
+import NextPathIcon from "src/assets/icons/icons8-signpost-100.png";
 import Image from "next/image";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
 import { useEffect, useState } from "react";
@@ -16,13 +24,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPaths, startRoad } from "src/store/paths/pathsSlice";
 import { getProgrammingId } from "src/data/programmingIds";
 import { set } from "nprogress";
-
+import { showToast } from "src/utils/showToast";
 
 const RoadDetails = ({ language = "" }) => {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
   const router = useRouter();
-  const capitalizedLanguage = language.charAt(0).toUpperCase() + language.slice(1);
+  const capitalizedLanguage =
+    language.charAt(0).toUpperCase() + language.slice(1);
   const dispatch = useDispatch();
   const { paths } = useSelector((state) => state);
 
@@ -39,11 +48,7 @@ const RoadDetails = ({ language = "" }) => {
   const [title, setTitle] = useState(""); // Road title
   const [description, setDescription] = useState(""); // Road description
 
-  const handleStartRoad = () => {
-    // Redirect to the first path of the road
-    dispatch(startRoad({ programmingid: programmingId }));
-    router.push(`/roads/${language}/1`);
-  };
+
 
   const renderPathIcon = (path) => {
     if (path.pathIsFinished) {
@@ -80,7 +85,6 @@ const RoadDetails = ({ language = "" }) => {
         setDescription(paths.data.description);
 
         const pathsData = paths.data.paths;
-
 
         // Amount of completed paths
         const completedPaths = pathsData.filter((path) => path.pathIsFinished);
@@ -132,6 +136,17 @@ const RoadDetails = ({ language = "" }) => {
 
   // TODO: Get the title and description from front-end side
 
+  const isImageExist = paths.data?.isImageExists;
+
+  const handleStartRoad = () => {
+    if (isImageExist) {
+      dispatch(startRoad({ programmingid: programmingId }));
+      router.push(`/roads/${language}/1`);
+    } else {
+      showToast("error", "Image not found");
+    }
+  };
+
   return (
     <Box>
       {/* Breadcrumbs */}
@@ -168,6 +183,7 @@ const RoadDetails = ({ language = "" }) => {
                     </Box>
                     <Button
                       variant="contained"
+                      disabled={!isImageExist}
                       sx={{
                         backgroundColor: "#fff",
                         color: theme.palette.primary.dark,
@@ -276,14 +292,12 @@ const RoadDetails = ({ language = "" }) => {
                 fontWeight={600}
                 color={!path.pathIsFinished ? "#fff" : "#0A3B7A"}
               >
-               
                 {path.language.title}:
               </Typography>
               <Typography
                 variant="body1"
                 color={!path.pathIsFinished ? "#fff" : "#0A3B7A"}
               >
-               
                 {path.language.description}
               </Typography>
             </Box>
@@ -292,6 +306,6 @@ const RoadDetails = ({ language = "" }) => {
       ))}
     </Box>
   );
-}
+};
 
 export default RoadDetails;

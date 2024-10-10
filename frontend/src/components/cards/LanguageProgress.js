@@ -40,7 +40,15 @@ const LanguageProgress = ({ language, type }) => {
   console.log("language", language);
 
   return (
-    <Card>
+    <Card
+    onClick={() => {
+      if (type === "road" && language.percentage != 0) {
+        router.push(`/roads/${language.id}`);
+      } else if (type === "lab" && language.percentage != 0) {
+        router.push(`/labs/${language.id}`);
+      }
+    }}
+    >
       <CardContent
         sx={{
           display: "flex",
@@ -157,7 +165,7 @@ const LanguageProgress = ({ language, type }) => {
                   sx={{ textTransform: "none", minWidth: "80px" }}
                   onClick={() => {
                     if (type === "road") {
-                      router.push(`/roads/${language.id}`);                    
+                      router.push(`/roads/${language.id}`);
                     } else if (type === "lab") {
                       router.push(`/labs/${language.id}`);
                     }
