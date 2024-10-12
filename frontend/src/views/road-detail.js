@@ -121,16 +121,16 @@ const RoadDetails = ({ language = "" }) => {
 
   const progresses = [
     {
-      name: "In progress", // String
+      name: t("in_progress"),  // String
       // value: stateStatistics.data?.data?.progress, // Number
       value: amountOfInProgressPaths,
-      color: "#8FDDFD", // String
+      color: theme.palette.primary.light,// String
     },
     {
-      name: "Completed", // String
+      name: t("completed"), // String
       // value: stateStatistics.data?.data?.completed, // Number
       value: amountOfCompletedPaths,
-      color: "#0A3B7A", // String
+      color: theme.palette.primary.dark, // String
     },
   ];
 
@@ -156,13 +156,13 @@ const RoadDetails = ({ language = "" }) => {
       <Box sx={{ mt: 2 }}>
         <Grid container spacing={2}>
           {/* Road Description and button */}
-          <Grid item xs={12} sm={6} md={8}>
+          <Grid item xs={12} md={8}>
             <Card sx={{ height: "100%" }}>
               <CardContent
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  justifyContent: "start",
+                  alignItems: "start",
                   gap: 3,
                   p: 4,
                 }}
@@ -172,16 +172,25 @@ const RoadDetails = ({ language = "" }) => {
                   alt="C Icon"
                   width={80}
                   height={80}
+                  style={{ 
+              
+                  }}
                 />
                 {!pathIsStarted ? (
                   <>
-                    <Box>
+                    <Box 
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 2,
+
+                    }}
+                    >
                       <Typography variant="h4" fontWeight={600}>
                         {title}
                       </Typography>
                       <Typography variant="body1">{description}</Typography>
-                    </Box>
-                    <Button
+                      <Button
                       variant="contained"
                       disabled={!isImageExist}
                       sx={{
@@ -201,6 +210,28 @@ const RoadDetails = ({ language = "" }) => {
                       {" "}
                       {t("roads.path.start_road")}{" "}
                     </Button>
+                      
+                    </Box>
+                    {/* <Button
+                      variant="contained"
+                      disabled={!isImageExist}
+                      sx={{
+                        backgroundColor: "#fff",
+                        color: theme.palette.primary.dark,
+                        fontWeight: 600,
+                        maxWidth: "9.37rem",
+                        maxHeight: "3.12rem",
+                        minWidth: "9.37rem",
+                        minHeight: "3.12rem",
+                        ":hover": {
+                          bgcolor: theme.palette.primary.light,
+                        },
+                      }}
+                      onClick={handleStartRoad}
+                    >
+                      {" "}
+                      {t("roads.path.start_road")}{" "}
+                    </Button> */}
                   </>
                 ) : (
                   <Box
@@ -234,7 +265,7 @@ const RoadDetails = ({ language = "" }) => {
           </Grid>
 
           {/* Circular Progresses */}
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12}  md={4}>
             <Card sx={{ height: "100%" }}>
               <CardContent
                 sx={{
@@ -243,7 +274,9 @@ const RoadDetails = ({ language = "" }) => {
                   alignItems: "center",
                 }}
               >
-                <CircularProgressStatistics progresses={progresses} />
+                <CircularProgressStatistics progresses={progresses} 
+                flexDirection={"column"}
+                />
               </CardContent>
             </Card>
           </Grid>

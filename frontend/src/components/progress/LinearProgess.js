@@ -33,8 +33,8 @@ const LinearProgess = ({ progress = 0, backgroundColor }) => {
         ></Box>
       </Box>
 
-      <Typography sx={{ width: "fit-content" }}>{progress}%</Typography>
-    </Box>
+      <Typography sx={{ width: "fit-content" }}>{Math.floor(progress)}%</Typography>
+      </Box>
   );
 };
 

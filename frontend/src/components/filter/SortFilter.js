@@ -18,7 +18,7 @@ const SortFilter = ({ filters, setFilters, textKey }) => {
   return (
     <Card
       sx={{
-        width: "calc(100% - 4px)",
+        // width: "calc(100% - 4px)",
         height: "calc(100% - 4px)",
         cursor: "pointer",
         border: "2px solid " + theme.palette.primary.main,
@@ -74,11 +74,13 @@ const SortFilter = ({ filters, setFilters, textKey }) => {
         <Typography
           style={{
             flexWrap: "nowrap",
+            userSelect: "none",
           }}
         >
           <Translations
             style={{
               flexWrap: "nowrap",
+              userSelect: "none",
             }}
             text={"labs.sort_the_labs"}
           />
