@@ -263,6 +263,7 @@ func (s *logService) LanguageUsageRates(ctx context.Context) (languageUsageRates
 
 	var rates domains.LanguageUsageRates
 	for _, pl := range programmingLanguages {
+		rate = 0
 		rates.SetIconPath(pl.IconPath)
 		rates.SetName(pl.Name)
 		for _, path := range roadLogs {
