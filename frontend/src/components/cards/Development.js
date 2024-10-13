@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getUserDevelopment } from "../../store/statistics/statisticsSlice";
 import { useTranslation } from "react-i18next";
+import { theme } from "src/configs/theme";
 
 const Development = () => {
   // let Deneme = [
@@ -23,20 +24,21 @@ const Development = () => {
   const dispatch = useDispatch();
   const { statistics: stateStatistics } = useSelector((state) => state);
   const { t } = useTranslation();
-  const _sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   useEffect(() => {
     dispatch(getUserDevelopment());
-  }, [dispatch]);
+  }, [dispatch]);  
 
   const progresses = [
     {
       name: t("home.development.roads"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
       value: stateStatistics.data?.data?.roadPercentage,
+      color: theme.palette.primary.dark,
     },
     {
       name: t("home.development.labs"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
       value: stateStatistics.data?.data?.labPercantage,
+      color: theme.palette.primary.light,
     },
   ];
 
@@ -76,7 +78,7 @@ const Development = () => {
           >
             <CircularProgressStatistics
               progresses={progresses}
-              flexDirection={_sm ? "column" : "row"}
+              flexDirection={"column"}
             />
           </Box>
         </CardContent>

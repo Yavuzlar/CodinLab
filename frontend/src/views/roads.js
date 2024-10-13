@@ -49,12 +49,12 @@ const Roads = () => {
     <>
       <Grid container spacing={2} gap={2}>
         <Grid item container xs={12} spacing={4} sx={{ pt: "0px !important" }}>
-          <Grid item xs={12} md={8}>
-            <InfoCard {...roads} sx={{ height: "212px" }} />
+          <Grid item xs={12} md={7}>
+            <InfoCard {...roads}  />
           </Grid>
 
-          <Grid item xs={12} md={4}>
-            <Card sx={{ height: "212px" }}>
+          <Grid item xs={12} md={5}>
+            <Card sx={{ height: "18.5rem" }}>
               <CardContent
                 sx={{
                   display: "flex",
@@ -63,7 +63,8 @@ const Roads = () => {
 
                 }}
               >
-              <CircularProgressStatistics progresses={roadProgressStats} />
+              <CircularProgressStatistics progresses={roadProgressStats}
+              flexDirection={"column"} />
               </CardContent>
             </Card>
           </Grid>

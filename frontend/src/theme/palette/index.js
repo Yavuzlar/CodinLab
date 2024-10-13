@@ -69,6 +69,11 @@ const palette = {
     secondary: text.secondary,
     disabled: "#f00", // if we use this color in code , change it for better readability
   },
+  difficulty: {
+    easy: "#39CE19",
+    medium: "#EE7A19",
+    hard: "#DC0101",
+  },
 };
 
 export default palette;

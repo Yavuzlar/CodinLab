@@ -1,5 +1,12 @@
 import { useTheme } from "@mui/material/styles";
-import { Card, CardContent, Typography, Box, Button } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Button,
+  useMediaQuery,
+} from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Tooltip from "@mui/material/Tooltip";
 import CodeEditor from "src/components/code-editor";
@@ -106,10 +113,12 @@ const LanguageRoad = ({ language = "", pathId }) => {
     }
   };
 
+  const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
+
   // Parameters for the code editor
   const params = {
     height: "50vh",
-    width: "50vw",
+    width: _mdmd ? "100%" : "50vw",
   };
 
   // API data for the code editor
@@ -151,12 +160,10 @@ const LanguageRoad = ({ language = "", pathId }) => {
       >
         <CardContent>
           <Typography variant="h4" fontWeight={500}>
-            {" "}
-            {title}{" "}
+            {title}
           </Typography>
-          <Typography variant="body1" sx={{ lineHeight: 2.5 }}>
-            {" "}
-            {description}{" "}
+          <Typography variant="body1" sx={{ lineHeight: 2.5, mb: 4 }}>
+            {description}
           </Typography>
           {isFinished && (
             <Box sx={{ position: "absolute", right: "1rem", top: "1rem" }}>
@@ -200,9 +207,15 @@ const LanguageRoad = ({ language = "", pathId }) => {
           </Button>
         </CardContent>
       </Card>
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          flexDirection: _mdmd ? "column" : "row",
+        }}
+      >
         <CodeEditor
-          key={template} 
+          key={template}
           params={params}
           onRun={handleRun}
           onStop={handleStop}
@@ -212,7 +225,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
           apiData={apiData}
           editorRef={editorRef}
           val={template}
-
         />
         <Output value={output} params={params} />
       </Box>
@@ -221,6 +233,3 @@ const LanguageRoad = ({ language = "", pathId }) => {
 };
 
 export default LanguageRoad;
-
-
-
