@@ -1,11 +1,8 @@
 import { useTheme } from "@emotion/react";
-import { Circle, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
-  Checkbox,
   Container,
   FormControl,
-  FormControlLabel,
   Grid,
   InputAdornment,
   Card,
@@ -14,10 +11,14 @@ import {
   Typography,
   Link,
   Button,
-  Divider,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import Image from "next/image";
+import CodinLabLogo from "../assets/logo/codinlab-logo-main.png";
+import visibilityOnIcon from "../assets/icons/icons8-eye-1.png";
+import visibilityOffIcon from "../assets/icons/eye-hidden.png";
+import LanguageSelector from "src/layout/components/navigation/item/LanguageSelector";
 import { useState, useEffect } from "react";
 import { registerValidation } from "src/configs/validation/registerSchema";
 import CardImage from "src/assets/3d/3d-casual-life-windows-with-developer-code-symbols.png";
@@ -31,21 +32,14 @@ const Register = () => {
   const [formData, setFormData] = useState();
   const [errors, setErrors] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+
+  const md_down = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const { register } = useAuth();
 
   const handleChange = (e) => {
-    if (e.target.name === "checkbox") {
-      setIsChecked(!isChecked);
-      return;
-    }
-    if (e.target.name === "checkbox") {
-      setIsChecked(!isChecked);
-      return;
-    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -56,10 +50,6 @@ const Register = () => {
     const validationErrors = await registerValidation(formData);
     setErrors(validationErrors);
 
-    if (!isChecked) {
-      setErrors({ ...errors, checkbox: "You must accept" });
-      return;
-    }
     if (Object.keys(validationErrors).length > 0) {
       console.log("Form has errors:", validationErrors);
       return;
@@ -68,11 +58,12 @@ const Register = () => {
     try {
       await register(formData);
     } catch (error) {}
+
   };
 
   addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-      handleSubmit();
+      handleSubmit(event);
     }
   });
 
@@ -134,14 +125,25 @@ const Register = () => {
     <Box
       sx={{
         position: "relative",
+        mt: { sm: 0, md: 1 },
       }}
     >
+      <Box>
+        {md_down ? (
+          ""
+        ) : (
+          <Button sx={{ top: 0, right: 0, position: "absolute" }}>
+            <LanguageSelector />
+          </Button>
+        )}
+      </Box>
       <Box
         sx={{
-          display: { xs: "none", mdlg: "block" },
+          display: { xs: "none", md: "block" },
           position: "absolute",
           top: "-6.5%",
           left: {
+            md: "-3%",
             mdlg: "%1",
             lg: "3%",
             lgPlus: "5%",
@@ -156,16 +158,19 @@ const Register = () => {
       </Box>
       <Box
         sx={{
-          display: { xs: "none", mdlg: "block" },
+          display: { xs: "none", md: "block" },
           position: "absolute",
           top: "3%",
           right: {
-            mdlg: "-17%",
+            md: "-10%",
+            mdlg: "-11%",
+            mdxl: "-%9",
             lg: "-10%",
+            lgmd: "-7%",
             lgPlus: "-5%",
             lgXl: "2%",
             xl: "4%",
-            xxl: "14%",
+            xxl: "8%",
           },
           zIndex: 1,
         }}
@@ -178,34 +183,59 @@ const Register = () => {
           alt="Girl holding laptop"
         />
       </Box>
-      <Container sx={{ display: "flex", justifyContent: "center", mt: "4%" }}>
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <Card
           sx={{
-            m: 1,
+            width: { xs: "100%", sm: "auto" },
           }}
         >
           <CardContent
             sx={{
-              width: { md: "auto", lg: "50.75rem" },
+              width: {
+                mdmd: "auto",
+                md: "35rem",
+                mdlg: "40rem",
+                mdxl: "45rem",
+                lg: "50.75rem",
+              },
             }}
           >
             <Grid
               container
               direction="column"
               sx={{
-                px: { xs: 2, sm: 4, md: 6, lg: 8, xl: 10, xxl: 12 },
+                px: { xs: 4, sm: 6, md: 8, lg: 10, xl: 12, xxl: 14 },
+                position: "relative",
               }}
             >
+              {md_down ? (
+                <Button sx={{ top: 0, right: 0, position: "absolute" }}>
+                  <LanguageSelector />
+                </Button>
+              ) : (
+                ""
+              )}
               <Box
                 sx={{
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  flexDirection: "column",
                   gap: 1,
                   my: 5,
                 }}
               >
-                <Circle sx={{ width: 40, height: 40, mr: 1 }} />
+                <Image
+                  src={CodinLabLogo}
+                  alt="codinlab-logo"
+                  width={80}
+                  height={120}
+                />
                 <Typography
                   textAlign="center"
                   variant="body1"
@@ -272,11 +302,21 @@ const Register = () => {
                             aria-label="toggle password visibility"
                             onClick={handleClickShowPassword}
                           >
-                            {showPassword ? (
-                              <VisibilityOff sx={{ color: "#000" }} />
-                            ) : (
-                              <Visibility sx={{ color: "#000" }} />
-                            )}
+                            <Image
+                              style={{ zIndex: 99 }}
+                              src={
+                                showPassword
+                                  ? visibilityOnIcon
+                                  : visibilityOffIcon
+                              }
+                              alt={
+                                showPassword
+                                  ? "visibilityOnIcon"
+                                  : "visibilityOffIcon"
+                              }
+                              width={30}
+                              height={30}
+                            />
                           </IconButton>
                         </InputAdornment>
                       ),
