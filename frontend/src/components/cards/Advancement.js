@@ -47,16 +47,12 @@ const Advancement = () => {
             sx={{
               width: "100%",
               height: "100%",
-              overflowX: "hidden",
-              overflowY: "auto",
+              overflow: "auto",
               "&::-webkit-scrollbar": {
-                width: "0.4rem",
+                width: "0rem",
               },
               "&::-webkit-scrollbar-track": {
                 background: "transparent",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                backgroundColor: theme.palette.primary.main,
               },
             }}
           >

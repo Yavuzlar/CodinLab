@@ -11,7 +11,10 @@ import {
   Paper,
   IconButton,
   TextField,
-  Button
+  Button,
+  useMediaQuery,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Image from "next/image";
@@ -25,6 +28,7 @@ import { getAdminUser } from "src/store/user/userSlice";
 import LanguageIcon from "src/components/language-icon/LanguageIcon";
 import EditIcon from "../assets/icons/icons8-edit-64.png";
 import DeleteIcon from "../assets/icons/icons8-delete-30.png";
+import InfoIcon from "@mui/icons-material/Info";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -33,7 +37,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { deleteUserById, fetchUserById, updateUserById } from "src/store/admin/adminSlice";
+import {
+  deleteUserById,
+  fetchUserById,
+  updateUserById,
+} from "src/store/admin/adminSlice";
 import { hexToRGBA } from "src/utils/hex-to-rgba";
 
 const UsersList = () => {
@@ -121,33 +129,34 @@ const UsersList = () => {
     },
   };
 
+  const _sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
   return (
     <Grid container spacing={2} direction="column">
       <Grid item xs={12}>
-        <Box
-          sx={{
-            display: "flex",
-            gap: "1rem",
-            flexDirection: "column",
-            height: "100%",
-          }}
-        >
-          <FilterUser filters={filters} setFilters={setFilters} />
-        </Box>
+        <FilterUser filters={filters} setFilters={setFilters} />
       </Grid>
-      <Grid
-        item
-        xs={12}
-        sx={{
-          maxHeight: "calc(100vh - 143px)",
-          overflow: "auto",
-        }}
-      >
+      <Grid item xs={12} sx={{}}>
         <TableContainer
           component={Paper}
-          sx={{ borderRadius: "15px 15px 0px 0px" }}
+          sx={{
+            borderRadius: "15px 15px 0px 0px",
+              overflow: "auto",
+              "&::-webkit-scrollbar": {
+                width: "0rem",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "transparent",
+              },
+            maxHeight: "calc(100vh - 143px)",
+          }}
         >
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table
+            sx={{
+              minWidth: _sm ? "100%" : "600",
+            }}
+            aria-label="simple table"
+          >
             <TableHead
               sx={{
                 bgcolor: theme.palette.primary.dark,
@@ -205,6 +214,7 @@ const UsersList = () => {
                     padding: "10px 10px 10px 0px",
                     whiteSpace: "nowrap",
                     width: "25%",
+                    display: _sm ? "none" : "",
                   }}
                 >
                   <Box
@@ -233,6 +243,7 @@ const UsersList = () => {
                     padding: "10px 10px 10px 0px",
                     whiteSpace: "nowrap",
                     width: "25%",
+                    display: _sm ? "none" : "",
                   }}
                 >
                   <Box
@@ -269,97 +280,162 @@ const UsersList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {stateUser.adminUserData?.data?.map((row) => (
-                <TableRow
-                  key={row.order}
-                  sx={{
-                    bgcolor:
-                      row.order % 2 === 1
-                        ? theme.palette.primary.main
-                        : theme.palette.primary.light,
-                  }}
-                >
-                  <TableCell
+              {stateUser.adminUserData?.data
+                ?.filter((row) =>
+                  row.username
+                    .toLowerCase()
+                    .includes(filters.search.toLowerCase())
+                )
+                .sort((a, b) => {
+                  if (filters.sort === "asc") {
+                    return a.username.localeCompare(b.username);
+                  }
+                  if (filters.sort === "desc") {
+                    return b.username.localeCompare(a.username);
+                  }
+                  return 0;
+                })
+                .map((row) => (
+                  <TableRow
+                    key={row.order}
                     sx={{
-                      fontFamily: "Outfit",
-                      fontSize: "1rem",
-                      lineHeight: "normal",
-                      padding: "10px 10px 10px 25px",
-                      borderBottom: "none",
+                      bgcolor:
+                        row.order % 2 === 1
+                          ? theme.palette.primary.main
+                          : theme.palette.primary.light,
                     }}
                   >
-                    {row.order}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderBottom: "none",
-                      fontFamily: "Outfit",
-                      fontSize: "1rem",
-                      lineHeight: "normal",
-                      padding: "10px 10px 10px 35px",
-                    }}
-                    align="left"
-                  >
-                    {row.username}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderBottom: "none",
-                      fontFamily: "Outfit",
-                      fontSize: "1rem",
-                      lineHeight: "normal",
-                      padding: "10px 10px 10px 35px",
-                    }}
-                    align="left"
-                  >
-                    {row.level}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      borderBottom: "none",
-                      fontFamily: "Outfit",
-                      fontSize: "1rem",
-                      lineHeight: "normal",
-                      padding: "10px 10px 10px 35px",
-                    }}
-                  >
-                    <LanguageIcon language={row.bestLanguage} />
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      borderBottom: "none",
-                      padding: "10px 10px 10px 0px",
-                    }}
-                  >
-                    <IconButton
-                      onClick={() => handleEdit(row)}
-                      aria-label="edit"
+                    <TableCell
+                      sx={{
+                        fontFamily: "Outfit",
+                        fontSize: "1rem",
+                        lineHeight: "normal",
+                        padding: "10px 10px 10px 25px",
+                        borderBottom: "none",
+                      }}
                     >
-                      <Image
-                        src={EditIcon}
-                        alt="Edit Icon"
-                        width={25}
-                        height={25}
-                        style={{ filter: 'invert(100%)' }} 
-                      />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => handleDelete(row.userID)}
-                      aria-label="delete"
+                      {row.order}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderBottom: "none",
+                        fontFamily: "Outfit",
+                        fontSize: "1rem",
+                        lineHeight: "normal",
+                        padding: "10px 10px 10px 35px",
+                      }}
+                      align="left"
                     >
-                      <Image
-                        src={DeleteIcon}
-                        alt="Delete Icon"
-                        width={25}
-                        height={25}
-                        style={{ filter: 'invert(100%)' }} 
-                      />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      {row.username}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        borderBottom: "none",
+                        fontFamily: "Outfit",
+                        fontSize: "1rem",
+                        lineHeight: "normal",
+                        padding: "10px 10px 10px 35px",
+                        display: _sm ? "none" : "",
+                      }}
+                      align="left"
+                    >
+                      {row.level}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{
+                        borderBottom: "none",
+                        fontFamily: "Outfit",
+                        fontSize: "1rem",
+                        lineHeight: "normal",
+                        padding: "10px 10px 10px 35px",
+                        display: _sm ? "none" : "",
+                      }}
+                    >
+                      <LanguageIcon language={row.bestLanguage} />
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{
+                        borderBottom: "none",
+                        padding: "10px 10px 10px 0px",
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <IconButton
+                        onClick={() => handleEdit(row)}
+                        aria-label="edit"
+                      >
+                        <Image
+                          src={EditIcon}
+                          alt="Edit Icon"
+                          width={25}
+                          height={25}
+                          style={{ filter: "invert(100%)" }}
+                        />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleDelete(row.userID)}
+                        aria-label="delete"
+                      >
+                        <Image
+                          src={DeleteIcon}
+                          alt="Delete Icon"
+                          width={25}
+                          height={25}
+                          style={{ filter: "invert(100%)" }}
+                        />
+                      </IconButton>
+                      <Tooltip
+                        title={
+                          <Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: "0.5rem",
+                              }}
+                            >
+                              <Typography>
+                                <Translations text="userlist.level.name" />:
+                              </Typography>
+                              <Typography>{row.level}</Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: "0.5rem",
+                              }}
+                            >
+                              <Typography>
+                                <Translations text="userlist.best.name" />:
+                              </Typography>
+                              {row.bestLanguage ? (
+                                <Typography>{row.bestLanguage}</Typography>
+                              ) : (
+                                <Typography>-</Typography>
+                              )}
+                            </Box>
+                          </Box>
+                        }
+                        sx={{
+                          mt: "7.2px",
+                          paddingLeft: "8px",
+                          display: _sm ? "" : "none",
+                        }}
+                      >
+                        <InfoIcon
+                          style={{
+                            width: "25px",
+                            height: "25px",
+                          }}
+                        />
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -379,12 +455,12 @@ const UsersList = () => {
               color: hexToRGBA(theme.palette.text.primary, 0.7),
             }}
           >
-            <Translations text="userlist.edit.content"/>
+            <Translations text="userlist.edit.content" />
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            label={<Translations text="register.name"/>}
+            label={<Translations text="register.name" />}
             type="text"
             fullWidth
             variant="filled"
@@ -394,7 +470,7 @@ const UsersList = () => {
           />
           <TextField
             margin="dense"
-            label={<Translations text="register.surname"/>}
+            label={<Translations text="register.surname" />}
             type="text"
             fullWidth
             variant="filled"
@@ -406,7 +482,7 @@ const UsersList = () => {
           />
           <TextField
             margin="dense"
-            label={<Translations text="register.username"/>}
+            label={<Translations text="register.username" />}
             type="text"
             fullWidth
             variant="filled"
