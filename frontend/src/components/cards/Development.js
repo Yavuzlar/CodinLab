@@ -32,12 +32,12 @@ const Development = () => {
   const progresses = [
     {
       name: t("home.development.roads"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.data?.data?.roadPercentage,
+      value: stateStatistics.developmentData?.data?.roadPercentage ,
       color: theme.palette.primary.dark,
     },
     {
       name: t("home.development.labs"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.data?.data?.labPercantage,
+      value: stateStatistics.developmentData?.data?.labPercantage ,
       color: theme.palette.primary.light,
     },
   ];

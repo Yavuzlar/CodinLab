@@ -50,7 +50,7 @@ const Roads = () => {
       <Grid container spacing={2} gap={2}>
         <Grid item container xs={12} spacing={4} sx={{ pt: "0px !important" }}>
           <Grid item xs={12} md={7}>
-            <InfoCard {...roads}  />
+            <InfoCard {...roads} />
           </Grid>
 
           <Grid item xs={12} md={5}>
@@ -63,8 +63,8 @@ const Roads = () => {
 
                 }}
               >
-              <CircularProgressStatistics progresses={roadProgressStats}
-              flexDirection={"column"} />
+                <CircularProgressStatistics progresses={roadProgressStats}
+                  flexDirection={"column"} />
               </CardContent>
             </Card>
           </Grid>
@@ -99,7 +99,7 @@ const Roads = () => {
         >
           {stateLanguage.userLanguageRoadStatsData?.data?.map(
             (language, index) => (
-              <Grid item xs={12} md={12} key={index}>
+              <Grid item xs={12} md={12} key={index} sx={{ cursor: "pointer" }}>
                 <LanguageProgress language={language} type="road" />
               </Grid>
             )

@@ -27,8 +27,10 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import axios from "axios";
 
 const renderDifficulty = (difficulty) => {
+  const { t } = useTranslation();
+
   switch (difficulty) {
-    case "easy":
+    case 1:
       return (
         <Box
           sx={{
@@ -47,12 +49,12 @@ const renderDifficulty = (difficulty) => {
             fontWeight={500}
             sx={{ textTransform: "capitalize" }}
           >
-            {" "}
-            {difficulty}{" "}
+            {t("labs.difficulty.easy")}
+
           </Typography>
         </Box>
       );
-    case "medium":
+    case 2:
       return (
         <Box
           sx={{
@@ -71,12 +73,11 @@ const renderDifficulty = (difficulty) => {
             fontWeight={500}
             sx={{ textTransform: "capitalize" }}
           >
-            {" "}
-            {difficulty}{" "}
+            {t("labs.difficulty.medium")}
           </Typography>
         </Box>
       );
-    case "hard":
+    case 3:
       return (
         <Box
           sx={{
@@ -95,8 +96,7 @@ const renderDifficulty = (difficulty) => {
             fontWeight={500}
             sx={{ textTransform: "capitalize" }}
           >
-            {" "}
-            {difficulty}{" "}
+            {t("labs.difficulty.hard")}
           </Typography>
         </Box>
       );
@@ -120,9 +120,10 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const [labData, setLabData] = useState({
     title: "",
-    difficulty:"",
+    programmingName: "",
+    difficulty: "",
     description: "",
-    questionNote:"",
+    questionNote: "",
     expectedOutputNote: "",
     expectedOutput: "",
     hint: "",
@@ -150,10 +151,11 @@ const LabQuestion = ({ language = "", questionId }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    
+
     if (labSlice.data) {
       setLabData({
         title: labSlice.data[0]?.language?.title,
+        programmingName: labSlice.data[0]?.programmingName,
         difficulty: labSlice.data[0]?.difficulty,
         description: labSlice.data[0]?.language?.description,
         questionNote: labSlice.data[0]?.language?.note,
@@ -175,13 +177,13 @@ const LabQuestion = ({ language = "", questionId }) => {
       setIsFailed(true);
     }
   };
-  
+
 
   const handleStop = (outputData) => {
     // this api for get stop code component (stop code component is the last component in the container)
     // but not use it in this component
     // dispatch(getStop())
-    
+
     setOutput(outputData);
     setIsSubmitted(false);
     setIsCompleted(false);
@@ -193,7 +195,7 @@ const LabQuestion = ({ language = "", questionId }) => {
         method: "GET",
         url: `/api/v1/private/lab/reset/${programmingID}/${questionId}`,
       });
-  
+
       if (response.status === 200) {
         const apiTemplate = response.data?.data?.template || "";
         // const prevData = labData;
@@ -203,14 +205,14 @@ const LabQuestion = ({ language = "", questionId }) => {
         // });
         editorRef.current.setValue(apiTemplate);
         console.log("Reset response success", labData);
-  
+
       }
     } catch (error) {
       console.log("Reset response error", error);
     }
   };
-  
-  
+
+
   useEffect(() => {
     dispatch(
       getLabByProgramingId({
@@ -225,13 +227,13 @@ const LabQuestion = ({ language = "", questionId }) => {
   // Breadcrumbs
   const breadcrums = [
     {
-      path: "/labs",
-      title: labData.title,
+      path: `/labs/${language}`,
+      title: t("nav.labs"),
       permission: "labs",
     },
     {
       path: `/labs/${language}`,
-      title: labData.title,
+      title: labData.programmingName, // edit the sand backend programming id and take language namea.
       permission: "labs",
     },
 
@@ -279,9 +281,8 @@ const LabQuestion = ({ language = "", questionId }) => {
             }}
           >
             {/* Question Title */}
-            <Typography variant="h4" fontWeight={600}>
-              {" "}
-              {labData.title}{" "}
+            <Typography variant="h4" fontWeight={600} >
+              {labData.title}
             </Typography>
 
             {/* Difficulty, Hint button*/}
@@ -290,7 +291,7 @@ const LabQuestion = ({ language = "", questionId }) => {
                 display: "flex",
                 gap: "1rem",
                 position: "absolute",
-                top: "1rem",
+                bottom: "1rem",
                 right: "1rem",
               }}
             >
@@ -307,57 +308,56 @@ const LabQuestion = ({ language = "", questionId }) => {
                   px: 2,
                 }}
               >
-                 <Image src={LightBulb} alt="hint" width={25} height={25} />
-                 <Typography variant="body1" color={"#FFCA00"} fontWeight={500}>
-                  {" "}
-                  {t("labs.question.hint")}{" "}
+                <Image src={LightBulb} alt="hint" width={25} height={25} />
+                <Typography variant="body1" color={"#FFCA00"} fontWeight={500}>
+                  {t("labs.question.hint")}
                 </Typography>
               </Button>
               <Tooltip title={t("roads.path.restart.button")}>
-              <Button
-                variant="dark"
-                sx={{
-                  
-                }}
-                onClick={() => handleReset()}
-              >
-                <RestartAltIcon />
-              </Button>
-            </Tooltip>
-            </Box>
-           
-            <Modal
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
+                <Button
+                  variant="dark"
+                  sx={{
+
+                  }}
+                  onClick={() => handleReset()}
                 >
-                  <Box sx={
-                    {
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      maxWidth: 500,
-                      bgcolor: theme.palette.primary.main,
-                      p: 4,
-                      borderRadius: '15px',
-                      textAlign: 'center'
-                    }
-                  }>
-                    <Typography
-                      id="modal-modal-title"
-                      variant="h6"
-                      component="h2"
-                    >
-                      {t("labs.question.hint")}
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      {labData.hint}
-                    </Typography>
-                  </Box>
-                </Modal>
-           
+                  <RestartAltIcon />
+                </Button>
+              </Tooltip>
+            </Box>
+
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={
+                {
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  maxWidth: 500,
+                  bgcolor: theme.palette.primary.main,
+                  p: 4,
+                  borderRadius: '15px',
+                  textAlign: 'center'
+                }
+              }>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  {t("labs.question.hint")}
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  {labData.hint}
+                </Typography>
+              </Box>
+            </Modal>
+
 
             {/* Question Description */}
             <Typography variant="body1">{labData.description}</Typography>
@@ -424,18 +424,18 @@ const LabQuestion = ({ language = "", questionId }) => {
           )}
 
           {/* Expected output card */}
-         
-              {/* Output */}
-              {isSubmitted && (
-                 <Card
-                 sx={{
-                   width: "100%",
-                   backgroundColor: isSubmitted ? "#0A3B7A" : "",
-                 }}
-               >
-                 <CardContent
-                   sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
-                 >
+
+          {/* Output */}
+          {isSubmitted && (
+            <Card
+              sx={{
+                width: "100%",
+                backgroundColor: isSubmitted ? "#0A3B7A" : "",
+              }}
+            >
+              <CardContent
+                sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -469,7 +469,7 @@ const LabQuestion = ({ language = "", questionId }) => {
                 </Box>
               </CardContent>
             </Card>
-              )}
+          )}
         </Box>
       </Box>
     </>

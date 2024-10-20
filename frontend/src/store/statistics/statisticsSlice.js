@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   data: [],
   advancementData: [],
+  developmentData: [],
   difficultyStatsData: [],
   labsProgressStatsData: [],
   error: false,
@@ -148,7 +149,7 @@ const statisticsSlice = createSlice({
         state.error = null;
       })
       .addCase(getUserDevelopment.fulfilled, (state, action) => {
-        state.data = action.payload;
+        state.developmentData = action.payload;
         state.loading = false;
       })
       .addCase(getUserDevelopment.rejected, (state, action) => {

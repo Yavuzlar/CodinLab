@@ -69,8 +69,8 @@ const LanguageRoad = ({ language = "", pathId }) => {
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
 
-        setIsStarted(pathData.isStarted);
-        setIsFinished(pathData.isFinished);
+        setIsStarted(pathData.pathIsStarted);
+        setIsFinished(pathData.pathIsFinished);
         setTitle(pathData.language.title);
         setDescription(pathData.language.description);
         setContent(pathData.language.content);
@@ -162,8 +162,14 @@ const LanguageRoad = ({ language = "", pathId }) => {
           <Typography variant="h4" fontWeight={500}>
             {title}
           </Typography>
-          <Typography variant="body1" sx={{ lineHeight: 2.5, mb: 4 }}>
+          <Typography variant="body1" sx={{ lineHeight: 2.5 }}>
             {description}
+          </Typography>
+          <Typography variant="body1" sx={{ mb: "10px", color: "lightgrey" }}>
+            {content}
+          </Typography>
+          <Typography variant="body1" sx={{ color: "lightgrey" }}>
+            {note}
           </Typography>
           {isFinished && (
             <Box sx={{ position: "absolute", right: "1rem", top: "1rem" }}>
@@ -202,8 +208,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
             onClick={handleNextPath}
             disabled={!isFinished}
           >
-            {" "}
-            {t("roads.path.next_path")}{" "}
+            {t("roads.path.next_path")}
           </Button>
         </CardContent>
       </Card>
