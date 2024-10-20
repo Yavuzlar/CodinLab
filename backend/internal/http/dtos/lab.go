@@ -13,6 +13,7 @@ func NewLabDTOManager() LabDTOManager {
 
 type LabDTO struct {
 	ID         int            `json:"id"`
+	ProgrammingName string `json:"programmingName"`
 	Languages  LabLanguageDTO `json:"language"`
 	Template   string         `json:"template,omitempty"`
 	IsStarted  bool           `json:"isStarted"`
@@ -52,9 +53,10 @@ func (m *LabDTOManager) ToLabsForAllDTO(labs []LabForAllDTO, isImageExists bool)
 }
 
 // This is for get lab by id
-func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, template string) LabDTO {
+func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, template string, programmingName string) LabDTO {
 	return LabDTO{
 		ID:         lab.GetID(),
+		ProgrammingName: programmingName,
 		Languages:  languagesDTO,
 		Template:   template,
 		IsStarted:  lab.GetIsStarted(),

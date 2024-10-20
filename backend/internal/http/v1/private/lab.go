@@ -178,7 +178,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
 		languageDTO := h.dtoManager.LabDTOManager.ToLanguageDTO(labCollection.GetLanguages(), language)
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTO, frontendTemplate))
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTO, frontendTemplate, inventoryInformation.GetName()))
 	}
 	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, labID, domains.TypeLab, domains.ContentStarted); err != nil {
 		return err

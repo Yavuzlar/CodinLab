@@ -42,6 +42,7 @@ const RoadDetails = ({ language = "" }) => {
 
   const [pathsDataContent, setPathsDataContent] = useState([]);
   const [pathIsStarted, setpathIsStarted] = useState(false); // Set this to true if the user has started the road on useEffect()
+  const [totalPath, setTotalPath] = useState(0)
   const [amountOfInProgressPaths, setAmountOfInProgressPaths] = useState(0); // Amount of in progress paths
   const [amountOfCompletedPaths, setAmountOfCompletedPaths] = useState(0); // Amount of completed paths // Path icon path
   const [programmingIcon, setProgrammingIcon] = useState("images/c.png"); // Programming icon path
@@ -61,7 +62,7 @@ const RoadDetails = ({ language = "" }) => {
   };
 
   useEffect(() => {
-    setProgrammingId(language);
+    setProgrammingId(parseInt(language));
   }, [language]);
 
   useEffect(() => {
@@ -98,6 +99,7 @@ const RoadDetails = ({ language = "" }) => {
           setpathIsStarted(true);
         }
 
+        setTotalPath(pathsData.length)
         setAmountOfInProgressPaths(inProgressPaths.length);
         setAmountOfCompletedPaths(completedPaths.length);
         setPathsDataContent(pathsData);
@@ -140,7 +142,7 @@ const RoadDetails = ({ language = "" }) => {
 
   const handleStartRoad = () => {
     if (isImageExist) {
-      dispatch(startRoad({ programmingid: programmingId }));
+      dispatch(startRoad({ programmingID: programmingId }));
       router.push(`/roads/${language}/1`);
     } else {
       showToast("error", "Image not found");
@@ -172,45 +174,44 @@ const RoadDetails = ({ language = "" }) => {
                   alt="C Icon"
                   width={80}
                   height={80}
-                  style={{ 
-              
+                  style={{
+
                   }}
                 />
                 {!pathIsStarted ? (
                   <>
-                    <Box 
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 2,
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
 
-                    }}
+                      }}
                     >
                       <Typography variant="h4" fontWeight={600}>
                         {title}
                       </Typography>
                       <Typography variant="body1">{description}</Typography>
                       <Button
-                      variant="contained"
-                      disabled={!isImageExist}
-                      sx={{
-                        backgroundColor: "#fff",
-                        color: theme.palette.primary.dark,
-                        fontWeight: 600,
-                        maxWidth: "9.37rem",
-                        maxHeight: "3.12rem",
-                        minWidth: "9.37rem",
-                        minHeight: "3.12rem",
-                        ":hover": {
-                          bgcolor: theme.palette.primary.light,
-                        },
-                      }}
-                      onClick={handleStartRoad}
-                    >
-                      {" "}
-                      {t("roads.path.start_road")}{" "}
-                    </Button>
-                      
+                        variant="contained"
+                        disabled={!isImageExist}
+                        sx={{
+                          backgroundColor: "#fff",
+                          color: theme.palette.primary.dark,
+                          fontWeight: 600,
+                          maxWidth: "9.37rem",
+                          maxHeight: "3.12rem",
+                          minWidth: "9.37rem",
+                          minHeight: "3.12rem",
+                          ":hover": {
+                            bgcolor: theme.palette.primary.light,
+                          },
+                        }}
+                        onClick={handleStartRoad}
+                      >
+                        {t("roads.path.start_road")}
+                      </Button>
+
                     </Box>
                     {/* <Button
                       variant="contained"
@@ -243,9 +244,9 @@ const RoadDetails = ({ language = "" }) => {
                     }}
                   >
                     <Typography variant="h4">
-                      {" "}
-                      {capitalizedLanguage}{" "}
+                      {title}
                     </Typography>
+                    <Typography variant="body1">{description}</Typography>
                     <LinearProgess progress={amountOfCompletedPaths} />
                     <Stack direction={"row"} spacing={1}>
                       <Image
@@ -255,7 +256,7 @@ const RoadDetails = ({ language = "" }) => {
                         height={25}
                       />
                       <Typography variant="body1">
-                        {amountOfCompletedPaths}/100 Path
+                        {amountOfCompletedPaths}/{totalPath} Path
                       </Typography>
                     </Stack>
                   </Box>
@@ -265,7 +266,7 @@ const RoadDetails = ({ language = "" }) => {
           </Grid>
 
           {/* Circular Progresses */}
-          <Grid item xs={12}  md={4}>
+          <Grid item xs={12} md={4}>
             <Card sx={{ height: "100%" }}>
               <CardContent
                 sx={{
@@ -274,8 +275,8 @@ const RoadDetails = ({ language = "" }) => {
                   alignItems: "center",
                 }}
               >
-                <CircularProgressStatistics progresses={progresses} 
-                flexDirection={"column"}
+                <CircularProgressStatistics progresses={progresses}
+                  flexDirection={"column"}
                 />
               </CardContent>
             </Card>
@@ -284,7 +285,7 @@ const RoadDetails = ({ language = "" }) => {
       </Box>
 
       {pathsDataContent.map((path, index) => (
-        <Box key={index}>
+        <Box key={index} >
           <Box
             sx={{
               borderWidth: 6,
@@ -311,6 +312,8 @@ const RoadDetails = ({ language = "" }) => {
                   ? "#fff"
                   : theme.palette.primary.dark,
                 p: 3,
+                cursor: "pointer"
+
               }}
             >
               <Image
