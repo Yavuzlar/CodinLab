@@ -149,6 +149,14 @@ const RoadDetails = ({ language = "" }) => {
     }
   };
 
+  const handlePath = (path) => {
+    if (!(path.pathIsStarted && !path.pathIsFinished) && !(path.pathIsFinished)) {
+      return
+    }
+
+    router.push(`/roads/${language}/${path.id}`)
+  }
+
   return (
     <Box>
       {/* Breadcrumbs */}
@@ -300,7 +308,7 @@ const RoadDetails = ({ language = "" }) => {
             }}
           >
             <Box
-              onClick={() => router.push(`/roads/${language}/${path.id}`)}
+              onClick={() => handlePath(path)}
               sx={{
                 mt: 2,
                 display: "flex",

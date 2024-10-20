@@ -17,10 +17,14 @@ const Home = () => {
     (state) => state
   );
 
+
   useEffect(() => {
     dispatch(getInventories());
     dispatch(GetUserLevel());
   }, [dispatch]);
+
+  console.log(stateStatistics)
+
 
   const progresses = [
     {
@@ -83,8 +87,8 @@ const Home = () => {
         >
           <Grid item xs={12} md={6} xl={4}>
             <LevelStatistic
-              levels={stateStatistics.data?.data?.level}
-              progress={stateStatistics.data?.data?.levelPercentage}
+              levels={stateStatistics.levelData?.data?.level}
+              progress={stateStatistics.levelData?.data?.levelPercentage}
             />
           </Grid>
           <Grid item xs={12} md={6} xl={4}>
