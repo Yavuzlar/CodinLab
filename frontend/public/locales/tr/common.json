@@ -125,5 +125,6 @@
   "home.development.labs": "Labaratuvarlar",
    "runCode" : "Kod Çalıştırılıyor...",
   "succsesCode" : "Kod Başarıyla Çalıştırıldı",
-   "lab.button.review": "İncele"
+   "lab.button.review": "İncele",
+   "settings" : "Ayarlar"
 }

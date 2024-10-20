@@ -142,17 +142,14 @@ const Labs = () => {
 
       <Grid
         item
-        container
-        xs={12}
         md={5}
-        spacing={2}
-        sx={{
+        e sx={{
           maxHeight: "calc(100vh - 143px)",
           overflow: "auto",
         }}
       >
         {labsStatsData?.map((language, index) => (
-          <Grid item xs={12} key={index}>
+          <Grid item mb={2} xs={12} key={index} >
             <LanguageProgress language={language} type="lab" />
           </Grid>
         ))}

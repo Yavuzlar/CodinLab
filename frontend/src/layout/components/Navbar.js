@@ -16,10 +16,14 @@ import { useTranslation } from "react-i18next";
 import { useNav } from "src/hooks/useNav";
 import Logo from "../../assets/logo/codinlab-logo-light.png";
 import Image from "next/image";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import { useRouter } from "next/router";
 
 function ResponsiveAppBar() {
-  const { logout } = useAuth();
+  const { logout,user } = useAuth();
   const { anchorElNav, OpenNavMenu, CloseNavMenu, LogoClick } = useNav();
+  const router = useRouter();
+  
 
   const handleLogout = async () => {
     try {
@@ -28,9 +32,20 @@ function ResponsiveAppBar() {
     }
   };
 
+  const routerSettings = () => {
+    if (user?.role === "admin") {
+      router.push("/admin/settings");  
+    } 
+    else if (user?.role === "user") {
+      router.push("/settings");  
+    } 
+  };
+
+
   const { t } = useTranslation();
 
   const logoutText = t("logout");
+  const settingsText = t("settings");
 
   return (
     <AppBar
@@ -141,6 +156,36 @@ function ResponsiveAppBar() {
             ))}
             <LanguageSelector />
             <IconButton
+              onClick={routerSettings}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "0.5rem",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.3)",
+                  borderRadius: "5px",
+                },
+              }}
+            >
+              <ManageAccountsIcon
+                sx={{
+                  width: 24,
+                  height: 24,
+                }}
+              />
+              <Typography
+                sx={{
+                  fontWeight: 300,
+                  textTransform: "capitalize",
+                  fontFamily: "Outfit",
+                  textAlign: "center",
+                }}
+              >
+                {settingsText}
+              </Typography>
+            </IconButton>
+            <IconButton
               onClick={handleLogout}
               sx={{
                 display: "flex",
@@ -208,7 +253,30 @@ function ResponsiveAppBar() {
                 />
               ))}
               <Divider sx={{ borderColor: "white" }} />
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Box sx={{ 
+                display: "flex", 
+                flexDirection: "column", 
+                gap: 1.5, 
+
+               }}>
+              <IconButton
+                  onClick={routerSettings}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    "&:hover": {
+                      backgroundColor: "rgba(255, 255, 255, 0.3)",
+                      borderRadius: "5px",
+                    },
+                  }}
+                >
+                  <ManageAccountsIcon />
+                  <Typography>
+                    {settingsText}
+                  </Typography>
+                </IconButton>
                 <IconButton
                   onClick={handleLogout}
                   sx={{
@@ -223,7 +291,9 @@ function ResponsiveAppBar() {
                   }}
                 >
                   <LogoutIcon />
-                  <Typography>Logout</Typography>
+                  <Typography>
+                    {logoutText}
+                  </Typography>
                 </IconButton>
               </Box>
             </Box>
