@@ -123,6 +123,8 @@
   "home.development.labs": "Labs",
   "runCode" : "Code Running...",
   "succsesCode" : "Code Successfully Run",
-  "lab.button.review": "Review"
+  "lab.button.review": "Review",
+  "settings" : "Settings"
+
 
 }
