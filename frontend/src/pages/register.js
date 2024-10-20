@@ -57,7 +57,7 @@ const Register = () => {
     // Call API
     try {
       await register(formData);
-    } catch (error) {}
+    } catch (error) { }
 
   };
 

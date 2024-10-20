@@ -5,6 +5,7 @@ import axios from "axios";
 const initialState = {
   loading: false,
   data: [],
+  levelData: [],
   advancementData: [],
   developmentData: [],
   difficultyStatsData: [],
@@ -22,10 +23,10 @@ export const fetchAdvancement = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(response.message);
     }
   }
 );
@@ -39,13 +40,13 @@ export const GetUserLevel = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(response.message);
     }
   }
-); 
+);
 
 export const getUserDevelopment = createAsyncThunk(
   "statistics/getUserDevelopment",
@@ -56,13 +57,13 @@ export const getUserDevelopment = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(response.message);
     }
   }
-); 
+);
 
 export const getDifficultyStatistics = createAsyncThunk(
   "statistics/getDifficultyStatistics",
@@ -73,10 +74,10 @@ export const getDifficultyStatistics = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(response.message);
     }
   }
 );
@@ -90,10 +91,10 @@ export const getLabsProgressStats = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(response.message);
     }
   }
 );
@@ -107,10 +108,10 @@ export const getRoadProgressStats = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(response.message);
     }
   }
 );
@@ -120,24 +121,24 @@ const statisticsSlice = createSlice({
   initialState: initialState,
   extraReducers: (builder) => {
     builder
-    .addCase(fetchAdvancement.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(fetchAdvancement.fulfilled, (state, action) => {
-      state.advancementData = action.payload;
-      state.loading = false;
-    })
-    .addCase(fetchAdvancement.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
+      .addCase(fetchAdvancement.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAdvancement.fulfilled, (state, action) => {
+        state.advancementData = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchAdvancement.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(GetUserLevel.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(GetUserLevel.fulfilled, (state, action) => {
-        state.data = action.payload;
+        state.levelData = action.payload;
         state.loading = false;
       })
       .addCase(GetUserLevel.rejected, (state, action) => {
