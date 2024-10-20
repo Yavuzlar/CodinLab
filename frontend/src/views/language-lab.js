@@ -41,12 +41,8 @@ const LanguageLab = ({ language = "" }) => {
   const lgmd_down = useMediaQuery((theme) => theme.breakpoints.down("lgmd"));
 
   const router = useRouter();
-  
+
   const programingId = language;
-
-
-
-  console.log("programingId", programingId);
 
   return (
     <div>
@@ -144,7 +140,7 @@ const LanguageLab = ({ language = "" }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <LabInfo programingId={programingId} />
+          <LabInfo filter={filters} programingId={programingId} />
         </Grid>
       </Grid>
     </div>
