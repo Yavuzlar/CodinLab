@@ -23,9 +23,6 @@ const Home = () => {
     dispatch(GetUserLevel());
   }, [dispatch]);
 
-  console.log(stateStatistics)
-
-
   const progresses = [
     {
       name: "Easy",

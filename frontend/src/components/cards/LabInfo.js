@@ -9,7 +9,9 @@ import { useEffect } from "react";
 import { getLabsById } from "src/store/lab/labSlice";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
-const LabInfo = ({ programingId }) => {
+import { theme } from "src/configs/theme";
+import { status } from "nprogress";
+const LabInfo = ({ programingId, filter }) => {
   const dispatch = useDispatch();
   const { lab: stateLabs } = useSelector((state) => state);
 
@@ -27,7 +29,45 @@ const LabInfo = ({ programingId }) => {
   }, [dispatch, programingId, i18n.language]);
 
   const isImageExist = stateLabs.data?.isImageExists
+  const { status, difficulty, search, sort } = filter
 
+  const filterLabs = () => {
+    let filteredLabs = stateLabs.data?.labs;
+
+    switch (status) {
+      case "completed":
+        filteredLabs = filteredLabs.filter((lab) => lab.isFinished);
+        break;
+    }
+
+    switch (difficulty) {
+      case "easy":
+        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 1)
+        break
+      case "medium":
+        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 2)
+        break
+      case "hard":
+        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 3)
+        break
+    }
+
+    switch (sort) {
+      case "desc":
+        filteredLabs = [...filteredLabs].sort((a, b) => b.id - a.id);
+        break;
+      case "asc":
+        filteredLabs = [...filteredLabs].sort((a, b) => a.id - b.id);
+        break;
+    }
+
+    if (search != "") {
+      filteredLabs = filteredLabs.filter((lab) =>
+        lab.language.title && lab.language.title.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    return filteredLabs;
+  };
 
   return (
     <Box
@@ -38,7 +78,7 @@ const LabInfo = ({ programingId }) => {
         justifyContent: "center",
       }}
     >
-      {stateLabs.data?.labs?.map((lab, index) => (
+      {filterLabs()?.map((lab, index) => (
         <Card
           sx={{
             width: "375px",
@@ -50,6 +90,7 @@ const LabInfo = ({ programingId }) => {
             gap: "1rem",
             padding: "1rem",
             borderRadius: "16px",
+            backgroundColor: lab.isFinished ? theme.palette.success.dark : "",
           }}
           key={index}
         >
@@ -66,8 +107,8 @@ const LabInfo = ({ programingId }) => {
                 lab.difficulty === 1
                   ? TestTubeGreen
                   : lab.difficulty === 2
-                  ? TestTubeOrange
-                  : TestTubeRed
+                    ? TestTubeOrange
+                    : TestTubeRed
               }
               alt="difficulty"
               width={40}
@@ -89,7 +130,7 @@ const LabInfo = ({ programingId }) => {
             </Typography>
 
             <Button
-              variant={lab.finished ? "dark" : "light"} 
+              variant={lab.finished ? "dark" : "light"}
               disabled={!isImageExist}
               sx={{
                 borderRadius: "16px",
@@ -103,7 +144,7 @@ const LabInfo = ({ programingId }) => {
                 letterSpacing: "0",
               }}
               onClick={() => {
-              router.push(`/labs/${programingId}/${lab.id}`);
+                router.push(`/labs/${programingId}/${lab.id}`);
               }
               }
             >

@@ -204,7 +204,6 @@ const LabQuestion = ({ language = "", questionId }) => {
         //   template: apiTemplate,
         // });
         editorRef.current.setValue(apiTemplate);
-        console.log("Reset response success", labData);
 
       }
     } catch (error) {
