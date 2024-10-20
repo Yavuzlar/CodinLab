@@ -8,7 +8,7 @@ import userIcon from "../assets/icons/icons8-male-user-100.png";
 import settingsIcon from "../assets/icons/icons8-settings-128.png";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { getLanguageUsageRates } from "src/store/log/logSlice";
+import { getLanguageUsageRates, getSolitionWeek } from "src/store/log/logSlice";
 import { useEffect } from "react";
 import DonotProggresStatistic from "src/components/progress/DonotProggresStatistic";
 
@@ -20,6 +20,7 @@ const Admin = () => {
 
   useEffect(() => {
     dispatch(getLanguageUsageRates());
+    dispatch(getSolitionWeek());
   }, [dispatch]);
 
   console.log(logStatistics);
