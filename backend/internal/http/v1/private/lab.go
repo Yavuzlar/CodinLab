@@ -130,7 +130,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 		labDTOs = append(labDTOs, h.dtoManager.LabDTOManager.ToLabForAllDTO(labCollection, languageDTO))
 	}
 	labDTOs = h.dtoManager.LabDTOManager.FilterLabForAllDTOs(labDTOs)
-	labsDTO := h.dtoManager.LabDTOManager.ToLabsForAllDTO(labDTOs, isExists)
+	labsDTO := h.dtoManager.LabDTOManager.ToLabsForAllDTO(labDTOs, isExists, inventoryInformation.GetIconPath())
 
 	return response.Response(200, "GetLabs successful", labsDTO)
 }

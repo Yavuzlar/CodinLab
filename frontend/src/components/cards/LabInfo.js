@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { theme } from "src/configs/theme";
 import { status } from "nprogress";
-const LabInfo = ({ programingId, filter }) => {
+const LabInfo = ({ programingId, filter, setIconPath }) => {
   const dispatch = useDispatch();
   const { lab: stateLabs } = useSelector((state) => state);
 
@@ -22,11 +22,19 @@ const LabInfo = ({ programingId, filter }) => {
   useEffect(() => {
     dispatch(
       getLabsById({
+        router: router,
         programmingID: programingId,
         language: i18n.language,
       })
     );
   }, [dispatch, programingId, i18n.language]);
+
+
+  useEffect(() => {
+    if (stateLabs) {
+      setIconPath(stateLabs?.data?.iconPath)
+    }
+  }, [stateLabs])
 
   const isImageExist = stateLabs.data?.isImageExists
   const { status, difficulty, search, sort } = filter

@@ -36,6 +36,7 @@ type LabsDTO struct {
 type LabsForAllDTO struct {
 	Labs          []LabForAllDTO `json:"labs"`
 	IsImageExists bool           `json:"isImageExists"`
+	IconPath string `json:"iconPath"`
 }
 
 func (m *LabDTOManager) ToLabsDTO(labs []LabDTO, isImageExists bool) LabsDTO {
@@ -45,10 +46,11 @@ func (m *LabDTOManager) ToLabsDTO(labs []LabDTO, isImageExists bool) LabsDTO {
 	}
 }
 
-func (m *LabDTOManager) ToLabsForAllDTO(labs []LabForAllDTO, isImageExists bool) LabsForAllDTO {
+func (m *LabDTOManager) ToLabsForAllDTO(labs []LabForAllDTO, isImageExists bool, iconPath string) LabsForAllDTO {
 	return LabsForAllDTO{
 		Labs:          labs,
 		IsImageExists: isImageExists,
+		IconPath: iconPath,
 	}
 }
 
