@@ -22,8 +22,8 @@ export const fetchUserById = createAsyncThunk(
       if (response.status === 200) {
         return response.data.data;
       }
-      
-     
+
+
     } catch (error) {
       return rejectWithValue(error.response.data.message || error.message);
     }
@@ -31,41 +31,41 @@ export const fetchUserById = createAsyncThunk(
 );
 
 export const updateUserById = createAsyncThunk(
-    "admin/updateUserById",
-    async ({ data, userid }, { rejectWithValue,dispatch }) => {
-      try {
-        const response = await axios({
-          method: "POST",
-          url: `/api/v1/private/admin/user/${userid}`,
-          data: data,
-        });
-        if (response.status === 200) {
-          dispatch(getAdminUser());
-          return response.data.data;
-        }
-      } catch (error) {
-        return rejectWithValue(error.response.data.message || error.message);
+  "admin/updateUserById",
+  async ({ data, userid }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `/api/v1/private/admin/user/${userid}`,
+        data: data,
+      });
+      if (response.status === 200) {
+        dispatch(getAdminUser());
+        return response.data.data;
       }
+    } catch (error) {
+      return rejectWithValue(error.response.data.message || error.message);
     }
-  );
+  }
+);
 
-  export const deleteUserById = createAsyncThunk(
-    "admin/deleteUserById",
-    async (data, { rejectWithValue,dispatch }) => {
-      try {
-        const response = await axios({
-          method: "DELETE",
-          url: `/api/v1/private/admin/user/${data}`,
-        });
-        if (response.status === 200) {
-          dispatch(getAdminUser());
-          return response.data.data;
-        }
-      } catch (error) {
-        return rejectWithValue(error.response.data.message || error.message);
+export const deleteUserById = createAsyncThunk(
+  "admin/deleteUserById",
+  async (data, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios({
+        method: "DELETE",
+        url: `/api/v1/private/admin/user/${data}`,
+      });
+      if (response.status === 200) {
+        dispatch(getAdminUser());
+        return response.data.data;
       }
+    } catch (error) {
+      return rejectWithValue(error.response.data.message || error.message);
     }
-  );
+  }
+);
 
 const adminSlice = createSlice({
   name: "admin",

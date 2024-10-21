@@ -99,7 +99,7 @@ const ProgressStatusesLab = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            cursor: "pointer",
+            cursor: "pointber",
           }}
           onClick={() => {
             handleDiffSet(item)
@@ -108,8 +108,7 @@ const ProgressStatusesLab = ({
           <Image
             src={item.image}
             alt={`${item.difficulty}-level`}
-            width={40}
-            height={40}
+            width={filters.difficulty == item.difficulty ? 45 : 40}
           />
         </Box>
       ))}

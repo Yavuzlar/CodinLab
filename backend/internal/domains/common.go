@@ -14,6 +14,7 @@ type InventoryInformation struct {
 	fileExtension string
 	templatePath  string
 	language      InventoryLanguage
+	iconPath string
 }
 
 func (i *InventoryInformation) GetID() int {
@@ -56,7 +57,15 @@ func (i *InventoryInformation) SetLanguage(language InventoryLanguage) {
 	i.language = language
 }
 
-func NewInventoryInformation(name, dockerImage, fileExtension, pathDir string, ID int, cmd, shCmd []string, infoLanguage InventoryLanguage) *InventoryInformation {
+func (i *InventoryInformation) GetIconPath() string {
+	return i.iconPath
+}
+
+func (i *InventoryInformation) SetIconPath(iconPath string) {
+	i.iconPath = iconPath
+}
+
+func NewInventoryInformation(iconPath,name, dockerImage, fileExtension, pathDir string, ID int, cmd, shCmd []string, infoLanguage InventoryLanguage) *InventoryInformation {
 	info := &InventoryInformation{
 		id:            ID,
 		name:          name,
@@ -66,6 +75,7 @@ func NewInventoryInformation(name, dockerImage, fileExtension, pathDir string, I
 		shCmd:         shCmd,
 		pathDir:       pathDir,
 		language:      infoLanguage,
+		iconPath: iconPath,
 	}
 
 	return info
