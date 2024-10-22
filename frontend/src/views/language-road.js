@@ -165,10 +165,10 @@ const LanguageRoad = ({ language = "", pathId }) => {
           <Typography variant="body1" sx={{ lineHeight: 2.5 }}>
             {description}
           </Typography>
-          <Typography variant="body1" sx={{ mb: "10px", color: "lightgrey" }}>
+          <Typography variant="body1" sx={{ mb: "10px", color: "lightgrey", whiteSpace: "pre-line" }}>
             {content}
           </Typography>
-          <Typography variant="body1" sx={{ color: "lightgrey" }}>
+          <Typography variant="body1" sx={{ color: "lightgrey", whiteSpace: "pre-line" }}>
             {note}
           </Typography>
           {isFinished && (
