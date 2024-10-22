@@ -57,7 +57,7 @@ const Register = () => {
     // Call API
     try {
       await register(formData);
-    } catch (error) { }
+    } catch (error) {}
 
   };
 
@@ -125,7 +125,11 @@ const Register = () => {
     <Box
       sx={{
         position: "relative",
-        mt: { sm: 0, md: 1 },
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+
+        height: "100vh",
       }}
     >
       <Box>
@@ -137,20 +141,19 @@ const Register = () => {
           </Button>
         )}
       </Box>
-      <Box
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          position: "relative",
+        }}
+      >
+        <Box
         sx={{
           display: { xs: "none", md: "block" },
           position: "absolute",
           top: "-6.5%",
-          left: {
-            md: "-3%",
-            mdlg: "%1",
-            lg: "3%",
-            lgPlus: "5%",
-            lgXl: "9%",
-            xl: "12%",
-            xxl: "18%",
-          },
+          left: "-1rem",
           zIndex: 1,
         }}
       >
@@ -160,18 +163,8 @@ const Register = () => {
         sx={{
           display: { xs: "none", md: "block" },
           position: "absolute",
-          top: "3%",
-          right: {
-            md: "-10%",
-            mdlg: "-11%",
-            mdxl: "-%9",
-            lg: "-10%",
-            lgmd: "-7%",
-            lgPlus: "-5%",
-            lgXl: "2%",
-            xl: "4%",
-            xxl: "8%",
-          },
+          top: "3.4rem",
+          right: "-7.8rem",
           zIndex: 1,
         }}
       >
@@ -183,12 +176,6 @@ const Register = () => {
           alt="Girl holding laptop"
         />
       </Box>
-      <Container
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
         <Card
           sx={{
             width: { xs: "100%", sm: "auto" },
