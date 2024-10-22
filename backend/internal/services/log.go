@@ -229,8 +229,37 @@ func (l *logService) CountSolutionsByProgrammingLast7Days(ctx context.Context) (
 	if err != nil {
 		return nil, err
 	}
-	if len(solutions) == 0 {
-		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrSolutionsNotFound)
+
+	inventory, err := l.parserService.GetInventory()
+	if err != nil {
+		return nil, err
+	}
+	var solution domains.SolutionsByProgramming
+	lenSolution := len(solutions)
+	for _, inv := range inventory {
+		found := false
+		if lenSolution == 0 {
+			solution.SetLabCount(0)
+			solution.SetProgrammingID(int32(inv.ID))
+			solution.SetRoadCount(0)
+			solution.SetTotalCount(0)
+			solutions = append(solutions, solution)
+			continue
+		}
+		for _, s := range solutions {
+			if s.GetProgrammingID() == int32(inv.ID) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			solution.SetLabCount(0)
+			solution.SetProgrammingID(int32(inv.ID))
+			solution.SetRoadCount(0)
+			solution.SetTotalCount(0)
+			solutions = append(solutions, solution)
+		}
+
 	}
 
 	return solutions, err

@@ -9,6 +9,7 @@ import (
 
 func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 	logRoutes := root.Group("/log")
+	logRoutes.Use(h.adminAuthMiddleware)
 	logRoutes.Get("/", h.GetAllLogs)
 	logRoutes.Get("/solution/byday/:year", h.GetSolutionsByDay)
 	logRoutes.Get("/solution/week", h.GetSolutionsByProgramming)
