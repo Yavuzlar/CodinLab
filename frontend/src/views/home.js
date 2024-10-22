@@ -10,12 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getInventories } from "src/store/language/languageSlice";
 import { GetUserLevel } from "src/store/statistics/statisticsSlice";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { language: stateLanguage, statistics: stateStatistics } = useSelector(
     (state) => state
   );
+
+
 
 
   useEffect(() => {
