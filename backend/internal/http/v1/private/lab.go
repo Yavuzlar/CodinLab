@@ -263,7 +263,12 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		}
 	}
 
-	return response.Response(200, logs, nil)
+	parsedLog, err := h.services.CodeService.ParseCodeLog(logs)
+	if err != nil {
+		return err
+	}
+
+	return response.Response(200, "AnswerLab Successfull", parsedLog)
 }
 
 // @Tags Lab
