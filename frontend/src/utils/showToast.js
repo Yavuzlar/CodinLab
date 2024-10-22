@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import toast from 'react-hot-toast'
 
 // return rejectWithValue(error.response.data.code);
@@ -9,7 +10,7 @@ const showToast = (type, message, position, style) => {
   }
 
   if (message && message != '') {
-    toast[type]?.(message, {
+    toast[type]?.(t(message), {
       position: position ?? 'top-center',
       duration: duration,
       style: style,

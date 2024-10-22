@@ -159,14 +159,14 @@ const settings = () => {
       infoSettingsData
     );
     setErrorInfo(validationInfoErrors);
-    if(!validationInfoErrors || Object.keys(validationInfoErrors).length === 0
-    ){
+    if (!validationInfoErrors || Object.keys(validationInfoErrors).length === 0
+    ) {
       setOpenDialog(true);
     }
 
   };
 
-  
+
   const handleDialogSubmit = () => {
     const dataToSend = {
       ...infoSettingsData,
@@ -545,7 +545,7 @@ const settings = () => {
                   </FormControl>
 
                   <Button
-                   onClick={handleSubmitInfoSettings}
+                    onClick={handleSubmitInfoSettings}
                     variant="dark"
                     sx={{
                       marginTop: 4,
@@ -804,118 +804,118 @@ const settings = () => {
 
       <Dialog open={openDialog} onClose={handleClose}
         sx={{
-        "& .MuiDialog-paper": {
-          color: (theme) => `${theme.palette.text.primary} !important`,
-          borderRadius: "16px",
-          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-          width: "100%",
-          maxWidth: "500px",
-          padding: "20px",
-        },
+          "& .MuiDialog-paper": {
+            color: (theme) => `${theme.palette.text.primary} !important`,
+            borderRadius: "16px",
+            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+            width: "100%",
+            maxWidth: "500px",
+            padding: "20px",
+          },
         }}
       >
-  <DialogTitle>
-    <Translations text={"dialog.title.password"} />
-  </DialogTitle>
-  <DialogContent>
-    <DialogContentText
-      sx={{
-        color: (theme) =>
-          `${theme.palette.text.primary} !important`,
-      }}
-    >
-      <Translations text={"dialog.content.password"} />
-    </DialogContentText>
-    <TextField
-      sx={{
-        marginTop: "20px",
-        borderRadius: "15px",
-        border : "2px solid #0A3B7A",
-
-        "& .MuiInputBase-root" :{
-          backgroundColor: (theme) =>
-            `${theme.palette.background.default} !important`,
-        },
-
-        "& .MuiOutlinedInput-root": {
-          borderRadius: "15px",
-          "&.Mui-focused fieldset": {
-            borderColor: (theme) =>
-              `${theme.palette.primary.dark} !important`,
-          },
-        },
-
-        "& .MuiInputBase-input": {
-          color: "#0A3B7A",
-          fontWeight: "bold",
-          marginTop: "5px",
-        },
-
-        "& .MuiInputLabel-root": {
-          color: (theme) =>
-            `${theme.palette.primary.dark} !important`,
-            fontWeight: "bold",
-        },
-
-        "& .Mui-focused": {
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#0A3B7A",
-          },
-        },
-
-       
-
-      }}
-
-      autoFocus
-      margin="dense"
-      label={<Translations text={"settings.old.password"} />}
-      type={showPassword ? "text" : "password"}
-      variant="filled"
-      fullWidth
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-      InputProps={{
-        endAdornment: (
-          <IconButton
-            onClick={hanldeClickShowPassword}
-            edge="end"
+        <DialogTitle>
+          <Translations text={"dialog.title.password"} />
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            sx={{
+              color: (theme) =>
+                `${theme.palette.text.primary} !important`,
+            }}
           >
-            <Image
-              style={{ zIndex: 99 }}
-              src={
-                showPassword
-                  ? visibilityOnIcon
-                  : visibilityOffIcon
-              }
-              alt={
-                showPassword
-                  ? "visibilityOnIcon"
-                  : "visibilityOffIcon"
-              }
-              width={30}
-              height={30}
-            />
-          </IconButton>
-        ),
-      }}
-    />
-  </DialogContent>
-  <DialogActions
-    sx={{
-      display: "flex",
-      justifyContent: "space-between",
-      padding: "20px",
-    }}
-  >
-    <Button  onClick={handleClose}  variant="dark">
-    <Translations text={"dialog.button.cancel"} />
-    </Button>
-    <Button onClick={handleDialogSubmit} variant="dark">
-    <Translations text={"dialog.button.submit"} />
-    </Button>
-  </DialogActions>
-</Dialog>
+            <Translations text={"dialog.content.password"} />
+          </DialogContentText>
+          <TextField
+            sx={{
+              marginTop: "20px",
+              borderRadius: "15px",
+              border: "2px solid #0A3B7A",
+
+              "& .MuiInputBase-root": {
+                backgroundColor: (theme) =>
+                  `${theme.palette.background.default} !important`,
+              },
+
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "15px",
+                "&.Mui-focused fieldset": {
+                  borderColor: (theme) =>
+                    `${theme.palette.primary.dark} !important`,
+                },
+              },
+
+              "& .MuiInputBase-input": {
+                color: "#0A3B7A",
+                fontWeight: "bold",
+                marginTop: "5px",
+              },
+
+              "& .MuiInputLabel-root": {
+                color: (theme) =>
+                  `${theme.palette.primary.dark} !important`,
+                fontWeight: "bold",
+              },
+
+              "& .Mui-focused": {
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#0A3B7A",
+                },
+              },
+
+
+
+            }}
+
+            autoFocus
+            margin="dense"
+            label={<Translations text={"settings.old.password"} />}
+            type={showPassword ? "text" : "password"}
+            variant="filled"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  onClick={hanldeClickShowPassword}
+                  edge="end"
+                >
+                  <Image
+                    style={{ zIndex: 99 }}
+                    src={
+                      showPassword
+                        ? visibilityOnIcon
+                        : visibilityOffIcon
+                    }
+                    alt={
+                      showPassword
+                        ? "visibilityOnIcon"
+                        : "visibilityOffIcon"
+                    }
+                    width={30}
+                    height={30}
+                  />
+                </IconButton>
+              ),
+            }}
+          />
+        </DialogContent>
+        <DialogActions
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "20px",
+          }}
+        >
+          <Button onClick={handleClose} variant="dark">
+            <Translations text={"dialog.button.cancel"} />
+          </Button>
+          <Button onClick={handleDialogSubmit} variant="dark">
+            <Translations text={"dialog.button.submit"} />
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

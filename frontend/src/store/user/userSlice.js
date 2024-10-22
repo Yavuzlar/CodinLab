@@ -78,7 +78,7 @@ export const getAdminUser = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        
+
         return response.data;
       }
     } catch (error) {
@@ -137,7 +137,7 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         showToast("dismiss");
-        showToast("error", state.error);
+        showToast("error", action.payload);
       })
       .addCase(getAdminUser.pending, (state) => {
         state.loading = true;
