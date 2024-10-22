@@ -43,6 +43,26 @@ func newCodeService(
 	}
 }
 
+func (s *codeService) ParseCodeLog(log string) (*domains.UserLog, error) {
+	var userLog domains.UserLog
+
+	logArr := strings.Split(log, "|")
+
+	if len(logArr) != 2 {
+		return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidTemplateOutput)
+	}
+
+	userLog.Output = logArr[1]
+	if logArr[0] == "Test Passed" {
+		userLog.IsCorrect = true
+	} else {
+		userLog.ExpectedOutput = logArr[0]
+		userLog.IsCorrect = false
+	}
+
+	return &userLog, nil
+}
+
 func (s *codeService) Pull(ctx context.Context, imageReference, programmingLanguage string, conn *websocket.Conn) error {
 	if conn != nil {
 		errSocket := conn.WriteJSON(domains.Response{

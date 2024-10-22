@@ -292,7 +292,12 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		}
 	}
 
-	return response.Response(200, logs, nil)
+	parsedLog, err := h.services.CodeService.ParseCodeLog(logs)
+	if err != nil {
+		return err
+	}
+
+	return response.Response(200, "RoadAnswer Successfull", parsedLog)
 }
 
 // @Tags Road

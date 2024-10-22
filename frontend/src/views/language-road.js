@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   useMediaQuery,
+  Alert,
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Tooltip from "@mui/material/Tooltip";
@@ -35,7 +36,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [output, setOutput] = useState(""); // we will store the output here
+  const [output, setOutput] = useState({});
 
   const [programmingId, setProgrammingId] = useState(null);
 
@@ -84,8 +85,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   }, [path]);
 
   const handleRun = (outputData) => {
-    // this function will be called when the code is run
-    setOutput(outputData);
+    setOutput(outputData?.data);
   };
 
   const handleStop = (outputData) => {
@@ -212,6 +212,15 @@ const LanguageRoad = ({ language = "", pathId }) => {
           </Button>
         </CardContent>
       </Card>
+      {output && output.output && (
+        <Alert
+          severity={output.isCorrect ? "success" : "error"}
+          variant="filled"
+          sx={{ color: theme.palette.common.white, marginBottom: "10px", borderRadius: "10px" }}
+        >
+          {output.isCorrect ? t("CODE_SUCCESS") : `${t("CODE_ALERT").replace("$$$", output.expectedOutput).replace("***", output.output)}`}
+        </Alert>
+      )}
       <Box
         sx={{
           display: "flex",

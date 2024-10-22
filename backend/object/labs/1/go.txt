@@ -27,14 +27,15 @@ $usercode$
 
 func main(){
     $checks$
-
-    fmt.Println("$success$")
 }
 
 ## CHECK
 
 result$rnd$ := $funcname$($input$)
 if (result$rnd$ != $output$){
-    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    fmt.Printf("$out$|%v", result$rnd$)
+    return
+}else{
+    fmt.Printf("$success$|%v", result$rnd$)
     return
 }

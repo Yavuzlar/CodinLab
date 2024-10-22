@@ -19,6 +19,7 @@ type ICodeService interface {
 	DeleteFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention string) (err error)
 	StopContainer(ctx context.Context, containerID string) error
 	SaveUserHistory(conn *websocket.Conn, messages []byte, userID string) error
+	ParseCodeLog(log string) (*UserLog, error)
 }
 
 type UserCodeRequest struct {
@@ -31,4 +32,10 @@ type UsersCode struct {
 	ProgrammingID int32  `json:"programmingID"`
 	LabPathID     int32  `json:"labPathID"`
 	LabPathType   string `json:"labPathType"`
+}
+
+type UserLog struct {
+	Output         string `json:"output"`
+	ExpectedOutput string `json:"expectedOutput"`
+	IsCorrect      bool   `json:"isCorrect"`
 }

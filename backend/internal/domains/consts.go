@@ -2,14 +2,15 @@ package domains
 
 // 400
 const (
-	ErrInvalidProgrammingID = "ERR_INVALID_PROGRAMMING_ID"
-	ErrInvalidLabOrPathID   = "ERR_INVALID_LAB_OR_PATH_ID"
-	ErrInvalidUserID        = "ERR_INVALID_USER_ID"
-	ErrInvalidLabID         = "ERR_INVALID_LAB_ID"
-	ErrInvalidLogID         = "ERR_INVALID_LOG_ID"
-	ErrInvalidPathID        = "ERR_INVALID_PATH_ID"
-	ErrInvalidCreds         = "ERR_INVALID_CREDENTIALS"
-	ErrInvalidRole          = "ERR_INVALID_ROLE"
+	ErrInvalidTemplateOutput = "ERR_INVALID_TEMPLATE_OUTPUT"
+	ErrInvalidProgrammingID  = "ERR_INVALID_PROGRAMMING_ID"
+	ErrInvalidLabOrPathID    = "ERR_INVALID_LAB_OR_PATH_ID"
+	ErrInvalidUserID         = "ERR_INVALID_USER_ID"
+	ErrInvalidLabID          = "ERR_INVALID_LAB_ID"
+	ErrInvalidLogID          = "ERR_INVALID_LOG_ID"
+	ErrInvalidPathID         = "ERR_INVALID_PATH_ID"
+	ErrInvalidCreds          = "ERR_INVALID_CREDENTIALS"
+	ErrInvalidRole           = "ERR_INVALID_ROLE"
 
 	ErrUsernameUsing = "ERR_USERNAME_BEING_USED"
 	ErrStartRoad     = "ERR_NEED_ROAD_START"
@@ -78,7 +79,7 @@ var (
 	ContentLevelUp   = "Level Up"
 )
 
-//Solve Rates
+// Solve Rates
 var (
 	Low     = 3  //max -level1
 	LowMid  = 6  //max -level2

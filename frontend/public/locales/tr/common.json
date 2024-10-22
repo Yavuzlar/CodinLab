@@ -176,9 +176,15 @@
    "ERR_DOCKER_LOGS": "Docker logları getirilirken bir hata oluştu.",
    "ERR_DOCKER_FILES": "Docker dosyalarında bir hata oluştu.",
    "ERR_DOCKER_COULD_NOT_CREATE_FILE": "Docker dosyası oluşturulamadı.",
+  "ERR_INVALID_TEMPLATE_OUTPUT": "Hatalı kod taslağı",
+
    
    "ERR_PARSER_SERVICE": "Parser servis hatası.",
 
    "INTERNAL_SERVER_ERROR": "İç Sunucu Hatası",
-   "VALIDATION_ERROR": "Doğrulama Hatası"
+   "VALIDATION_ERROR": "Doğrulama Hatası",
+  
+    "CODE_ALERT": "$$$ bekleniyordu ama *** alındı",
+    "CODE_SUCCESS": "Tebrikler!"
+
 }

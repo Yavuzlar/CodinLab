@@ -173,8 +173,12 @@
   "ERR_DOCKER_LOGS": "Error occurred while fetching Docker logs.",
   "ERR_DOCKER_FILES": "Error occurred with Docker files.",
   "ERR_DOCKER_COULD_NOT_CREATE_FILE": "Could not create Docker file.",
+  "ERR_INVALID_TEMPLATE_OUTPUT": "Invalid Code Template",
   
   "ERR_PARSER_SERVICE": "Parser service error.",
   "INTERNAL_SERVER_ERROR": "Internal server error",
-  "VALIDATION_ERROR": "Validation Error"
+  "VALIDATION_ERROR": "Validation Error",
+
+  "CODE_ALERT": "$$$ was expected but got ***",
+  "CODE_SUCCESS": "Good Job!"
 }

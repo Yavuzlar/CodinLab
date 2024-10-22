@@ -3,10 +3,9 @@
 #include <iostream>
 
 int $funcname$() {
+   // Write your code here
 
-    // Write your code here
-
- return 0;
+   return 0;
 }
 
 ## DOCKER

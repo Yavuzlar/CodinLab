@@ -20,7 +20,6 @@ $imps$
 $usercode$
 
 $checks$
-print("$success$")
 
 ## CHECK
 
@@ -30,5 +29,7 @@ result$rnd$ = $funcname$($input$)
 expected_output = True if '$output$' == 'true' else False
 
 if result$rnd$ != expected_output:
-    print(f"Test Failed: Expected {expected_output}, but got {result$rnd$}")
+    print(f"{expected_output}|{result$rnd$}")
     exit(1)
+else:
+    print(f"$success$|{result$rnd$}")

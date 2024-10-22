@@ -11,6 +11,7 @@ import {
   Button,
   Modal,
   Tooltip,
+  Alert,
 } from "@mui/material";
 import TestTubeGreen from "src/assets/icons/icons8-test-tube-100-green.png";
 import TestTubeOrange from "src/assets/icons/icons8-test-tube-100-orange.png";
@@ -168,7 +169,9 @@ const LabQuestion = ({ language = "", questionId }) => {
   }, [labSlice.data]);
 
   const handleRun = (outputData) => {
-    setOutput(outputData);
+    console.log(outputData)
+    console.log(outputData?.data)
+    setOutput(outputData?.data);
     setIsSubmitted(true);
 
     if (true) {
@@ -361,6 +364,15 @@ const LabQuestion = ({ language = "", questionId }) => {
             {/* Question Description */}
             <Typography variant="body1">{labData.description}</Typography>
 
+            {output && output.output && (
+              <Alert
+                severity={output.isCorrect ? "success" : "error"}
+                variant="filled"
+                sx={{ color: theme.palette.common.white, marginBottom: "10px", borderRadius: "10px" }}
+              >
+                {output.isCorrect ? t("CODE_SUCCESS") : `${t("CODE_ALERT").replace("$$$", output.expectedOutput).replace("***", output.output)}`}
+              </Alert>
+            )}
             {/* Question Note */}
             <Box
               sx={{
@@ -376,6 +388,7 @@ const LabQuestion = ({ language = "", questionId }) => {
             </Box>
           </CardContent>
         </Card>
+
 
         <Box
           sx={{
@@ -405,8 +418,7 @@ const LabQuestion = ({ language = "", questionId }) => {
               color={"#39CE19"}
               sx={{ ml: 2 }}
             >
-              {" "}
-              {t("labs.question.completed")}{" "}
+              {t("labs.question.completed")}
             </Typography>
           )}
 
@@ -417,8 +429,8 @@ const LabQuestion = ({ language = "", questionId }) => {
               color={"#e00404"}
               sx={{ ml: 2 }}
             >
-              {" "}
-              {t("labs.question.failed")}{" "}
+
+              {t("labs.question.failed")}
             </Typography>
           )}
 
@@ -458,19 +470,19 @@ const LabQuestion = ({ language = "", questionId }) => {
                   >
                     <Typography
                       variant="body1"
-                      fontFamily={"Cascadia Code"}
                       color={"black"}
+                      sx={{ whiteSpace: 'pre-line' }}
                     >
-                      {" "}
-                      "{output}"{" "}
+                      {output?.output}
                     </Typography>
                   </Box>
                 </Box>
               </CardContent>
             </Card>
           )}
+
         </Box>
-      </Box>
+      </Box >
     </>
   );
 };
