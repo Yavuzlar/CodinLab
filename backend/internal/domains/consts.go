@@ -32,7 +32,6 @@ const (
 	ErrUserCodeNotFound            = "ERR_USERCODE_NOT_FOUND"
 	ErrTemplateNotFound            = "ERR_TEMPLATE_NOT_FOUND"
 	ErrRoadNotFound                = "ERR_ROAD_NOT_FOUND"
-	ErrSolutionsNotFound           = "ERR_SOLUTIONS_NOT_FOUND"
 	ErrActivityNotFound            = "ERR_ACTIVITY_NOT_FOUND"
 )
 

@@ -276,8 +276,8 @@ func (r *LogRepository) CountSolutionsByProgrammingLast7Days(ctx context.Context
                  AND l1.content = 'Started'
                  AND l2.content = 'Completed'
     WHERE
-        l1.type IN ('Path', 'Lab')
-        AND l1.created_at >= DATE('now', '-7 days')
+        l2.type IN ('Path', 'Lab')
+        AND l2.created_at >= DATE('now', '-7 days')
     GROUP BY
         l1.programming_id
 `

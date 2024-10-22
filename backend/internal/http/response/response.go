@@ -1,6 +1,7 @@
 package response
 
 import (
+	"encoding/json"
 	"errors"
 
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
@@ -91,6 +92,16 @@ func ResponseHandler(c *fiber.Ctx, err error) error {
 			resp.Errors = serviceErr.Error()
 		}
 		return c.Status(serviceErr.Code).JSON(resp)
+	}
+
+	//unmarshall errors
+	var typeErr *json.UnmarshalTypeError
+	var syntaxErr *json.SyntaxError
+	if errors.As(err, &typeErr) || errors.As(err, &syntaxErr) {
+		return c.Status(422).JSON(&BaseResponse{
+			StatusCode: 422,
+			Message:    "UNPROCESSABLE_ENTITY",
+		})
 	}
 
 	//unknown errors
