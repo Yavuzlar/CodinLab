@@ -1487,6 +1487,9 @@ const docTemplate = `{
                 "programmingID": {
                     "type": "integer"
                 },
+                "programmingName": {
+                    "type": "string"
+                },
                 "roadCount": {
                     "type": "integer"
                 },

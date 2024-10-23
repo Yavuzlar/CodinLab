@@ -84,10 +84,11 @@ func (s *SolutionsByDay) SetLevel(level int) {
 }
 
 type SolutionsByProgramming struct {
-	programmingID int32
-	labCount      int
-	roadCount     int
-	totalCount    int
+	programmingID   int32
+	programmingName string
+	labCount        int
+	roadCount       int
+	totalCount      int
 }
 
 func (s *SolutionsByProgramming) GetProgrammingID() int32 {
@@ -96,6 +97,14 @@ func (s *SolutionsByProgramming) GetProgrammingID() int32 {
 
 func (s *SolutionsByProgramming) SetProgrammingID(programmingID int32) {
 	s.programmingID = programmingID
+}
+
+func (s *SolutionsByProgramming) GetProgrammingName() string {
+	return s.programmingName
+}
+
+func (s *SolutionsByProgramming) SetProgrammingName(programmingName string) {
+	s.programmingName = programmingName
 }
 
 func (s *SolutionsByProgramming) GetLabCount() int {
