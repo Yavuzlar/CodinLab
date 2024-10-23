@@ -243,11 +243,13 @@ func (l *logService) CountSolutionsByProgrammingLast7Days(ctx context.Context) (
 			solution.SetProgrammingID(int32(inv.ID))
 			solution.SetRoadCount(0)
 			solution.SetTotalCount(0)
+			solution.SetProgrammingName(inv.Name)
 			solutions = append(solutions, solution)
 			continue
 		}
-		for _, s := range solutions {
+		for i, s := range solutions {
 			if s.GetProgrammingID() == int32(inv.ID) {
+				solutions[i].SetProgrammingName(inv.Name)
 				found = true
 				break
 			}
@@ -257,6 +259,7 @@ func (l *logService) CountSolutionsByProgrammingLast7Days(ctx context.Context) (
 			solution.SetProgrammingID(int32(inv.ID))
 			solution.SetRoadCount(0)
 			solution.SetTotalCount(0)
+			solution.SetProgrammingName(inv.Name)
 			solutions = append(solutions, solution)
 		}
 

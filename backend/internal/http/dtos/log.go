@@ -31,10 +31,11 @@ type SolutionsByDayDTO struct {
 
 // Represents the total  spent on Lab & Road solutions for each programming language.
 type SolutionsByProgrammingDTO struct {
-	ProgrammingID int32 `json:"programmingID"`
-	LabCount      int   `json:"labCount"`
-	RoadCount     int   `json:"roadCount"`
-	TotalCount    int   `json:"totalCount"`
+	ProgrammingID   int32  `json:"programmingID"`
+	ProgrammingName string `json:"programmingName"`
+	LabCount        int    `json:"labCount"`
+	RoadCount       int    `json:"roadCount"`
+	TotalCount      int    `json:"totalCount"`
 }
 
 type LanguageUsageRatesDTO struct {
@@ -95,10 +96,11 @@ func (m *LogDTOManager) ToSolutionsByDayDTOs(solutionsByDays []domains.Solutions
 
 func (m *LogDTOManager) ToSolutionsByProgrammingDTO(domain domains.SolutionsByProgramming) SolutionsByProgrammingDTO {
 	return SolutionsByProgrammingDTO{
-		ProgrammingID: domain.GetProgrammingID(),
-		RoadCount:     domain.GetRoadCount(),
-		LabCount:      domain.GetLabCount(),
-		TotalCount:    domain.GetTotalCount(),
+		ProgrammingID:   domain.GetProgrammingID(),
+		ProgrammingName: domain.GetProgrammingName(),
+		RoadCount:       domain.GetRoadCount(),
+		LabCount:        domain.GetLabCount(),
+		TotalCount:      domain.GetTotalCount(),
 	}
 }
 
