@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 
 const initialState = {
   loading: false,
@@ -25,6 +25,9 @@ export const getLabByProgramingId = createAsyncThunk(
         return response.data.data;
       }
     } catch (error) {
+      if (error.response && error.response.status === 404) {
+        Router.push("/404");
+      }
       return rejectWithValue(response.message || error.message);
     }
   }
@@ -47,7 +50,10 @@ export const getLabsById = createAsyncThunk(
         return response.data.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message || error.message);
+      if (error.response && error.response.status === 404) {
+        Router.push("/404");
+      }
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );

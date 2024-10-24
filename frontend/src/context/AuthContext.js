@@ -65,7 +65,7 @@ const AuthProvider = ({ children }) => {
         if (message === 'Started') {
           setContainerLoading(true);
           showToast("dismiss");
-          showToast("success", downloadingFormattedMessage);
+          showToast("loading", downloadingFormattedMessage);
         } else if (message === 'Finished') {
           setContainerLoading(false);
           showToast("dismiss");
