@@ -125,6 +125,9 @@
   "succsesCode" : "Code Successfully Run",
   "lab.button.review": "Review",
   "settings" : "Settings",
+  "code.image.downloading": "$$$$ is downloading.",
+  "code.image.downloaded": "The $$$$ image downloaded successfully",
+
 
 
   "ERR_INVALID_PROGRAMMING_ID": "Invalid programming ID provided.",

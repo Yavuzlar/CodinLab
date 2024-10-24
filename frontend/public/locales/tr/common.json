@@ -127,6 +127,9 @@
   "succsesCode" : "Kod Başarıyla Çalıştırıldı",
    "lab.button.review": "İncele",
    "settings" : "Ayarlar",
+   "code.image.downloading": "$$$$ İndiriliyor.",
+  "code.image.downloaded": "$$$$ Başarıyla İndirildi.",
+
 
 
 

@@ -11,12 +11,14 @@ const defaultProvider = {
   user: null,
   loading: true,
   isInitialized: false,
+  containerLoading: false,
   setUser: () => null,
   setLoading: () => Boolean,
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
   initAuth: () => Promise.resolve(),
   login: () => Promise.resolve(),
+  setContainerLoading: () => Promise.resolve(),
 };
 
 const AuthContext = createContext(defaultProvider);
@@ -27,6 +29,8 @@ const AuthProvider = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(
     defaultProvider.isInitialized
   );
+  const [containerLoading, setContainerLoading] = useState(defaultProvider.containerLoading)
+
   const ws = useRef(null);
 
   const router = useRouter();
@@ -44,14 +48,36 @@ const AuthProvider = ({ children }) => {
     };
 
     ws.current.onmessage = (e) => {
-      console.log("Message from server:", e.data);
+      const data = JSON.parse(e.data);
+      console.log("Message from server:", data);
 
+      if (data.Type === 'Pull') {
+        const message = data.Data.message;
+        const programmingLanguage = data.Data.programminglanguage || "Unknown Language";
+
+        const downloadedMessage = t("code.image.downloaded");
+        const downloadingMessage = t("code.image.downloading");
+
+        // $$$$'ı programmingLanguage ile değiştiriyoruz
+        const formattedMessage = downloadedMessage.replace("$$$$", programmingLanguage);
+        const downloadingFormattedMessage = downloadingMessage.replace("$$$$", programmingLanguage);
+
+        if (message === 'Started') {
+          setContainerLoading(true);
+          showToast("dismiss");
+          showToast("success", downloadingFormattedMessage);
+        } else if (message === 'Finished') {
+          setContainerLoading(false);
+          showToast("dismiss");
+          showToast("success", formattedMessage);
+        }
+      }
 
       // this part is for get container id from websocket but not used in this project
       // const data = JSON.parse(e.data); // 
       // if (data.Type === "container") {
       //   const containerId = data?.Data?.id;
-  
+
       //   if (containerId) {
       //     localStorage.setItem('containerId', containerId);
       //   }
@@ -122,7 +148,7 @@ const AuthProvider = ({ children }) => {
               router.push("/").then(() => router.reload());
             } else {
               setLoading(false);
-              webSocket(); 
+              webSocket();
             }
           } else {
             setLoading(false);
@@ -178,7 +204,7 @@ const AuthProvider = ({ children }) => {
         const user = response?.data?.data;
         setUser(user);
         router.push("/home");
-        webSocket(); 
+        webSocket();
       } else {
         showToast("dismiss");
         showToast("error", response.data.message);
@@ -204,6 +230,7 @@ const AuthProvider = ({ children }) => {
     register: handleRegister,
     initAuth,
     login: handleLogin,
+    containerLoading,
   };
 
   if (!isInitialized && loading) return <Spinner />;

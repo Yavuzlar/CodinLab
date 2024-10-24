@@ -1,4 +1,4 @@
-import { Box, Button, Card, Typography } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Typography } from "@mui/material";
 import TestTubeRed from "../../assets/icons/red.png";
 import TestTubeOrange from "../../assets/icons/orange.png";
 import TestTubeGreen from "../../assets/icons/green.png";
@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { theme } from "src/configs/theme";
 import { status } from "nprogress";
-const LabInfo = ({ programingId, filter, setIconPath }) => {
+const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
   const dispatch = useDispatch();
   const { lab: stateLabs } = useSelector((state) => state);
 
@@ -156,10 +156,15 @@ const LabInfo = ({ programingId, filter, setIconPath }) => {
               }
               }
             >
-              {lab.isFinished ? (
-                <Translations text={"lab.button.review"} />
+              {containerLoading ? (
+                <CircularProgress size={24} sx={{ position: 'absolute' }} />
               ) : (
-                <Translations text={"lab.button.solve"} />
+                // Eğer xax false ise normal yazılar gösterilecek
+                lab.isFinished ? (
+                  <Translations text={"lab.button.review"} />
+                ) : (
+                  <Translations text={"lab.button.solve"} />
+                )
               )}
             </Button>
           </Box>
