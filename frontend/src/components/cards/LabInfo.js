@@ -34,7 +34,7 @@ const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
     if (stateLabs) {
       setIconPath(stateLabs?.data?.iconPath)
     }
-  }, [stateLabs])
+  }, [stateLabs?.data])
 
   const isImageExist = stateLabs.data?.isImageExists
   const { status, difficulty, search, sort } = filter

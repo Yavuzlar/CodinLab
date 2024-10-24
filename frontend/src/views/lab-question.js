@@ -169,8 +169,6 @@ const LabQuestion = ({ language = "", questionId }) => {
   }, [labSlice.data]);
 
   const handleRun = (outputData) => {
-    console.log(outputData)
-    console.log(outputData?.data)
     setOutput(outputData?.data);
     setIsSubmitted(true);
 
