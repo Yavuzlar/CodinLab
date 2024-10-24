@@ -19,6 +19,8 @@ const GraphicalStatistics = ({ data }) => {
   const language = i18n.language;
   const [hoursLang, setHoursLang] = useState({ language });
 
+
+
   useEffect(() => {
     let storedLang = localStorage.getItem("i18nextLng");
 
@@ -35,6 +37,9 @@ const GraphicalStatistics = ({ data }) => {
     }
   }, [language, i18n]);
 
+
+  
+
   return (
     <ResponsiveContainer width="100%" height={280}>
       <LineChart data={data}>
@@ -45,7 +50,7 @@ const GraphicalStatistics = ({ data }) => {
           vertical={false}
         />
         <XAxis
-          dataKey="name"
+          dataKey="programmingName"
           padding={{ left: 30, right: 30 }}
           tick={{ fill: "#fff" }}
           tickLine={false}
@@ -54,27 +59,29 @@ const GraphicalStatistics = ({ data }) => {
             strokeWidth: 2,
           }}
         />
-        <YAxis
+        {/* <YAxis
           tick={{ fill: "#fff" }}
           axisLine={null}
           ticks={[0, 2, 4, 6, 8, 10, 12, 14, 16]}
           tickFormatter={(value) => `${value} ${hoursLang}`}
           tickLine={false}
-        />
+        /> */}
         <Tooltip
           contentStyle={{ backgroundColor: theme.palette.background.default }}
           labelStyle={{ color: theme.palette.primary.main }}
         />
         <Line
           type="monotone"
-          dataKey="Roads"
+          dataKey="roadCount"
+          name="Road"
           stroke={theme.palette.primary.dark}
           strokeWidth={3}
           activeDot={{ r: 8 }}
         />
         <Line
           type="monotone"
-          dataKey="Labs"
+          dataKey="labCount"
+          name="Lab"
           stroke={theme.palette.info.main}
           strokeWidth={3}
         />
