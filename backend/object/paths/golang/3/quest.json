@@ -1,0 +1,35 @@
+{
+	"id": 3,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Functions",
+			"description": "Understand how to define and use functions in Go.",
+			"content": "Learn the syntax for defining a function, passing parameters, and returning values.",
+			"note": "1. Define a function called `add` that takes two integers as input and returns their sum.\n2. Call this function in your main function and print the result.\n3. Ensure you handle different input cases like negative numbers."
+		},
+		{
+			"lang": "tr",
+			"title": "Fonksiyonlar",
+			"description": "Go dilinde fonksiyonların nasıl tanımlandığını ve kullanıldığını öğrenin.",
+			"content": "Bir fonksiyonun nasıl tanımlanacağını, parametreler alacağını ve değer döndüreceğini öğrenin.",
+			"note": "1. İki tam sayı alan ve bunların toplamını döndüren bir `add` fonksiyonu tanımlayın.\n2. Bu fonksiyonu ana fonksiyonunuzda çağırın ve sonucu yazdırın.\n3. Negatif sayılar gibi farklı giriş durumlarını ele aldığınızdan emin olun."
+		}
+	],
+	"quest": {
+		"difficulty": 2,
+		"funcName": "add",
+		"tests": [
+			{
+				"input": [5, 7],
+				"output": [12]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 2,
+				"templatePath": "object/paths/golang/3/template.txt"
+			}
+		]
+	}
+}

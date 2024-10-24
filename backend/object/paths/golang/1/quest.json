@@ -1,0 +1,35 @@
+{
+	"id": 1,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Basic Syntax",
+			"description": "Understanding the basic syntax of Go",
+			"content": "Learn about the basic structure of a Go program, including package declaration, import statements, and the main function.",
+			"note": "1. Write a Go program that prints 'Hello, World!' to the console.\n2. Include the necessary `import \"fmt\"` statement to use `fmt.Println()`.\n3. Ensure proper syntax and formatting."
+		},
+		{
+			"lang": "tr",
+			"title": "Temel Sözdizimi",
+			"description": "Go dilinin temel sözdizimini öğrenin.",
+			"content": "Bir Go programının temel yapısını, paket bildirimi, import ifadeleri ve ana fonksiyonu öğrenin.",
+			"note": "1. Konsola 'Hello, World!' yazdıran bir Go programı yazın.\n2. `fmt.Println()` kullanmak için `import \"fmt\"` ifadesini ekleyin.\n3. Doğru sözdizimi ve biçimlendirmeye dikkat edin."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "main",
+		"tests": [
+			{
+				"input": [],
+				"output": ["Hello, World!"]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 2,
+				"templatePath": "object/paths/golang/1/template.txt"
+			}
+		]
+	}
+}

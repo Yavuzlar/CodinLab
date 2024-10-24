@@ -1,0 +1,35 @@
+## FRONTEND
+
+package main;
+
+func $funcname$(s string) string {
+    // Write your code here
+}
+
+## DOCKER
+
+package main
+
+$imps$
+
+import "fmt"
+
+$usercode$
+
+func main(){
+    $checks$
+
+    fmt.Println("$success$")
+}
+
+## CHECK
+
+result$rnd$ := $funcname$($input$)
+if (result$rnd$ != $output$){
+    fmt.Printf("_|%v|$out$|_", result$rnd$)
+    return
+}else{
+    fmt.Printf("$success$|%v|_|_", result$rnd$)
+    return
+}
+

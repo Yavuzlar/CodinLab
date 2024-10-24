@@ -45,6 +45,7 @@ const RoadDetails = ({ language = "" }) => {
 
   const [pathsDataContent, setPathsDataContent] = useState([]);
   const [pathIsStarted, setpathIsStarted] = useState(false); // Set this to true if the user has started the road on useEffect()
+  const [roadIsStarted, setRoadIsStarted] = useState(false)
   const [totalPath, setTotalPath] = useState(0)
   const [amountOfInProgressPaths, setAmountOfInProgressPaths] = useState(0); // Amount of in progress paths
   const [amountOfCompletedPaths, setAmountOfCompletedPaths] = useState(0); // Amount of completed paths // Path icon path
@@ -86,6 +87,7 @@ const RoadDetails = ({ language = "" }) => {
 
         setTitle(paths.data.name);
         setDescription(paths.data.description);
+        setRoadIsStarted(paths.data.roadIsStarted)
 
         const pathsData = paths.data.paths;
 
@@ -141,7 +143,6 @@ const RoadDetails = ({ language = "" }) => {
   // TODO: Get the title and description from front-end side
 
   const isImageExist = paths.data?.isImageExists;
-
   const handleStartRoad = () => {
     if (isImageExist) {
       dispatch(startRoad({ programmingID: programmingId }));
@@ -185,10 +186,9 @@ const RoadDetails = ({ language = "" }) => {
                   width={80}
                   height={80}
                   style={{
-
                   }}
                 />
-                {!pathIsStarted ? (
+                {!roadIsStarted ? (
                   <>
                     <Box
                       sx={{
