@@ -15,7 +15,10 @@ import pyImg from "../../assets/icons/python.png";
 import Image from "next/image";
 import { useTheme } from "@emotion/react";
 import Translations from "../Translations";
-
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import { useDispatch, useSelector } from "react-redux";
+import { getSolitionWeek } from "src/store/log/logSlice";
+import { useEffect } from "react";
 const langData = [
   { name: "C", image: { cImg }, Roads: 2, Labs: 8 },
   { name: "C++", image: { cppImg }, Roads: 8, Labs: 6 },
@@ -25,6 +28,14 @@ const langData = [
 ];
 
 const Timestatistic = () => {
+  const dispatch = useDispatch();
+
+  const { log: logStatistics } = useSelector((state) => state);
+
+  useEffect(() => {
+    dispatch(getSolitionWeek());
+  }, [dispatch]);
+
   const _smd = useMediaQuery((theme) => theme.breakpoints.down("smd"));
   const theme = useTheme();
   return (
@@ -80,7 +91,7 @@ const Timestatistic = () => {
             >
               <Box sx={{ display: "flex" }}>
                 <Box sx={{ mr: "5px" }}>
-                  <Image src={goImg} width={30} height={30} />
+                  <DateRangeIcon />
                 </Box>
                 <Box>
                   <Typography

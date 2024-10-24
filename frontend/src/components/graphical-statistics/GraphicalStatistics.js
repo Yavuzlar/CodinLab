@@ -54,13 +54,13 @@ const GraphicalStatistics = ({ data }) => {
             strokeWidth: 2,
           }}
         />
-        <YAxis
+        {/* <YAxis
           tick={{ fill: "#fff" }}
           axisLine={null}
           ticks={[0, 2, 4, 6, 8, 10, 12, 14, 16]}
           tickFormatter={(value) => `${value} ${hoursLang}`}
           tickLine={false}
-        />
+        /> */}
         <Tooltip
           contentStyle={{ backgroundColor: theme.palette.background.default }}
           labelStyle={{ color: theme.palette.primary.main }}
