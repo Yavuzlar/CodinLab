@@ -125,13 +125,13 @@ const RoadDetails = ({ language = "" }) => {
     {
       name: t("in_progress"),  // String
       // value: stateStatistics.data?.data?.progress, // Number
-      value: amountOfInProgressPaths,
+      value: (amountOfInProgressPaths * 100) / totalPath,
       color: theme.palette.primary.light,// String
     },
     {
       name: t("completed"), // String
       // value: stateStatistics.data?.data?.completed, // Number
-      value: amountOfCompletedPaths,
+      value: (amountOfCompletedPaths * 100) / totalPath,
       color: theme.palette.primary.dark, // String
     },
   ];
@@ -148,6 +148,14 @@ const RoadDetails = ({ language = "" }) => {
       showToast("error", "Image not found");
     }
   };
+
+  const handlePath = (path) => {
+    if (!(path.pathIsStarted && !path.pathIsFinished) && !(path.pathIsFinished)) {
+      return
+    }
+
+    router.push(`/roads/${language}/${path.id}`)
+  }
 
   return (
     <Box>
@@ -247,7 +255,7 @@ const RoadDetails = ({ language = "" }) => {
                       {title}
                     </Typography>
                     <Typography variant="body1">{description}</Typography>
-                    <LinearProgess progress={amountOfCompletedPaths} />
+                    <LinearProgess progress={(amountOfCompletedPaths * 100) / totalPath} />
                     <Stack direction={"row"} spacing={1}>
                       <Image
                         src={PathIcon}
@@ -300,7 +308,7 @@ const RoadDetails = ({ language = "" }) => {
             }}
           >
             <Box
-              onClick={() => router.push(`/roads/${language}/${path.id}`)}
+              onClick={() => handlePath(path)}
               sx={{
                 mt: 2,
                 display: "flex",

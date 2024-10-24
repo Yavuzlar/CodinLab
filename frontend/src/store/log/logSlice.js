@@ -9,22 +9,21 @@ const initialState = {
 };
 
 export const getLanguageUsageRates = createAsyncThunk(
-    "log/getLanguageUsageRates",
-    async (_, { rejectWithValue }) => {
-      try {
-        console.log("getLanguageUsageRates");
-        const response = await axios({
-          method: "GET",
-          url: `/api/v1/private/log/rates`,
-        });
-        if (response.status === 200) {
-          return response.data;
-        }
-      } catch (error) {
-        return rejectWithValue(response.message || error.message);
+  "log/getLanguageUsageRates",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/api/v1/private/log/rates`,
+      });
+      if (response.status === 200) {
+        return response.data;
       }
+    } catch (error) {
+      return rejectWithValue(response.message || error.message);
     }
-  );
+  }
+);
 
   export const getSolitionWeek = createAsyncThunk(
     "log/getSolitionWeek",
@@ -74,6 +73,7 @@ const logSlice = createSlice({
             state.error = action.payload;
         })
     }
+
 })
 
 export default logSlice.reducer;

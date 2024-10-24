@@ -21,13 +21,7 @@ import { t } from "i18next";
 import { theme } from "src/configs/theme";
 import { useRouter } from "next/router";
 
-const languages = {
-  c: { image: C, title: "C Language" },
-  cpp: { image: Cpp, title: "C++ Language" },
-  go: { image: Go, title: "Go Language" },
-  javascript: { image: Js, title: "JavaScript" },
-  python: { image: Python, title: "Python" },
-};
+
 
 const LanguageLab = ({ language = "" }) => {
   const [filters, setFilters] = useState({
@@ -37,16 +31,11 @@ const LanguageLab = ({ language = "" }) => {
     sort: "",
   });
 
-  const selectedLanguage = languages[language.toLowerCase()];
+  const [iconPath, setIconPath] = useState("");
   const lgmd_down = useMediaQuery((theme) => theme.breakpoints.down("lgmd"));
-
   const router = useRouter();
-  
+
   const programingId = language;
-
-
-
-  console.log("programingId", programingId);
 
   return (
     <div>
@@ -61,16 +50,14 @@ const LanguageLab = ({ language = "" }) => {
               flexDirection: lgmd_down ? "column" : "row",
             }}
           >
-            {selectedLanguage && (
-              <Box>
-                <Image
-                  src={selectedLanguage.image}
-                  height={65}
-                  width={65}
-                  alt={selectedLanguage.title}
-                />
-              </Box>
-            )}
+            <Box>
+              <img
+                src={"/api/v1/" + iconPath}
+                height={65}
+                width={65}
+              // alt={selectedLanguage.title}
+              />
+            </Box>
 
             <Grid
               container
@@ -144,7 +131,7 @@ const LanguageLab = ({ language = "" }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <LabInfo programingId={programingId} />
+          <LabInfo setIconPath={setIconPath} filter={filters} programingId={programingId} />
         </Grid>
       </Grid>
     </div>

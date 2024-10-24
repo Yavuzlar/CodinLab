@@ -47,7 +47,7 @@ const CodeEditor = ({
     // const toastId = toast.loading(t("runCode")); 
     showToast("dismiss")
     showToast("loading", t("runCode"));
-    
+
     try {
       const response = await axios({
         method: "POST",
@@ -59,13 +59,13 @@ const CodeEditor = ({
       });
       showToast("dismiss")
       showToast("success", t("succsesCode"));
-      onRun(response.data?.message);
+      onRun(response.data);
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message, { id: toastId }); 
+      toast.error(error.response?.data?.message || error.message, { id: 2 });
       onRun(error.response?.data?.message || error.message);
     }
   };
-  
+
 
   // here we will add the stop api calls
   const handleStop = () => {

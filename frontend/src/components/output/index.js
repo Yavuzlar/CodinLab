@@ -89,9 +89,10 @@ const Output = ({ value, params }) => {
             paddingBottom: "24px",
             paddingTop: "8px",
             fontWeight: "normal",
+            whiteSpace: 'pre-line'
           }}
         >
-          {value}
+          {value?.output}
         </Box>
       </Box>
     </Box>

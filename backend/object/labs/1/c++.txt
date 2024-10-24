@@ -33,14 +33,15 @@ $usercode$
 
 int main(){
     $checks$
-
-    std::cout << "$success$" << std::endl;
 }
 
 ## CHECK
 
 bool result$rnd$ = $funcname$($input$);
 if (result$rnd$ != $output$){
-    std::cout << "Test Failed: Expected $out$, but got " << result$rnd$ << std::endl;
+    std::cout << "$out$|" << result$rnd$ << std::endl;
     return 0;
+}else{
+    std::cout << "$success$|$output$" << std::endl;
+    return 1;
 }

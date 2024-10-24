@@ -10,12 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getInventories } from "src/store/language/languageSlice";
 import { GetUserLevel } from "src/store/statistics/statisticsSlice";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { language: stateLanguage, statistics: stateStatistics } = useSelector(
     (state) => state
   );
+
+
+
 
   useEffect(() => {
     dispatch(getInventories());
@@ -83,8 +87,8 @@ const Home = () => {
         >
           <Grid item xs={12} md={6} xl={4}>
             <LevelStatistic
-              levels={stateStatistics.data?.data?.level}
-              progress={stateStatistics.data?.data?.levelPercentage}
+              levels={stateStatistics.levelData?.data?.level}
+              progress={stateStatistics.levelData?.data?.levelPercentage}
             />
           </Grid>
           <Grid item xs={12} md={6} xl={4}>
