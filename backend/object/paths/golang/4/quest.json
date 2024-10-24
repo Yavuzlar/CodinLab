@@ -1,0 +1,43 @@
+{
+	"id": 4,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Control Structures",
+			"description": "Master Go's control structures such as `if-else`, `for loops`, and `switch` statements.",
+			"content": "Understand how to use conditional statements and loops effectively.",
+			"note": "1. Write a function that takes an integer and prints whether it is even or odd.\n2. Use an `if-else` statement to check the number.\n3. Also, print numbers from 1 to 10 using a `for` loop."
+		},
+		{
+			"lang": "tr",
+			"title": "Kontrol Yapıları",
+			"description": "Go'daki `if-else`, `for` döngüleri ve `switch` yapılarını öğrenin.",
+			"content": "Koşullu ifadeler ve döngülerin nasıl etkili bir şekilde kullanıldığını anlayın.",
+			"note": "1. Bir tamsayı alan ve onun çift mi tek mi olduğunu yazdıran bir fonksiyon yazın.\n2. Sayıyı kontrol etmek için bir `if-else` yapısı kullanın."
+		}
+	],
+	"quest": {
+		"difficulty": 2,
+		"funcName": "controlStructures",
+		"tests": [
+			{
+				"input": [3],
+				"output": ["Odd"]
+			},
+			{
+				"input": [2],
+				"output": ["Even"]
+			},
+			{
+				"input": [12],
+				"output": ["Even"]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 2,
+				"templatePath": "object/paths/golang/4/template.txt"
+			}
+		]
+	}
+}

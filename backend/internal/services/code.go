@@ -45,19 +45,29 @@ func newCodeService(
 
 func (s *codeService) ParseCodeLog(log string) (*domains.UserLog, error) {
 	var userLog domains.UserLog
-
+	fmt.Println(log)
 	logArr := strings.Split(log, "|")
 
-	if len(logArr) != 2 {
+	if len(logArr) != 4 {
 		return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidTemplateOutput)
 	}
 
-	userLog.Output = logArr[1]
-	if logArr[0] == "Test Passed" {
-		userLog.IsCorrect = true
-	} else {
-		userLog.ExpectedOutput = logArr[0]
-		userLog.IsCorrect = false
+	if logArr[0] != "_" {
+		if strings.Contains(logArr[0], "Test Passed") {
+			userLog.IsCorrect = true
+		}
+	}
+
+	if logArr[1] != "_" {
+		userLog.Output = logArr[1]
+	}
+
+	if logArr[2] != "_" {
+		userLog.ExpectedOutput = logArr[2]
+	}
+
+	if logArr[3] != "_" {
+		userLog.ErrorMessage = logArr[3]
 	}
 
 	return &userLog, nil

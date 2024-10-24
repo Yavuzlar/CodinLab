@@ -37,5 +37,6 @@ type UsersCode struct {
 type UserLog struct {
 	Output         string `json:"output"`
 	ExpectedOutput string `json:"expectedOutput"`
+	ErrorMessage   string `json:"errorMessage"`
 	IsCorrect      bool   `json:"isCorrect"`
 }
