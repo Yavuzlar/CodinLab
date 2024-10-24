@@ -15,19 +15,32 @@ import pyImg from "../../assets/icons/python.png";
 import Image from "next/image";
 import { useTheme } from "@emotion/react";
 import Translations from "../Translations";
-import DateRangeIcon from '@mui/icons-material/DateRange';
+import DateRangeIcon from "@mui/icons-material/DateRange";
 import { useDispatch, useSelector } from "react-redux";
 import { getSolitionWeek } from "src/store/log/logSlice";
-import { useEffect } from "react";
-const langData = [
-  { name: "C", image: { cImg }, Roads: 2, Labs: 8 },
-  { name: "C++", image: { cppImg }, Roads: 8, Labs: 6 },
-  { name: "Go", image: { goImg }, Roads: 7, Labs: 4 },
-  { name: "JavaScript", image: { jsImg }, Roads: 12, Labs: 10 },
-  { name: "Python", image: { pyImg }, Roads: 3, Labs: 8 },
-];
+import { useEffect, useState } from "react";
+import { t } from "i18next";
 
 const Timestatistic = () => {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const today = new Date();
+  const startOfWeek = new Date(
+    today.setDate(today.getDate() - today.getDay() + 1)
+  );
+  const endOfWeek = new Date(today.setDate(today.getDate() + 6));
+
+  const options = { day: "numeric", month: "long" };
+  const startOfWeekFormatted = startOfWeek.toLocaleDateString("en-GB", options);
+  const endOfWeekFormatted = endOfWeek.toLocaleDateString("en-GB", options);
+
+  useEffect(() => {
+    setStartDate(startOfWeekFormatted);
+    setEndDate(endOfWeekFormatted);
+  }, [startOfWeekFormatted, endOfWeekFormatted]);
+
+
   const dispatch = useDispatch();
 
   const { log: logStatistics } = useSelector((state) => state);
@@ -38,6 +51,8 @@ const Timestatistic = () => {
 
   const _smd = useMediaQuery((theme) => theme.breakpoints.down("smd"));
   const theme = useTheme();
+
+
   return (
     <Box
       sx={{
@@ -104,7 +119,7 @@ const Timestatistic = () => {
                       font: "normal normal normal 16px/20px Outfit;",
                     }}
                   >
-                    8 Apr - 14 Apr
+                    {startDate} - {endDate}
                   </Typography>
                 </Box>
               </Box>
@@ -128,7 +143,7 @@ const Timestatistic = () => {
               }}
             ></Box>
             <Box sx={{ flexGrow: 1 }}>
-              <GraphicalStatistics data={langData} />
+              <GraphicalStatistics data={logStatistics.weekData.data} />
             </Box>
           </Box>
           <Box

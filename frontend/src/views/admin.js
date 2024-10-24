@@ -20,10 +20,8 @@ const Admin = () => {
 
   useEffect(() => {
     dispatch(getLanguageUsageRates());
-    dispatch(getSolitionWeek());
   }, [dispatch]);
 
-  console.log(logStatistics);
 
   const progresses = {
     values: logStatistics.data?.data?.map((item) => item.usagePercentage),
