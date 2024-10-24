@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import CustomBreadcrumbs from "src/components/breadcrumbs";
-import { useTranslation } from "react-i18next";
+import { Translation, useTranslation } from "react-i18next";
 import i18next from "i18next";
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   Grid,
   Typography,
   Stack,
+  CircularProgress,
 } from "@mui/material";
 import LockIcon from "src/assets/icons/padlock.png";
 import PathIcon from "src/assets/icons/icons8-path-100.png";
@@ -17,7 +18,7 @@ import DoneIcon from "src/assets/icons/icons8-done-100 (1).png";
 import NextPathIcon from "src/assets/icons/icons8-signpost-100.png";
 import Image from "next/image";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LinearProgess from "src/components/progress/LinearProgess";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +26,8 @@ import { fetchPaths, startRoad } from "src/store/paths/pathsSlice";
 import { getProgrammingId } from "src/data/programmingIds";
 import { set } from "nprogress";
 import { showToast } from "src/utils/showToast";
+import Translations from "src/components/Translations";
+import { AuthContext } from "src/context/AuthContext";
 
 const RoadDetails = ({ language = "" }) => {
   const theme = useTheme();
@@ -48,8 +51,7 @@ const RoadDetails = ({ language = "" }) => {
   const [programmingIcon, setProgrammingIcon] = useState("images/c.png"); // Programming icon path
   const [title, setTitle] = useState(""); // Road title
   const [description, setDescription] = useState(""); // Road description
-
-
+  const { containerLoading } = useContext(AuthContext)
 
   const renderPathIcon = (path) => {
     if (path.pathIsFinished) {
@@ -217,7 +219,11 @@ const RoadDetails = ({ language = "" }) => {
                         }}
                         onClick={handleStartRoad}
                       >
-                        {t("roads.path.start_road")}
+                        {containerLoading ? (
+                          <CircularProgress size={24} sx={{ position: 'absolute' }} />
+                        ) : (
+                          <Translations text={"roads.path.start_road"} />
+                        )}
                       </Button>
 
                     </Box>
