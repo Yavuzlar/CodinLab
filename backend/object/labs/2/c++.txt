@@ -7,10 +7,10 @@
 
 using namespace std;
 
-bool $funcname$(std::string s) {
+int $funcname$(std::string s) {
     // Write your code here
 
-    return false
+    return 0
 }
 
 int main() {
@@ -32,8 +32,8 @@ $usercode$
 
 int main(){
     $checks$
+    std::cout << "$success$|*_|*_|*_" << std::endl;
 
-    std::cout << "$success$" << std::endl;
 }
 
 ## CHECK
@@ -44,13 +44,12 @@ std::vector<int> outputArr$rnd$ = {$output$};
 std::vector<int> result$rnd$ = $funcname$(inputArr$rnd$);
 if (result$rnd$ != outputArr$rnd$){
     
-    cout << "Test Failed: Expected ";
     for (int num : outputArr$rnd$) {
-        cout << num << " ";
+        cout << "_|*" << num << " ";
     }
-    cout << ", but got ";
+    cout << "|*";
     for (int num : result$rnd$) {
-        cout << num << " ";
+        cout << num << "|*_" << " ";
     }
     cout << endl;
     exit($rnd$);

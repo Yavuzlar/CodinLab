@@ -27,15 +27,13 @@ $usercode$
 
 func main(){
     $checks$
+    fmt.Println("$success$|*_|*_|*_")
 }
 
 ## CHECK
 
 result$rnd$ := $funcname$($input$)
 if (result$rnd$ != $output$){
-    fmt.Printf("$out$|%v", result$rnd$)
-    return
-}else{
-    fmt.Printf("$success$|%v", result$rnd$)
+    fmt.Printf("_|*$out$|*%v|*_", result$rnd$)
     return
 }
