@@ -16,5 +16,6 @@ $usercode$
 
 int main(){
    $funcname$();
+   
    return 0;
 }

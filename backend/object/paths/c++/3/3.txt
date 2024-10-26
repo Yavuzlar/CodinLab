@@ -1,10 +1,9 @@
 ## FRONTEND
 
+#include <iostream>
 
 int $funcname$(int n1,int n2) {
-
     // Write your code here
-
 }
 
 int main() {
@@ -28,17 +27,20 @@ $imps$
 
 $usercode$
 
+
+std::string a;
 int main(){
     $checks$
 
-    std::cout << "$success$" << std::endl;
+    std::cout << "$success$|||" << result0 << "|||_|||_" << std::endl;
+
     return 0;
 }
 
 ## CHECK
 
 int result$rnd$ = $funcname$($input$);
-if (result$rnd$ != $output$){
-    std::cout << "Test Failed: Expected $out$, but got " << result$rnd$ << std::endl;
+if (result$rnd$ != $output$) {
+    std::cout << "_|||" << result$rnd$ << "|||$out$|||_" << std::endl;
     return 0;
 }
