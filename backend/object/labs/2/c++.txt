@@ -32,8 +32,6 @@ $usercode$
 
 int main(){
     $checks$
-    std::cout << "$success$|*_|*_|*_" << std::endl;
-
 }
 
 ## CHECK
@@ -42,15 +40,22 @@ std::vector<int> inputArr$rnd$ = {$input$};
 std::vector<int> outputArr$rnd$ = {$output$};
 
 std::vector<int> result$rnd$ = $funcname$(inputArr$rnd$);
-if (result$rnd$ != outputArr$rnd$){
-    
+if (result$rnd$ != outputArr$rnd$) {
+    std::cout << "_|||";
     for (int num : outputArr$rnd$) {
-        cout << "_|*" << num << " ";
+        std::cout << num << " ";
     }
-    cout << "|*";
+    std::cout << "|||$out$|||_";
     for (int num : result$rnd$) {
-        cout << num << "|*_" << " ";
+        std::cout << num << " ";
     }
-    cout << endl;
-    exit($rnd$);
+    std::cout << "|||_" << std::endl;
+    return 0;
+} else {
+    std::cout << "$success$|||";
+    for (int num : result$rnd$) {
+        std::cout << num << " ";
+    }
+    std::cout << "|||_|||_" << std::endl;
+    return 0;
 }

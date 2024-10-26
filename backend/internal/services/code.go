@@ -45,8 +45,7 @@ func newCodeService(
 
 func (s *codeService) ParseCodeLog(log string) (*domains.UserLog, error) {
 	var userLog domains.UserLog
-	fmt.Println(log)
-	logArr := strings.Split(log, "|*")
+	logArr := strings.Split(log, "|||")
 	err := "go: golang.org/x/tool"
 
 	if len(logArr) != 4 {
@@ -56,7 +55,7 @@ func (s *codeService) ParseCodeLog(log string) (*domains.UserLog, error) {
 		re := regexp.MustCompile(`(?m)^\)?go: downloading golang.org/x/.*\n`)
 		log = re.ReplaceAllString(log, "")
 
-		re2 := regexp.MustCompile(`v\d+\.\d+\.\d+`) //captures version numbers of go package
+		re2 := regexp.MustCompile(`v\d+\.\d+\.\d+`)
 		log = re2.ReplaceAllString(log, "")
 
 		userLog.ErrorMessage = log
@@ -70,11 +69,11 @@ func (s *codeService) ParseCodeLog(log string) (*domains.UserLog, error) {
 	}
 
 	if logArr[1] != "_" {
-		userLog.ExpectedOutput = logArr[1]
+		userLog.Output = logArr[1]
 	}
 
 	if logArr[2] != "_" {
-		userLog.Output = logArr[2]
+		userLog.ExpectedOutput = logArr[2]
 	}
 
 	if logArr[3] != "_" {
