@@ -7,6 +7,7 @@ import {
   Button,
   useMediaQuery,
   Alert,
+  Grid,
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Tooltip from "@mui/material/Tooltip";
@@ -84,6 +85,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
     }
   }, [path]);
 
+
   const handleRun = (outputData) => {
     setOutput(outputData?.data);
   };
@@ -117,8 +119,8 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   // Parameters for the code editor
   const params = {
-    height: "50vh",
-    width: _mdmd ? "100%" : "50vw",
+    height: "30rem",
+    width: "100%",
   };
 
   // API data for the code editor
@@ -168,7 +170,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
           <Typography variant="body1" sx={{ mb: "10px", color: "lightgrey", whiteSpace: "pre-line" }}>
             {content}
           </Typography>
-          <Typography variant="body1" sx={{ color: "lightgrey", whiteSpace: "pre-line" }}>
+          <Typography variant="body1" sx={{ color: "lightgrey", whiteSpace: "pre-line", mb: "3rem" }}>
             {note}
           </Typography>
           {isFinished && (
@@ -194,7 +196,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
           )}
 
           <Button
-            variant="dark"
+            variant="light"
             sx={{
               position: "absolute",
               right: "1rem",
@@ -204,6 +206,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
               textTransform: "capitalize",
               py: 1,
               px: 3,
+              
             }}
             onClick={handleNextPath}
             disabled={!isFinished}
@@ -221,27 +224,27 @@ const LanguageRoad = ({ language = "", pathId }) => {
           {output.isCorrect ? t("CODE_SUCCESS") : `${t("CODE_ALERT").replace("$$$", output.expectedOutput).replace("***", output.output)}`}
         </Alert>
       )}
-      <Box
-        sx={{
-          display: "flex",
-          gap: 2,
-          flexDirection: _mdmd ? "column" : "row",
-        }}
-      >
-        <CodeEditor
-          key={template}
-          params={params}
-          onRun={handleRun}
-          onStop={handleStop}
-          leng={language}
-          // defValue={template}
-          title={"example.c"}
-          apiData={apiData}
-          editorRef={editorRef}
-          val={template}
-        />
-        <Output value={output} params={params} />
-      </Box>
+      <Grid container spacing={2}>
+  <Grid item xs={12} md={6}>
+    <CodeEditor
+      key={template}
+      onRun={handleRun}
+      onStop={handleStop}
+      leng={language}
+      title={"example.c"}
+      apiData={apiData}
+      editorRef={editorRef}
+      val={template}
+      params={params}
+    />
+  </Grid>
+  <Grid item xs={12} md={6}>
+    <Output
+    params={params}
+      value={output}
+    />
+  </Grid>
+</Grid>
     </>
   );
 };
