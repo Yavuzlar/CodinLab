@@ -1,14 +1,14 @@
 ## FRONTEND
 
+#include <iostream>
+#include <string>
 
 string $funcname$() {
-
     // Write your code here
-
 }
 
 int main() {
-    std::string result = $funcname$();
+    string result = $funcname$();
     
     std::cout << "Fonksiyondan dönen sonuç: " << result << std::endl;
     return 0;
@@ -20,17 +20,18 @@ $imps$
 
 $usercode$
 
-int main(){
+int main() {
     $checks$
 
-    std::cout << "$success$" << std::endl;
+    std::cout << "$success$|||" << result0 << "|||_|||_" << std::endl;
+
     return 0;
 }
 
 ## CHECK
 
-std::string result$rnd$ = $funcname$();
-if (result$rnd$ != $output$){
-    std::cout << "Test Failed: Expected $out$, but got " << result$rnd$ << std::endl;
+std::string result$rnd$ = $funcname$($input$);
+if (result$rnd$ != $output$) {
+    std::cout << "_|||" << result$rnd$ << "|||$out$|||_" << std::endl;
     return 0;
 }

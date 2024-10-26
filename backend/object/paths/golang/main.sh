@@ -21,5 +21,6 @@ for i in "${!test[@]}"; do
         echo "Test Passed|||$result|||_|||_"
     else
         echo "_|||$result|||$expected_result|||_"
+        exit 2
     fi
 done
