@@ -33,15 +33,13 @@ $usercode$
 
 int main(){
     $checks$
+    std::cout << "$success$|*_|*_|*_" << std::endl;
 }
 
 ## CHECK
 
 bool result$rnd$ = $funcname$($input$);
 if (result$rnd$ != $output$){
-    std::cout << "$out$|" << result$rnd$ << std::endl;
+    std::cout << "_|*$out$|*" << result$rnd$ <<"|*_" << std::endl;
     return 0;
-}else{
-    std::cout << "$success$|$output$" << std::endl;
-    return 1;
 }

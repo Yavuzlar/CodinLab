@@ -15,7 +15,7 @@ import $imps$
 $usercode$
 
 $checks$
-print("$success$")
+print(f"$success$|*_|*_|*_")
 
 ## CHECK
 
@@ -24,5 +24,4 @@ output_arr$rnd$ = [$output$]
 
 result$rnd$ = $funcname$(input_arr$rnd$)
 if result$rnd$ != output_arr$rnd$:
-    print(f"Test Failed: Expected {output_arr$rnd$}, but got {result$rnd$}")
-
+    print(f"_|*{output_arr$rnd$}|*{result$rnd$}|*_")

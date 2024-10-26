@@ -16,11 +16,11 @@ $imps$
 $usercode$
 
 $checks$
-print("$success$")
+print(f"$success$|*_|*_|*_")
 
 ## CHECK
 
 result$rnd$ = $funcname$($input$)
 if result$rnd$ != $output$:
-    print(f"Test Failed: Expected $out$, but got {result$rnd$}")
+    print(f"_|*$out$|*{result$rnd$}|*_")
     exit($rnd$)

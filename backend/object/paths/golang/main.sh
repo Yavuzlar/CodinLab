@@ -12,15 +12,15 @@ for i in "${!test[@]}"; do
 
     if [ $? -ne 0 ]; then
         echo "Compilation failed:"
-        echo "_|_|_|$compile_output"
+        echo "_|*_|*_|*$compile_output"
         exit 1
     fi
 
     result=$(go run ../main.go)  
 
     if [[ "$result" == "$expected_result" ]]; then
-        echo "Test Passed|$result|_|_"
+        echo "Test Passed|*$result|*_|*_"
     else
-        echo "_|$result|$expected_result|_"
+        echo "_|*$expected_result|*$result|*_"
     fi
 done
