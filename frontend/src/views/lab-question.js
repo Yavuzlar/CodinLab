@@ -12,6 +12,7 @@ import {
   Modal,
   Tooltip,
   Alert,
+  Grid,
 } from "@mui/material";
 import TestTubeGreen from "src/assets/icons/icons8-test-tube-100-green.png";
 import TestTubeOrange from "src/assets/icons/icons8-test-tube-100-orange.png";
@@ -26,6 +27,7 @@ import { data } from "autoprefixer";
 import { getStop } from "src/store/code/codeSlice";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import axios from "axios";
+import { YAxis } from "recharts";
 
 const renderDifficulty = (difficulty) => {
   const { t } = useTranslation();
@@ -117,7 +119,6 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const [isFailed, setIsFailed] = useState(false);
 
   const [labData, setLabData] = useState({
     title: "",
@@ -130,6 +131,24 @@ const LabQuestion = ({ language = "", questionId }) => {
     hint: "",
     template: ""
   });
+
+  const [isCorrect, setIsCorrect] = useState( false);
+  const [isFailed, setIsFailed] = useState(false);
+
+
+  useEffect(() => {
+    // Reset states on each new output
+    setIsCorrect(false);
+    setIsFailed(false);
+  
+    // Set states based on output correctness
+    if (output?.isCorrect === true) {
+      setIsCorrect(true);
+    } else if (output?.isCorrect === false) {
+      setIsFailed(true);
+    }
+  }, [output]);
+  
 
   const [open, setOpen] = useState(false);
 
@@ -167,6 +186,8 @@ const LabQuestion = ({ language = "", questionId }) => {
       });
     }
   }, [labSlice.data]);
+
+
 
   const handleRun = (outputData) => {
     setOutput(outputData?.data);
@@ -246,8 +267,8 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const params = {
     // these are the parameters for the component settings.
-    height: !isMobile ? "30vw" : "90vw",
-    width: !isMobile ? "40vw" : "98vw",
+    height: "30rem",
+    width: "100%",
   };
 
   return (
@@ -256,231 +277,235 @@ const LabQuestion = ({ language = "", questionId }) => {
       <CustomBreadcrumbs titles={breadcrums} />
 
       {/* Outer container */}
-      <Box
+      <Grid
+  container
+  spacing={2}
+  sx={{
+    mt: 2,
+  }}
+>
+  {/* Question Description Card */}
+  <Grid item xs={12} md={6}>
+    <Card
+      sx={{
+        width: "100%",
+        height: "100%",
+        position: "relative",
+      }}
+    >
+      <CardContent
         sx={{
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
           gap: "1rem",
-          flexDirection: isMobile ? "column" : "row",
-          mt: 2,
+          mt: isMobile ? "2.5rem" : "0",
         }}
       >
-        {/* Question Description Card */}
-        <Card
-          sx={{
-            width: isMobile ? "100%" : "50%",
-            position: "relative",
-          }}
-        >
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-              mt: isMobile ? "2.5rem" : "0",
-            }}
-          >
-            {/* Question Title */}
-            <Typography variant="h4" fontWeight={600} >
-              {labData.title}
-            </Typography>
+        {/* Question Title */}
+        <Typography variant="h4" fontWeight={600}>
+          {labData.title}
+        </Typography>
 
-            {/* Difficulty, Hint button*/}
-            <Box
-              sx={{
-                display: "flex",
-                gap: "1rem",
-                position: "absolute",
-                bottom: "1rem",
-                right: "1rem",
-              }}
-            >
-              {renderDifficulty(labData.difficulty)}
-
-              <Button
-                onClick={handleOpen}
-                sx={{
-                  display: "flex",
-                  gap: "0.4rem",
-                  backgroundColor: "#FDEDAE",
-                  borderRadius: "0.7rem",
-                  py: 1,
-                  px: 2,
-                }}
-              >
-                <Image src={LightBulb} alt="hint" width={25} height={25} />
-                <Typography variant="body1" color={"#FFCA00"} fontWeight={500}>
-                  {t("labs.question.hint")}
-                </Typography>
-              </Button>
-              <Tooltip title={t("roads.path.restart.button")}>
-                <Button
-                  variant="dark"
-                  sx={{
-
-                  }}
-                  onClick={() => handleReset()}
-                >
-                  <RestartAltIcon />
-                </Button>
-              </Tooltip>
-            </Box>
-
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={
-                {
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  maxWidth: 500,
-                  bgcolor: theme.palette.primary.main,
-                  p: 4,
-                  borderRadius: '15px',
-                  textAlign: 'center'
-                }
-              }>
-                <Typography
-                  id="modal-modal-title"
-                  variant="h6"
-                  component="h2"
-                >
-                  {t("labs.question.hint")}
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  {labData.hint}
-                </Typography>
-              </Box>
-            </Modal>
-
-
-            {/* Question Description */}
-            <Typography variant="body1">{labData.description}</Typography>
-
-            {output && output.output && (
-              <Alert
-                severity={output.isCorrect ? "success" : "error"}
-                variant="filled"
-                sx={{ color: theme.palette.common.white, marginBottom: "10px", borderRadius: "10px" }}
-              >
-                {output.isCorrect ? t("CODE_SUCCESS") : `${t("CODE_ALERT").replace("$$$", output.expectedOutput).replace("***", output.output)}`}
-              </Alert>
-            )}
-            {/* Question Note */}
-            <Box
-              sx={{
-                backgroundColor: theme.palette.primary.dark,
-                borderRadius: "1rem",
-                padding: "2rem",
-              }}
-            >
-              <strong>Note:</strong>
-              {<br />}
-              {<br />}
-              <Typography variant="body1">{labData.questionNote}</Typography>
-            </Box>
-          </CardContent>
-        </Card>
-
-
+        {/* Difficulty, Hint button */}
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
             gap: "1rem",
+            position: "absolute",
+            bottom: "1rem",
+            right: "1rem",
           }}
         >
-          {/* Editor */}
-          <CodeEditor
-            params={params}
-            onRun={handleRun}
-            onStop={handleStop}
-            leng={language}
-            // defValue={labData.template}
-            title={labData.title}
-            apiData={apiData}
-            val={labData?.template}
-            editorRef={editorRef}
-          />
+          {renderDifficulty(labData.difficulty)}
 
-          {/* Compilation messages after submitting */}
-          {isCompleted && (
-            <Typography
-              variant="body1"
-              fontWeight={"700"}
-              color={"#39CE19"}
-              sx={{ ml: 2 }}
-            >
-              {t("labs.question.completed")}
+          <Button
+            onClick={handleOpen}
+            variant="contained"
+            sx={{
+              display: "flex",
+              gap: "0.4rem",
+              backgroundColor: "#FDEDAE",
+              borderRadius: "0.7rem",
+              py: 1,
+              px: 2,
+            }}
+          >
+            <Image src={LightBulb} alt="hint" width={25} height={25} />
+            <Typography variant="body1" color={"#FFCA00"} fontWeight={500}>
+              {t("labs.question.hint")}
             </Typography>
-          )}
+          </Button>
 
-          {isFailed && (
-            <Typography
-              variant="body1"
-              fontWeight={"700"}
-              color={"#e00404"}
-              sx={{ ml: 2 }}
-            >
+          <Tooltip title={t("roads.path.restart.button")}>
+            <Button variant="dark" onClick={handleReset}>
+              <RestartAltIcon />
+            </Button>
+          </Tooltip>
+        </Box>
 
-              {t("labs.question.failed")}
-            </Typography>
-          )}
+        <Modal open={open} onClose={handleClose}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              maxWidth: 500,
+              bgcolor: theme.palette.primary.main,
+              p: 4,
+              borderRadius: "15px",
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="h6">{t("labs.question.hint")}</Typography>
+            <Typography sx={{ mt: 2 }}>{labData.hint}</Typography>
+          </Box>
+        </Modal>
 
-          {/* Expected output card */}
+        {/* Question Description */}
+        <Typography variant="body1">{labData.description}</Typography>
 
-          {/* Output */}
-          {isSubmitted && (
-            <Card
+        {output && output.output && (
+          <Alert
+            severity={output.isCorrect ? "success" : "error"}
+            variant="filled"
+            sx={{
+              color: theme.palette.common.white,
+              marginBottom: "10px",
+              borderRadius: "10px",
+            }}
+          >
+            {output.isCorrect
+              ? t("CODE_SUCCESS")
+              : `${t("CODE_ALERT")
+                  .replace("$$$", output.expectedOutput)
+                  .replace("***", output.output)}`}
+          </Alert>
+        )}
+
+        {/* Question Note */}
+        <Box
+          sx={{
+            backgroundColor: theme.palette.primary.dark,
+            borderRadius: "1rem",
+            padding: "2rem",
+            mb: "5rem",
+          }}
+        >
+          <strong>Note:</strong>
+          <Typography variant="body1">{labData.questionNote}</Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  </Grid>
+
+  {/* Code Editor and Output Section */}
+  <Grid item xs={12} md={6}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
+      {/* Editor */}
+      <CodeEditor
+        params={params}
+        onRun={handleRun}
+        onStop={handleStop}
+        leng={language}
+        title={labData.title}
+        apiData={apiData}
+        val={labData?.template}
+        editorRef={editorRef}
+      />
+
+      {/* Compilation messages after submitting */}
+      {isCorrect && (
+  <Typography
+    variant="body1"
+    fontWeight="700"
+    color="#39CE19"
+    sx={{ ml: 2 }}
+  >
+    {t("labs.question.completed")}
+  </Typography>
+)}
+
+{isFailed && (
+  <Typography
+    variant="body1"
+    fontWeight="700"
+    color="#e00404"
+    sx={{ ml: 2 }}
+  >
+    {t("labs.question.failed")}
+  </Typography>
+      )}
+
+      {/* Expected output card */}
+      {isSubmitted && (
+        <Card
+          sx={{
+            width: "100%",
+            backgroundColor: "#0A3B7A",
+            
+          }}
+        >
+          <CardContent
+            sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
+          >
+            <Box
               sx={{
-                width: "100%",
-                backgroundColor: isSubmitted ? "#0A3B7A" : "",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <CardContent
-                sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
+              
+              <Box sx={{ width: "21%" }}>
+                <Typography variant="body1" fontWeight={"bold"}>
+                  {t("labs.question.output")}{" "}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  borderRadius: "0.6rem",
+                  backgroundColor: "#C3FFD3",
+                  px: 2,
+                  py: 1,
+                  overflow:"auto",
+            height: "8rem",
+            "&::-webkit-scrollbar": {
+              width: "0.8em",
+            },
+            "&::-webkit-scrollbar-track": {
+              boxShadow: "inset 0 0 6px rgba(0,0,0,0.00)",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#888",
+              borderRadius: "10px",
+            },
+                }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
+                <Typography
+                  variant="body1"
+                  color={"black"}
+                  sx={{ whiteSpace: "pre-line" }}
                 >
-                  <Box sx={{ width: "21%" }}>
-                    <Typography variant="body1" fontWeight={"bold"}>
-                      {t("labs.question.output")}{" "}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      width: "100%",
-                      borderRadius: "0.6rem",
-                      backgroundColor: isSubmitted ? "#C3FFD3" : "#DAF0FE",
-                      px: 2,
-                      py: 1,
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      color={"black"}
-                      sx={{ whiteSpace: 'pre-line' }}
-                    >
-                      {output?.output}
-                    </Typography>
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          )}
+                  {output?.output || output?.errorMessage}
+                
+                </Typography>
+              </Box>
+            </Box>
+          </CardContent>
+        </Card>
+      )}
+    </Box>
+  </Grid>
+</Grid>
 
-        </Box>
-      </Box >
     </>
   );
 };

@@ -143,6 +143,7 @@ const Labs = () => {
       <Grid
         item
         md={5}
+        xs={12}
         e sx={{
           maxHeight: "calc(100vh - 143px)",
           overflow: "auto",
