@@ -53,7 +53,7 @@ $usercode$
 
 func main(){
     $checks$
-    fmt.Println("$success$|*_|*_|*_")
+    fmt.Printf("$success$|||%v|||_|||_", result$res$)
 }
 
 ## CHECK
@@ -62,6 +62,6 @@ inputArr$rnd$ := []bool{$input$}
 
 result$rnd$ := $funcname$(inputArr$rnd$)
 if (result$rnd$ != $output$){
-    fmt.Printf("_|*$out$|*%v|*_", result$rnd$)
+    fmt.Printf("_|||$out$|||%v|||_", result$rnd$)
     return
 }

@@ -27,6 +27,7 @@ $usercode$
 
 func main(){
     $checks$
+    fmt.Printf("$success$|||%v|||_|||_", result$res$)
 }
 
 ## CHECK
@@ -34,8 +35,5 @@ func main(){
 result$rnd$ := $funcname$($input$)
 if result$rnd$ != $output$ {
     fmt.Printf("_|||%v|||$out$|||_",result$rnd$)
-    return
-} else {
-    fmt.Printf("$success$|||%v|||_|||_", result$rnd$)
     return
 }

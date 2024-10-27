@@ -342,8 +342,8 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 	docker := templateMap["docker"]
 
 	checks := s.createChecks(templateMap["check"], tests)
-
 	docker = strings.Replace(docker, "$checks$", checks, -1)
+	docker = strings.Replace(docker, "$res$", fmt.Sprint(len(tests)-1), -1)
 	docker = strings.Replace(docker, "$usercode$", cleanedCode, -1)
 	docker = strings.Replace(docker, "$funcname$", funcName, -1)
 	docker = strings.Replace(docker, "$success$", "Test Passed", -1)

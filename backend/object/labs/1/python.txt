@@ -20,7 +20,7 @@ $imps$
 $usercode$
 
 $checks$
-print(f"$success$|*_|*_|*_")
+print(f"$success$|||{result$res$}|||_|||_")
 
 ## CHECK
 
@@ -29,6 +29,6 @@ result$rnd$ = $funcname$($input$)
 expected_output = True if '$output$' == 'true' else False
 
 if result$rnd$ != expected_output:
-    print(f"_|*{expected_output}|*{result$rnd$}|*_")
+    print(f"_|||{expected_output}|||{result$rnd$}|||_")
     exit(1)
 

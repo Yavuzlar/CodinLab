@@ -32,6 +32,11 @@ $usercode$
 
 int main(){
     $checks$
+    std::cout << "$success$|||";
+    for (int num : result$res$) {
+        std::cout << num << " ";
+    }
+    std::cout << "|||_|||_" << std::endl;
 }
 
 ## CHECK
@@ -50,12 +55,5 @@ if (result$rnd$ != outputArr$rnd$) {
         std::cout << num << " ";
     }
     std::cout << "|||_" << std::endl;
-    return 0;
-} else {
-    std::cout << "$success$|||";
-    for (int num : result$rnd$) {
-        std::cout << num << " ";
-    }
-    std::cout << "|||_|||_" << std::endl;
     return 0;
 }

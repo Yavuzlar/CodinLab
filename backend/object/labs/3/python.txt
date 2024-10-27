@@ -16,11 +16,11 @@ $imps$
 $usercode$
 
 $checks$
-print(f"$success$|*_|*_|*_")
+print(f"$success$|||{result$res$}|||_|||_")
 
 ## CHECK
 
 result$rnd$ = $funcname$($input$)
 if result$rnd$ != $output$:
-    print(f"_|*$out$|*{result$rnd$}|*_")
+    print(f"_|||$out$|||{result$rnd$}|||_")
     exit($rnd$)

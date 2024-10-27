@@ -49,7 +49,7 @@ $usercode$
 
 int main(){
     $checks$
-    std::cout << "$success$|*_|*_|*_" << std::endl;
+    std::cout << "$success$|||" << result$res$ <<"|||_|||_" << std::endl;
 }
 
 ## CHECK
@@ -58,6 +58,6 @@ std::vector<bool> inputArr$rnd$ = {$input$};
 
 int result$rnd$ = $funcname$(inputArr$rnd$);
 if (result$rnd$ != $output$){
-    std::cout << "_|*$out$|*" << result$rnd$ << "|*_" << std::endl;
+    std::cout << "_|||$out$|||" << result$rnd$ << "|||_" << std::endl;
     exit($rnd$);
 }
