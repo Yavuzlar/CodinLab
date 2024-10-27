@@ -53,6 +53,6 @@ inputArr$rnd$ := []string{$input$}
 
 result$rnd$ := $funcname$(inputArr$rnd$)
 if (result$rnd$ != $output$){
-    fmt.Printf("_|||$out$|||%v|||_", result$rnd$)
+    fmt.Printf("_|||%v|||$out$|||_", result$rnd$)
     return
 }

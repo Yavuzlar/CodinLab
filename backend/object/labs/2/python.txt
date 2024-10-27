@@ -1,8 +1,8 @@
 ## FRONTEND
 
-def $funcname$(s: list[int]) -> bool:
+def $funcname$(s: list[int]) -> list[int]:
     # Write your code here
-    return False
+    return []
 
 def main():
     input_str = input("Lütfen bir string değer girin: ")
@@ -24,4 +24,11 @@ output_arr$rnd$ = [$output$]
 
 result$rnd$ = $funcname$(input_arr$rnd$)
 if result$rnd$ != output_arr$rnd$:
-    print(f"_|||{output_arr$rnd$}|||{result$rnd$}|||_")
+    print("_|||", end="")
+    for num in result$rnd$:
+        print(num, end=" ")
+    print("|||", end="")
+    for num in output_arr$rnd$:
+        print(num, end=" ")
+    print("|||_")
+    exit(1)

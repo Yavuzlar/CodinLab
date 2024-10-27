@@ -29,6 +29,6 @@ result$rnd$ = $funcname$($input$)
 expected_output = True if '$output$' == 'true' else False
 
 if result$rnd$ != expected_output:
-    print(f"_|||{expected_output}|||{result$rnd$}|||_")
+    print(f"_|||{result$rnd$}|||{expected_output}|||_")
     exit(1)
 

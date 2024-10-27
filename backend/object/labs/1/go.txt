@@ -34,6 +34,6 @@ func main(){
 
 result$rnd$ := $funcname$($input$)
 if result$rnd$ != $output$ {
-    fmt.Printf("_|||%v|||$out$|||_",result$rnd$)
+    fmt.Printf("_|||%v|||$out$|||_", result$rnd$)
     return
 }

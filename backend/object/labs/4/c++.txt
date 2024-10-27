@@ -54,6 +54,6 @@ std::vector<string> inputArr$rnd$ = {$input$};
 
 std::string result$rnd$ = $funcname$(inputArr$rnd$);
 if (result$rnd$ != $output$){
-    std::cout << "_|||$out$|||" << result$rnd$ << "|||_" << std::endl;
+    std::cout << "_|||" << result$rnd$ <<"|||$out$|||_" << std::endl;
     exit($rnd$);
 }

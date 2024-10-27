@@ -7,19 +7,32 @@
 
 using namespace std;
 
-int $funcname$(std::string s) {
+std::vector<int> $funcname$(const std::vector<int>& s) {
     // Write your code here
 
-    return 0
+    return std::vector<int>();
 }
 
 int main() {
-    std::string input;
+    int n;
 
-    std::cout << "Bir string girin: ";
-    std::getline(std::cin, input); 
+    std::cout << "Enter array length: ";
+    std::cin >> n;
 
-    std::cout << std::boolalpha << isPalindrome(input) << std::endl;
+    std::vector<int> arr(n);
+
+    std::cout << "Enter " << n << " elements for the array:" << endl;
+    for (int i = 0; i < n; i++) {
+        std::cout << "Element " << (i + 1) << ": ";
+        std::cin >> arr[i];
+    }
+    
+    std::vector<int> result = $funcname$(arr);
+
+    for (int num : result) {
+        std::cout << num << " "; 
+    }
+    std::cout << std::endl;
 
     return 0;
 }
@@ -47,11 +60,11 @@ std::vector<int> outputArr$rnd$ = {$output$};
 std::vector<int> result$rnd$ = $funcname$(inputArr$rnd$);
 if (result$rnd$ != outputArr$rnd$) {
     std::cout << "_|||";
-    for (int num : outputArr$rnd$) {
+    for (int num : result$rnd$) {
         std::cout << num << " ";
     }
-    std::cout << "|||$out$|||_";
-    for (int num : result$rnd$) {
+    std::cout << "|||";
+    for (int num : outputArr$rnd$) {
         std::cout << num << " ";
     }
     std::cout << "|||_" << std::endl;
