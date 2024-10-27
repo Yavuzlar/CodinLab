@@ -54,15 +54,33 @@ const RoadDetails = ({ language = "" }) => {
   const [description, setDescription] = useState(""); // Road description
   const { containerLoading } = useContext(AuthContext)
 
-  const renderPathIcon = (path) => {
-    if (path.pathIsFinished) {
-      return DoneIcon;
-    } else if (path.pathIsStarted && !path.pathIsFinished) {
-      return NextPathIcon;
-    } else {
-      return LockIcon;
-    }
-  };
+  const breadcrums = [
+    {
+      path: "/roads",
+      title: t("home.roads.title"),
+      permission: "roads",
+    },
+    {
+      path: `/roads/${language}`,
+      title: capitalizedLanguage,
+      permission: "roads",
+    },
+  ];
+
+  const progresses = [
+    {
+      name: t("in_progress"),  // String
+      // value: stateStatistics.data?.data?.progress, // Number
+      value: (amountOfInProgressPaths * 100) / totalPath,
+      color: theme.palette.primary.light,// String
+    },
+    {
+      name: t("completed"), // String
+      // value: stateStatistics.data?.data?.completed, // Number
+      value: (amountOfCompletedPaths * 100) / totalPath,
+      color: theme.palette.primary.dark, // String
+    },
+  ];
 
   useEffect(() => {
     setProgrammingId(parseInt(language));
@@ -111,37 +129,17 @@ const RoadDetails = ({ language = "" }) => {
     }
   }, [paths, i18next.language]);
 
-  // Breadcrumbs
-  const breadcrums = [
-    {
-      path: "/roads",
-      title: t("home.roads.title"),
-      permission: "roads",
-    },
-    {
-      path: `/roads/${language}`,
-      title: capitalizedLanguage,
-      permission: "roads",
-    },
-  ];
-
-  const progresses = [
-    {
-      name: t("in_progress"),  // String
-      // value: stateStatistics.data?.data?.progress, // Number
-      value: (amountOfInProgressPaths * 100) / totalPath,
-      color: theme.palette.primary.light,// String
-    },
-    {
-      name: t("completed"), // String
-      // value: stateStatistics.data?.data?.completed, // Number
-      value: (amountOfCompletedPaths * 100) / totalPath,
-      color: theme.palette.primary.dark, // String
-    },
-  ];
+  const renderPathIcon = (path) => {
+    if (path.pathIsFinished) {
+      return DoneIcon;
+    } else if (path.pathIsStarted && !path.pathIsFinished) {
+      return NextPathIcon;
+    } else {
+      return LockIcon;
+    }
+  };
 
   // TODO: Get the title and description from front-end side
-
   const isImageExist = paths.data?.isImageExists;
   const handleStartRoad = () => {
     if (isImageExist) {
@@ -227,26 +225,6 @@ const RoadDetails = ({ language = "" }) => {
                       </Button>
 
                     </Box>
-                    {/* <Button
-                      variant="contained"
-                      disabled={!isImageExist}
-                      sx={{
-                        backgroundColor: "#fff",
-                        color: theme.palette.primary.dark,
-                        fontWeight: 600,
-                        maxWidth: "9.37rem",
-                        maxHeight: "3.12rem",
-                        minWidth: "9.37rem",
-                        minHeight: "3.12rem",
-                        ":hover": {
-                          bgcolor: theme.palette.primary.light,
-                        },
-                      }}
-                      onClick={handleStartRoad}
-                    >
-                      {" "}
-                      {t("roads.path.start_road")}{" "}
-                    </Button> */}
                   </>
                 ) : (
                   <Box

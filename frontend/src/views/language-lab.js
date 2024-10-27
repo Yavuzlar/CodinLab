@@ -25,20 +25,18 @@ import { AuthContext } from "src/context/AuthContext";
 
 
 const LanguageLab = ({ language = "" }) => {
+  const programingId = language;
+
+  const lgmd_down = useMediaQuery((theme) => theme.breakpoints.down("lgmd"));
+  const { containerLoading } = useContext(AuthContext)
+
+  const [iconPath, setIconPath] = useState("");
   const [filters, setFilters] = useState({
     status: "all",
     difficulty: "all",
     search: "",
     sort: "",
   });
-
-  const [iconPath, setIconPath] = useState("");
-  const lgmd_down = useMediaQuery((theme) => theme.breakpoints.down("lgmd"));
-  const router = useRouter();
-
-  const { containerLoading } = useContext(AuthContext)
-
-  const programingId = language;
 
   return (
     <div>

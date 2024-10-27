@@ -30,6 +30,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { changePassword, changeProfile } from "src/store/user/userSlice";
 
 const settings = () => {
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const { user: stateUser } = useSelector((state) => state);
+
   const [passwordSettingsData, setPasswordSettingsData] = useState();
   const [infoSettingsData, setInfoSettingsData] = useState({});
 
@@ -58,12 +62,60 @@ const settings = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    const validateInfoSettings = async () => {
+      if (infoSettingsSubmitted) {
+        const validationInfoErrors = await profileSettingsValidation(
+          infoSettingsData
+        );
+        setErrorInfo(validationInfoErrors);
+      }
+    };
+    validateInfoSettings();
+  }, [infoSettingsData, infoSettingsSubmitted]);
+
+  useEffect(() => {
+    const validateInfoSettings = async () => {
+      if (infoSettingsSubmitted) {
+        const validationInfoErrors = await profileSettingsValidation(
+          infoSettingsData
+        );
+        setErrorInfo(validationInfoErrors);
+      }
+    };
+    validateInfoSettings();
+  }, [infoSettingsData, infoSettingsSubmitted]);
+
+  useEffect(() => {
+    dispatch(fetchProfileUser());
+  }, []);
+
+  useEffect(() => {
+    //this is for the api call
+    dispatch(fetchProfileUser());
+  }, []);
+
+  useEffect(() => {
+    //this is the  data for the user in api
+    if (stateUser.data) {
+      //this is checking if the data is available
+      setInfoSettingsData({
+        name: stateUser.data.data?.name,
+        surname: stateUser.data.data?.surname,
+        username: stateUser.data.data?.username,
+        githubProfile: stateUser.data.data?.githubProfile,
+      });
+    }
+  }, [stateUser.data]);
+
   const hanldeClickShowOldPassword = () => {
     setShowOldPassword(!showOldPassword);
   };
+
   const hanldeClickShowNewPassword = () => {
     setShowNewPassword(!showNewPassword);
   };
+
   const hanldeClickShowConfirmPassword = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
@@ -75,9 +127,6 @@ const settings = () => {
   const handleClose = () => {
     setOpenDialog(false);
   };
-
-  const dispatch = useDispatch();
-  const { user: stateUser } = useSelector((state) => state);
 
   const handleInfoSettings = (e) => {
     setInfoSettingsData({
@@ -149,8 +198,6 @@ const settings = () => {
     }
   };
 
-  const theme = useTheme();
-
   const handleSubmitInfoSettings = async (e) => {
     e.preventDefault();
     setInfoSettingsSubmitted(true);
@@ -165,7 +212,6 @@ const settings = () => {
     }
 
   };
-
 
   const handleDialogSubmit = () => {
     const dataToSend = {
@@ -197,52 +243,6 @@ const settings = () => {
       console.log("Catch Hatası", error);
     }
   };
-
-  useEffect(() => {
-    const validateInfoSettings = async () => {
-      if (infoSettingsSubmitted) {
-        const validationInfoErrors = await profileSettingsValidation(
-          infoSettingsData
-        );
-        setErrorInfo(validationInfoErrors);
-      }
-    };
-    validateInfoSettings();
-  }, [infoSettingsData, infoSettingsSubmitted]);
-
-  useEffect(() => {
-    const validateInfoSettings = async () => {
-      if (infoSettingsSubmitted) {
-        const validationInfoErrors = await profileSettingsValidation(
-          infoSettingsData
-        );
-        setErrorInfo(validationInfoErrors);
-      }
-    };
-    validateInfoSettings();
-  }, [infoSettingsData, infoSettingsSubmitted]);
-
-  useEffect(() => {
-    dispatch(fetchProfileUser());
-  }, []);
-
-  useEffect(() => {
-    //this is for the api call
-    dispatch(fetchProfileUser());
-  }, []);
-
-  useEffect(() => {
-    //this is the  data for the user in api
-    if (stateUser.data) {
-      //this is checking if the data is available
-      setInfoSettingsData({
-        name: stateUser.data.data?.name,
-        surname: stateUser.data.data?.surname,
-        username: stateUser.data.data?.username,
-        githubProfile: stateUser.data.data?.githubProfile,
-      });
-    }
-  }, [stateUser.data]);
 
   return (
     <div>

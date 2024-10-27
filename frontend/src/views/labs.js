@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Box, Card, CardContent, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import InfoCard from "src/components/cards/Info";
 import LanguageProgress from "src/components/cards/LanguageProgress";
@@ -12,30 +12,23 @@ import {
   getLabsProgressStats,
 } from "src/store/statistics/statisticsSlice";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
-import { useRouter } from "next/router";
 import { theme } from "src/configs/theme";
 
 const Labs = () => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const searchPlaceholder = t("labs.search.placeholder");
+
+  const { language: stateLanguage, statistics: stateStatistics } = useSelector(
+    (state) => state
+  );
+
   const [filters, setFilters] = useState({
     status: "all", // all, in-progress, completed
     search: "",
     sort: "", // "", asc, desc
   });
-  const { t } = useTranslation();
-  const searchPlaceholder = t("labs.search.placeholder");
-
-  const dispatch = useDispatch();
-  const { language: stateLanguage, statistics: stateStatistics } = useSelector(
-    (state) => state
-  );
-
-  const rotuer = useRouter();
-
-  useEffect(() => {
-    dispatch(getUserLanguageLabStats());
-    dispatch(getDifficultyStatistics());
-    dispatch(getLabsProgressStats());
-  }, [dispatch]);
 
   const labsStatsData = stateLanguage.userLanguageLabStatsData?.data;
 
@@ -74,6 +67,12 @@ const Labs = () => {
       color: theme.palette.primary.light,
     },
   ];
+
+  useEffect(() => {
+    dispatch(getUserLanguageLabStats());
+    dispatch(getDifficultyStatistics());
+    dispatch(getLabsProgressStats());
+  }, [dispatch]);
 
   return (
     <Grid container spacing={2}>
