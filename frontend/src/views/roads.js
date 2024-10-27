@@ -11,24 +11,19 @@ import { CircularProgressStatistics } from "src/components/progress/CircularProg
 import { getRoadProgressStats } from "src/store/statistics/statisticsSlice";
 
 const Roads = () => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const searchPlaceholder = t("roads.search.placeholder");
+  const { language: stateLanguage, statistics: stateStatistics } = useSelector(
+    (state) => state
+  );
+
   const [filters, setFilters] = useState({
     status: "all", // all, in-progress, completed
     search: "",
     sort: "", // "", asc, desc
   });
-
-  const { t } = useTranslation();
-  const searchPlaceholder = t("roads.search.placeholder");
-
-  const dispatch = useDispatch();
-  const { language: stateLanguage, statistics: stateStatistics } = useSelector(
-    (state) => state
-  );
-
-  useEffect(() => {
-    dispatch(getUserLanguageRoadStats());
-    dispatch(getRoadProgressStats());
-  }, [dispatch]);
 
   const roadProgressStats = [
     {
@@ -44,6 +39,11 @@ const Roads = () => {
       color: "#0A3B7A",
     },
   ];
+
+  useEffect(() => {
+    dispatch(getUserLanguageRoadStats());
+    dispatch(getRoadProgressStats());
+  }, [dispatch]);
 
   return (
     <>

@@ -18,7 +18,6 @@ import CustomBreadcrumbs from "src/components/breadcrumbs";
 import DoneIcon from "src/assets/icons/icons8-done-100 (1).png";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
-import { getProgrammingId } from "src/data/programmingIds";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPathById } from "src/store/path/pathSlice";
 import { useRouter } from "next/router";
@@ -30,25 +29,52 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const router = useRouter();
   const theme = useTheme();
 
-  const dispatch = useDispatch();
   const { path } = useSelector((state) => state);
   const editorRef = useRef(null);
+  const dispatch = useDispatch();
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [output, setOutput] = useState({});
-
   const [programmingId, setProgrammingId] = useState(null);
-
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [note, setNote] = useState("");
   const [template, setTemplate] = useState("");
+
+  const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
+
+  const apiData = {
+    programmingId: programmingId,
+    pathId: pathId,
+    endPoint: "road",
+  };
+
+  const breadcrums = [
+    {
+      path: "/roads",
+      title: "Roads",
+      permission: "roads",
+    },
+    {
+      path: `/roads/${language}`,
+      title: _language,
+      permission: "roads",
+    },
+    {
+      path: `/roads`,
+      title: title,
+      permission: "roads",
+    },
+  ];
+
+  const params = {
+    height: "30rem",
+    width: "100%",
+  };
 
   useEffect(() => {
     setProgrammingId(language);
@@ -115,39 +141,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
     }
   };
 
-  const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
-
-  // Parameters for the code editor
-  const params = {
-    height: "30rem",
-    width: "100%",
-  };
-
-  // API data for the code editor
-  const apiData = {
-    programmingId: programmingId,
-    pathId: pathId,
-    endPoint: "road",
-  };
-
-  // Breadcrumbs for the page
-  const breadcrums = [
-    {
-      path: "/roads",
-      title: "Roads",
-      permission: "roads",
-    },
-    {
-      path: `/roads/${language}`,
-      title: _language,
-      permission: "roads",
-    },
-    {
-      path: `/roads`,
-      title: title,
-      permission: "roads",
-    },
-  ];
 
   return (
     <>
@@ -206,7 +199,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
               textTransform: "capitalize",
               py: 1,
               px: 3,
-              
+
             }}
             onClick={handleNextPath}
             disabled={!isFinished}
@@ -225,26 +218,26 @@ const LanguageRoad = ({ language = "", pathId }) => {
         </Alert>
       )}
       <Grid container spacing={2}>
-  <Grid item xs={12} md={6}>
-    <CodeEditor
-      key={template}
-      onRun={handleRun}
-      onStop={handleStop}
-      leng={language}
-      title={"example.c"}
-      apiData={apiData}
-      editorRef={editorRef}
-      val={template}
-      params={params}
-    />
-  </Grid>
-  <Grid item xs={12} md={6}>
-    <Output
-    params={params}
-      value={output}
-    />
-  </Grid>
-</Grid>
+        <Grid item xs={12} md={6}>
+          <CodeEditor
+            key={template}
+            onRun={handleRun}
+            onStop={handleStop}
+            leng={language}
+            title={"example.c"}
+            apiData={apiData}
+            editorRef={editorRef}
+            val={template}
+            params={params}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Output
+            params={params}
+            value={output}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 };

@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getInventories } from "src/store/language/languageSlice";
 import { GetUserLevel } from "src/store/statistics/statisticsSlice";
-import { useTranslation } from "react-i18next";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -18,31 +17,11 @@ const Home = () => {
     (state) => state
   );
 
-
-
-
   useEffect(() => {
     dispatch(getInventories());
     dispatch(GetUserLevel());
   }, [dispatch]);
 
-  const progresses = [
-    {
-      name: "Easy",
-      value: 50,
-      color: "#39CE19",
-    },
-    {
-      name: "Medium",
-      value: 25,
-      color: "#EE7A19",
-    },
-    {
-      name: "Hard",
-      value: 45,
-      color: "#DC0101",
-    },
-  ];
   return (
     <>
       <Grid container spacing={4} sx={{ px: "1rem" }}>

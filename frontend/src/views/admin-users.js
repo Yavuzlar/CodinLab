@@ -58,43 +58,13 @@ const UsersList = () => {
     surname: "",
     username: "",
   });
-
   const [filters, setFilters] = useState({
     status: "all",
     search: "",
     sort: "",
   });
 
-  useEffect(() => {
-    dispatch(getAdminUser());
-  }, [dispatch]);
-
-  const handleEdit = (user) => {
-    dispatch(fetchUserById(user.userID)).then((response) => {
-      const fetchedUser = response.payload;
-
-      setEditData({
-        githubProfile: fetchedUser?.githubProfile,
-        name: fetchedUser?.name,
-        surname: fetchedUser?.surname,
-        role: fetchedUser?.role,
-        username: fetchedUser?.username,
-      });
-
-      setSelectedUser(user);
-      setOpenDialog(true);
-    });
-  };
-
-  const handleSave = () => {
-    dispatch(updateUserById({ data: editData, userid: selectedUser.userID }));
-    setOpenDialog(false);
-  };
-
-  const handleDelete = (id) => {
-    dispatch(deleteUserById(id));
-  };
-
+  const _sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const inputStyle = {
     borderRadius: "15px",
     border: "2px solid #0A3B7A",
@@ -129,7 +99,35 @@ const UsersList = () => {
     },
   };
 
-  const _sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  useEffect(() => {
+    dispatch(getAdminUser());
+  }, [dispatch]);
+
+  const handleEdit = (user) => {
+    dispatch(fetchUserById(user.userID)).then((response) => {
+      const fetchedUser = response.payload;
+
+      setEditData({
+        githubProfile: fetchedUser?.githubProfile,
+        name: fetchedUser?.name,
+        surname: fetchedUser?.surname,
+        role: fetchedUser?.role,
+        username: fetchedUser?.username,
+      });
+
+      setSelectedUser(user);
+      setOpenDialog(true);
+    });
+  };
+
+  const handleSave = () => {
+    dispatch(updateUserById({ data: editData, userid: selectedUser.userID }));
+    setOpenDialog(false);
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deleteUserById(id));
+  };
 
   return (
     <Grid container spacing={2} direction="column">
@@ -141,13 +139,13 @@ const UsersList = () => {
           component={Paper}
           sx={{
             borderRadius: "15px 15px 0px 0px",
-              overflow: "auto",
-              "&::-webkit-scrollbar": {
-                width: "0rem",
-              },
-              "&::-webkit-scrollbar-track": {
-                background: "transparent",
-              },
+            overflow: "auto",
+            "&::-webkit-scrollbar": {
+              width: "0rem",
+            },
+            "&::-webkit-scrollbar-track": {
+              background: "transparent",
+            },
             maxHeight: "calc(100vh - 143px)",
           }}
         >

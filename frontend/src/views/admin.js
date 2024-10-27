@@ -14,14 +14,10 @@ import DonotProggresStatistic from "src/components/progress/DonotProggresStatist
 
 const Admin = () => {
   const theme = useTheme();
+
+  const router = useRouter();
   const dispatch = useDispatch();
-
   const { log: logStatistics } = useSelector((state) => state);
-
-  useEffect(() => {
-    dispatch(getLanguageUsageRates());
-  }, [dispatch]);
-
 
   const progresses = {
     values: logStatistics.data?.data?.map((item) => item.usagePercentage),
@@ -33,7 +29,10 @@ const Admin = () => {
     theme.palette.info.dark,
   ];
 
-  const router = useRouter();
+  useEffect(() => {
+    dispatch(getLanguageUsageRates());
+  }, [dispatch]);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sx={{ display: "flex", gap: 2 }}>
