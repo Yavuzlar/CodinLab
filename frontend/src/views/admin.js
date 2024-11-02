@@ -87,36 +87,6 @@ const Admin = () => {
                   <Translations text="admin.profile.button" />
                 </Typography>
               </Button>
-
-              <Button
-                onClick={() => router.push("admin/settings")}
-                variant="dark"
-                sx={{
-                  textTransform: "none",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "16px",
-                  borderRadius: "10px",
-                }}
-              >
-                <Image
-                  src={settingsIcon}
-                  alt="settingsIcon"
-                  width={26}
-                  height={26}
-                />
-                <Typography
-                  variant="infoText"
-                  sx={{
-                    color: `${theme.palette.common.white} !important`,
-                    fontWeight: "normal",
-                  }}
-                >
-                  <Translations text="admin.settings.button" />
-                </Typography>
-              </Button>
             </Box>
 
             <Card

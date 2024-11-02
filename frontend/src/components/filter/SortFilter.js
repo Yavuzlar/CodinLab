@@ -82,7 +82,7 @@ const SortFilter = ({ filters, setFilters, textKey }) => {
               flexWrap: "nowrap",
               userSelect: "none",
             }}
-            text={"labs.sort_the_labs"}
+            text={textKey}
           />
         </Typography>
       </Box>
