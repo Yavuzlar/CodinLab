@@ -37,53 +37,48 @@ const FilterUser = ({
         justifyContent: "space-between",
       }}
     >
-    
-
-        <Box sx={{ width: _sm ? "100%" : "50%" }}>
-          <FormControl fullWidth>
-            <TextField
-              name="search-in-labs"
-              placeholder={t("users.search.placeholder")}
-              variant="outlined"
-              size="small"
-              onChange={(e) =>
-                setFilters({ ...filters, search: e.target.value })
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment sx={{ zIndex: 10, mr: 1 }}>
-                    <Search />
-                  </InputAdornment>
-                ),
-                style: { color: theme.palette.text.primary },
-              }}
-              sx={{
-                "& .MuiInputBase-input": {
+      <Box sx={{ width: _sm ? "100%" : "50%" }}>
+        <FormControl fullWidth>
+          <TextField
+            name="search-in-labs"
+            placeholder={t("users.search.placeholder")}
+            variant="outlined"
+            size="small"
+            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment sx={{ zIndex: 10, mr: 1 }}>
+                  <Search />
+                </InputAdornment>
+              ),
+              style: { color: theme.palette.text.primary },
+            }}
+            sx={{
+              "& .MuiInputBase-input": {
+                color: theme.palette.text.primary,
+                zIndex: 9,
+                "&::placeholder": {
                   color: theme.palette.text.primary,
-                  zIndex: 9,
-                  "&::placeholder": {
-                    color: theme.palette.text.primary,
-                    opacity: 0.7,
-                  },
+                  opacity: 0.7,
                 },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    backgroundColor: theme.palette.primary.main,
-                  },
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  backgroundColor: theme.palette.primary.main,
                 },
-                width: "100%",
-                height: "100%",
-              }}
-            />
-          </FormControl>
-        </Box>
-    
+              },
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </FormControl>
+      </Box>
 
       <Box sx={{ height: "44px", minWidth: "fit-content" }}>
         <SortFilter
           filters={filters}
           setFilters={setFilters}
-          textKey="labs.sort_the_labs"
+          textKey="admin.users.sort.filter"
         />
       </Box>
     </Box>

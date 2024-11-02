@@ -29,7 +29,9 @@ const AuthProvider = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(
     defaultProvider.isInitialized
   );
-  const [containerLoading, setContainerLoading] = useState(defaultProvider.containerLoading)
+  const [containerLoading, setContainerLoading] = useState(
+    defaultProvider.containerLoading
+  );
 
   const ws = useRef(null);
 
@@ -51,22 +53,29 @@ const AuthProvider = ({ children }) => {
       const data = JSON.parse(e.data);
       console.log("Message from server:", data);
 
-      if (data.Type === 'Pull') {
+      if (data.Type === "Pull") {
         const message = data.Data.message;
-        const programmingLanguage = data.Data.programminglanguage || "Unknown Language";
+        const programmingLanguage =
+          data.Data.programminglanguage || "Unknown Language";
 
         const downloadedMessage = t("code.image.downloaded");
         const downloadingMessage = t("code.image.downloading");
 
         // $$$$'ı programmingLanguage ile değiştiriyoruz
-        const formattedMessage = downloadedMessage.replace("$$$$", programmingLanguage);
-        const downloadingFormattedMessage = downloadingMessage.replace("$$$$", programmingLanguage);
+        const formattedMessage = downloadedMessage.replace(
+          "$$$$",
+          programmingLanguage
+        );
+        const downloadingFormattedMessage = downloadingMessage.replace(
+          "$$$$",
+          programmingLanguage
+        );
 
-        if (message === 'Started') {
+        if (message === "Started") {
           setContainerLoading(true);
           showToast("dismiss");
           showToast("loading", downloadingFormattedMessage);
-        } else if (message === 'Finished') {
+        } else if (message === "Finished") {
           setContainerLoading(false);
           showToast("dismiss");
           showToast("success", formattedMessage);
@@ -74,7 +83,7 @@ const AuthProvider = ({ children }) => {
       }
 
       // this part is for get container id from websocket but not used in this project
-      // const data = JSON.parse(e.data); // 
+      // const data = JSON.parse(e.data); //
       // if (data.Type === "container") {
       //   const containerId = data?.Data?.id;
 
@@ -107,7 +116,9 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
     closeWebSocket();
     const firstPath = router.pathname.split("/")[1];
-    if (firstPath !== "login") router.replace("/login");
+    if (firstPath !== "login" && firstPath !== "register") {
+      router.replace("/login");
+    }
   };
 
   const handleLogout = async () => {
@@ -144,7 +155,10 @@ const AuthProvider = ({ children }) => {
             setIsInitialized(true);
             setUser(user);
 
-            if (router.pathname === "/login" || router.pathname === "/register") {
+            if (
+              router.pathname === "/login" ||
+              router.pathname === "/register"
+            ) {
               router.push("/").then(() => router.reload());
             } else {
               setLoading(false);
