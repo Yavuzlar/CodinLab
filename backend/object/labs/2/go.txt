@@ -60,13 +60,11 @@ outputArr$rnd$ := []int{$output$}
 result$rnd$ := $funcname$(inputArr$rnd$)
 if (!reflect.DeepEqual(result$rnd$, outputArr$rnd$) ){
     fmt.Print("_|||")
-    for _, num := range result$rnd$ {
-        fmt.Printf("%v ", num)
-    }
+   
+    fmt.Printf("%v ", result$rnd$)
     fmt.Print("|||")
-    for _, num := range outputArr$rnd${
-        fmt.Printf("%v ", num)
-    }
+    
+    fmt.Printf("%v ", outputArr$rnd$)
     fmt.Println("|||_")
     return
 }

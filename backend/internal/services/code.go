@@ -382,7 +382,7 @@ func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName strin
 	return frontend, nil
 }
 
-func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string) (string, error) {
+func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string, checkHistory bool) (string, error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
@@ -395,9 +395,11 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 
 	var frontendTemplate string
 	if labRoadType == domains.TypeLab {
-		history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtention)
-		if len(history) > 0 {
-			return history, nil
+		if checkHistory {
+			history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtention)
+			if len(history) > 0 {
+				return history, nil
+			}
 		}
 
 		lab, err := s.labService.GetLabByID(userID, labPathID)
@@ -417,9 +419,11 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 		}
 
 	} else if labRoadType == domains.TypePath {
-		history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtention)
-		if len(history) > 0 {
-			return history, nil
+		if checkHistory {
+			history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtention)
+			if len(history) > 0 {
+				return history, nil
+			}
 		}
 
 		path, err := s.roadService.GetPathByID(userID, programmingID, labPathID)

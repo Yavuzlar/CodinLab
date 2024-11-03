@@ -46,9 +46,16 @@ $usercode$
 int main(){
     $checks$
     std::cout << "$success$|||";
-    for (int num : result$res$) {
-        std::cout << num << " ";
+
+    std::cout << "[";
+    for (size_t i = 0; i < result$res$.size(); ++i) {
+        std::cout << result$res$[i];
+        if (i < result$res$.size() - 1) {
+            std::cout << ",";
+        }
     }
+    std::cout << "]" << std::endl;
+    
     std::cout << "|||_|||_" << std::endl;
 }
 
@@ -60,13 +67,27 @@ std::vector<int> outputArr$rnd$ = {$output$};
 std::vector<int> result$rnd$ = $funcname$(inputArr$rnd$);
 if (result$rnd$ != outputArr$rnd$) {
     std::cout << "_|||";
-    for (int num : result$rnd$) {
-        std::cout << num << " ";
+
+    std::cout << "[";
+    for (size_t i = 0; i < result$rnd$.size(); ++i) {
+        std::cout << result$rnd$[i];
+        if (i < result$rnd$.size() - 1) {
+            std::cout << ",";
+        }
     }
+    std::cout << "]" << std::endl;
+
     std::cout << "|||";
-    for (int num : outputArr$rnd$) {
-        std::cout << num << " ";
+
+    std::cout << "[";
+    for (size_t i = 0; i < outputArr$rnd$.size(); ++i) {
+        std::cout << outputArr$rnd$[i];
+        if (i < outputArr$rnd$.size() - 1) {
+            std::cout << ",";
+        }
     }
+    std::cout << "]" << std::endl;
+
     std::cout << "|||_" << std::endl;
     return 0;
 }

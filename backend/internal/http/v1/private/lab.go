@@ -170,7 +170,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), true)
 	if err != nil {
 		return err
 	}
@@ -219,6 +219,15 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	lab, err := h.services.LabService.GetLabByID(userSession.UserID, labID)
 	if err != nil {
 		return err
+	}
+
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), false)
+	if err != nil {
+		return err
+	}
+
+	if frontendTemplate == answerLabDTO.UserCode {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "SAME_CODE_ERROR", err)
 	}
 
 	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
@@ -302,7 +311,7 @@ func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension(), true)
 	if err != nil {
 		return err
 	}
