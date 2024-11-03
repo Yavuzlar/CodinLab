@@ -4,6 +4,6 @@ const UsersAdmin = () => <UsersPage />;
 
 UsersAdmin.acl = {
   action: "read",
-  permission: "settings",
+  permission: "adminUserSettings",
 };
 export default UsersAdmin;

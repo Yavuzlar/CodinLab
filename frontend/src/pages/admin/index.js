@@ -4,6 +4,6 @@ const AdminPage = () => <Admin />;
 
 AdminPage.acl = {
   action: "read",
-  permission: "home",
+  permission: "admin",
 };
 export default AdminPage;
