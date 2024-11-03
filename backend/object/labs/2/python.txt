@@ -25,10 +25,12 @@ output_arr$rnd$ = [$output$]
 result$rnd$ = $funcname$(input_arr$rnd$)
 if result$rnd$ != output_arr$rnd$:
     print("_|||", end="")
-    for num in result$rnd$:
-        print(num, end=" ")
+    
+    print(result$rnd$, end="")
+
     print("|||", end="")
-    for num in output_arr$rnd$:
-        print(num, end=" ")
+
+    print(output_arr$rnd$, end="")
+    
     print("|||_")
     exit(1)

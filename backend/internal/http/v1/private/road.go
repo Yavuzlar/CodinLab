@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -151,7 +152,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension(), true)
 	if err != nil {
 		return err
 	}
@@ -239,14 +240,25 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
-	if err != nil {
-		return err
-	}
 	road, err := h.services.RoadService.GetPathByID(userSession.UserID, programmingID, pathID)
 	if err != nil {
 		return err
 	}
+
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), false)
+	if err != nil {
+		return err
+	}
+
+	if frontendTemplate == answerRoadDTO.UserCode {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "SAME_CODE_ERROR", err)
+	}
+
+	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
+	if err != nil {
+		return err
+	}
+
 	codeTmp := road.GetQuest().GetCodeTemplates()[0] // Çünkü road hangi dil için ise onun template'i kullanılıcak başka gerek yok.
 
 	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplatePath(), road.GetQuest().GetFuncName(), answerRoadDTO.UserCode, road.GetQuest().GetTests())
@@ -332,7 +344,7 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension(), true)
 	if err != nil {
 		return err
 	}
