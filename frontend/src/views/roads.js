@@ -45,6 +45,20 @@ const Roads = () => {
     dispatch(getRoadProgressStats());
   }, [dispatch]);
 
+  // const Deneme = [
+  //   {
+  //     id: 1,
+  //     name: "React",
+  //     value: 20.2452,
+  //     color: "#8FDDFD",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Python",
+  //     value: 40,
+  //     color: "#0A3B7A",
+  //   },
+  // ];
   return (
     <>
       <Grid container spacing={2} gap={2}>
@@ -60,11 +74,12 @@ const Roads = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-
                 }}
               >
-                <CircularProgressStatistics progresses={roadProgressStats}
-                  flexDirection={"column"} />
+                <CircularProgressStatistics
+                  progresses={roadProgressStats}
+                  flexDirection={"column"}
+                />
               </CardContent>
             </Card>
           </Grid>

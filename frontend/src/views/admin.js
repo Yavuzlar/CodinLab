@@ -30,6 +30,10 @@ const Admin = () => {
     theme.palette.info.dark,
   ];
 
+  // const Deneme = {
+  //   values: [10.5, 20.764674, 30, 40],
+  //   labels: ["a", "b", "c", "d"],
+  // };
   useEffect(() => {
     dispatch(getLanguageUsageRates());
   }, [dispatch]);
@@ -170,7 +174,7 @@ const Admin = () => {
                         <Typography
                           sx={{ font: "normal normal normal 18px/23px Outfit" }}
                         >
-                          %{item.usagePercentage}
+                          %{Math.round(item.usagePercentage)}
                         </Typography>
                       </Box>
                     </Box>
