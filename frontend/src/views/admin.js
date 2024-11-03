@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLanguageUsageRates, getSolitionWeek } from "src/store/log/logSlice";
 import { useEffect } from "react";
 import DonotProggresStatistic from "src/components/progress/DonotProggresStatistic";
+import CustomBreadcrumbs from "src/components/breadcrumbs";
 
 const Admin = () => {
   const theme = useTheme();

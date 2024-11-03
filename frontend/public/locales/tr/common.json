@@ -128,6 +128,8 @@
   "lab.button.review": "İncele",
   "settings": "Ayarlar",
   "admin.users.sort.filter": "Kullanıcıları Sırala",
+  "admin": "Yönetici",
+  "users": "Kullanıcılar",
 
   "code.image.downloading": "$$$$ İndiriliyor.",
   "code.image.downloaded": "$$$$ Başarıyla İndirildi.",
