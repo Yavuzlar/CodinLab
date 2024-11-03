@@ -7,7 +7,7 @@ import {
   Grid,
   IconButton,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import Image from "next/image";
 import ComputerImage from "../assets/3d/3d-casual-life-website-browser-window-in-laptop.png";
@@ -21,12 +21,17 @@ import MauseImage from "../assets/3d/casual-life-3d-cursor.png";
 import { profileSettingsValidation } from "src/configs/validation/profileSettingsSchema";
 import { changePasswordValidation } from "src/configs/validation/changePassSchema";
 import { useDispatch, useSelector } from "react-redux";
-import { changePassword, changeProfile, fetchProfileUser } from "src/store/user/userSlice";
+import {
+  changePassword,
+  changeProfile,
+  fetchProfileUser,
+} from "src/store/user/userSlice";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import CustomBreadcrumbs from "src/components/breadcrumbs";
 
 const settings = () => {
   const theme = useTheme();
@@ -203,7 +208,9 @@ const settings = () => {
       infoSettingsData
     );
     setErrorInfo(validationInfoErrors);
-    if (!validationInfoErrors || Object.keys(validationInfoErrors).length === 0
+    if (
+      !validationInfoErrors ||
+      Object.keys(validationInfoErrors).length === 0
     ) {
       setOpenDialog(true);
     }
@@ -240,8 +247,18 @@ const settings = () => {
     }
   };
 
+  const breadcrums = [
+    {
+      path: "/admin/settings",
+      title: "Settings",
+      permission: "settings",
+    },
+  ];
+
   return (
-    <div>
+    <Box>
+      <CustomBreadcrumbs titles={breadcrums} />
+
       <Box
         sx={{
           display: "flex",
@@ -798,7 +815,9 @@ const settings = () => {
         </Box>
       </Box>
 
-      <Dialog open={openDialog} onClose={handleClose}
+      <Dialog
+        open={openDialog}
+        onClose={handleClose}
         sx={{
           "& .MuiDialog-paper": {
             color: (theme) => `${theme.palette.text.primary} !important`,
@@ -816,8 +835,7 @@ const settings = () => {
         <DialogContent>
           <DialogContentText
             sx={{
-              color: (theme) =>
-                `${theme.palette.text.primary} !important`,
+              color: (theme) => `${theme.palette.text.primary} !important`,
             }}
           >
             <Translations text={"dialog.content.password"} />
@@ -848,8 +866,7 @@ const settings = () => {
               },
 
               "& .MuiInputLabel-root": {
-                color: (theme) =>
-                  `${theme.palette.primary.dark} !important`,
+                color: (theme) => `${theme.palette.primary.dark} !important`,
                 fontWeight: "bold",
               },
 
@@ -859,7 +876,6 @@ const settings = () => {
                 },
               },
             }}
-
             autoFocus
             margin="dense"
             label={<Translations text={"settings.old.password"} />}
@@ -870,21 +886,12 @@ const settings = () => {
             onChange={(e) => setPassword(e.target.value)}
             InputProps={{
               endAdornment: (
-                <IconButton
-                  onClick={hanldeClickShowPassword}
-                  edge="end"
-                >
+                <IconButton onClick={hanldeClickShowPassword} edge="end">
                   <Image
                     style={{ zIndex: 99 }}
-                    src={
-                      showPassword
-                        ? visibilityOnIcon
-                        : visibilityOffIcon
-                    }
+                    src={showPassword ? visibilityOnIcon : visibilityOffIcon}
                     alt={
-                      showPassword
-                        ? "visibilityOnIcon"
-                        : "visibilityOffIcon"
+                      showPassword ? "visibilityOnIcon" : "visibilityOffIcon"
                     }
                     width={30}
                     height={30}
@@ -909,7 +916,7 @@ const settings = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   );
 };
 

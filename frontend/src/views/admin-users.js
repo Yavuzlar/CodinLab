@@ -43,6 +43,7 @@ import {
   updateUserById,
 } from "src/store/admin/adminSlice";
 import { hexToRGBA } from "src/utils/hex-to-rgba";
+import CustomBreadcrumbs from "src/components/breadcrumbs";
 
 const UsersList = () => {
   const theme = useTheme();
@@ -129,12 +130,27 @@ const UsersList = () => {
     dispatch(deleteUserById(id));
   };
 
+  const breadcrums = [
+    {
+      path: "/admin",
+      title: <Translations text="admin" />,
+      permission: "settings",
+    },
+    {
+      path: "/admin/users",
+      title: <Translations text="users" />,
+      permission: "settings",
+    },
+  ];
+
   return (
     <Grid container spacing={2} direction="column">
+      <CustomBreadcrumbs titles={breadcrums} />
+
       <Grid item xs={12}>
         <FilterUser filters={filters} setFilters={setFilters} />
       </Grid>
-      <Grid item xs={12} sx={{}}>
+      <Grid item xs={12}>
         <TableContainer
           component={Paper}
           sx={{
