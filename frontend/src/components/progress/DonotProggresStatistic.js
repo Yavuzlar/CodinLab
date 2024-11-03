@@ -55,18 +55,17 @@ const DonutProgressStatistic = ({ data }) => {
   }, []);
 
   useEffect(() => {
-  
     if (data) {
       setChartData((prevState) => ({
         ...prevState,
-        series: data?.values || [],
+        series: data?.values?.map((value) => Math.floor(value)) || [],
         options: {
           ...prevState.options,
           labels: data?.labels || [],
         },
       }));
     }
-  }, [data]); 
+  }, [data]);
 
   return (
     <div>

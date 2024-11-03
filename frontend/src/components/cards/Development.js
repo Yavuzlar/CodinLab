@@ -16,8 +16,13 @@ const Development = () => {
   // let Deneme = [
   //   {
   //     name: "In progress", // String
-  //     value: 90, // Number
+  //     value: 90.6324, // Number
   //     color: "#0A3B7A", // String
+  //   },
+  //   {
+  //     name: "afnanfkja", // String
+  //     value: 50, // Number
+  //     color: "red", // String
   //   },
   // ];
 
@@ -27,17 +32,17 @@ const Development = () => {
 
   useEffect(() => {
     dispatch(getUserDevelopment());
-  }, [dispatch]);  
+  }, [dispatch]);
 
   const progresses = [
     {
       name: t("home.development.roads"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.developmentData?.data?.roadPercentage ,
+      value: stateStatistics.developmentData?.data?.roadPercentage,
       color: theme.palette.primary.dark,
     },
     {
       name: t("home.development.labs"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.developmentData?.data?.labPercantage ,
+      value: stateStatistics.developmentData?.data?.labPercantage,
       color: theme.palette.primary.light,
     },
   ];

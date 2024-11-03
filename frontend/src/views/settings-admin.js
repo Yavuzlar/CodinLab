@@ -33,7 +33,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CustomBreadcrumbs from "src/components/breadcrumbs";
 
-const settings = () => {
+const Settings = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { user: stateUser } = useSelector((state) => state);
@@ -920,4 +920,4 @@ const settings = () => {
   );
 };
 
-export default settings;
+export default Settings;
