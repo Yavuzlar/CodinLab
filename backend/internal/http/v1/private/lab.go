@@ -277,6 +277,10 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
+	if parsedLog.Output == "" {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "EMPTY_OUTPUT_ERROR", err)
+	}
+
 	return response.Response(200, "AnswerLab Successfull", parsedLog)
 }
 
