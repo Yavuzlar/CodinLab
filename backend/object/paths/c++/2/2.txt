@@ -32,6 +32,6 @@ int main() {
 
 std::string result$rnd$ = $funcname$($input$);
 if (result$rnd$ != $output$) {
-    std::cout << "_|||" << result$rnd$ << "|||$out$|||_" << std::endl;
+    std::cout << "_|||" << result$rnd$ << "|||$output$|||_" << std::endl;
     return 0;
 }
