@@ -95,9 +95,9 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   useEffect(() => {
     if (path) {
-      setExtention(path?.data?.data[0]?.fileExtention)
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
+        setExtention(path?.data?.data[0]?.fileExtention)
         setIsStarted(pathData.pathIsStarted);
         setIsFinished(pathData.pathIsFinished);
         setTitle(pathData.language.title);
