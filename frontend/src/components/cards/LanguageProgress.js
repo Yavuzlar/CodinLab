@@ -13,6 +13,7 @@ import Translations from "../Translations";
 import labIcon from "src/assets/icons/icons8-test-tube-100.png";
 import roadIcon from "src/assets/icons/icons8-path-100.png";
 import { useRouter } from "next/router";
+import { theme } from "src/configs/theme";
 
 const LanguageProgress = ({ language, type }) => {
   const _lg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -37,8 +38,9 @@ const LanguageProgress = ({ language, type }) => {
 
   const router = useRouter();
 
+  console.log(language)
   return (
-    <Card
+    <Card sx={{ cursor: language.percentage > 0 ? "pointer" : "", backgroundColor: language.percentage === 100 ? theme.palette.success.dark : "" }}
       onClick={() => {
         if (type === "road" && language.percentage != 0) {
           router.push(`/roads/${language.id}`);
