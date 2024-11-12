@@ -130,7 +130,7 @@ const Roads = () => {
         >
           {filterRoads()?.map(
             (language, index) => (
-              <Grid item xs={12} md={12} key={index} sx={{ cursor: "pointer" }}>
+              <Grid item xs={12} md={12} key={index}>
                 <LanguageProgress language={language} type="road" />
               </Grid>
             )
