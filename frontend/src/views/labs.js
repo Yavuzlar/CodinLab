@@ -74,6 +74,36 @@ const Labs = () => {
     dispatch(getLabsProgressStats());
   }, [dispatch]);
 
+  const { status, search, sort } = filters
+  const filterLabs = () => {
+    let filteredLabs = labsStatsData;
+
+    switch (status) {
+      case "completed":
+        filteredLabs = filteredLabs.filter((lab) => lab.completedLabs == lab.totalLabs);
+        break;
+      case "in-progress":
+        filteredLabs = filteredLabs.filter((lab) => lab.completedLabs > 0);
+        break;
+    }
+
+    switch (sort) {
+      case "desc":
+        filteredLabs = [...filteredLabs].sort((a, b) => b.id - a.id);
+        break;
+      case "asc":
+        filteredLabs = [...filteredLabs].sort((a, b) => a.id - b.id);
+        break;
+    }
+
+    if (search != "") {
+      filteredLabs = filteredLabs.filter((road) =>
+        road.name && road.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    return filteredLabs;
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item container xs={12} md={7}>
@@ -148,7 +178,7 @@ const Labs = () => {
           overflow: "auto",
         }}
       >
-        {labsStatsData?.map((language, index) => (
+        {filterLabs()?.map((language, index) => (
           <Grid item mb={2} xs={12} key={index} >
             <LanguageProgress language={language} type="lab" />
           </Grid>

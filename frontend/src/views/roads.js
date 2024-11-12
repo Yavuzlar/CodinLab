@@ -45,20 +45,36 @@ const Roads = () => {
     dispatch(getRoadProgressStats());
   }, [dispatch]);
 
-  // const Deneme = [
-  //   {
-  //     id: 1,
-  //     name: "React",
-  //     value: 20.2452,
-  //     color: "#8FDDFD",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Python",
-  //     value: 40,
-  //     color: "#0A3B7A",
-  //   },
-  // ];
+  const { status, search, sort } = filters
+  const filterRoads = () => {
+    let filteredRoads = stateLanguage?.userLanguageRoadStatsData?.data;
+
+    switch (status) {
+      case "completed":
+        filteredRoads = filteredRoads.filter((road) => road.percentage === 100);
+        break;
+      case "in-progress":
+        filteredRoads = filteredRoads.filter((road) => road.percentage > 0 && road.percentage < 100);
+        break;
+    }
+
+    switch (sort) {
+      case "desc":
+        filteredRoads = [...filteredRoads].sort((a, b) => b.id - a.id);
+        break;
+      case "asc":
+        filteredRoads = [...filteredRoads].sort((a, b) => a.id - b.id);
+        break;
+    }
+
+    if (search != "") {
+      filteredRoads = filteredRoads.filter((road) =>
+        road.name && road.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    return filteredRoads;
+  };
+
   return (
     <>
       <Grid container spacing={2} gap={2}>
@@ -112,7 +128,7 @@ const Roads = () => {
           spacing={2}
           sx={{ maxHeight: "calc(100vh - 143px)", pt: "0px !important" }}
         >
-          {stateLanguage.userLanguageRoadStatsData?.data?.map(
+          {filterRoads()?.map(
             (language, index) => (
               <Grid item xs={12} md={12} key={index} sx={{ cursor: "pointer" }}>
                 <LanguageProgress language={language} type="road" />

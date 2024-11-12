@@ -8,7 +8,6 @@ if __name__ == "__main__":
     input_str = input("Bir string girin: ")
     print($funcname$(input_str))
 
-
 ## DOCKER
 
 $imps$

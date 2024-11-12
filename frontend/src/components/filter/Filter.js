@@ -53,7 +53,7 @@ const Filter = ({
         minHeight: "44px",
         flexWrap: "wrap",
         gap: '1rem',
-        
+
       }}
     >
       <Box sx={{ display: "flex", gap: "1rem", width: 'auto' }}>
@@ -91,7 +91,7 @@ const Filter = ({
         />
       </Box>
 
-     
+
     </Box>
   );
 };
