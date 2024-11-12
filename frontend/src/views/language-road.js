@@ -39,6 +39,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [programmingId, setProgrammingId] = useState(null);
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const [extention, setExtention] = useState("")
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
@@ -94,9 +95,9 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   useEffect(() => {
     if (path) {
+      setExtention(path?.data?.data[0]?.fileExtention)
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
-
         setIsStarted(pathData.pathIsStarted);
         setIsFinished(pathData.pathIsFinished);
         setTitle(pathData.language.title);
@@ -224,7 +225,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
             onRun={handleRun}
             onStop={handleStop}
             leng={language}
-            title={"example.c"}
+            title={`example.${extention}`}
             apiData={apiData}
             editorRef={editorRef}
             val={template}
