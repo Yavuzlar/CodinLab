@@ -278,7 +278,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	}
 	fmt.Println(parsedLog)
 
-	if parsedLog.Output == "" {
+	if parsedLog.Output == "" && parsedLog.ErrorMessage != "" {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "EMPTY_OUTPUT_ERROR", err)
 	}
 

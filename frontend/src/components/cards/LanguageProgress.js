@@ -38,7 +38,6 @@ const LanguageProgress = ({ language, type }) => {
 
   const router = useRouter();
 
-  console.log(language)
   return (
     <Card sx={{ cursor: language.percentage > 0 ? "pointer" : "", backgroundColor: language.percentage === 100 ? theme.palette.success.dark : "" }}
       onClick={() => {

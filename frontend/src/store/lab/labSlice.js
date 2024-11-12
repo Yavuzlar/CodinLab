@@ -37,7 +37,6 @@ export const getLabsById = createAsyncThunk(
   "lab/getLabsById",
   async (data, { rejectWithValue }) => {
     try {
-      console.log("data", data);
       const response = await axios({
         method: "GET",
         url: `/api/v1/private/labs/${data.programmingID}`,
