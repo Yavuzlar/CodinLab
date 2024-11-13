@@ -309,7 +309,8 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	if parsedLog.Output == "" {
+	//if there is no error and the function does not produce output, it gives EMPTY_OUTPUT_ERROR
+	if parsedLog.Output == "" && parsedLog.ErrorMessage == "" {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "EMPTY_OUTPUT_ERROR", err)
 	}
 
