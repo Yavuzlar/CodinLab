@@ -280,19 +280,19 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 	return logs, nil
 }
 
-func (s *codeService) UploadUserCode(userID, programmingID, labPathID, codeType, fileExtention, content string) (string, error) {
+func (s *codeService) UploadUserCode(userID, programmingID, labPathID, codeType, fileExtention, content string) (string, string, error) {
 	if err := s.createCodeFile(userID); err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
+		return "", "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 	}
 
 	intLabPathID, err := strconv.Atoi(labPathID)
 	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabID)
+		return "", "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabID)
 	}
 
 	codePath := s.generateUserCodePath(userID, codeType, intProgrammingID, intLabPathID, fileExtention)
@@ -300,23 +300,23 @@ func (s *codeService) UploadUserCode(userID, programmingID, labPathID, codeType,
 
 	if codeType == domains.TypeLab {
 		if err := s.CreateFileAndWrite(codePath, content); err != nil {
-			return "", err
+			return "", "", err
 		}
 		if err := s.CreateFileAndWrite(codeTmpPath, ""); err != nil {
-			return "", err
+			return "", "", err
 		}
 	}
 
 	if codeType == domains.TypePath {
 		if err := s.CreateFileAndWrite(codePath, content); err != nil {
-			return "", err
+			return "", "", err
 		}
 		if err := s.CreateFileAndWrite(codeTmpPath, ""); err != nil {
-			return "", err
+			return "", "", err
 		}
 	}
 
-	return codeTmpPath, nil
+	return codePath, codeTmpPath, nil
 }
 
 func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []domains.Test) (string, error) {
@@ -742,7 +742,7 @@ func (s *codeService) SaveUserHistory(conn *websocket.Conn, messages []byte, use
 				return service_errors.NewServiceErrorWithMessage(400, "invalid type")
 			}
 
-			if _, err := s.UploadUserCode(userID, stringProgrammingID, stringLabPathID, req.Data.LabPathType, programmingInformation.GetFileExtension(), req.Data.UserCode); err != nil {
+			if _, _, err := s.UploadUserCode(userID, stringProgrammingID, stringLabPathID, req.Data.LabPathType, programmingInformation.GetFileExtension(), req.Data.UserCode); err != nil {
 				return err
 			}
 

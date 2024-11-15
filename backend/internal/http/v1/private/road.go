@@ -254,7 +254,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "SAME_CODE_ERROR", err)
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
+	userCodePath, tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
 	if err != nil {
 		return err
 	}
@@ -276,18 +276,15 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 			break
 		}
 	}
-	// TODO: Belki Getirebilirsin
-	// if conn == nil {
-	// 	return response.Response(500, "This user was not found in socket.", nil)
-	// }
 
+	// If funcName is empty. You no need function to run the code. Like python or js
 	var logs string
-	if strings.EqualFold(road.GetQuest().GetFuncName(), "main") {
+	if strings.EqualFold(strings.ToLower(road.GetQuest().GetFuncName()), "main") || road.GetQuest().GetFuncName() == "" {
 		err = h.services.CodeService.CreateBashFile(programmingInformation.GetCmd(), road.GetQuest().GetTests(), userSession.UserID, programmingInformation.GetPathDir())
 		if err != nil {
 			return err
 		}
-		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetShCmd(), conn)
+		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), userCodePath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetShCmd(), conn)
 		if err != nil {
 			return err
 		}
@@ -298,6 +295,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		}
 	}
 
+	// Eğer sorunun testi yok ise yani cevap gerekmyiorsa da eğer answer yollarsa loga kaydet bitti diye.
 	if strings.Contains(logs, "Test Passed") {
 		if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentCompleted); err != nil {
 			return err

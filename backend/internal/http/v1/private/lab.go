@@ -230,7 +230,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "SAME_CODE_ERROR", err)
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
+	_, tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
 	if err != nil {
 		return err
 	}

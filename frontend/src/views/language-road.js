@@ -8,6 +8,7 @@ import {
   useMediaQuery,
   Alert,
   Grid,
+  Modal,
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Tooltip from "@mui/material/Tooltip";
@@ -22,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPathById } from "src/store/path/pathSlice";
 import { useRouter } from "next/router";
 import axios from "axios";
+import ModalRoad from "src/components/modal/ModalRoad";
 
 const LanguageRoad = ({ language = "", pathId }) => {
   const _language = language.toUpperCase();
@@ -158,15 +160,10 @@ const LanguageRoad = ({ language = "", pathId }) => {
           <Typography variant="h4" fontWeight={500}>
             {title}
           </Typography>
-          <Typography variant="body1" sx={{ lineHeight: 2.5 }}>
-            {description}
-          </Typography>
-          <Typography variant="body1" sx={{ mb: "10px", color: "lightgrey", whiteSpace: "pre-line" }}>
+          <Typography variant="body1" sx={{ mt: "10px", mb: "40px", color: "lightgrey", whiteSpace: "pre-line" }}>
             {content}
           </Typography>
-          <Typography variant="body1" sx={{ color: "lightgrey", whiteSpace: "pre-line", mb: "3rem" }}>
-            {note}
-          </Typography>
+          <ModalRoad buttonMessage={t("road.modal.button")} message={note} />
           {isFinished && (
             <Box sx={{ position: "absolute", right: "1rem", top: "1rem" }}>
               <Image src={DoneIcon} height={30} width={30} alt="done" />

@@ -1,0 +1,21 @@
+## FRONTEND
+
+function $funcname$(x,y){
+    // Write your code here
+}
+
+## DOCKER
+
+$usercode$
+
+$checks$
+
+console.log("$success$|||" + result0 + "|||_|||_");
+
+## CHECK
+
+let result$rnd$ = $funcname$($input$);
+if (result$rnd$ !== $output$) {
+    console.log("_|||" + result$rnd$ + "|||$out$|||_");
+    process.exit(0);
+}
