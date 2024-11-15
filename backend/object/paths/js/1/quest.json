@@ -1,0 +1,38 @@
+{
+    "id": 1,
+    "languages": [
+        {
+            "lang": "en",
+            "title": "Hello World Program",
+            "description": "Learn how to create your first JavaScript program and output 'Hello, World!' to the console.",
+            "content": "Write a JavaScript program that outputs 'Hello, World!' to the console.",
+            "note": "Use the `console.log` method to print 'Hello, World!' to the console."
+        },
+        {
+            "lang": "tr",
+            "title": "Merhaba Dünya Programı",
+            "description": "İlk JavaScript programınızı oluşturun ve konsola 'Merhaba, Dünya!' yazdırın.",
+            "content": "Konsola 'Merhaba, Dünya!' yazdıran bir JavaScript programı yazın.",
+            "note": "`console.log` metodunu kullanarak konsola 'Merhaba, Dünya!' yazdırın."
+        }
+    ],
+    "quest": {
+        "needAnswer": true,
+        "difficulty": 1,
+        "funcName": "",
+        "tests": [
+            {
+                "input": [],
+                "output": [
+                    "Hello, World!"
+                ]
+            }
+        ],
+        "codeTemplates": [
+            {
+                "programmingID": 4,
+                "templatePath": "object/paths/js/1/template.txt"
+            }
+        ]
+    }
+}

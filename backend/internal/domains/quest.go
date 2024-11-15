@@ -46,6 +46,7 @@ func (ct *CodeTemplate) SetTemplatePath(templatePath string) {
 
 // Quest represents a coding challenge or task.
 type Quest struct {
+	needAnswer   bool
 	difficulty   int
 	funcName     string
 	tests        []Test

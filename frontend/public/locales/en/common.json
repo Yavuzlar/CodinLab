@@ -130,7 +130,7 @@
   "code.image.downloaded": "The $$$$ image downloaded successfully",
   "admin": "Admin",
   "users": "Users",
-
+  "road.modal.button": "Learn",
   "ERR_INVALID_PROGRAMMING_ID": "Invalid programming ID provided.",
   "ERR_INVALID_LAB_OR_PATH_ID": "Invalid lab or path ID provided.",
   "ERR_INVALID_USER_ID": "Invalid user ID provided.",
@@ -139,13 +139,10 @@
   "ERR_INVALID_PATH_ID": "Invalid path ID provided.",
   "ERR_INVALID_CREDENTIALS": "Invalid credentials.",
   "ERR_INVALID_ROLE": "Invalid role provided.",
-
   "ERR_USERNAME_BEING_USED": "The username is already in use.",
   "ERR_NEED_ROAD_START": "The road needs to be started.",
   "ERR_SOLVE_PATH": "An error occurred while solving the path.",
-
   "ERR_NO_PERMISSION_DELETE": "You do not have permission to delete.",
-
   "ERR_USER_NOT_FOUND": "User not found.",
   "ERR_MAINSH_NOT_FOUND": "Main road shell not found.",
   "ERR_IMAGE_NOT_FOUND": "Docker image not found.",
@@ -157,7 +154,6 @@
   "ERR_ROAD_NOT_FOUND": "Road not found.",
   "ERR_SOLUTIONS_NOT_FOUND": "Solutions not found.",
   "ERR_ACTIVITY_NOT_FOUND": "Activity not found.",
-
   "ERR_FILTERING_USERS": "Error occurred while filtering users.",
   "ERR_FILTERING_LOGS": "Error occurred while filtering logs.",
   "ERR_UPDATING_USER": "Error occurred while updating the user.",
@@ -171,18 +167,15 @@
   "ERR_COMPARING_PASSWORDS": "Error occurred while comparing passwords.",
   "ERR_ADDING_USER": "Error occurred while adding the user.",
   "ERR_ADDING_LOG": "Error occurred while adding the log.",
-
   "ERR_DOCKER_IMAGE": "Docker image error.",
   "ERR_DOCKER_CONTAINER_STOP": "Error occurred while stopping the Docker container.",
   "ERR_DOCKER_LOGS": "Error occurred while fetching Docker logs.",
   "ERR_DOCKER_FILES": "Error occurred with Docker files.",
   "ERR_DOCKER_COULD_NOT_CREATE_FILE": "Could not create Docker file.",
   "ERR_INVALID_TEMPLATE_OUTPUT": "Invalid Code Template",
-
   "ERR_PARSER_SERVICE": "Parser service error.",
   "INTERNAL_SERVER_ERROR": "Internal server error",
   "VALIDATION_ERROR": "Validation Error",
-
   "CODE_ALERT": "$$$ was expected but got ***",
   "CODE_SUCCESS": "Good Job!"
 }

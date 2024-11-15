@@ -9,7 +9,7 @@ import (
 type ICodeService interface {
 	Pull(ctx context.Context, imageReference, programmingLanguage string, conn *websocket.Conn) (err error)
 	IsImageExists(ctx context.Context, imageReference string) (isExists bool, err error)
-	UploadUserCode(userID, programmingID, labPathID, codeType, fileExtention, content string) (string, error)
+	UploadUserCode(userID, programmingID, labPathID, codeType, fileExtention, content string) (string, string, error)
 	RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string, conn *websocket.Conn) (string, error)
 	CreateBashFile(cmd []string, tests []Test, userID, pathDir string) error
 	CreateFileAndWrite(filePath, content string) (err error)
@@ -39,4 +39,13 @@ type UserLog struct {
 	ExpectedOutput string `json:"expectedOutput"`
 	ErrorMessage   string `json:"errorMessage"`
 	IsCorrect      bool   `json:"isCorrect"`
+}
+
+func NewUserLog(output, expectedOutput, errorMessage string, isCorrect bool) UserLog {
+	return UserLog{
+		Output:         output,
+		ExpectedOutput: expectedOutput,
+		ErrorMessage:   errorMessage,
+		IsCorrect:      isCorrect,
+	}
 }

@@ -130,10 +130,9 @@
   "admin.users.sort.filter": "Kullanıcıları Sırala",
   "admin": "Yönetici",
   "users": "Kullanıcılar",
-
+  "road.modal.button": "Öğren",
   "code.image.downloading": "$$$$ İndiriliyor.",
   "code.image.downloaded": "$$$$ Başarıyla İndirildi.",
-
   "ERR_INVALID_PROGRAMMING_ID": "Geçersiz programlama kimliği.",
   "ERR_INVALID_LAB_OR_PATH_ID": "Geçersiz laboratuvar veya yol kimliği.",
   "ERR_INVALID_USER_ID": "Geçersiz kullanıcı kimliği.",
@@ -142,13 +141,10 @@
   "ERR_INVALID_PATH_ID": "Geçersiz yol kimliği.",
   "ERR_INVALID_CREDENTIALS": "Geçersiz kimlik bilgileri.",
   "ERR_INVALID_ROLE": "Geçersiz rol.",
-
   "ERR_USERNAME_BEING_USED": "Kullanıcı adı zaten kullanılıyor.",
   "ERR_NEED_ROAD_START": "Yolun başlatılması gerekiyor.",
   "ERR_SOLVE_PATH": "Yol çözülürken bir hata oluştu.",
-
   "ERR_NO_PERMISSION_DELETE": "Silme izniniz yok.",
-
   "ERR_USER_NOT_FOUND": "Kullanıcı bulunamadı.",
   "ERR_MAINSH_NOT_FOUND": "Ana yol kabuğu bulunamadı.",
   "ERR_IMAGE_NOT_FOUND": "Docker imajı bulunamadı.",
@@ -160,7 +156,6 @@
   "ERR_ROAD_NOT_FOUND": "Yol bulunamadı.",
   "ERR_SOLUTIONS_NOT_FOUND": "Çözümler bulunamadı.",
   "ERR_ACTIVITY_NOT_FOUND": "Aktivite bulunamadı.",
-
   "ERR_FILTERING_USERS": "Kullanıcılar filtrelenirken bir hata oluştu.",
   "ERR_FILTERING_LOGS": "Loglar filtrelenirken bir hata oluştu.",
   "ERR_UPDATING_USER": "Kullanıcı güncellenirken bir hata oluştu.",
@@ -174,19 +169,15 @@
   "ERR_COMPARING_PASSWORDS": "Şifreler karşılaştırılırken bir hata oluştu.",
   "ERR_ADDING_USER": "Kullanıcı eklenirken bir hata oluştu.",
   "ERR_ADDING_LOG": "Log eklenirken bir hata oluştu.",
-
   "ERR_DOCKER_IMAGE": "Docker imaj hatası.",
   "ERR_DOCKER_CONTAINER_STOP": "Docker konteyneri durdurulurken bir hata oluştu.",
   "ERR_DOCKER_LOGS": "Docker logları getirilirken bir hata oluştu.",
   "ERR_DOCKER_FILES": "Docker dosyalarında bir hata oluştu.",
   "ERR_DOCKER_COULD_NOT_CREATE_FILE": "Docker dosyası oluşturulamadı.",
   "ERR_INVALID_TEMPLATE_OUTPUT": "Hatalı kod taslağı",
-
   "ERR_PARSER_SERVICE": "Parser servis hatası.",
-
   "INTERNAL_SERVER_ERROR": "İç Sunucu Hatası",
   "VALIDATION_ERROR": "Doğrulama Hatası",
-
   "CODE_ALERT": "$$$ bekleniyordu ama *** alındı",
   "CODE_SUCCESS": "Tebrikler!"
 }

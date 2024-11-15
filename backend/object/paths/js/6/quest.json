@@ -1,0 +1,37 @@
+{
+    "id": 6,
+    "languages": [
+        {
+            "lang": "en",
+            "title": "Arrays in JavaScript",
+            "description": "Learn how to work with arrays in JavaScript, including defining, initializing, and accessing array elements.",
+            "content": "Write a JavaScript program that initializes an array with 5 integers and prints each element.",
+            "note": "1. To create an array, use square brackets []. For example: `let arr = [1, 2, 3, 4, 5]`.\n2. You can add elements to an array using the `push()` method: `arr.push(6)` adds the number 6 to the end of the array.\n3. To access an element in an array, use its index, starting from 0. For example: `arr[0]` gives you the first element.\n4. Use a `for` loop to iterate through the array and print each element. Example: `for (let i = 0; i < arr.length; i++) { console.log(arr[i]); }`."
+        },
+        {
+            "lang": "tr",
+            "title": "JavaScript'te Diziler",
+            "description": "JavaScript dilinde dizilerle nasıl çalışılacağını öğrenin, dizileri tanımlama, başlatma ve dizinin elemanlarına erişme.",
+            "content": "5 tamsayıdan ve 5'in tam katlarından oluşan bir dizi başlatan ve her bir elemanı yazdıran bir JavaScript programı yazın.",
+            "note": "1. Dizi oluşturmak için köşeli parantezler [] kullanılır. Örneğin: `let arr = [1, 2, 3, 4, 5]`.\n2. Diziye eleman eklemek için `push()` metodunu kullanabilirsiniz: `arr.push(6)` komutu dizinin sonuna 6 sayısını ekler.\n3. Dizinin bir elemanına erişmek için dizinin indeksini kullanabilirsiniz. Örneğin: `arr[0]` dizinin ilk elemanını verir.\n4. Diziyi yazdırmak için bir `for` döngüsü kullanabilirsiniz. Örnek: `for (let i = 0; i < arr.length; i++) { console.log(arr[i]); }`."
+        }
+    ],
+    "quest": {
+        "difficulty": 3,
+        "funcName": "",
+        "tests": [
+            {
+                "input": [],
+                "output": [
+                    "5\n10\n15\n20\n25"
+                ]
+            }
+        ],
+        "codeTemplates": [
+            {
+                "programmingID": 4,
+                "templatePath": "object/paths/js/6/template.txt"
+            }
+        ]
+    }
+}

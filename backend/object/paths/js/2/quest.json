@@ -1,0 +1,38 @@
+{
+    "id": 2,
+    "languages": [
+        {
+            "lang": "en",
+            "title": "Variables and Data Types",
+            "description": "Learn about different data types in JavaScript, such as number, string, boolean, and character.",
+            "content": "Write a JavaScript program that defines variables with different data types and outputs their values.",
+            "note": "1. Create variables with the following data types and values:\n - A number with value 10\n - A string with value 'Hello'\n - A boolean with value true\n - A character with value 'A'\n\n2. Output each variable in the format: 'number: 10', 'string: Hello', 'boolean: true', 'character: A'."
+        },
+        {
+            "lang": "tr",
+            "title": "Değişkenler ve Veri Tipleri",
+            "description": "JavaScript dilinde number, string, boolean ve character gibi farklı veri tiplerini öğrenin.",
+            "content": "Farklı veri türlerinde değişkenler tanımlayan ve değerlerini yazdıran bir JavaScript programı yazın.",
+            "note": "1. Aşağıdaki veri türlerine ve değerlere sahip değişkenler oluşturun:\n - Değeri 10 olan bir number\n - Değeri 'Hello' olan bir string\n - Değeri true olan bir boolean\n - Değeri 'A' olan bir character\n\n2. Her bir değişkeni şu formatta çıktılayın: 'number: 10', 'string: Hello', 'boolean: true', 'character: A'."
+        }
+    ],
+    "quest": {
+        "needAnswer": true,
+        "difficulty": 1,
+        "funcName": "",
+        "tests": [
+            {
+                "input": [],
+                "output": [
+                    "number: 10 string: Hello boolean: true character: A"
+                ]
+            }
+        ],
+        "codeTemplates": [
+            {
+                "programmingID": 4,
+                "templatePath": "object/paths/js/2/template.txt"
+            }
+        ]
+    }
+}

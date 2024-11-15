@@ -6,8 +6,16 @@
         "labDir": "object/labs",
         "pathDir": "object/paths/c++",
         "iconPath": "images/c++.png",
-        "cmd": ["sh", "-c", "g++ -o main main.cpp && ./main"],
-        "bashCmd":  ["bash", "-c", "./main.sh"],
+        "cmd": [
+            "sh",
+            "-c",
+            "g++ -o main main.cpp && ./main"
+        ],
+        "bashCmd": [
+            "bash",
+            "-c",
+            "./main.sh"
+        ],
         "fileExtension": "cpp",
         "languages": [
             {
@@ -29,8 +37,16 @@
         "labDir": "object/labs",
         "pathDir": "object/paths/golang",
         "iconPath": "images/go.png",
-        "cmd": ["sh","-c","go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go && go run ../main.go"],
-        "bashCmd":  ["bash", "-c", "../main.sh"],
+        "cmd": [
+            "sh",
+            "-c",
+            "go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go && go run ../main.go"
+        ],
+        "bashCmd": [
+            "bash",
+            "-c",
+            "../main.sh"
+        ],
         "fileExtension": "go",
         "languages": [
             {
@@ -52,8 +68,16 @@
         "labDir": "object/labs",
         "pathDir": "object/paths/python",
         "iconPath": "images/python.png",
-        "cmd": ["sh", "-c", "python ../main.py"],
-        "bashCmd": ["bash", "-c", "../main.sh"],
+        "cmd": [
+            "sh",
+            "-c",
+            "python ../main.py"
+        ],
+        "bashCmd": [
+            "bash",
+            "-c",
+            "../main.sh"
+        ],
         "fileExtension": "py",
         "languages": [
             {
@@ -65,6 +89,37 @@
                 "lang": "tr",
                 "title": "Python nedir?",
                 "description": "Python programlama dilinin temellerini öğrenin."
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "JavaScript",
+        "dockerImage": "node:18",
+        "labDir": "object/labs",
+        "pathDir": "object/paths/js",
+        "iconPath": "images/javascript.png",
+        "cmd": [
+            "sh",
+            "-c",
+            "node main.js"
+        ],
+        "bashCmd": [
+            "bash",
+            "-c",
+            "../main.sh"
+        ],
+        "fileExtension": "js",
+        "languages": [
+            {
+                "lang": "en",
+                "title": "What is JavaScript?",
+                "description": "Learn the basics of JavaScript programming"
+            },
+            {
+                "lang": "tr",
+                "title": "JavaScript nedir?",
+                "description": "JavaScript programlama dilinin temellerini öğrenin."
             }
         ]
     }
