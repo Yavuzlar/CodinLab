@@ -1,4 +1,12 @@
 test=(-tests-)
+
+if [ ${#test[@]} -eq 0 ]; then
+    result=$(./main)
+    echo "Test Passed|||$result|||_|||_"
+    exit 0
+fi
+
+
 for i in "${!test[@]}"; do
     expected_result="${test[$i]}"
     
@@ -8,6 +16,7 @@ for i in "${!test[@]}"; do
         echo "_|||_|||_|||$compile_output" 
         exit 1 
     fi
+
     
     result=$(./main)
 

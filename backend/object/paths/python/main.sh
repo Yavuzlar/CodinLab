@@ -1,6 +1,12 @@
 test=(-tests-)
 export TERM=xterm  
 
+if [ ${#test[@]} -eq 0 ]; then
+    result=$(python3 ../main.py)
+    echo "Test Passed|||$result|||_|||_"
+    exit 0
+fi
+
 for i in "${!test[@]}"; do
     expected_result="${test[$i]}"
 
