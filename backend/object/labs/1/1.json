@@ -21,30 +21,46 @@
 		"funcName": "isPalindrome",
 		"tests": [
 			{
-				"input": ["madam"],
-				"output": [true]
+				"input": [
+					"madam"
+				],
+				"output": [
+					true
+				]
 			},
 			{
-				"input": ["hello"],
-				"output": [false]
+				"input": [
+					"hello"
+				],
+				"output": [
+					false
+				]
 			},
 			{
-				"input": ["racecar"],
-				"output": [true]
+				"input": [
+					"racecar"
+				],
+				"output": [
+					true
+				]
 			}
 		],
 		"codeTemplates": [
 			{
 				"programmingID": 1,
-				"templatePath" : "object/labs/1/c++.txt"
+				"templatePath": "object/labs/1/c++.txt"
 			},
 			{
 				"programmingID": 2,
-				"templatePath" : "object/labs/1/go.txt"
+				"templatePath": "object/labs/1/go.txt"
 			},
 			{
 				"programmingID": 3,
-				"templatePath" : "object/labs/1/python.txt"
+				"templatePath": "object/labs/1/python.txt"
+			},
+			{
+				"programmingID": 4,
+				"templatePath": "object/labs/1/js.txt"
 			}
 		]
 	}

@@ -1,0 +1,24 @@
+## FRONTEND
+
+const $funcname$ = (s) => {
+    // Write your code here
+}
+
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+$checks$
+console.log(`$success$|||${result$res$}|||_|||_`);
+
+## CHECK
+
+result$rnd$ = $funcname$($input$)
+
+if(result$rnd$ !=  $output$){
+    console.log(`_|||${result$rnd$}|||$output$|||_`);
+    process.exit($rnd$);
+}

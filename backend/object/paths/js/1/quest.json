@@ -11,9 +11,9 @@
         {
             "lang": "tr",
             "title": "Merhaba Dünya Programı",
-            "description": "İlk JavaScript programınızı oluşturun ve konsola 'Merhaba, Dünya!' yazdırın.",
-            "content": "Konsola 'Merhaba, Dünya!' yazdıran bir JavaScript programı yazın.",
-            "note": "`console.log` metodunu kullanarak konsola 'Merhaba, Dünya!' yazdırın."
+            "description": "İlk JavaScript programınızı oluşturun ve konsola 'Hello, World!' yazdırın.",
+            "content": "Konsola 'Hello, World!' yazdıran bir JavaScript programı yazın.",
+            "note": "`console.log` metodunu kullanarak konsola 'Hello, World!' yazdırın."
         }
     ],
     "quest": {
