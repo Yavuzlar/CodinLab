@@ -27,7 +27,7 @@
 		],
 		"codeTemplates": [
 			{
-				"programmingID": 2,
+				"programmingID": 3,
 				"templatePath": "object/paths/python/1/template.txt"
 			}
 		]

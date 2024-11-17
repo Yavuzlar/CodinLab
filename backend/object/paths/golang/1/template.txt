@@ -5,15 +5,3 @@ package main
 func $funcname$() {
     // Write your code here
 }
-
-## DOCKER
-
-package main
-
-$imps$
-
-$usercode$
-
-func main(){
-   $funcname$();
-}

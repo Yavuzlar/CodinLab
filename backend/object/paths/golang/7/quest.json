@@ -1,0 +1,39 @@
+{
+    "id": 7,
+    "languages": [
+        {
+            "lang": "en",
+            "title": "For Loops",
+            "description": "Learn how to use `for` loops in Go for iteration over arrays, slices, or any iterable objects.",
+            "content": "Understand the structure of a `for` loop in Go and how to use it to iterate over different data structures.",
+            "note": "1. Write a simple `for` loop that iterates over an array and prints each element.\n2. Use the `for` loop to sum up the elements of an array.\n3. Demonstrate the use of a `for` loop in a range-based iteration over slices.\n\nExample: `for i := 0; i < len(arr); i++ { fmt.Println(arr[i]) }`\n\nExpected output format:\n`Array: [1 2 3 4 5], Sum: 15`"
+        },
+        {
+            "lang": "tr",
+            "title": "For Döngüleri",
+            "description": "Go dilinde diziler, dilimler veya herhangi bir iteratif nesne üzerinde döngü yapmak için `for` döngüsünü nasıl kullanacağınızı öğrenin.",
+            "content": "Go'daki `for` döngüsünün yapısını anlayın ve farklı veri yapılarını döngüyle nasıl işleyebileceğinizi öğrenin.",
+            "note": "1. Bir dizi üzerinde döngü çalıştırarak her bir elemanı yazdıran basit bir `for` döngüsü yazın.\n2. Dizinin elemanlarını toplamak için `for` döngüsünü kullanın.\n3. Dilimler üzerinde `for` döngüsü ile range kullanarak nasıl iterasyon yapılacağını gösterin.\n\nÖrnek: `for i := 0; i < len(arr); i++ { fmt.Println(arr[i]) }`\n\nBeklenen çıktı formatı:\n`Array: [1 2 3 4 5], Sum: 15`"
+        }
+    ],
+    "quest": {
+        "difficulty": 2,
+        "funcName": "sumArrayElements",
+        "tests": [
+            {
+                "input": [[1, 2, 3, 4, 5]],
+                "output": ["Array: [1 2 3 4 5], Sum: 15"]
+            },
+            {
+                "input": [[7, 8, 9]],
+                "output": ["Array: [7 8 9], Sum: 24"]
+            }
+        ],
+        "codeTemplates": [
+            {
+                "programmingID": 2,
+                "templatePath": "object/paths/golang/7/template.txt"
+            }
+        ]
+    }
+}
