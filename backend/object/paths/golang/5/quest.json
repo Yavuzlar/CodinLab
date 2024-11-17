@@ -6,14 +6,14 @@
             "title": "Arrays and Slices",
             "description": "Learn how to extract the last 3 elements from an array using slices in Go.",
             "content": "Understand how to create a slice from an array in Go and access specific parts of the array using slice syntax.",
-            "note": "1. Take an input array of integers.\n2. Create a slice that contains the last 3 elements of the array.\n3. Print both the original array and the slice.\n\nExpected output format:\n`Array: [1, 2, 3, 4, 5], Slice: [3, 4, 5]`"
+            "note": "1. Take an input array of integers.\n2. Create a slice that contains the last 3 elements of the array using the slicing technique: `arr[len(arr)-3:]`.\n3. Print both the original array and the slice.\n\nExpected output format:\n`Array: [1 2 3 4 5], Slice: [3 4 5]`"
         },
         {
             "lang": "tr",
             "title": "Diziler ve Dilimler",
             "description": "Go dilinde dilimleri kullanarak bir dizinin son 3 elemanını nasıl alacağınızı öğrenin.",
             "content": "Bir diziden dilim oluşturmayı ve dilim sözdizimi ile dizinin belirli bölümlerine nasıl erişileceğini öğrenin.",
-            "note": "1. Girdi olarak bir tam sayı dizisi alın.\n2. Dizinin son 3 elemanını içeren bir dilim oluşturun.\n3. Hem orijinal diziyi hem de dilimi yazdırın.\n\nBeklenen string çıktı formatı:\n`Array: [1, 2, 3, 4, 5], Slice: [3, 4, 5]`"
+            "note": "1. Girdi olarak bir tam sayı dizisi alın.\n2. Dizinin son 3 elemanını içeren bir dilim oluşturmak için dilimleme tekniğini kullanın: `arr[len(arr)-3:]`.\n3. Hem orijinal diziyi hem de dilimi yazdırın.\n\nBeklenen string çıktı formatı:\n`Array: [1 2 3 4 5], Slice: [3 4 5]`"
         }
     ],
     "quest": {
@@ -26,7 +26,7 @@
             },
             {
                 "input": [[7, 8, 9, 10, 11, 12]],
-                "output": ["Array: [7 8 9, 10 11 12], Slice: [10 11 12]"]
+                "output": ["Array: [7 8 9 10 11 12], Slice: [10 11 12]"]
             }
         ],
         "codeTemplates": [

@@ -1,35 +1,35 @@
 {
-	"id": 2,
-	"languages": [
-		{
-			"lang": "en",
-			"title": "Variables and Data Types",
-			"description": "Learn about variables, constants, and Go's data types.",
-			"content": "Understand how to declare variables using `var` and short declaration, and explore data types such as `int`, `float`, and `string`.",
-			"note": "1. Declare a variable of each type (`int`, `float64`, and `string`).\n2. Initialize the variables and print their values.\n3. Add comments explaining what each line of code does."
-		},
-		{
-			"lang": "tr",
-			"title": "Değişkenler ve Veri Tipleri",
-			"description": "Değişkenler, sabitler ve Go'nun veri tiplerini öğrenin.",
-			"content": "Değişkenleri `var` ile nasıl tanımlayacağınızı öğrenin ve `int`, `float64` ve `string` gibi veri tiplerini keşfedin.",
-			"note": "1. Her bir veri tipinden (`int`, `float64`, `string`) bir değişken tanımlayın.\n2. Değişkenleri başlatın ve değerlerini yazdırın.\n3. Her satırın ne yaptığını açıklayan yorumlar ekleyin."
-		}
-	],
-	"quest": {
-		"difficulty": 2,
-		"funcName": "main",
-		"tests": [
-			{
-				"input": [],
-				"output": ["5 3.14 Go is awesome"]
-			}
-		],
-		"codeTemplates": [
-			{
-				"programmingID": 2,
-				"templatePath": "object/paths/golang/2/template.txt"
-			}
-		]
-	}
+    "id": 2,
+    "languages": [
+        {
+            "lang": "en",
+            "title": "Variables and Data Types",
+            "description": "Learn about variables, constants, and Go's data types.",
+            "content": "In this exercise, you will practice declaring variables, initializing them with values, and printing their values. This will help you understand how to work with Go's data types like `int`, `float64`, and `string`, as well as the `var` and short declaration syntax.",
+            "note": "1. Start by declaring variables for each data type (`int`, `float64`, and `string`).\n2. Initialize the variables with appropriate values (e.g., 5 for `int`, 3.14 for `float64`, and 'Hello Go!' for `string`).\n3. Use the `fmt.Println()` function to print the variables to the console.\n4. Explore both the `var` keyword and short declaration syntax (`:=`) for creating variables.\n5. Add comments above each line explaining its purpose, such as declaring a variable, assigning a value, or printing output."
+        },
+        {
+            "lang": "tr",
+            "title": "Değişkenler ve Veri Tipleri",
+            "description": "Değişkenler, sabitler ve Go'nun veri tipleriyle ilgili temel bilgileri öğrenin.",
+            "content": "Bu alıştırmada, değişkenleri tanımlamayı, değer atamayı ve bu değerleri yazdırmayı uygulayacaksınız. Go'nun `int`, `float64`, `string` gibi veri tiplerini ve değişken tanımlama yöntemlerini (`var` ve kısa tanımlama) anlamanızı sağlayacaktır.",
+            "note": "1. Her veri türü için bir değişken tanımlayın (`int`, `float64`, `string`).\n2. Değişkenlere uygun başlangıç değerleri atayın (örneğin, `int` için 5, `float64` için 3.14, `string` için 'Merhaba Go!').\n3. `fmt.Println()` fonksiyonunu kullanarak değişkenleri konsola yazdırın.\n4. Değişkenleri tanımlamak için hem `var` anahtar kelimesini hem de kısa tanımlama sözdizimini (`:=`) kullanmayı keşfedin.\n5. Her kod satırının ne yaptığını açıklayan yorumlar ekleyin (örneğin, değişken tanımlama, değer atama, çıktı yazdırma)."
+        }
+    ],
+    "quest": {
+        "difficulty": 2,
+        "funcName": "main",
+        "tests": [
+            {
+                "input": [],
+                "output": ["5 3.14 Hello Go!"]
+            }
+        ],
+        "codeTemplates": [
+            {
+                "programmingID": 2,
+                "templatePath": "object/paths/golang/2/template.txt"
+            }
+        ]
+    }
 }

@@ -17,7 +17,6 @@
         }
     ],
     "quest": {
-        "needAnswer": false,
         "difficulty": 2,
         "funcName": "",
         "tests": [
