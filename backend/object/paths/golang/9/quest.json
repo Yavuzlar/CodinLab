@@ -1,0 +1,40 @@
+{
+    "id": 9,
+    "languages": [
+        {
+            "lang": "en",
+            "title": "Switch and Foreach",
+            "description": "In Go, the switch statement executes the first case block that matches the given condition. There are two types of switch: condition-based switch and type-based switch. The type-based switch will be detailed after the interface topic is covered, and it is not included in this path. Foreach is a type of loop created by specifying a range. The range expression (such as an array, slice, etc.) is iterated over, and each element is taken in turn to perform the specified operation.",
+            "content": "Write a program that determines the season based on the month using both statements, and learn how to use foreach and switch!",
+            "note": "1. Iterate over the slice passed as a parameter to the function. The foreach loop syntax is as follows: \n`foreach i, month := range months {\n\n}`\nHere, `i` refers to the index, and if not needed, you can use `_` to ignore it. \n2. Inside the loop, use switch to define the cases. If the month is 1, January, December, or 12, it should match winter. \n`switch (case) {\ncase 1:\n // action\ndefault:\n // action \n}` \nIf no case matches, the default case will be executed. The default case is optional.\n3.The slice passed to the function should be considered as \"months := []string{`January`, `February`,`March`, `April`, `May`,.....,`December`}\".\n3. The results: Winter, Spring, Summer, Fall of the cases should be stored in a slice and returned at the end"
+        },
+        {
+            "lang": "tr",
+            "title": "Switch and Foreach",
+            "description": "Go'da switch ifadesi, verilen durumu sağlayan ilk case bloğunun çalışmasını sağlar. İki tür switch vardır: duruma göre switch ve türe göre switch. Türe göre switch, interface konusu anlatıldıktan sonra detaylandırılacaktır ve bu başlık bu yola dahil değildir. Foreach ise range(aralık) verilerek oluşturulan döngü çeşididir. Range verilen ifade (dizi,slice vs.) üzerinde iterasyon yaparken her bir öğeyi sırasıyla alır ve belirtilen işlemi gerçekleştirebilir.",
+            "content": "İki ifadeyi kullanarak mevsim tespiti yapan bir kod yazın ve foreach ile switch kullanımını öğrenin!",
+            "note": "1. Size hazır olarak fonksiyona parametre olarak yollanarak verilmiş olan slice üzerinde döngülenin. Örnek foreach yazımı şöyledir: \n`foreach i,month:= range months{\n\n}`\n Burada `i` indexi ifade eder ve ihtiyaç olmaması halinde yerine `_` yazılabilir.\n2. Döngü içerisinde switch ile caseleri belirleyin. Eğer aylar 1,Ocak,Aralık,12 gibiyse aylardan kıştır eşleşmesi yapılmalıdır. \n`switch(case){\ncase 1:\n //yapılacak işlem\ndefault:\n //yapılacak işlem \n}` \n Hiçbir durum sağlanmazsa en sondaki default case çalışacaktır. Yazılmak zorunda değildir.\n3. Fonksiyona gönderilen slice \"months := []string{`January`, `February`,`March`, `April`, `May`,.....,`December`}\" şeklinde düşünülmelidir.\n3. Caselerin sonuçları: Winter, Spring, Summer, Fall olarak bir slice içerisine kaydedilmeli en son ise geri döndürülmelidir."
+        }
+          
+    ],
+    "quest": {
+        "difficulty": 1,
+        "funcName": "findSeason",
+        "tests": [
+            {
+                "input": [["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]],
+                "output": [["Winter", "Winter", "Spring", "Spring", "Spring", "Summer", "Summer", "Summer", "Fall", "Fall", "Fall", "Winter"]]
+            },
+            {
+                "input": [["March", "June", "December", "January", "April"]],
+                "output": [["Spring", "Summer", "Winter", "Winter", "Spring"]]
+            }
+        ],
+        "codeTemplates": [
+            {
+                "programmingID": 2,
+                "templatePath": "object/paths/golang/9/template.txt"
+            }
+        ]
+    }
+}
