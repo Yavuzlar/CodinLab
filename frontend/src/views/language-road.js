@@ -48,6 +48,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [note, setNote] = useState("");
   const [template, setTemplate] = useState("");
   const [fileExtention, setFileExtention] = useState("");
+  const [monacoEditor, setMonacoEditor] = useState("")
 
   const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
 
@@ -109,13 +110,13 @@ const LanguageRoad = ({ language = "", pathId }) => {
         setNote(pathData.language.note);
         setTemplate(pathData.template);
         setFileExtention(path.data.data[0].fileExtention);
+        setMonacoEditor(path.data.data[0].monacoEditor)
       }
 
       setError(path.error);
       setLoading(path.loading);
     }
   }, [path]);
-
 
   const handleRun = (outputData) => {
     setOutput(outputData?.data);
@@ -224,7 +225,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
             key={template}
             onRun={handleRun}
             onStop={handleStop}
-            leng={fileExtention}
+            leng={monacoEditor}
             title={`example.${extention}`}
             apiData={apiData}
             editorRef={editorRef}
