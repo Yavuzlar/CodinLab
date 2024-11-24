@@ -47,6 +47,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [content, setContent] = useState("");
   const [note, setNote] = useState("");
   const [template, setTemplate] = useState("");
+  const [fileExtention, setFileExtention] = useState("");
 
   const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
 
@@ -107,6 +108,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
         setContent(pathData.language.content);
         setNote(pathData.language.note);
         setTemplate(pathData.template);
+        setFileExtention(path.data.data[0].fileExtention);
       }
 
       setError(path.error);
@@ -143,6 +145,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
       console.log("Reset response error", error);
     }
   };
+
 
 
   return (
@@ -221,7 +224,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
             key={template}
             onRun={handleRun}
             onStop={handleStop}
-            leng={language}
+            leng={fileExtention}
             title={`example.${extention}`}
             apiData={apiData}
             editorRef={editorRef}

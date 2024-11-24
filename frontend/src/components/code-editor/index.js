@@ -35,6 +35,7 @@ const CodeEditor = ({
   const [editorActionsWidth, setEditorActionsWidth] = useState(0);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
   const editorActions = useRef(null);
+  const [language, setLanguage] = useState(leng);
 
   // here we will add the onMount function
   const onMount = (editor) => {
@@ -94,7 +95,9 @@ const CodeEditor = ({
 
   useEffect(() => {
     setValue(val);
-  }, [val]);
+    setLanguage(leng);
+  }, [val, leng]);
+
 
   return (
     <Box
@@ -308,7 +311,7 @@ const CodeEditor = ({
         }}
       >
         <Editor
-          language={leng || "javascript"}
+          language={language}
           // defaultValue={defaultValue || "// Write your code here"}
           defaultValue={"// Write your code here"}
           value={value}
