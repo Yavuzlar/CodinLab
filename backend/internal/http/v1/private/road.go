@@ -113,7 +113,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
 			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTO, ""))
 		}
-		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs, isExists, *inventoryInformation.GetLanguage(), inventoryInformation.GetFileExtension())
+		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs, isExists, *inventoryInformation.GetLanguage(), inventoryInformation.GetFileExtension(), inventoryInformation.GetMonacoEditor())
 	}
 
 	return response.Response(200, "GetRoads successful", roadDTO)
@@ -164,7 +164,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
 			pathsDTO = append(pathsDTO, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTO, frontendTemplate))
 		}
-		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO, isExists, *inventoryInformation.GetLanguage(), inventoryInformation.GetFileExtension()))
+		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO, isExists, *inventoryInformation.GetLanguage(), inventoryInformation.GetFileExtension(), inventoryInformation.GetMonacoEditor()))
 	}
 
 	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentStarted); err != nil {

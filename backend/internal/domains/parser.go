@@ -22,6 +22,7 @@ type InventoryP struct {
 	Cmd           []string    `json:"cmd"`
 	ShCmd         []string    `json:"bashCmd"`
 	FileExtension string      `json:"fileExtension"`
+	MonacoEditor  string      `json:"monacoEditor"`
 	Languages     []LanguageP `json:"languages"`
 }
 

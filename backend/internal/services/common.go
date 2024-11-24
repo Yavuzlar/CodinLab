@@ -40,7 +40,7 @@ func (s *commonService) GetInventoryInformation(programmingID, language string) 
 				}
 			}
 
-			inventoryInformation = domains.NewInventoryInformation(inv.IconPath,inv.Name, inv.DockerImage, inv.FileExtension, inv.PathDir, inv.ID, inv.Cmd, inv.ShCmd, langInfo)
+			inventoryInformation = domains.NewInventoryInformation(inv.IconPath, inv.Name, inv.DockerImage, inv.FileExtension, inv.MonacoEditor, inv.PathDir, inv.ID, inv.Cmd, inv.ShCmd, langInfo)
 			break
 		}
 	}
