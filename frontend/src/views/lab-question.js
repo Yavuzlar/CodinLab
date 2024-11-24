@@ -123,7 +123,8 @@ const LabQuestion = ({ language = "", questionId }) => {
     expectedOutput: "",
     hint: "",
     template: "",
-    fileExtention: ""
+    fileExtention: "",
+    monacoEditor: ""
   });
 
   const [open, setOpen] = useState(false);
@@ -219,7 +220,8 @@ const LabQuestion = ({ language = "", questionId }) => {
         expectedOutput: labSlice.data[0]?.language?.expectedOutput,
         hint: labSlice.data[0]?.language?.hint,
         template: labSlice.data[0]?.template,
-        fileExtention: labSlice.data[0]?.fileExtention
+        fileExtention: labSlice.data[0]?.fileExtention,
+        monacoEditor: labSlice.data[0]?.monacoEditor
       });
     }
   }, [labSlice.data]);
@@ -377,7 +379,7 @@ const LabQuestion = ({ language = "", questionId }) => {
               params={params}
               onRun={handleRun}
               onStop={handleStop}
-              leng={labData.fileExtention}
+              leng={labData.monacoEditor}
               title={labData.title}
               apiData={apiData}
               val={labData?.template}
