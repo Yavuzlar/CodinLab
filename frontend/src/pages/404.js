@@ -4,7 +4,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 // ** Layout Import
 import BlankLayout from "src/layout/BlankLayout";
-import Link from "next/link";
+import { useRouter } from "next/router"; // Router Import
 import { hexToRGBA } from "src/utils/hex-to-rgba";
 
 // ** Styled Components
@@ -15,6 +15,8 @@ const BoxWrapper = styled(Box)(({ theme }) => ({
 }));
 
 const Error404 = () => {
+  const router = useRouter();
+
   return (
     <Box
       sx={{
@@ -46,17 +48,28 @@ const Error404 = () => {
         >
           404
         </Typography>
-
         <Typography variant="h5" sx={{ mb: 1, fontSize: "1.5rem !important" }}>
           Page Not Found ⚠️
         </Typography>
       </BoxWrapper>
-
-      <Link passHref href="/">
-        <Button variant="contained" sx={{ px: 5.5, mt: 3 }}>
-          Go Home
-        </Button>
-      </Link>
+      <Button
+        variant="contained"
+        sx={{ px: 5.5, mt: 3 }}
+        onClick={() => {
+          if (window.history.length > 2) {
+            router.back();
+            setTimeout(() => {
+              if (window.location.pathname.includes("404")) {
+                window.history.go(-2);
+              }
+            }, 100);
+          } else {
+            router.back();
+          }
+        }}
+      >
+        Go Back
+      </Button>
     </Box>
   );
 };
