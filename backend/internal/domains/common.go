@@ -12,9 +12,10 @@ type InventoryInformation struct {
 	shCmd         []string
 	pathDir       string
 	fileExtension string
+	monacoEditor  string
 	templatePath  string
 	language      InventoryLanguage
-	iconPath string
+	iconPath      string
 }
 
 func (i *InventoryInformation) GetID() int {
@@ -45,6 +46,10 @@ func (i *InventoryInformation) GetFileExtension() string {
 	return i.fileExtension
 }
 
+func (i *InventoryInformation) GetMonacoEditor() string {
+	return i.monacoEditor
+}
+
 func (i *InventoryInformation) GetTemplatePath() string {
 	return i.templatePath
 }
@@ -65,17 +70,18 @@ func (i *InventoryInformation) SetIconPath(iconPath string) {
 	i.iconPath = iconPath
 }
 
-func NewInventoryInformation(iconPath,name, dockerImage, fileExtension, pathDir string, ID int, cmd, shCmd []string, infoLanguage InventoryLanguage) *InventoryInformation {
+func NewInventoryInformation(iconPath, name, dockerImage, fileExtension, monacoEditor, pathDir string, ID int, cmd, shCmd []string, infoLanguage InventoryLanguage) *InventoryInformation {
 	info := &InventoryInformation{
 		id:            ID,
 		name:          name,
 		dockerImage:   dockerImage,
 		fileExtension: fileExtension,
+		monacoEditor:  monacoEditor,
 		cmd:           cmd,
 		shCmd:         shCmd,
 		pathDir:       pathDir,
 		language:      infoLanguage,
-		iconPath: iconPath,
+		iconPath:      iconPath,
 	}
 
 	return info

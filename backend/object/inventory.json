@@ -17,6 +17,7 @@
             "./main.sh"
         ],
         "fileExtension": "cpp",
+        "monacoEditor": "cpp",
         "languages": [
             {
                 "lang": "en",
@@ -48,6 +49,7 @@
             "../main.sh"
         ],
         "fileExtension": "go",
+        "monacoEditor": "go",
         "languages": [
             {
                 "lang": "en",
@@ -79,6 +81,7 @@
             "../main.sh"
         ],
         "fileExtension": "py",
+        "monacoEditor": "python",
         "languages": [
             {
                 "lang": "en",
@@ -110,6 +113,7 @@
             "../main.sh"
         ],
         "fileExtension": "js",
+        "monacoEditor": "javascript",
         "languages": [
             {
                 "lang": "en",
