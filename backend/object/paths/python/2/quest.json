@@ -1,0 +1,36 @@
+{
+    "id": 2,
+    "languages": [
+      {
+        "lang": "en",
+        "title": "Variable Data Types",
+        "description": "Learn about the variable data types in Python.",
+        "content": "In Python, you can define variables with different data types such as integer, float, string, and boolean. Use the `type()` function to check the data type of a variable.",
+        "note": "1. Python has dynamic typing, so you do not need to declare the type of a variable explicitly.\n2. To define a variable, just assign a value to it: `x = 1`, `y = 3.14`, `message = 'Hello World'`, `is_active = True`.\n3. Use the `type()` function to check the type of a variable, for example: `type(x)` will return `int`.\n4. Data types are automatically inferred based on the assigned value.\n5.To complete this path, you need to understand the different variable data types in Python. There is no specific answer required for this task. Understanding the types is sufficient."
+      },
+      {
+        "lang": "tr",
+        "title": "Değişken Veri Tipleri",
+        "description": "Python'daki değişken veri tiplerini öğrenin.",
+        "content": "Python'da tam sayı, ondalıklı sayı, string ve boolean gibi farklı veri tiplerine sahip değişkenler tanımlayabilirsiniz. Değişkenin veri tipini kontrol etmek için `type()` fonksiyonunu kullanabilirsiniz.",
+        "note": "1. Python, dinamik tür belirlemeye sahip olduğundan, değişkenlerin türünü açıkça belirtmeniz gerekmemektedir.\n2. Bir değişken tanımlamak için ona bir değer atamanız yeterlidir: `x = 1`, `y = 3.14`, `message = 'Hello World'`, `is_active = True`.\n3. Değişkenin türünü kontrol etmek için `type()` fonksiyonunu kullanın. Örneğin, `type(x)` ifadesi `int` döndürecektir.\n4. Veri tipleri, atanan değere göre otomatik olarak algılanır. \n5. Bu yolu tamamlamak için Python'daki farklı değişken veri tiplerini anlamanız gerekmektedir. Bu yolun doğru bir cevabı yoktur. Tipleri anlamanız yeterlidir."
+      }
+    ],
+    "quest": {
+      "difficulty": 1,
+      "funcName": "",
+      "tests": [
+        {
+          "input": [],
+          "output": []
+        }
+      ],
+      "codeTemplates": [
+        {
+          "programmingID": 3,
+          "templatePath": "object/paths/python/2/template.txt"
+        }
+      ]
+    }
+  }
+  
