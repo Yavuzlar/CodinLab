@@ -5,16 +5,16 @@
 			"lang": "en",
 			"title": "Basic Syntax",
 			"description": "Understanding the basic syntax of Python",
-			"content":"To complete this task, you need to print the 'Hello, World!' message to the screen by using print function.",
+			"content": "To complete this task, you need to print the 'Hello, World!' message to the screen by using print function.",
 			"note": "1.  First, make sure to use the required `print` statement: **print(\"Hello, World!\")**: The 'print' function is necessary for printing output to the console.\n2. To print to the console, use the following statement: `print(\"Hello, World!\")` This line sends the 'Hello, World!' message to the console and adds a new line.\n3. In Python, you don't need to use semicolons because statements are automatically terminated at the end of the line."
 		},
 		{
 			"lang": "tr",
 			"title": "Basit yazılış",
 			"description": "Python dilinin temellerini öğrenin.",
-            "content": "Bu görevi tamamlamak için print fonksiyonunu kullanarak 'Hello, World!' ifadesini ekrana yazdırmanız gerekmektedir.",
-            "note": "1. İlk olarak gerekli `print` ifadesini kullandığınızdan emin olun: **print(\"Hello, World!\")**: Konsola çıktı yazdırmak için 'print' fonksiyonu gereklidir.\n2. Konsola yazdırmak için şu ifadeyi kullanın: `print(\"Hello, World!\")` Bu ifade 'Hello, World!' mesajını konsola gönderir ve yeni bir satır ekler.\n3. Python dilinde noktalı virgül kullanmanıza gerek yoktur, çünkü ifadeler satır sonuyla otomatik olarak tamamlanır."
-        }
+			"content": "Bu görevi tamamlamak için print fonksiyonunu kullanarak 'Hello, World!' ifadesini ekrana yazdırmanız gerekmektedir.",
+			"note": "1. İlk olarak gerekli `print` ifadesini kullandığınızdan emin olun: **print(\"Hello, World!\")**: Konsola çıktı yazdırmak için 'print' fonksiyonu gereklidir.\n2. Konsola yazdırmak için şu ifadeyi kullanın: `print(\"Hello, World!\")` Bu ifade 'Hello, World!' mesajını konsola gönderir ve yeni bir satır ekler.\n3. Python dilinde noktalı virgül kullanmanıza gerek yoktur, çünkü ifadeler satır sonuyla otomatik olarak tamamlanır."
+		}
 	],
 	"quest": {
 		"difficulty": 1,
@@ -22,7 +22,9 @@
 		"tests": [
 			{
 				"input": [],
-				"output": ["Hello, World!"]
+				"output": [
+					"Hello, World!"
+				]
 			}
 		],
 		"codeTemplates": [
