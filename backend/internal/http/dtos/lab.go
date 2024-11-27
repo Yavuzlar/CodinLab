@@ -20,6 +20,7 @@ type LabDTO struct {
 	IsFinished      bool           `json:"isFinished"`
 	Difficulty      int            `json:"difficulty"`
 	FileExtention   string         `json:"fileExtention"`
+	MonacoEditor    string         `json:"monacoEditor"`
 }
 
 type LabForAllDTO struct {
@@ -56,7 +57,7 @@ func (m *LabDTOManager) ToLabsForAllDTO(labs []LabForAllDTO, isImageExists bool,
 }
 
 // This is for get lab by id
-func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, template string, programmingName, fileExtention string) LabDTO {
+func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, template string, programmingName, fileExtention, monacoEditor string) LabDTO {
 	return LabDTO{
 		ID:              lab.GetID(),
 		ProgrammingName: programmingName,
@@ -66,6 +67,7 @@ func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, t
 		IsFinished:      lab.GetIsFinished(),
 		Difficulty:      lab.GetQuest().GetDifficulty(),
 		FileExtention:   fileExtention,
+		MonacoEditor:    monacoEditor,
 	}
 }
 

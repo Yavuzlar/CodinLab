@@ -12,12 +12,12 @@ string $funcname$(int n) {
 int main() {
     int n;
     
-    std::cout << "n değerini girin: ";
-    std::cin >> n;
+    cout << "n değerini girin: ";
+    cin >> n;
     
-    std::string result = $funcname$(n);
+    string result = $funcname$(n);
     
-    std::cout << "Fonksiyondan dönen sonuç: " << result << std::endl;
+    cout << "Fonksiyondan dönen sonuç: " << result << endl;
     return 0;
 }
 
