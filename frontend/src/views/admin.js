@@ -167,7 +167,7 @@ const Admin = () => {
                         }}
                       >
                         <img
-                          src={"api/v1/" + item.iconPath}
+                          src={"/api/v1/" + item.iconPath}
                           width={30}
                           height={30}
                         />

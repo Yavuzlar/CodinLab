@@ -34,6 +34,10 @@ func Run(cfg *config.Config) {
 	if err != nil {
 		panic(err)
 	}
+	// object folder existence
+	if _, err := os.Stat("object"); os.IsNotExist(err) {
+		panic("object folder does not exist")
+	}
 	// repository initialize
 	userRepo := repositories.NewUserRepository(conn)
 	logRepo := repositories.NewLogRepository(conn)

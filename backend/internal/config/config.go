@@ -18,8 +18,9 @@ const (
 	defaultSessionExpiration      = 24 * time.Hour
 	defaultManagmentPath          = "/management"
 	defaultAppMode                = "self"
-	version                       = "1.0.0"
 )
+
+var APP_VERSION string = "0.0.1"
 
 type Managment struct {
 	ManagmentUsername string `mapstructure:"username"`
@@ -54,7 +55,7 @@ type HTTPConfig struct {
 
 func Init(configsDir ...string) (cfg *Config, err error) {
 	cfg = new(Config)
-	viper.SetDefault("app.version", version)
+	viper.SetDefault("app.version", APP_VERSION)
 	viper.SetDefault("http.port", defaultHTTPPort)
 	viper.SetDefault("http.max_header_megabytes", defaultHTTPMaxHeaderMegabytes)
 	viper.SetDefault("http.timeouts.read", defaultHTTPRWTimeout)

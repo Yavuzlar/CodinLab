@@ -58,7 +58,7 @@ const LanguageProgress = ({ language, type }) => {
         }}
       >
         <img
-          src={"api/v1/" + language.iconPath}
+          src={"/api/v1/" + language.iconPath}
           alt={language.name}
           width={56}
           height={56}
