@@ -73,6 +73,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           file: ./docker/prod.Dockerfile
           tags: ${{ steps.meta.outputs.tags }}
+          platforms: linux/amd64,linux/arm64,darwin
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
