@@ -1,6 +1,11 @@
 # CodinLab
 CodinLab software development laboratory
 
+## Installation
+```bash
+    docker run -p"80:80" -v "/var/run/docker.sock:/var/run/docker.sock" ghcr.io/yavuzlar/codinlab:latest
+```
+
 ## Inventory JSON Explanation
 
 This inventory JSON contains all the programming languages supported by CodinLab. You can add as many languages as you want to the array by filling in the required fields in the desired format.
