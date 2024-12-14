@@ -8,7 +8,6 @@ import {
   useMediaQuery,
   Alert,
   Grid,
-  Modal,
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Tooltip from "@mui/material/Tooltip";
@@ -26,7 +25,9 @@ import axios from "axios";
 import ModalRoad from "src/components/modal/ModalRoad";
 
 const LanguageRoad = ({ language = "", pathId }) => {
+  // Language to be displayed
   const _language = language.toUpperCase();
+
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const theme = useTheme();
@@ -37,27 +38,33 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const [output, setOutput] = useState({});
+
   const [programmingId, setProgrammingId] = useState(null);
+
+  const [languageName, setLanguageName] = useState("");
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [extention, setExtention] = useState("")
+  const [extension, setExtension] = useState("")
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [note, setNote] = useState("");
   const [template, setTemplate] = useState("");
-  const [fileExtention, setFileExtention] = useState("");
+  const [fileExtension, setFileExtension] = useState("");
   const [monacoEditor, setMonacoEditor] = useState("")
 
   const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
 
+  // API data
   const apiData = {
     programmingId: programmingId,
     pathId: pathId,
     endPoint: "road",
   };
 
+  // Breadcrumbs
   const breadcrums = [
     {
       path: "/roads",
@@ -66,7 +73,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
     },
     {
       path: `/roads/${language}`,
-      title: _language,
+      title: languageName,
       permission: "roads",
     },
     {
@@ -76,15 +83,18 @@ const LanguageRoad = ({ language = "", pathId }) => {
     },
   ];
 
+  // Params for the code editor
   const params = {
     height: "30rem",
     width: "100%",
   };
 
+  // Set the programming id
   useEffect(() => {
     setProgrammingId(language);
   }, [language]);
 
+  // Fetch the path by id
   useEffect(() => {
     if (programmingId && pathId) {
       dispatch(
@@ -97,11 +107,12 @@ const LanguageRoad = ({ language = "", pathId }) => {
     }
   }, [programmingId, pathId, i18n.language]);
 
+  // Set the path data
   useEffect(() => {
     if (path) {
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
-        setExtention(path?.data?.data[0]?.fileExtention)
+        setExtension(path?.data?.data[0]?.fileExtension)
         setIsStarted(pathData.pathIsStarted);
         setIsFinished(pathData.pathIsFinished);
         setTitle(pathData.language.title);
@@ -109,8 +120,9 @@ const LanguageRoad = ({ language = "", pathId }) => {
         setContent(pathData.language.content);
         setNote(pathData.language.note);
         setTemplate(pathData.template);
-        setFileExtention(path.data.data[0].fileExtention);
+        setFileExtension(path.data.data[0].fileExtension);
         setMonacoEditor(path.data.data[0].monacoEditor)
+        setLanguageName(path.data.data[0].name);
       }
 
       setError(path.error);
@@ -118,20 +130,28 @@ const LanguageRoad = ({ language = "", pathId }) => {
     }
   }, [path]);
 
+  // Set isFinished to true if the output is correct
+  useEffect(() => {
+    if (output.isCorrect) {
+      setIsFinished(true);
+    }
+  }, [output]);
+
+  // Handle Code Editor functions
   const handleRun = (outputData) => {
     setOutput(outputData?.data);
   };
 
   const handleStop = (outputData) => {
-    // this function will be called when the code is stopped
     setOutput(outputData);
   };
 
   const handleNextPath = () => {
-    // here we will add the next path api call
     router.push(`/roads/${language}/${parseInt(pathId) + 1}`);
   };
+  // End Handle Code Editor functions
 
+  // Reset the path
   const handleReset = async () => {
     try {
       const response = await axios({
@@ -146,8 +166,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
       console.log("Reset response error", error);
     }
   };
-
-
 
   return (
     <>
@@ -226,7 +244,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
             onRun={handleRun}
             onStop={handleStop}
             leng={monacoEditor}
-            title={`example.${extention}`}
+            title={`example.${extension}`}
             apiData={apiData}
             editorRef={editorRef}
             val={template}
