@@ -22,6 +22,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLabByProgramingId } from "src/store/lab/labSlice";
+import { useAuth } from "src/hooks/useAuth";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import axios from "axios";
 
@@ -107,6 +108,7 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const { t, i18n } = useTranslation();
   const theme = useTheme();
+  const { sendHistory } = useAuth();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
 
   const [isCorrect, setIsCorrect] = useState(false);
@@ -126,6 +128,7 @@ const LabQuestion = ({ language = "", questionId }) => {
     fileExtention: "",
     monacoEditor: ""
   });
+  const [userCode, setUserCode] = useState("");
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -208,6 +211,23 @@ const LabQuestion = ({ language = "", questionId }) => {
     }
   };
 
+  const handleChange = (outputData) => {
+    console.log("handlechange triggered:", outputData);
+    setUserCode(outputData);
+  };
+
+  const handleBeforeUnload = (event) => {
+    console.log("User code content: ", userCode);
+    const labPathType = "Lab";
+
+    sendHistory(
+      userCode,
+      parseInt(programmingID),
+      parseInt(questionId),
+      labPathType
+    );
+  };
+
   useEffect(() => {
     if (labSlice.data) {
       setLabData({
@@ -223,6 +243,7 @@ const LabQuestion = ({ language = "", questionId }) => {
         fileExtention: labSlice.data[0]?.fileExtention,
         monacoEditor: labSlice.data[0]?.monacoEditor
       });
+      setUserCode(labSlice.data[0]?.template)
     }
   }, [labSlice.data]);
 
@@ -241,7 +262,7 @@ const LabQuestion = ({ language = "", questionId }) => {
     <>
       {/* Breadcrumbs */}
       <CustomBreadcrumbs titles={breadcrums} />
-
+      <button onClick={() => handleBeforeUnload()}>Send history</button>
       {/* Outer container */}
       <Grid
         container
@@ -297,7 +318,11 @@ const LabQuestion = ({ language = "", questionId }) => {
                   }}
                 >
                   <Image src={LightBulb} alt="hint" width={25} height={25} />
-                  <Typography variant="body1" color={"#FFCA00"} fontWeight={500}>
+                  <Typography
+                    variant="body1"
+                    color={"#FFCA00"}
+                    fontWeight={500}
+                  >
                     {t("labs.question.hint")}
                   </Typography>
                 </Button>
@@ -323,7 +348,9 @@ const LabQuestion = ({ language = "", questionId }) => {
                     textAlign: "center",
                   }}
                 >
-                  <Typography variant="h6">{t("labs.question.hint")}</Typography>
+                  <Typography variant="h6">
+                    {t("labs.question.hint")}
+                  </Typography>
                   <Typography sx={{ mt: 2 }}>{labData.hint}</Typography>
                 </Box>
               </Modal>
@@ -344,8 +371,8 @@ const LabQuestion = ({ language = "", questionId }) => {
                   {output.isCorrect
                     ? t("CODE_SUCCESS")
                     : `${t("CODE_ALERT")
-                      .replace("$$$", output.expectedOutput)
-                      .replace("***", output.output)}`}
+                        .replace("$$$", output.expectedOutput)
+                        .replace("***", output.output)}`}
                 </Alert>
               )}
 
@@ -379,6 +406,7 @@ const LabQuestion = ({ language = "", questionId }) => {
               params={params}
               onRun={handleRun}
               onStop={handleStop}
+              onChange={handleChange}
               leng={labData.monacoEditor}
               title={labData.title}
               apiData={apiData}
@@ -415,7 +443,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                 sx={{
                   width: "100%",
                   backgroundColor: "#0A3B7A",
-
                 }}
               >
                 <CardContent
@@ -428,7 +455,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                       alignItems: "center",
                     }}
                   >
-
                     <Box sx={{ width: "21%" }}>
                       <Typography variant="body1" fontWeight={"bold"}>
                         {t("labs.question.output")}{" "}
@@ -461,7 +487,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                         sx={{ whiteSpace: "pre-line" }}
                       >
                         {output?.output || output?.errorMessage}
-
                       </Typography>
                     </Box>
                   </Box>
@@ -471,7 +496,6 @@ const LabQuestion = ({ language = "", questionId }) => {
           </Box>
         </Grid>
       </Grid>
-
     </>
   );
 };

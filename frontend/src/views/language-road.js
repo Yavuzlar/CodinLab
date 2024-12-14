@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPathById } from "src/store/path/pathSlice";
 import { useRouter } from "next/router";
+import { useAuth } from "src/hooks/useAuth";
 import axios from "axios";
 import ModalRoad from "src/components/modal/ModalRoad";
 
@@ -31,6 +32,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const theme = useTheme();
+  const { sendHistory } = useAuth();
 
   const { path } = useSelector((state) => state);
   const editorRef = useRef(null);
@@ -54,6 +56,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [template, setTemplate] = useState("");
   const [fileExtension, setFileExtension] = useState("");
   const [monacoEditor, setMonacoEditor] = useState("")
+  const [userCode, setUserCode] = useState("");
 
   const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
 
@@ -123,6 +126,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
         setFileExtension(path.data.data[0].fileExtension);
         setMonacoEditor(path.data.data[0].monacoEditor)
         setLanguageName(path.data.data[0].name);
+        setUserCode(pathData.template);
       }
 
       setError(path.error);
@@ -167,9 +171,27 @@ const LanguageRoad = ({ language = "", pathId }) => {
     }
   };
 
+  const handleBeforeUnload = (event) => {
+    console.log("User code content: ", userCode);
+    const labPathType = "Road";
+
+    sendHistory(
+      userCode,
+      parseInt(programmingId),
+      parseInt(pathId),
+      labPathType
+    );
+  };
+
+  const handleChange = (outputData) => {
+    console.log("handlechange triggered:", outputData);
+    setUserCode(outputData);
+  };
+
   return (
     <>
       <CustomBreadcrumbs titles={breadcrums} />
+      <button onClick={() => handleBeforeUnload()}>Send history</button>
       <Card
         sx={{
           position: "relative",
@@ -243,6 +265,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
             key={template}
             onRun={handleRun}
             onStop={handleStop}
+            onChange={handleChange}
             leng={monacoEditor}
             title={`example.${extension}`}
             apiData={apiData}
