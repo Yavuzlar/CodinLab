@@ -200,6 +200,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   return (
     <>
       <CustomBreadcrumbs titles={breadcrums} />
+      <button onClick={() => handleBeforeUnload()}>Send history</button>
       <Card
         sx={{
           position: "relative",
