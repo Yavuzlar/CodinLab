@@ -23,7 +23,6 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLabByProgramingId } from "src/store/lab/labSlice";
 import { useAuth } from "src/hooks/useAuth";
-import { useAuth } from "src/hooks/useAuth";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import axios from "axios";
 
@@ -110,7 +109,6 @@ const LabQuestion = ({ language = "", questionId }) => {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const { sendHistory } = useAuth();
-  const { sendHistory } = useAuth();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
 
   const [isCorrect, setIsCorrect] = useState(false);
@@ -130,7 +128,6 @@ const LabQuestion = ({ language = "", questionId }) => {
     fileExtention: "",
     monacoEditor: "",
   });
-  const [userCode, setUserCode] = useState("");
   const [userCode, setUserCode] = useState("");
 
   const [open, setOpen] = useState(false);
@@ -255,6 +252,7 @@ const LabQuestion = ({ language = "", questionId }) => {
         monacoEditor: labSlice.data[0]?.monacoEditor,
       });
       setUserCode(labSlice.data[0]?.template);
+      setUserCode(labSlice.data[0]?.template)
     }
   }, [labSlice.data]);
 
@@ -332,11 +330,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                     color={"#FFCA00"}
                     fontWeight={500}
                   >
-                  <Typography
-                    variant="body1"
-                    color={"#FFCA00"}
-                    fontWeight={500}
-                  >
                     {t("labs.question.hint")}
                   </Typography>
                 </Button>
@@ -365,9 +358,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                   <Typography variant="h6">
                     {t("labs.question.hint")}
                   </Typography>
-                  <Typography variant="h6">
-                    {t("labs.question.hint")}
-                  </Typography>
                   <Typography sx={{ mt: 2 }}>{labData.hint}</Typography>
                 </Box>
               </Modal>
@@ -388,8 +378,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                   {output.isCorrect
                     ? t("CODE_SUCCESS")
                     : `${t("CODE_ALERT")
-                        .replace("$$$", output.expectedOutput)
-                        .replace("***", output.output)}`}
                         .replace("$$$", output.expectedOutput)
                         .replace("***", output.output)}`}
                 </Alert>
@@ -425,7 +413,6 @@ const LabQuestion = ({ language = "", questionId }) => {
               params={params}
               onRun={handleRun}
               onStop={handleStop}
-              onChange={handleChange}
               onChange={handleChange}
               leng={labData.monacoEditor}
               title={labData.title}
