@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPathById } from "src/store/path/pathSlice";
 import { useRouter } from "next/router";
 import { useAuth } from "src/hooks/useAuth";
+import { useAuth } from "src/hooks/useAuth";
 import axios from "axios";
 import ModalRoad from "src/components/modal/ModalRoad";
 
@@ -32,6 +33,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const theme = useTheme();
+  const { sendHistory } = useAuth();
   const { sendHistory } = useAuth();
 
   const { path } = useSelector((state) => state);
@@ -55,7 +57,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [note, setNote] = useState("");
   const [template, setTemplate] = useState("");
   const [fileExtension, setFileExtension] = useState("");
-  const [monacoEditor, setMonacoEditor] = useState("");
+  const [monacoEditor, setMonacoEditor] = useState("")
   const [userCode, setUserCode] = useState("");
 
   const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
@@ -126,6 +128,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
         setFileExtension(path.data.data[0].fileExtension);
         setMonacoEditor(path.data.data[0].monacoEditor);
         setLanguageName(path.data.data[0].name);
+        setUserCode(pathData.template);
         setUserCode(pathData.template);
       }
 
@@ -200,6 +203,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   return (
     <>
       <CustomBreadcrumbs titles={breadcrums} />
+      <button onClick={() => handleBeforeUnload()}>Send history</button>
       <Card
         sx={{
           position: "relative",
@@ -302,6 +306,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
             key={template}
             onRun={handleRun}
             onStop={handleStop}
+            onChange={handleChange}
             onChange={handleChange}
             leng={monacoEditor}
             title={`example.${extension}`}
