@@ -221,6 +221,15 @@ const LanguageRoad = ({ language = "", pathId }) => {
               whiteSpace: "pre-line",
             }}
           >
+          <Typography
+            variant="body1"
+            sx={{
+              mt: "10px",
+              mb: "40px",
+              color: "lightgrey",
+              whiteSpace: "pre-line",
+            }}
+          >
             {content}
           </Typography>
           <ModalRoad buttonMessage={t("road.modal.button")} message={note} />
@@ -269,6 +278,11 @@ const LanguageRoad = ({ language = "", pathId }) => {
         <Alert
           severity={output.isCorrect ? "success" : "error"}
           variant="filled"
+          sx={{
+            color: theme.palette.common.white,
+            marginBottom: "10px",
+            borderRadius: "10px",
+          }}
           sx={{
             color: theme.palette.common.white,
             marginBottom: "10px",
