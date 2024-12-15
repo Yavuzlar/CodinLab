@@ -10,10 +10,12 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import ActivityStatisticComponent from "../statistics/ActivityStatisticComponent";
-import { data } from "../../data/activityDataExample";
-import { useState } from "react";
+// import { data } from "../../data/activityDataExample";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Translations from "../Translations";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchActivityByYear } from "src/store/admin/adminActivitySlice";
 
 const CustomSelect = styled(Select)({
   backgroundColor: "#0A3B7A",
@@ -26,14 +28,31 @@ const CustomSelect = styled(Select)({
 });
 
 const Activity = () => {
-  const _smd = useMediaQuery((theme) => theme.breakpoints.down("smd"));
+  const dispatch = useDispatch();
+  const { activity: activityData } = useSelector((state) => state);
+
+  const data = activityData.data.data;
 
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
 
+  const _smd = useMediaQuery((theme) => theme.breakpoints.down("smd"));
+
   const handleChange = (event) => {
     setYear(event.target.value);
   };
+
+  useEffect(() => {
+    dispatch(fetchActivityByYear({ year }));
+  }, [year]);
+
+  const years = Array.from(
+    { length: new Date().getFullYear() - 2023 },
+    (_, i) => 2024 + i
+  ).reverse();
+
+  // const years = [2024, 2023, 2022, 2021, 2020];
+
   return (
     <Box
       sx={{
@@ -80,7 +99,7 @@ const Activity = () => {
                     onChange={handleChange}
                     disableUnderline
                   >
-                    {[2024, 2023, 2022, 2021].map((y) => (
+                    {years.map((y) => (
                       <MenuItem key={y} value={y}>
                         {y}
                       </MenuItem>
@@ -106,7 +125,13 @@ const Activity = () => {
               justifyContent: "center",
             }}
           >
-            <ActivityStatisticComponent activityData={data} />
+            {Array.isArray(data) && data.length !== 0 ? (
+              <ActivityStatisticComponent activityData={data} />
+            ) : (
+              <Typography>
+                <Translations text="admin_activity_calendar_no_data_error" />
+              </Typography>
+            )}
           </Box>
         </CardContent>
       </Card>
