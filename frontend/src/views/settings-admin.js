@@ -41,8 +41,8 @@ const Settings = () => {
 
   const [passwordSettingsData, setPasswordSettingsData] = useState();
   const [infoSettingsData, setInfoSettingsData] = useState({});
-
   const [showOldPassword, setShowOldPassword] = useState(false);
+
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -305,11 +305,11 @@ const Settings = () => {
                 color: (theme) =>
                   `${theme.palette.border.secondary} !important`,
                 fontWeight: "bold",
-                transform: visibleNameLabe
-                  ? "translateY(0)"
-                  : "translateY(20px)",
-                opacity: visibleNameLabe ? 1 : 0,
-                transition: "all 0.3s ease-in-out",
+                // transform: visibleNameLabe
+                //   ? "translateY(0)"
+                //   : "translateY(20px)",
+                // opacity: visibleNameLabe ? 1 : 0,
+                // transition: "all 0.3s ease-in-out",
               }}
             >
               <Translations text={"settings.change.name"} />
@@ -351,11 +351,11 @@ const Settings = () => {
                 color: (theme) =>
                   `${theme.palette.border.secondary} !important`,
                 fontWeight: "bold",
-                transform: visibleSurnameLabel
-                  ? "translateY(0)"
-                  : "translateY(20px)",
-                opacity: visibleSurnameLabel ? 1 : 0,
-                transition: "all 0.3s ease-in-out",
+                // transform: visibleSurnameLabel
+                //   ? "translateY(0)"
+                //   : "translateY(20px)",
+                // opacity: visibleSurnameLabel ? 1 : 0,
+                // transition: "all 0.3s ease-in-out",
               }}
             >
               <Translations text={"settings.change.surname"} />
@@ -397,11 +397,11 @@ const Settings = () => {
                 color: (theme) =>
                   `${theme.palette.border.secondary} !important`,
                 fontWeight: "bold",
-                transform: visibleUsernameLabel
-                  ? "translateY(0)"
-                  : "translateY(20px)",
-                opacity: visibleUsernameLabel ? 1 : 0,
-                transition: "all 0.3s ease-in-out",
+                // transform: visibleUsernameLabel
+                //   ? "translateY(0)"
+                //   : "translateY(20px)",
+                // opacity: visibleUsernameLabel ? 1 : 0,
+                // transition: "all 0.3s ease-in-out",
               }}
             >
               <Translations text={"settings.change.username"} />
@@ -443,11 +443,11 @@ const Settings = () => {
                 color: (theme) =>
                   `${theme.palette.border.secondary} !important`,
                 fontWeight: "bold",
-                transform: visibleGithubLabel
-                  ? "translateY(0)"
-                  : "translateY(20px)",
-                opacity: visibleGithubLabel ? 1 : 0,
-                transition: "all 0.3s ease-in-out",
+                // transform: visibleGithubLabel
+                //   ? "translateY(0)"
+                //   : "translateY(20px)",
+                // opacity: visibleGithubLabel ? 1 : 0,
+                // transition: "all 0.3s ease-in-out",
               }}
             >
               <Translations text={"settings.change.github"} />
@@ -507,11 +507,11 @@ const Settings = () => {
                 color: (theme) =>
                   `${theme.palette.border.secondary} !important`,
                 fontWeight: "bold",
-                transform: visibleOldPasswordLabel
-                  ? "translateY(0)"
-                  : "translateY(20px)",
-                opacity: visibleOldPasswordLabel ? 1 : 0,
-                transition: "all 0.3s ease-in-out",
+                // transform: visibleOldPasswordLabel
+                //   ? "translateY(0)"
+                //   : "translateY(20px)",
+                // opacity: visibleOldPasswordLabel ? 1 : 0,
+                // transition: "all 0.3s ease-in-out",
               }}
             >
               <Translations text={"settings.old.password"} />
@@ -572,11 +572,11 @@ const Settings = () => {
                 color: (theme) =>
                   `${theme.palette.border.secondary} !important`,
                 fontWeight: "bold",
-                transform: visibleNewPasswordLabel
-                  ? "translateY(0)"
-                  : "translateY(20px)",
-                opacity: visibleNewPasswordLabel ? 1 : 0,
-                transition: "all 0.3s ease-in-out",
+                // transform: visibleNewPasswordLabel
+                //   ? "translateY(0)"
+                //   : "translateY(20px)",
+                // opacity: visibleNewPasswordLabel ? 1 : 0,
+                // transition: "all 0.3s ease-in-out",
               }}
             >
               <Translations text={"settings.new.password"} />
@@ -637,11 +637,11 @@ const Settings = () => {
                 color: (theme) =>
                   `${theme.palette.border.secondary} !important`,
                 fontWeight: "bold",
-                transform: visibleConfirmPasswordLabel
-                  ? "translateY(0)"
-                  : "translateY(20px)",
-                opacity: visibleConfirmPasswordLabel ? 1 : 0,
-                transition: "all 0.3s ease-in-out",
+                // transform: visibleConfirmPasswordLabel
+                //   ? "translateY(0)"
+                //   : "translateY(20px)",
+                // opacity: visibleConfirmPasswordLabel ? 1 : 0,
+                // transition: "all 0.3s ease-in-out",
               }}
             >
               <Translations text={"settings.confirm.password"} />
@@ -725,7 +725,8 @@ const Settings = () => {
           flexDirection: smd_down ? "column" : "row",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: "4rem",
+          marginTop: "6rem",
+          gap: "2rem",
         }}
       >
         <Image
@@ -734,7 +735,7 @@ const Settings = () => {
           width={300}
           height={200}
         />
-        <Image src={MouseImage} alt="Mouse_Image" width={200} height={200} />
+        <Image src={MouseImage} alt="Mouse_Image" width={90} height={90} />
 
         <Image
           src={CoffeeImage}

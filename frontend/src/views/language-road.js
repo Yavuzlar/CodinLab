@@ -41,14 +41,14 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [programmingId, setProgrammingId] = useState(null);
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [extention, setExtention] = useState("")
+  const [extention, setExtention] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [note, setNote] = useState("");
   const [template, setTemplate] = useState("");
   const [fileExtention, setFileExtention] = useState("");
-  const [monacoEditor, setMonacoEditor] = useState("")
+  const [monacoEditor, setMonacoEditor] = useState("");
 
   const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
 
@@ -101,7 +101,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
     if (path) {
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
-        setExtention(path?.data?.data[0]?.fileExtention)
+        setExtention(path?.data?.data[0]?.fileExtention);
         setIsStarted(pathData.pathIsStarted);
         setIsFinished(pathData.pathIsFinished);
         setTitle(pathData.language.title);
@@ -110,7 +110,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
         setNote(pathData.language.note);
         setTemplate(pathData.template);
         setFileExtention(path.data.data[0].fileExtention);
-        setMonacoEditor(path.data.data[0].monacoEditor)
+        setMonacoEditor(path.data.data[0].monacoEditor);
       }
 
       setError(path.error);
@@ -147,8 +147,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
     }
   };
 
-
-
   return (
     <>
       <CustomBreadcrumbs titles={breadcrums} />
@@ -164,7 +162,15 @@ const LanguageRoad = ({ language = "", pathId }) => {
           <Typography variant="h4" fontWeight={500}>
             {title}
           </Typography>
-          <Typography variant="body1" sx={{ mt: "10px", mb: "40px", color: "lightgrey", whiteSpace: "pre-line" }}>
+          <Typography
+            variant="body1"
+            sx={{
+              mt: "10px",
+              mb: "40px",
+              color: "lightgrey",
+              whiteSpace: "pre-line",
+            }}
+          >
             {content}
           </Typography>
           <ModalRoad buttonMessage={t("road.modal.button")} message={note} />
@@ -201,7 +207,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
               textTransform: "capitalize",
               py: 1,
               px: 3,
-
             }}
             onClick={handleNextPath}
             disabled={!isFinished}
@@ -214,9 +219,17 @@ const LanguageRoad = ({ language = "", pathId }) => {
         <Alert
           severity={output.isCorrect ? "success" : "error"}
           variant="filled"
-          sx={{ color: theme.palette.common.white, marginBottom: "10px", borderRadius: "10px" }}
+          sx={{
+            color: theme.palette.common.white,
+            marginBottom: "10px",
+            borderRadius: "10px",
+          }}
         >
-          {output.isCorrect ? t("CODE_SUCCESS") : `${t("CODE_ALERT").replace("$$$", output.expectedOutput).replace("***", output.output)}`}
+          {output.isCorrect
+            ? t("CODE_SUCCESS")
+            : `${t("CODE_ALERT")
+                .replace("$$$", output.expectedOutput)
+                .replace("***", output.output)}`}
         </Alert>
       )}
       <Grid container spacing={2}>
@@ -234,10 +247,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Output
-            params={params}
-            value={output}
-          />
+          <Output params={params} value={output} />
         </Grid>
       </Grid>
     </>
