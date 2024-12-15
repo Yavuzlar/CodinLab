@@ -162,7 +162,7 @@
   "ERR_FETCHING_LABS": "Error occurred while fetching labs.",
   "ERR_FETCHING_ROADS": "Error occurred while fetching roads.",
   "ERR_FETCHING_LEVELS": "Error occurred while fetching levels.",
-  "ERR_FETCHING_TEMPLATE": "Error occurred while fetching the frontend template.",
+  "ERR_FETCHING_TEMPLATE,": "Error occurred while fetching the frontend template.",
   "ERR_FETCHING_PROGRAMMING_LANGUAGES": "Error occurred while fetching programming languages.",
   "ERR_COMPARING_PASSWORDS": "Error occurred while comparing passwords.",
   "ERR_ADDING_USER": "Error occurred while adding the user.",
@@ -177,5 +177,24 @@
   "INTERNAL_SERVER_ERROR": "Internal server error",
   "VALIDATION_ERROR": "Validation Error",
   "CODE_ALERT": "$$$ was expected but got ***",
-  "CODE_SUCCESS": "Good Job!"
+  "CODE_SUCCESS": "Good Job!",
+  "admin_activity_calendar_no_data_error": "There is no activity data for this year.",
+  "admin_activity_calendar_logs_tooltip": "{{count}} activities on {{date}}",
+  "admin_activity_calendar_legend_less": "Low",
+  "admin_activity_calendar_legend_more": "High",
+  "admin_activity_calendar_months": [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ],
+  "admin_activity_calendar_total_count": "{{count}} activite on {{year}}"
 }
