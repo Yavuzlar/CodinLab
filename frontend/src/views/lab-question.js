@@ -126,7 +126,7 @@ const LabQuestion = ({ language = "", questionId }) => {
     hint: "",
     template: "",
     fileExtention: "",
-    monacoEditor: ""
+    monacoEditor: "",
   });
   const [userCode, setUserCode] = useState("");
 
@@ -151,7 +151,7 @@ const LabQuestion = ({ language = "", questionId }) => {
   const apiData = {
     programmingId: programmingID,
     pathId: questionId,
-    endPoint: 'lab'
+    endPoint: "lab",
   };
 
   // Breadcrumbs
@@ -204,7 +204,6 @@ const LabQuestion = ({ language = "", questionId }) => {
       if (response.status === 200) {
         const apiTemplate = response.data?.data?.template || "";
         editorRef.current.setValue(apiTemplate);
-
       }
     } catch (error) {
       console.log("Reset response error", error);
@@ -212,12 +211,10 @@ const LabQuestion = ({ language = "", questionId }) => {
   };
 
   const handleChange = (outputData) => {
-    console.log("handlechange triggered:", outputData);
     setUserCode(outputData);
   };
 
   const handleBeforeUnload = (event) => {
-    console.log("User code content: ", userCode);
     const labPathType = "Lab";
 
     sendHistory(
@@ -226,7 +223,18 @@ const LabQuestion = ({ language = "", questionId }) => {
       parseInt(questionId),
       labPathType
     );
+
+    event?.preventDefault();
   };
+
+  // Trigger sendHistory when the user leaves the page
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   useEffect(() => {
     if (labSlice.data) {
@@ -241,9 +249,9 @@ const LabQuestion = ({ language = "", questionId }) => {
         hint: labSlice.data[0]?.language?.hint,
         template: labSlice.data[0]?.template,
         fileExtention: labSlice.data[0]?.fileExtention,
-        monacoEditor: labSlice.data[0]?.monacoEditor
+        monacoEditor: labSlice.data[0]?.monacoEditor,
       });
-      setUserCode(labSlice.data[0]?.template)
+      setUserCode(labSlice.data[0]?.template);
     }
   }, [labSlice.data]);
 
@@ -257,12 +265,10 @@ const LabQuestion = ({ language = "", questionId }) => {
     );
   }, [language, questionId]);
 
-
   return (
     <>
       {/* Breadcrumbs */}
       <CustomBreadcrumbs titles={breadcrums} />
-      <button onClick={() => handleBeforeUnload()}>Send history</button>
       {/* Outer container */}
       <Grid
         container

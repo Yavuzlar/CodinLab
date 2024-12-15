@@ -48,14 +48,14 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [languageName, setLanguageName] = useState("");
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [extension, setExtension] = useState("")
+  const [extension, setExtension] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [note, setNote] = useState("");
   const [template, setTemplate] = useState("");
   const [fileExtension, setFileExtension] = useState("");
-  const [monacoEditor, setMonacoEditor] = useState("")
+  const [monacoEditor, setMonacoEditor] = useState("");
   const [userCode, setUserCode] = useState("");
 
   const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
@@ -115,7 +115,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
     if (path) {
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
-        setExtension(path?.data?.data[0]?.fileExtension)
+        setExtension(path?.data?.data[0]?.fileExtension);
         setIsStarted(pathData.pathIsStarted);
         setIsFinished(pathData.pathIsFinished);
         setTitle(pathData.language.title);
@@ -124,7 +124,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
         setNote(pathData.language.note);
         setTemplate(pathData.template);
         setFileExtension(path.data.data[0].fileExtension);
-        setMonacoEditor(path.data.data[0].monacoEditor)
+        setMonacoEditor(path.data.data[0].monacoEditor);
         setLanguageName(path.data.data[0].name);
         setUserCode(pathData.template);
       }
@@ -172,7 +172,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
   };
 
   const handleBeforeUnload = (event) => {
-    console.log("User code content: ", userCode);
     const labPathType = "Road";
 
     sendHistory(
@@ -181,17 +180,26 @@ const LanguageRoad = ({ language = "", pathId }) => {
       parseInt(pathId),
       labPathType
     );
+
+    event?.preventDefault();
   };
 
   const handleChange = (outputData) => {
-    console.log("handlechange triggered:", outputData);
     setUserCode(outputData);
   };
+
+  // Trigger sendHistory when the user leaves the page
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <>
       <CustomBreadcrumbs titles={breadcrums} />
-      <button onClick={() => handleBeforeUnload()}>Send history</button>
       <Card
         sx={{
           position: "relative",
@@ -204,7 +212,15 @@ const LanguageRoad = ({ language = "", pathId }) => {
           <Typography variant="h4" fontWeight={500}>
             {title}
           </Typography>
-          <Typography variant="body1" sx={{ mt: "10px", mb: "40px", color: "lightgrey", whiteSpace: "pre-line" }}>
+          <Typography
+            variant="body1"
+            sx={{
+              mt: "10px",
+              mb: "40px",
+              color: "lightgrey",
+              whiteSpace: "pre-line",
+            }}
+          >
             {content}
           </Typography>
           <ModalRoad buttonMessage={t("road.modal.button")} message={note} />
@@ -241,7 +257,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
               textTransform: "capitalize",
               py: 1,
               px: 3,
-
             }}
             onClick={handleNextPath}
             disabled={!isFinished}
@@ -254,9 +269,17 @@ const LanguageRoad = ({ language = "", pathId }) => {
         <Alert
           severity={output.isCorrect ? "success" : "error"}
           variant="filled"
-          sx={{ color: theme.palette.common.white, marginBottom: "10px", borderRadius: "10px" }}
+          sx={{
+            color: theme.palette.common.white,
+            marginBottom: "10px",
+            borderRadius: "10px",
+          }}
         >
-          {output.isCorrect ? t("CODE_SUCCESS") : `${t("CODE_ALERT").replace("$$$", output.expectedOutput).replace("***", output.output)}`}
+          {output.isCorrect
+            ? t("CODE_SUCCESS")
+            : `${t("CODE_ALERT")
+                .replace("$$$", output.expectedOutput)
+                .replace("***", output.output)}`}
         </Alert>
       )}
       <Grid container spacing={2}>
@@ -275,10 +298,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Output
-            params={params}
-            value={output}
-          />
+          <Output params={params} value={output} />
         </Grid>
       </Grid>
     </>
