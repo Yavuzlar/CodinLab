@@ -127,7 +127,6 @@ const LabQuestion = ({ language = "", questionId }) => {
     template: "",
     fileExtention: "",
     monacoEditor: "",
-    monacoEditor: "",
   });
   const [userCode, setUserCode] = useState("");
 
@@ -152,7 +151,6 @@ const LabQuestion = ({ language = "", questionId }) => {
   const apiData = {
     programmingId: programmingID,
     pathId: questionId,
-    endPoint: "lab",
     endPoint: "lab",
   };
 
@@ -238,18 +236,6 @@ const LabQuestion = ({ language = "", questionId }) => {
     };
   }, []);
 
-    event?.preventDefault();
-  };
-
-  // Trigger sendHistory when the user leaves the page
-  useEffect(() => {
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
   useEffect(() => {
     if (labSlice.data) {
       setLabData({
@@ -263,7 +249,6 @@ const LabQuestion = ({ language = "", questionId }) => {
         hint: labSlice.data[0]?.language?.hint,
         template: labSlice.data[0]?.template,
         fileExtention: labSlice.data[0]?.fileExtention,
-        monacoEditor: labSlice.data[0]?.monacoEditor,
         monacoEditor: labSlice.data[0]?.monacoEditor,
       });
       setUserCode(labSlice.data[0]?.template);
