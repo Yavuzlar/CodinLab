@@ -57,7 +57,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [note, setNote] = useState("");
   const [template, setTemplate] = useState("");
   const [fileExtension, setFileExtension] = useState("");
-  const [monacoEditor, setMonacoEditor] = useState("")
+  const [monacoEditor, setMonacoEditor] = useState("");
   const [userCode, setUserCode] = useState("");
 
   const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
@@ -203,7 +203,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
   return (
     <>
       <CustomBreadcrumbs titles={breadcrums} />
-      <button onClick={() => handleBeforeUnload()}>Send history</button>
       <Card
         sx={{
           position: "relative",
