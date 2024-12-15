@@ -224,15 +224,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
               whiteSpace: "pre-line",
             }}
           >
-          <Typography
-            variant="body1"
-            sx={{
-              mt: "10px",
-              mb: "40px",
-              color: "lightgrey",
-              whiteSpace: "pre-line",
-            }}
-          >
             {content}
           </Typography>
           <ModalRoad buttonMessage={t("road.modal.button")} message={note} />
@@ -286,12 +277,12 @@ const LanguageRoad = ({ language = "", pathId }) => {
             marginBottom: "10px",
             borderRadius: "10px",
           }}
-          sx={{
-            color: theme.palette.common.white,
-            marginBottom: "10px",
-            borderRadius: "10px",
-          }}
         >
+          {output.isCorrect
+            ? t("CODE_SUCCESS")
+            : `${t("CODE_ALERT")
+                .replace("$$$", output.expectedOutput)
+                .replace("***", output.output)}`}
           {output.isCorrect
             ? t("CODE_SUCCESS")
             : `${t("CODE_ALERT")
@@ -316,6 +307,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
           />
         </Grid>
         <Grid item xs={12} md={6}>
+          <Output params={params} value={output} />
           <Output params={params} value={output} />
         </Grid>
       </Grid>
