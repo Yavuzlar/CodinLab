@@ -22,12 +22,13 @@ const CodeEditor = ({
   params,
   onRun,
   onStop,
+  onChange,
   leng,
   defValue,
   title,
   apiData,
   val,
-  editorRef
+  editorRef,
 }) => {
   const [value, setValue] = useState(null);
   const [defaultValue, setDefaultValue] = useState(defValue);
@@ -45,8 +46,8 @@ const CodeEditor = ({
 
   // here we will add the run calls
   const handleRun = async () => {
-    // const toastId = toast.loading(t("runCode")); 
-    showToast("dismiss")
+    // const toastId = toast.loading(t("runCode"));
+    showToast("dismiss");
     showToast("loading", t("runCode"));
 
     try {
@@ -58,7 +59,7 @@ const CodeEditor = ({
           "Content-Type": "application/json",
         },
       });
-      showToast("dismiss")
+      showToast("dismiss");
       showToast("success", t("succsesCode"));
       onRun(response.data);
     } catch (error) {
@@ -66,7 +67,6 @@ const CodeEditor = ({
       onRun(error.response?.data?.message || error.message);
     }
   };
-
 
   // here we will add the stop api calls
   const handleStop = () => {
@@ -76,6 +76,11 @@ const CodeEditor = ({
       const response = "Stopped from backend";
       onStop(response);
     }, 2000);
+  };
+
+  const handleChange = (newValue) => {
+    setValue(newValue);
+    onChange(newValue);
   };
 
   // for mobile menu options
@@ -97,7 +102,6 @@ const CodeEditor = ({
     setValue(val);
     setLanguage(leng);
   }, [val, leng]);
-
 
   return (
     <Box
@@ -315,7 +319,7 @@ const CodeEditor = ({
           // defaultValue={defaultValue || "// Write your code here"}
           defaultValue={"// Write your code here"}
           value={value}
-          onChange={(newValue) => setValue(newValue)}
+          onChange={(newValue) => handleChange(newValue)}
           onMount={onMount}
           theme={theme}
           loading={<div>Loading...</div>}

@@ -111,6 +111,24 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const sendHistory = (userCode, programmingID, labPathID, labPathType) => {
+    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+      const historyData = {
+        type: "closed",
+        data: {
+          userCode: userCode,
+          programmingID: programmingID,
+          labPathID: labPathID,
+          labPathType: labPathType,
+        },
+      };
+      ws.current.send(JSON.stringify(historyData));
+      console.log("History data sent to server:", historyData);
+    } else {
+      console.error("WebSocket is not connected");
+    }
+  };
+
   const deleteStorage = () => {
     setUser(null);
     setLoading(false);
@@ -245,6 +263,7 @@ const AuthProvider = ({ children }) => {
     initAuth,
     login: handleLogin,
     containerLoading,
+    sendHistory,
   };
 
   if (!isInitialized && loading) return <Spinner />;

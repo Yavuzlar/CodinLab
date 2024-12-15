@@ -22,6 +22,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLabByProgramingId } from "src/store/lab/labSlice";
+import { useAuth } from "src/hooks/useAuth";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import axios from "axios";
 
@@ -107,6 +108,7 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const { t, i18n } = useTranslation();
   const theme = useTheme();
+  const { sendHistory } = useAuth();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
 
   const [isCorrect, setIsCorrect] = useState(false);
@@ -124,8 +126,9 @@ const LabQuestion = ({ language = "", questionId }) => {
     hint: "",
     template: "",
     fileExtention: "",
-    monacoEditor: ""
+    monacoEditor: "",
   });
+  const [userCode, setUserCode] = useState("");
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -148,7 +151,7 @@ const LabQuestion = ({ language = "", questionId }) => {
   const apiData = {
     programmingId: programmingID,
     pathId: questionId,
-    endPoint: 'lab'
+    endPoint: "lab",
   };
 
   // Breadcrumbs
@@ -201,12 +204,37 @@ const LabQuestion = ({ language = "", questionId }) => {
       if (response.status === 200) {
         const apiTemplate = response.data?.data?.template || "";
         editorRef.current.setValue(apiTemplate);
-
       }
     } catch (error) {
       console.log("Reset response error", error);
     }
   };
+
+  const handleChange = (outputData) => {
+    setUserCode(outputData);
+  };
+
+  const handleBeforeUnload = (event) => {
+    const labPathType = "Lab";
+
+    sendHistory(
+      userCode,
+      parseInt(programmingID),
+      parseInt(questionId),
+      labPathType
+    );
+
+    event?.preventDefault();
+  };
+
+  // Trigger sendHistory when the user leaves the page
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   useEffect(() => {
     if (labSlice.data) {
@@ -221,8 +249,9 @@ const LabQuestion = ({ language = "", questionId }) => {
         hint: labSlice.data[0]?.language?.hint,
         template: labSlice.data[0]?.template,
         fileExtention: labSlice.data[0]?.fileExtention,
-        monacoEditor: labSlice.data[0]?.monacoEditor
+        monacoEditor: labSlice.data[0]?.monacoEditor,
       });
+      setUserCode(labSlice.data[0]?.template);
     }
   }, [labSlice.data]);
 
@@ -236,12 +265,10 @@ const LabQuestion = ({ language = "", questionId }) => {
     );
   }, [language, questionId]);
 
-
   return (
     <>
       {/* Breadcrumbs */}
       <CustomBreadcrumbs titles={breadcrums} />
-
       {/* Outer container */}
       <Grid
         container
@@ -297,7 +324,11 @@ const LabQuestion = ({ language = "", questionId }) => {
                   }}
                 >
                   <Image src={LightBulb} alt="hint" width={25} height={25} />
-                  <Typography variant="body1" color={"#FFCA00"} fontWeight={500}>
+                  <Typography
+                    variant="body1"
+                    color={"#FFCA00"}
+                    fontWeight={500}
+                  >
                     {t("labs.question.hint")}
                   </Typography>
                 </Button>
@@ -323,7 +354,9 @@ const LabQuestion = ({ language = "", questionId }) => {
                     textAlign: "center",
                   }}
                 >
-                  <Typography variant="h6">{t("labs.question.hint")}</Typography>
+                  <Typography variant="h6">
+                    {t("labs.question.hint")}
+                  </Typography>
                   <Typography sx={{ mt: 2 }}>{labData.hint}</Typography>
                 </Box>
               </Modal>
@@ -344,8 +377,8 @@ const LabQuestion = ({ language = "", questionId }) => {
                   {output.isCorrect
                     ? t("CODE_SUCCESS")
                     : `${t("CODE_ALERT")
-                      .replace("$$$", output.expectedOutput)
-                      .replace("***", output.output)}`}
+                        .replace("$$$", output.expectedOutput)
+                        .replace("***", output.output)}`}
                 </Alert>
               )}
 
@@ -379,6 +412,7 @@ const LabQuestion = ({ language = "", questionId }) => {
               params={params}
               onRun={handleRun}
               onStop={handleStop}
+              onChange={handleChange}
               leng={labData.monacoEditor}
               title={labData.title}
               apiData={apiData}
@@ -415,7 +449,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                 sx={{
                   width: "100%",
                   backgroundColor: "#0A3B7A",
-
                 }}
               >
                 <CardContent
@@ -428,7 +461,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                       alignItems: "center",
                     }}
                   >
-
                     <Box sx={{ width: "21%" }}>
                       <Typography variant="body1" fontWeight={"bold"}>
                         {t("labs.question.output")}{" "}
@@ -461,7 +493,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                         sx={{ whiteSpace: "pre-line" }}
                       >
                         {output?.output || output?.errorMessage}
-
                       </Typography>
                     </Box>
                   </Box>
@@ -471,7 +502,6 @@ const LabQuestion = ({ language = "", questionId }) => {
           </Box>
         </Grid>
       </Grid>
-
     </>
   );
 };
