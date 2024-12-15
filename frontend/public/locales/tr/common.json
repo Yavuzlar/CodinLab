@@ -179,5 +179,24 @@
   "INTERNAL_SERVER_ERROR": "İç Sunucu Hatası",
   "VALIDATION_ERROR": "Doğrulama Hatası",
   "CODE_ALERT": "$$$ bekleniyordu ama *** alındı",
-  "CODE_SUCCESS": "Tebrikler!"
+  "CODE_SUCCESS": "Tebrikler!",
+  "admin_activity_calendar_no_data_error": "Bu yıl için aktivite verisi bulunmamaktadır.",
+  "admin_activity_calendar_logs_tooltip": "{{date}} tarihinde {{count}} etkinlik",
+  "admin_activity_calendar_legend_less": "Düşük",
+  "admin_activity_calendar_legend_more": "Yüksek",
+  "admin_activity_calendar_months": [
+    "Oca",
+    "Şub",
+    "Mar",
+    "Nis",
+    "May",
+    "Haz",
+    "Tem",
+    "Ağu",
+    "Eyl",
+    "Eki",
+    "Kas",
+    "Ara"
+  ],
+  "admin_activity_calendar_total_count": "{{year}} yılında {{count}} aktivite"
 }
