@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import CustomBreadcrumbs from "src/components/breadcrumbs";
-import { Translation, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 import {
   Box,
@@ -23,8 +23,6 @@ import LinearProgess from "src/components/progress/LinearProgess";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPaths, startRoad } from "src/store/paths/pathsSlice";
-import { getProgrammingId } from "src/data/programmingIds";
-import { set } from "nprogress";
 import { showToast } from "src/utils/showToast";
 import Translations from "src/components/Translations";
 import { AuthContext } from "src/context/AuthContext";
@@ -33,8 +31,6 @@ const RoadDetails = ({ language = "" }) => {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
   const router = useRouter();
-  const capitalizedLanguage =
-    language.charAt(0).toUpperCase() + language.slice(1);
   const dispatch = useDispatch();
   const { paths } = useSelector((state) => state);
 
@@ -43,8 +39,8 @@ const RoadDetails = ({ language = "" }) => {
 
   const [programmingId, setProgrammingId] = useState(null);
 
+  const [languageName, setLanguageName] = useState("");
   const [pathsDataContent, setPathsDataContent] = useState([]);
-  const [pathIsStarted, setpathIsStarted] = useState(false); // Set this to true if the user has started the road on useEffect()
   const [roadIsStarted, setRoadIsStarted] = useState(false)
   const [totalPath, setTotalPath] = useState(0)
   const [amountOfInProgressPaths, setAmountOfInProgressPaths] = useState(0); // Amount of in progress paths
@@ -52,7 +48,9 @@ const RoadDetails = ({ language = "" }) => {
   const [programmingIcon, setProgrammingIcon] = useState("images/c.png"); // Programming icon path
   const [title, setTitle] = useState(""); // Road title
   const [description, setDescription] = useState(""); // Road description
+  const [isImageExists, setIsImageExists] = useState(false)
   const { containerLoading } = useContext(AuthContext)
+
 
   const breadcrums = [
     {
@@ -62,7 +60,7 @@ const RoadDetails = ({ language = "" }) => {
     },
     {
       path: `/roads/${language}`,
-      title: capitalizedLanguage,
+      title: languageName,
       permission: "roads",
     },
   ];
@@ -117,17 +115,20 @@ const RoadDetails = ({ language = "" }) => {
           (path) => !path.pathIsFinished && path.pathIsFinished
         );
 
-        if (inProgressPaths.length > 0 || completedPaths.length > 0) {
-          setpathIsStarted(true);
-        }
-
         setTotalPath(pathsData.length)
         setAmountOfInProgressPaths(inProgressPaths.length);
         setAmountOfCompletedPaths(completedPaths.length);
         setPathsDataContent(pathsData);
+        setLanguageName(paths.data.name);
       }
     }
   }, [paths, i18next.language]);
+
+  useEffect(() => {
+    if (paths.data?.isImageExists) {
+      setIsImageExists(true)
+    }
+  }, [paths.data?.isImageExists])
 
   const renderPathIcon = (path) => {
     if (path.pathIsFinished) {
@@ -139,7 +140,6 @@ const RoadDetails = ({ language = "" }) => {
     }
   };
 
-  // TODO: Get the title and description from front-end side
   const isImageExist = paths.data?.isImageExists;
   const handleStartRoad = () => {
     if (isImageExist) {
@@ -180,7 +180,7 @@ const RoadDetails = ({ language = "" }) => {
               >
                 <Image
                   src={`/${programmingIcon}`}
-                  alt="C Icon"
+                  alt="Programming Language Icon"
                   width={80}
                   height={80}
                   style={{
@@ -202,7 +202,7 @@ const RoadDetails = ({ language = "" }) => {
                       <Typography variant="body1">{description}</Typography>
                       <Button
                         variant="contained"
-                        disabled={!isImageExist}
+                        disabled={!isImageExists}
                         sx={{
                           backgroundColor: "#fff",
                           color: theme.palette.primary.dark,
@@ -304,10 +304,9 @@ const RoadDetails = ({ language = "" }) => {
                   ? "#fff"
                   : theme.palette.primary.dark,
                 p: 3,
-                cursor: "pointer"
-
+                cursor: path.pathIsStarted ? "pointer" : "not-allowed"
               }}
-            >
+              >
               <Image
                 src={renderPathIcon(path)}
                 alt="Done Icon"
