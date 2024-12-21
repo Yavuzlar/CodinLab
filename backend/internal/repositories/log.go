@@ -27,8 +27,9 @@ type dbModelLogs struct {
 
 // lab and road numbers solved day by day
 type dbModelSolutionsByDay struct {
-	Date  string `db:"date"`
-	Count int    `db:"count"`
+	Date      string `db:"date"`
+	LabCount  int    `db:"lab_count"`
+	PathCount int    `db:"path_count"`
 }
 
 // SolutionsByLanguage represents the total count from lab and road solutions for each language.
@@ -43,7 +44,7 @@ func (r *LogRepository) dbModelSolutionsByDayToAppModel(dbModelSolutionsByDay db
 	date, _ := time.Parse("2006-01-02", dbModelSolutionsByDay.Date)
 
 	solutionsByDay.SetDate(date)
-	solutionsByDay.SetCount(dbModelSolutionsByDay.Count)
+	solutionsByDay.SetCount(dbModelSolutionsByDay.LabCount + dbModelSolutionsByDay.PathCount)
 	solutionsByDay.SetLevel(0)
 	return
 }
@@ -234,7 +235,8 @@ func (r *LogRepository) CountSolutionsByDay(ctx context.Context, year string) (s
 	query := `
 	SELECT 
 		DATE(created_at) AS date,
-		SUM(CASE WHEN type = 'Lab' AND content = 'Completed' THEN 1 ELSE 0 END) AS count
+		SUM(CASE WHEN type = 'Lab' AND content = 'Completed' THEN 1 ELSE 0 END) AS lab_count,
+		SUM(CASE WHEN type = 'Path' AND content = 'Completed' THEN 1 ELSE 0 END) AS path_count
 	FROM 
 		t_logs
 	WHERE
