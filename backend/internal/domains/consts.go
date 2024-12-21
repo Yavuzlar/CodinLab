@@ -82,7 +82,7 @@ var (
 var (
 	Low     = 3  //max -level1
 	LowMid  = 6  //max -level2
-	Middle  = 12 //max -level3
-	MidHigh = 9  //max -level4
-	High    = 13 //min -level5
+	Middle  = 9  //max -level3
+	MidHigh = 12 //max -level4
+	High    = 15 //min -level5
 )
