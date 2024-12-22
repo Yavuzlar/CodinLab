@@ -196,7 +196,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, []);
+  }, [userCode, programmingId, pathId]);
 
   return (
     <>
