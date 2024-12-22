@@ -6,9 +6,15 @@ import { useTranslation } from "react-i18next";
 const ActivityStatisticComponent = ({ activityData }) => {
   const { t } = useTranslation();
 
+  const formattedData = activityData.map((item) => ({
+    date: new Date(item.date).toISOString().split("T")[0], // YYYY-MM-DD formatı
+    count: parseInt(item.count, 10),
+    level: item.level,
+  }));
+
   return (
     <ActivityCalendar
-      data={activityData}
+      data={formattedData}
       blockRadius={4}
       blockSize={16}
       theme={{
