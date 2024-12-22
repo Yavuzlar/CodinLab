@@ -746,20 +746,23 @@ func (s *codeService) SaveUserHistory(conn *websocket.Conn, messages []byte, use
 				return err
 			}
 
+			errSocket := conn.WriteJSON(domains.Response{
+				Type: "close",
+				Data: struct {
+					Status  int    `json:"status"`
+					Message string `json:"message"`
+				}{
+					Status:  200,
+					Message: "History Saved Successfully",
+				},
+			})
+			if errSocket != nil {
+				return errSocket
+			}
 		}
+	} else {
+		return service_errors.NewServiceErrorWithMessage(400, "Web socket connection error")
 	}
-	errSocket := conn.WriteJSON(domains.Response{
-		Type: "close",
-		Data: struct {
-			Status  int    `json:"status"`
-			Message string `json:"message"`
-		}{
-			Status:  200,
-			Message: "History Saved Successfully",
-		},
-	})
-	if errSocket != nil {
-		return errSocket
-	}
+
 	return nil
 }
