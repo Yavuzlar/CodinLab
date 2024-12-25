@@ -72,7 +72,7 @@ First, let's examine the structure of the `inventory.json` file.
    - **sh**: Runs the shell (command line).
    - **-c**: Indicates the command will be executed inside the shell.
    After this, the necessary compile & run command is written. For C++, it is **g++ -o main main.cpp && ./main**. It should be adjusted according to the added language.
-- **`bashCmd`**: Unlike `cmd`, here you should write the necessary sh command to execute the **main.sh** file. What this file does is explained [here](#mainsh-file).
+- **`bashCmd`**: Unlike `cmd`, here you should write the necessary sh command to execute the **main.sh** file. What this file does is explained [here](#writing-the-mainsh-file).
 - **`fileExtension`**: You need to write the file extension of the language you're adding. This is necessary for determining the file type that users will write in the language.
 - **`monacoEditor`**: The file extension should be written here, as required by the Monaco Editor, to allow code customization according to the language.
 - **`languages`**: The last property you need to write in the JSON file is the language-specific title and description in both Turkish and English.
@@ -439,7 +439,7 @@ If the results don’t match:
 - **`else`**
 - **`echo "_ |||$result|||$expected_result||| _"`**: This prints the result of the test along with the expected value. The underscores indicate the unused sections of the format.
 
-### 11. **`if [ $? -ne 0 ]; then echo "_ ||| _ ||| _ |||$compile_output" exit 1 fi`**
+- **`if [ $? -ne 0 ]; then echo "_ ||| _ ||| _ |||$compile_output" exit 1 fi`**
 This block is used to check the exit status of the compilation. If the compilation fails (exit status not equal to 0), it will print the error message and return an error code (exit 1).
 
 ---
