@@ -1,0 +1,20 @@
+## FRONTEND
+
+def find_max(a, b):
+    # Write your code here
+    pass
+
+## DOCKER
+
+$usercode$
+
+$checks$
+
+print("$success$|||" + str(result0) + "|||_|||_")
+
+## CHECK
+
+result$rnd$ = find_max($input$)
+if result$rnd$ != $output$:
+    print("_|||" + str(result$rnd$) + "|||$out$|||_")
+    exit(0)
