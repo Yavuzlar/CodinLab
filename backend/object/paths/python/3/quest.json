@@ -1,0 +1,37 @@
+{
+  "id": 3,
+  "languages": [
+    {
+      "lang": "en",
+      "title": "Check Variable Types",
+      "description": "Practice identifying variable data types in Python.",
+      "content": "Define three variables: an integer, a string, and a boolean. Use the `type()` function to check their types.\nOutput format: `<class 'int'> - <class 'str'> - <class 'bool'>`.",
+      "note": "Define the variables as follows: `num = 10`, `text = 'Hello'`, and `status = True`.\nUse the `type()` function to verify their types. For example, `type(num)` should return `<class 'int'>`.\nWrite a Python script to check the types and print them as output.\nThis task helps you understand how to use `type()` and recognize Python's dynamic typing."
+    },
+    {
+      "lang": "tr",
+      "title": "Değişken Türlerini Kontrol Et",
+      "description": "Python'da değişken veri türlerini tanımlama ve kontrol etme pratiği yapın.",
+      "content": "Bir tam sayı, bir string ve bir boolean değişken tanımlayın. `type()` fonksiyonunu kullanarak bunların türlerini kontrol edin. Sırasıyla ekleyerek belirtilen formatta ekrana yazın.\nÇıktı formatı: `Tip1 - Tip2 - Tip3`.",
+      "note": "Şu değişkenleri tanımlayın: `num = 10`, `text = 'Merhaba'` ve `status = True`.\n`type()` fonksiyonunu kullanarak türlerini doğrulayın. Örneğin, `type(num)` ifadesi `<class 'int'>` döndürecektir.\nTürleri kontrol etmek ve sonucu yazdırmak için bir Python betiği yazın.\nBu görev, `type()` fonksiyonunu kullanma ve Python'un dinamik tür belirleme yapısını anlamanızı sağlar."
+    }
+  ],
+  "quest": {
+    "difficulty": 1,
+    "funcName": "",
+    "tests": [
+      {
+        "input": [],
+        "output": [
+          "<class 'int'> - <class 'str'> - <class 'bool'>"
+        ]
+      }
+    ],
+    "codeTemplates": [
+      {
+        "programmingID": 3,
+        "templatePath": "object/paths/python/2/template.txt"
+      }
+    ]
+  }
+}

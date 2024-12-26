@@ -1,0 +1,20 @@
+## FRONTEND
+
+def $funcname$(x, y):
+    # Write your code here
+    pass
+
+## DOCKER
+
+$usercode$
+
+$checks$
+
+print("$success$|||" + str(result0) + "|||_|||_")
+
+## CHECK
+
+result$rnd$ = $funcname$($input$)
+if result$rnd$ != $output$:
+    print("_|||" + str(result$rnd$) + "|||$out$|||_")
+    exit(0)
