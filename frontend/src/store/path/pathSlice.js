@@ -4,7 +4,7 @@ import axios from "axios";
 import { Router } from "next/router";
 
 const initialState = {
-  loading: false,
+  loading: true,
   data: [],
   error: false,
 };
@@ -25,10 +25,7 @@ export const fetchPathById = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        Router.push("/404");
-      }
-      return rejectWithValue(response.message || error.message);
+      return rejectWithValue(error);
     }
   }
 );

@@ -25,10 +25,7 @@ export const fetchPaths = createAsyncThunk(
         return response.data.data;
       }
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        Router.push("/404");
-      }
-      return rejectWithValue(response.message || error.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -47,7 +44,7 @@ export const startRoad = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.message || error.message);
+      return rejectWithValue(error.message);
     }
   }
 );

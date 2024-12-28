@@ -304,7 +304,10 @@ const RoadDetails = ({ language = "" }) => {
                   ? "#fff"
                   : theme.palette.primary.dark,
                 p: 3,
-                cursor: path.pathIsStarted ? "pointer" : "not-allowed"
+                cursor: path.pathIsStarted ? "pointer" : "not-allowed",
+                '&:hover': {
+                  boxShadow: 5
+                },
               }}
               >
               <Image

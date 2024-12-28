@@ -40,11 +40,11 @@ const Login = () => {
   const { login } = useAuth();
   const router = useRouter();
   // enter tuşu ile login olma
-  addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      handleSubmit();
-    }
-  });
+  // addEventListener("keydown", (event) => {
+  //   if (event.key === "Enter") {
+  //     handleSubmit();
+  //   }
+  // });
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   // const handleMouseDownPassword = (event) => {

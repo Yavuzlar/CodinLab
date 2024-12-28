@@ -39,7 +39,15 @@ const LanguageProgress = ({ language, type }) => {
   const router = useRouter();
 
   return (
-    <Card sx={{ cursor: language.percentage > 0 ? "pointer" : "", backgroundColor: language.percentage === 100 ? theme.palette.success.dark : "" }}
+    <Card
+      sx={{
+        cursor: language.percentage > 0 ? "pointer" : "",
+        backgroundColor:
+        language.percentage === 100 ? theme.palette.success.dark : "",
+        "&:hover": {
+          boxShadow: 8,
+        },
+      }}
       onClick={() => {
         if (type === "road" && language.percentage != 0) {
           router.push(`/roads/${language.id}`);
