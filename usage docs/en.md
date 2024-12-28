@@ -1,9 +1,9 @@
 
 # CodinLab Project Documentation
 
-This document is created to help adding content to the **CodinLab** project.
+This document is created to help users add content to the **CodinLab** project.
 
-A language file is created by default in the project. This file contains the existing languages (Go, JavaScript, Python, C++). If the language of the content you're adding does not exist, you must first add that language. If the language is already present, you can skip this step.
+A default language file is included in the project. This file contains the existing languages (Go, JavaScript, Python, C++). If the language of the content you'll add does not exist, you must first add that language. If the language is already present, you can skip this step.
 
 There are two separate categories for content in the project:
 
@@ -15,13 +15,13 @@ You can find more detailed information under the headings below.
 
 ## Add Language
 
-### Directory Structure:
+### Directory Structure
 
-The language files are located under the object folder in the project. The `inventory.json` file contains the default languages. When you want to add a new language, you need to add it to this file.
+The language files are located under the object folder in the project. The `inventory.json` file contains the default languages. To add a new language, include it in this file.
 
 ### How to Add a New Language?
 
-First, let's examine the structure of the `inventory.json` file.
+First, let's examine the structure of the `inventory.json` file:
 
 ```json
 [
@@ -66,7 +66,7 @@ First, let's examine the structure of the `inventory.json` file.
 - **`name`**: The name of the added language in uppercase. It is used as the title on the front end.
 - **`dockerImage`**: The **docker image** name and version for the language you want to add. To find the image name, you can check [dockerhub](https://hub.docker.com/). Adding `latest` indicates the latest version of the image. You can also specify a specific version.
 - **`labDir`**: This is fixed. You must always write **object/labs**. This is always the same as labs are separated only as templates by language.
-- **`pathDir`**: This changes according to the language. It should be **object/paths/`added language`**.
+- **`pathDir`**: This changes according to the language. It should be **object/paths/`<language_name>`**.
 - **`iconPath`**: You need to add the language icon under **object/icons**. You can access the correct icon later by writing **images/`icon name`** on api.
 - **`cmd`**: In this field, you need to write the command to compile and run the code in this language. This will allow the code written by the user to run in Docker. Commands start with "sh" followed by "-c".
    - **sh**: Runs the shell (command line).
@@ -92,7 +92,7 @@ In the project's `objects/paths` directory, there are folders for supported prog
 1. Add the new [language](#add-language) to the `inventory` file.
 2. Then, create a folder with the name of the language in this directory and add new paths for that language.
 
-The file structure example is as follows:
+An example of the file structure is shown below:
 
 ```
 object/ 
@@ -105,7 +105,7 @@ object/
 
 Each language folder contains numbered folders for the paths. These folders represent both the order of the paths and their `id`.
 
-The file structure example is as follows:
+An example of the file structure is shown below:
 
 ```
 c++/ 
@@ -131,7 +131,7 @@ In the project's `objects/labs` directory, each question has its own folder. All
 
 1. Add a new language in the `inventory` file in the necessary format.
 
-The file structure example is as follows:
+An example of the file structure is shown below:
 
 ```
 object/ 
@@ -200,7 +200,8 @@ This file contains information, task definitions, and tests about the questions.
 }
 ```
 
-### Explanation:
+### Explanation
+
 - **`id`**: The Path ID. This should match the folder name of the Path.
 - **`languages`**: Language-specific descriptions for the Path. These are displayed in different languages in the user interface.
     - `lang`: Specifies the language.
@@ -222,13 +223,14 @@ These details must be included. You can refer to the examples for proper formatt
 This file contains the area where the user will write their code, the logic for running it in a Docker environment, and the test mechanism. Since roadmaps contain only one language, a single template is enough for them. For example, if you write a path for C++, one template for C++ will be enough for this question.  
 If you are writing a lab, you must write a separate template for each language in which you want to see that lab. Then, if you specify the correct `id` and `path` in the `quest.json` file inside the `codeTemplates` array, the correct programming language will automatically be added to the question. Let's now look at how we can write templates.
 
-### Sections:
+### Sections
 
 - **FRONTEND**: The template where the user will write code on the frontend.
 - **DOCKER**: The Docker template used to run and compile the code.
 - **CHECK**: Test scenarios.
 
 #### Example (for C++)
+
 ```txt
 ## FRONTEND
 
@@ -301,6 +303,7 @@ The `## CHECK` section is responsible for testing the user's code and evaluating
 An example of the section structure is provided below:
 
 ## CHECK
+
 ```
 std::string result$rnd$ = $funcname$($input$);
 if (result$rnd$ != $output$) {
@@ -311,7 +314,7 @@ if (result$rnd$ != $output$) {
 - `$out$`: Represents the output value of the required test in the `quest.json` file.
 - `result$rnd$`: This is used to avoid assigning each function's output to the same variable and creating variables with the same name. It helps in generating random variable names.
 
-##### Working Principle:
+##### Working Principle
 
 This section essentially tests the test cases for the necessary path in the `quest.json` file. The function is given the required input, and the result returned from the function is assigned to a variable. Then, the output of the user's code is compared with the expected output. If they are not equal, the necessary format is printed to the screen, and the execution is stopped by returning.
 
@@ -357,7 +360,7 @@ is located under these directories. A separate `sh` file must be written for eac
 
 **Example structure for Go language:**
 
-```
+```sh
 #!/bin/bash
 test=(-tests-) # test dizisi tanımlandı
 
@@ -443,10 +446,11 @@ If the results don’t match:
 This block is used to check the exit status of the compilation. If the compilation fails (exit status not equal to 0), it will print the error message and return an error code (exit 1).
 
 ---
+
 **Authors**
+
 - Yusuf Küçükgökgözoğlu
 - Çetin Boran Mesüm
 - Melike Sena Çakır
+  
 ---
-
-
