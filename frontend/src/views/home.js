@@ -66,8 +66,8 @@ const Home = () => {
         >
           <Grid item xs={12} md={6} xl={4}>
             <LevelStatistic
-              levels={stateStatistics.levelData?.data?.level}
-              progress={stateStatistics.levelData?.data?.levelPercentage}
+              levels={10}
+              progress={30}
             />
           </Grid>
           <Grid item xs={12} md={6} xl={4}>
