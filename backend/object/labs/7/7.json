@@ -40,6 +40,10 @@
 		],
 		"codeTemplates": [
 			{
+				"programmingID": 1,
+				"templatePath": "object/labs/7/c++.txt"
+			},
+			{
 				"programmingID": 2,
 				"templatePath": "object/labs/7/go.txt"
 			}

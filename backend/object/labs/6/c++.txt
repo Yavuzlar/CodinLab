@@ -1,0 +1,43 @@
+## FRONTEND
+
+#include <stdio.h>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int $funcname$(std::string s) {
+    // Write your code here
+
+    return -1;
+}
+
+int main() {
+    std::string input;
+
+    std::cout << "Lütfen bir string değer girin:" << std::endl;
+
+    std::cin >> input;
+    std::cout << "Girdiğiniz string değer: " << $funcname$(input) << std::endl;
+
+    return 0;
+}
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+int main(){
+    $checks$
+    std::cout << "$success$|||" << result$res$ <<"|||_|||_" << std::endl;
+}
+
+## CHECK
+
+int result$rnd$ = $funcname$($input$);
+if (result$rnd$ != $output$){
+    std::cout << "_|||" << result$rnd$ <<"|||$out$|||_" << std::endl;
+    return 0;
+}
