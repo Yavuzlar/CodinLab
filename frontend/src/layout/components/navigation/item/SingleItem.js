@@ -14,19 +14,22 @@ const SingleItem = (props) => {
   const { ChangePage } = useNav();
 
   const router = useRouter();
+
+  // Sayfaya gitmek için kullanılacak fonksiyon
   const handleLocate = (p) => {
-    return () => {
-      if (p) {
-        router.replace(p);
-      }
-      ChangePage();
-    };
+    if (p) {
+      router.replace(p);
+    }
+    ChangePage();
+  };
+
+  const handleKeyPress = (e) => {
+    e.preventDefault();
   };
 
   const style = {
     borderRadius: "50%",
     backgroundColor: "transparent",
-
     "&:hover": {
       backgroundColor: "rgba(255, 255, 255, 0.3)",
       borderRadius: "0.938rem",
@@ -36,9 +39,10 @@ const SingleItem = (props) => {
   return (
     <Button
       sx={style}
+      onKeyDown={handleKeyPress}
       variant="text"
-      onClick={handleLocate(path)}
       active={router.pathname == path}
+      onClick={() => handleLocate(path)}
     >
       <Typography
         sx={{
