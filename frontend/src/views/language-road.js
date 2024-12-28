@@ -38,8 +38,8 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const editorRef = useRef(null);
   const dispatch = useDispatch();
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const [output, setOutput] = useState({});
 
@@ -48,6 +48,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [languageName, setLanguageName] = useState("");
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const [isNextPathAvailable, setIsNextPathAvailable] = useState(true);
   const [extension, setExtension] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -93,6 +94,13 @@ const LanguageRoad = ({ language = "", pathId }) => {
     width: "100%",
   };
 
+  // Error 404
+  useEffect(() => {
+    if (error?.status == 404) {
+      router.push('/404')
+    }
+  }, [error])
+
   // Set the programming id
   useEffect(() => {
     setProgrammingId(language);
@@ -113,7 +121,9 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   // Set the path data
   useEffect(() => {
+    setOutput("");
     if (path) {
+      console.log(path)
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
         setExtension(path?.data?.data[0]?.fileExtension);
@@ -137,7 +147,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   // Set isFinished to true if the output is correct
   useEffect(() => {
-    if (output.isCorrect) {
+    if (output?.isCorrect) {
       setIsFinished(true);
     }
   }, [output]);
@@ -172,6 +182,24 @@ const LanguageRoad = ({ language = "", pathId }) => {
     }
   };
 
+  const getNextPath = async () => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `/api/v1/private/road/path/${programmingId}/${pathId}`,
+      });
+      if (response.status === 200) {
+        setIsNextPathAvailable(true);
+      }
+    } catch (error) {
+      setIsNextPathAvailable(false);
+    }
+  };
+
+  useEffect(() => {
+    getNextPath();
+  }, [path])
+
   const handleBeforeUnload = (event) => {
     const labPathType = "Road";
 
@@ -200,108 +228,115 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   return (
     <>
-      <CustomBreadcrumbs titles={breadcrums} />
-      <Card
-        sx={{
-          position: "relative",
-          backgroundColor: theme.palette.primary.dark,
-          paddingY: 2,
-          my: 2,
-        }}
-      >
-        <CardContent>
-          <Typography variant="h4" fontWeight={500}>
-            {title}
-          </Typography>
-          <Typography
-            variant="body1"
+      {(!loading && !error) && (
+        <Box>
+          <CustomBreadcrumbs titles={breadcrums} />
+          <Card
             sx={{
-              mt: "10px",
-              mb: "40px",
-              color: "lightgrey",
-              whiteSpace: "pre-line",
+              position: "relative",
+              backgroundColor: theme.palette.primary.dark,
+              paddingY: 2,
+              my: 2,
             }}
           >
-            {content}
-          </Typography>
-          <ModalRoad buttonMessage={t("road.modal.button")} message={note} />
-          {isFinished && (
-            <Box sx={{ position: "absolute", right: "1rem", top: "1rem" }}>
-              <Image src={DoneIcon} height={30} width={30} alt="done" />
-            </Box>
-          )}
-          {!isFinished && (
-            <Tooltip title={t("roads.path.restart.button")}>
+            <CardContent>
+              <Typography variant="h4" fontWeight={500}>
+                {title}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  mt: "10px",
+                  mb: "40px",
+                  color: "lightgrey",
+                  whiteSpace: "pre-line",
+                }}
+              >
+                {content}
+              </Typography>
+              <ModalRoad
+                buttonMessage={t("road.modal.button")}
+                message={note}
+              />
+              {isFinished && (
+                <Box sx={{ position: "absolute", right: "1rem", top: "1rem" }}>
+                  <Image src={DoneIcon} height={30} width={30} alt="done" />
+                </Box>
+              )}
+              {!isFinished && (
+                <Tooltip title={t("roads.path.restart.button")}>
+                  <Button
+                    variant="dark"
+                    sx={{
+                      position: "absolute",
+                      right: "1rem",
+                      top: "1rem",
+                      minWidth: "1rem",
+                    }}
+                    onClick={handleReset}
+                  >
+                    <RestartAltIcon />
+                  </Button>
+                </Tooltip>
+              )}
+
               <Button
-                variant="dark"
+                variant="light"
                 sx={{
                   position: "absolute",
                   right: "1rem",
-                  top: "1rem",
-                  minWidth: "1rem",
+                  bottom: "1rem",
+                  fontWeight: 700,
+                  fontFamily: "Outfit",
+                  textTransform: "capitalize",
+                  py: 1,
+                  px: 3,
                 }}
-                onClick={handleReset}
+                onClick={handleNextPath}
+                disabled={!isFinished && isNextPathAvailable}
               >
-                <RestartAltIcon />
+                {t("roads.path.next_path")}
               </Button>
-            </Tooltip>
+            </CardContent>
+          </Card>
+          {output && output.output && (
+            <Alert
+              severity={output?.isCorrect ? "success" : "error"}
+              variant="filled"
+              sx={{
+                color: theme.palette.common.white,
+                marginBottom: "10px",
+                borderRadius: "10px",
+              }}
+            >
+              {output?.isCorrect
+                ? t("CODE_SUCCESS")
+                : `${t("CODE_ALERT")
+                    .replace("$$$", output.expectedOutput)
+                    .replace("***", output.output)}`}
+            </Alert>
           )}
-
-          <Button
-            variant="light"
-            sx={{
-              position: "absolute",
-              right: "1rem",
-              bottom: "1rem",
-              fontWeight: 700,
-              fontFamily: "Outfit",
-              textTransform: "capitalize",
-              py: 1,
-              px: 3,
-            }}
-            onClick={handleNextPath}
-            disabled={!isFinished}
-          >
-            {t("roads.path.next_path")}
-          </Button>
-        </CardContent>
-      </Card>
-      {output && output.output && (
-        <Alert
-          severity={output.isCorrect ? "success" : "error"}
-          variant="filled"
-          sx={{
-            color: theme.palette.common.white,
-            marginBottom: "10px",
-            borderRadius: "10px",
-          }}
-        >
-          {output.isCorrect
-            ? t("CODE_SUCCESS")
-            : `${t("CODE_ALERT")
-                .replace("$$$", output.expectedOutput)
-                .replace("***", output.output)}`}
-        </Alert>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <CodeEditor
+                key={template}
+                onRun={handleRun}
+                onStop={handleStop}
+                onChange={handleChange}
+                leng={monacoEditor}
+                title={`example.${extension}`}
+                apiData={apiData}
+                editorRef={editorRef}
+                val={template}
+                params={params}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Output params={params} value={output} />
+            </Grid>
+          </Grid>
+        </Box>
       )}
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <CodeEditor
-            key={template}
-            onRun={handleRun}
-            onStop={handleStop}
-            onChange={handleChange}
-            leng={monacoEditor}
-            title={`example.${extension}`}
-            apiData={apiData}
-            editorRef={editorRef}
-            val={template}
-            params={params}
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Output params={params} value={output} />
-        </Grid>
-      </Grid>
     </>
   );
 };
