@@ -1,0 +1,39 @@
+{
+	"id": 6,
+	"languages": [
+	{
+            "lang": "en",
+            "title": "Arrays",
+            "description": "Understanding arrays in C++",
+            "content": "Arrays are a fundamental data structure in C++ used to store multiple values of the same type in contiguous memory locations. Each value in an array is called an element, and elements are accessed using their index, starting from 0.\n\n#### Key Features of Arrays:\n1. **Fixed Size**: Once defined, the size of an array cannot be changed during program execution.\n2. **Homogeneous Elements**: All elements in an array must be of the same data type.\n3. **Efficient Access**: Elements can be accessed using their index for quick data retrieval.\n4. **Contiguous Memory**: Arrays are stored in adjacent memory locations, enabling efficient iteration.\n\n#### Example:\n```cpp\n#include <iostream>\nusing namespace std;\n\nint main() {\n    int numbers[5] = {10, 20, 30, 40, 50};\n    cout << \"First element: \" << numbers[0] << endl;\n    cout << \"Last element: \" << numbers[4] << endl;\n    return 0;\n}\n```\n\nIn this task, you will work with a function called 'findMax' that takes an array of integers and its size, and returns the maximum value in the array.",
+            "note": "Inside the function:\n   - Use a loop to iterate over the array.\n   - Create a variable named `max`.\n   - Compare each value in the array with `max`. If next value in array is greater then `max`, update it's value.\n   - Return the maximum value."
+        },
+        {
+            "lang": "tr",
+            "title": "Diziler",
+            "description": "C++'ta dizileri anlamayı öğrenin.",
+            "content": "Diziler, C++'ta aynı türden birden fazla değeri ardışık bellek konumlarında saklamak için kullanılan temel bir veri yapısıdır. Dizideki her bir değer bir eleman olarak adlandırılır ve bu elemanlara 0'dan başlayan indekslerle erişilir.\n\n#### Dizilerin Temel Özellikleri:\n1. **Sabit Boyut**: Bir dizi tanımlandığında, boyutu program çalışırken değiştirilemez.\n2. **Homojen Elemanlar**: Dizideki tüm elemanlar aynı veri türüne sahip olmalıdır.\n3. **Verimli Erişim**: Elemanlara, indeksleri kullanılarak hızlı bir şekilde erişilebilir.\n4. **Ardışık Bellek**: Diziler ardışık bellek konumlarında saklanır ve bu durum yinelemeyi kolaylaştırır.\n\n#### Örnek:\n```cpp\n#include <iostream>\nusing namespace std;\n\nint main() {\n    int sayilar[5] = {10, 20, 30, 40, 50};\n    cout << \"İlk eleman: \" << sayilar[0] << endl;\n    cout << \"Son eleman: \" << sayilar[4] << endl;\n    return 0;\n}\n```\n\nBu görevde, bir tam sayı dizisini ve boyutunu alan ve dizideki en büyük değeri döndüren 'findMax' adlı bir fonksiyon oluşturacaksınız.",
+            "note": "Fonksiyon içinde:\n   - Diziyi yinelemek için bir döngü kullanın.\n   - Bir max değişkeni oluşturun.\n   - Eğer döngüde, sıradaki değer max değişkeninde bulunan değerden büyükse değişkenin değerini güncelleyin.\n   - En büyük değeri döndürün."
+        }
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "findMax",
+		"tests": [
+			{
+				"input": [[3, 5, 7, 2, 8]],
+				"output": [8]
+			},
+			{
+				"input": [[1, 2, 3, 4, 5]],
+				"output": [5]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath": "object/paths/c++/6/template.txt"
+			}
+		]
+	}
+}

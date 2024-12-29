@@ -1,0 +1,52 @@
+## FRONTEND
+
+#include <stdio.h>
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int $funcname$(std::vector<int> arr) {
+    // Write your code here
+
+    return 0;
+}
+
+int main() {
+    std::vector<int> arr;
+    int input;
+
+    for (int i = 0; i < 3; ++i) {
+        std::cout << "Bir sayı girin: ";
+        std::cin >> input;
+        arr.push_back(input); 
+    }
+
+    int sum=$funcname$(arr);
+    std::cout << "Girilen sayıların toplamı: " << sum << std::endl;
+
+    return 0;
+}
+
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+int main(){
+    $checks$
+    std::cout << "$success$|||" << result$res$ <<"|||_|||_" << std::endl;
+}
+
+## CHECK
+
+std::vector<int> inputArr$rnd$ = {$input$};
+
+int result$rnd$ = $funcname$(inputArr$rnd$);
+if (result$rnd$ != $output$){
+    std::cout << "_|||" << result$rnd$ <<"|||$out$|||_" << std::endl;
+    exit($rnd$);
+}
