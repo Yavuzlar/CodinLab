@@ -10,9 +10,6 @@
 - [Inventory JSON Explanation](#inventory-json-explanation)
 - [Quest JSON Explanation](#quest-json-explanation)
 - [Code Template Explanation](#code-template-explanation)
-- [Constants](#constants)
-- [Sections](#sections)
-- 
 - [Contributing](#contributing)
 
 ## What is CODINLAB?
