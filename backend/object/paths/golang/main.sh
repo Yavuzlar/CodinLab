@@ -13,9 +13,6 @@ fi
 # Test döngüsü
 for i in "${!test[@]}"; do
     expected_result="${test[$i]}"
-    
-    go install golang.org/x/tools/cmd/goimports@latest > /dev/null 2>&1
-    goimports -w ../main.go > /dev/null 2>&1
 
     # GO dosyasını çalıştır 
     compile_output=$(go build -o main ../main.go 2>&1)

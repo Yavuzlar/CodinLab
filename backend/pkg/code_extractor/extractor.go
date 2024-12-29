@@ -73,3 +73,49 @@ func ExtractFuncName(code, newFuncName string) string {
 	newCode := strings.Join(lines, "\n")
 	return newCode
 }
+
+// Golangdeki tekli ve çoklu şekilde yazılmış importsları extract eder
+func ExtractImportsForGolang(importBlock string) []string {
+	re := regexp.MustCompile(`"([^"]+)"`)
+	matches := re.FindAllStringSubmatch(importBlock, -1)
+
+	var imports []string
+	for _, match := range matches {
+		imports = append(imports, match[1])
+	}
+	return imports
+}
+
+// Golang'de frontImports'a newImportsları uygun formatta ekler
+func CombineImportsForGolang(existingImports, newImports string) string {
+	existingImported := ExtractImportsForGolang(existingImports)
+	newImported := ExtractImportsForGolang(newImports)
+
+	uniqueImports := make(map[string]bool)
+	var finalList []string
+
+	for _, imp := range existingImported {
+		finalList = append(finalList, imp)
+		uniqueImports[imp] = true
+	}
+
+	for _, imp := range newImported {
+		if !uniqueImports[imp] { //existingImports'da zaten var ise eklemez
+			finalList = append(finalList, imp)
+			uniqueImports[imp] = true
+		}
+	}
+
+	if len(finalList) == 1 {
+		return fmt.Sprintf(`import "%s"`, finalList[0])
+	}
+
+	var sb strings.Builder
+	sb.WriteString("import (\n")
+	for _, imp := range finalList {
+		sb.WriteString(fmt.Sprintf("\t\"%s\"\n", imp))
+	}
+	sb.WriteString(")")
+
+	return sb.String()
+}
