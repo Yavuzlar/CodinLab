@@ -24,16 +24,18 @@ type LogDTO struct {
 
 // Lab & Road numbers solved day by day
 type SolutionsByDayDTO struct {
-	Date      time.Time `json:"date"`
-	RoadCount int       `json:"roadCount"`
-	LabCount  int       `json:"labCount"`
+	Date  time.Time `json:"date"`
+	Count int       `json:"count"`
+	Level int       `json:"level"`
 }
 
-// Represents the total hours spent on Lab & Road solutions for each programming language.
-type SolutionsHoursByProgrammingDTO struct {
-	ProgrammingID int32   `json:"programmingID"`
-	LabHours      float64 `json:"labHours"`
-	RoadHours     float64 `json:"roadHours"`
+// Represents the total  spent on Lab & Road solutions for each programming language.
+type SolutionsByProgrammingDTO struct {
+	ProgrammingID   int32  `json:"programmingID"`
+	ProgrammingName string `json:"programmingName"`
+	LabCount        int    `json:"labCount"`
+	RoadCount       int    `json:"roadCount"`
+	TotalCount      int    `json:"totalCount"`
 }
 
 type LanguageUsageRatesDTO struct {
@@ -78,9 +80,9 @@ func (m *LogDTOManager) ToLogDTOs(logs []domains.Log) []LogDTO {
 
 func (m *LogDTOManager) ToSolutionsByDayDTO(solutionsByDay domains.SolutionsByDay) SolutionsByDayDTO {
 	return SolutionsByDayDTO{
-		Date:      solutionsByDay.GetDate(),
-		RoadCount: solutionsByDay.GetRoadCount(),
-		LabCount:  solutionsByDay.GetLabCount(),
+		Date:  solutionsByDay.GetDate(),
+		Count: solutionsByDay.GetCount(),
+		Level: solutionsByDay.GetLevel(),
 	}
 }
 
@@ -92,18 +94,20 @@ func (m *LogDTOManager) ToSolutionsByDayDTOs(solutionsByDays []domains.Solutions
 	return solutionByDayDTOs
 }
 
-func (m *LogDTOManager) ToSolutionsHoursByProgrammingDTO(domain domains.SolutionsHoursByProgramming) SolutionsHoursByProgrammingDTO {
-	return SolutionsHoursByProgrammingDTO{
-		ProgrammingID: domain.GetProgrammingID(),
-		RoadHours:     domain.GetRoadHours(),
-		LabHours:      domain.GetLabHours(),
+func (m *LogDTOManager) ToSolutionsByProgrammingDTO(domain domains.SolutionsByProgramming) SolutionsByProgrammingDTO {
+	return SolutionsByProgrammingDTO{
+		ProgrammingID:   domain.GetProgrammingID(),
+		ProgrammingName: domain.GetProgrammingName(),
+		RoadCount:       domain.GetRoadCount(),
+		LabCount:        domain.GetLabCount(),
+		TotalCount:      domain.GetTotalCount(),
 	}
 }
 
-func (m *LogDTOManager) ToSolutionsHoursByProgrammingDTOs(domains []domains.SolutionsHoursByProgramming) []SolutionsHoursByProgrammingDTO {
-	var solutionByDayDTOs []SolutionsHoursByProgrammingDTO
+func (m *LogDTOManager) ToSolutionsByProgrammingDTOs(domains []domains.SolutionsByProgramming) []SolutionsByProgrammingDTO {
+	var solutionByDayDTOs []SolutionsByProgrammingDTO
 	for _, solutionByDays := range domains {
-		solutionByDayDTOs = append(solutionByDayDTOs, m.ToSolutionsHoursByProgrammingDTO(solutionByDays))
+		solutionByDayDTOs = append(solutionByDayDTOs, m.ToSolutionsByProgrammingDTO(solutionByDays))
 	}
 	return solutionByDayDTOs
 }

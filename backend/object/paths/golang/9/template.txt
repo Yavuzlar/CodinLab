@@ -1,0 +1,53 @@
+## FRONTEND
+
+package main;
+
+func $funcname$(n []string) []string {
+    // Write your code here
+}
+
+func main() {
+
+	fmt.Println("Enter a list of the months separated by commas (e.g., January, February):")
+
+	var input string
+	fmt.Scanln(&input)
+
+	months := strings.Split(input, ",")
+
+	seasons := $funcname$(months)
+	fmt.Println("Seasons for the entered months:", seasons)
+}
+
+## DOCKER
+
+package main
+
+$imps$
+
+import "reflect"
+
+$usercode$
+
+func main(){
+    $checks$
+    fmt.Printf("$success$|||%v|||_|||_", result$res$)
+}
+
+## CHECK
+
+
+inputArr$rnd$ := []string{$input$}
+outputArr$rnd$ := []string{$output$}
+
+result$rnd$ := $funcname$(inputArr$rnd$)
+if (!reflect.DeepEqual(result$rnd$, outputArr$rnd$) ){
+    fmt.Print("_|||")
+   
+    fmt.Printf("%v ", result$rnd$)
+    fmt.Print("|||")
+    
+    fmt.Printf("%v ", outputArr$rnd$)
+    fmt.Println("|||_")
+    return
+}

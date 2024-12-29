@@ -7,19 +7,32 @@
 
 using namespace std;
 
-bool $funcname$(std::string s) {
+std::vector<int> $funcname$(const std::vector<int>& s) {
     // Write your code here
 
-    return false
+    return std::vector<int>();
 }
 
 int main() {
-    std::string input;
+    int n;
 
-    std::cout << "Bir string girin: ";
-    std::getline(std::cin, input); 
+    std::cout << "Enter array length: ";
+    std::cin >> n;
 
-    std::cout << std::boolalpha << isPalindrome(input) << std::endl;
+    std::vector<int> arr(n);
+
+    std::cout << "Enter " << n << " elements for the array:" << endl;
+    for (int i = 0; i < n; i++) {
+        std::cout << "Element " << (i + 1) << ": ";
+        std::cin >> arr[i];
+    }
+    
+    std::vector<int> result = $funcname$(arr);
+
+    for (int num : result) {
+        std::cout << num << " "; 
+    }
+    std::cout << std::endl;
 
     return 0;
 }
@@ -32,8 +45,18 @@ $usercode$
 
 int main(){
     $checks$
+    std::cout << "$success$|||";
 
-    std::cout << "$success$" << std::endl;
+    std::cout << "[";
+    for (size_t i = 0; i < result$res$.size(); ++i) {
+        std::cout << result$res$[i];
+        if (i < result$res$.size() - 1) {
+            std::cout << ",";
+        }
+    }
+    std::cout << "]" << std::endl;
+    
+    std::cout << "|||_|||_" << std::endl;
 }
 
 ## CHECK
@@ -42,16 +65,29 @@ std::vector<int> inputArr$rnd$ = {$input$};
 std::vector<int> outputArr$rnd$ = {$output$};
 
 std::vector<int> result$rnd$ = $funcname$(inputArr$rnd$);
-if (result$rnd$ != outputArr$rnd$){
-    
-    cout << "Test Failed: Expected ";
-    for (int num : outputArr$rnd$) {
-        cout << num << " ";
+if (result$rnd$ != outputArr$rnd$) {
+    std::cout << "_|||";
+
+    std::cout << "[";
+    for (size_t i = 0; i < result$rnd$.size(); ++i) {
+        std::cout << result$rnd$[i];
+        if (i < result$rnd$.size() - 1) {
+            std::cout << ",";
+        }
     }
-    cout << ", but got ";
-    for (int num : result$rnd$) {
-        cout << num << " ";
+    std::cout << "]" << std::endl;
+
+    std::cout << "|||";
+
+    std::cout << "[";
+    for (size_t i = 0; i < outputArr$rnd$.size(); ++i) {
+        std::cout << outputArr$rnd$[i];
+        if (i < outputArr$rnd$.size() - 1) {
+            std::cout << ",";
+        }
     }
-    cout << endl;
-    exit($rnd$);
+    std::cout << "]" << std::endl;
+
+    std::cout << "|||_" << std::endl;
+    return 0;
 }

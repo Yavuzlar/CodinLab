@@ -130,7 +130,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 		labDTOs = append(labDTOs, h.dtoManager.LabDTOManager.ToLabForAllDTO(labCollection, languageDTO))
 	}
 	labDTOs = h.dtoManager.LabDTOManager.FilterLabForAllDTOs(labDTOs)
-	labsDTO := h.dtoManager.LabDTOManager.ToLabsForAllDTO(labDTOs, isExists)
+	labsDTO := h.dtoManager.LabDTOManager.ToLabsForAllDTO(labDTOs, isExists, inventoryInformation.GetIconPath())
 
 	return response.Response(200, "GetLabs successful", labsDTO)
 }
@@ -170,7 +170,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), true)
 	if err != nil {
 		return err
 	}
@@ -178,7 +178,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {
 		languageDTO := h.dtoManager.LabDTOManager.ToLanguageDTO(labCollection.GetLanguages(), language)
-		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTO, frontendTemplate))
+		labDTOList = append(labDTOList, h.dtoManager.LabDTOManager.ToLabDTO(labCollection, languageDTO, frontendTemplate, inventoryInformation.GetName(), inventoryInformation.GetFileExtension(), inventoryInformation.GetMonacoEditor()))
 	}
 	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, labID, domains.TypeLab, domains.ContentStarted); err != nil {
 		return err
@@ -221,7 +221,16 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), false)
+	if err != nil {
+		return err
+	}
+
+	if frontendTemplate == answerLabDTO.UserCode {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "SAME_CODE_ERROR", err)
+	}
+
+	_, tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), answerLabDTO.UserCode)
 	if err != nil {
 		return err
 	}
@@ -263,7 +272,17 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		}
 	}
 
-	return response.Response(200, logs, nil)
+	parsedLog, err := h.services.CodeService.ParseCodeLog(logs)
+	if err != nil {
+		return err
+	}
+
+	//if there is no error and the function does not produce output, it gives EMPTY_OUTPUT_ERROR
+	if parsedLog.Output == "" && parsedLog.ErrorMessage == "" {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "EMPTY_OUTPUT_ERROR", err)
+	}
+
+	return response.Response(200, "AnswerLab Successfull", parsedLog)
 }
 
 // @Tags Lab
@@ -297,7 +316,7 @@ func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, programmingInformation.GetFileExtension(), true)
 	if err != nil {
 		return err
 	}

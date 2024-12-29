@@ -6,10 +6,9 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-const DonotProggresStatistic = ({ data }) => {
+const DonutProgressStatistic = ({ data }) => {
   const [chartData, setChartData] = useState({
-    series: data?.values,
-
+    series: [],
     options: {
       stroke: {
         colors: [`${theme.palette.background.paper}`],
@@ -17,20 +16,19 @@ const DonotProggresStatistic = ({ data }) => {
       chart: {
         type: "donut",
       },
-
-      labels: data?.labels,
+      labels: [],
       colors: [theme.palette.info.dark, theme.palette.primary.light],
       plotOptions: {
         pie: {
           donut: {
             labels: {
-              show: false, 
+              show: false,
             },
           },
         },
       },
       legend: {
-        show: false, 
+        show: false,
       },
       responsive: [
         {
@@ -40,7 +38,7 @@ const DonotProggresStatistic = ({ data }) => {
               width: 200,
             },
             legend: {
-              show: false, 
+              show: false,
             },
           },
         },
@@ -49,11 +47,25 @@ const DonotProggresStatistic = ({ data }) => {
   });
 
   const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsClient(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setChartData((prevState) => ({
+        ...prevState,
+        series: data?.values?.map((value) => Math.floor(value)) || [],
+        options: {
+          ...prevState.options,
+          labels: data?.labels || [],
+        },
+      }));
+    }
+  }, [data]);
 
   return (
     <div>
@@ -72,4 +84,4 @@ const DonotProggresStatistic = ({ data }) => {
   );
 };
 
-export default DonotProggresStatistic;
+export default DonutProgressStatistic;

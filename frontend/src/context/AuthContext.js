@@ -11,12 +11,14 @@ const defaultProvider = {
   user: null,
   loading: true,
   isInitialized: false,
+  containerLoading: false,
   setUser: () => null,
   setLoading: () => Boolean,
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
   initAuth: () => Promise.resolve(),
   login: () => Promise.resolve(),
+  setContainerLoading: () => Promise.resolve(),
 };
 
 const AuthContext = createContext(defaultProvider);
@@ -27,6 +29,10 @@ const AuthProvider = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(
     defaultProvider.isInitialized
   );
+  const [containerLoading, setContainerLoading] = useState(
+    defaultProvider.containerLoading
+  );
+
   const ws = useRef(null);
 
   const router = useRouter();
@@ -44,14 +50,43 @@ const AuthProvider = ({ children }) => {
     };
 
     ws.current.onmessage = (e) => {
-      console.log("Message from server:", e.data);
+      const data = JSON.parse(e.data);
+      console.log("Message from server:", data);
 
+      if (data.Type === "Pull") {
+        const message = data.Data.message;
+        const programmingLanguage =
+          data.Data.programminglanguage || "Unknown Language";
+
+        const downloadedMessage = t("code.image.downloaded");
+        const downloadingMessage = t("code.image.downloading");
+
+        // $$$$'ı programmingLanguage ile değiştiriyoruz
+        const formattedMessage = downloadedMessage.replace(
+          "$$$$",
+          programmingLanguage
+        );
+        const downloadingFormattedMessage = downloadingMessage.replace(
+          "$$$$",
+          programmingLanguage
+        );
+
+        if (message === "Started") {
+          setContainerLoading(true);
+          showToast("dismiss");
+          showToast("loading", downloadingFormattedMessage);
+        } else if (message === "Finished") {
+          setContainerLoading(false);
+          showToast("dismiss");
+          showToast("success", formattedMessage);
+        }
+      }
 
       // this part is for get container id from websocket but not used in this project
-      // const data = JSON.parse(e.data); // 
+      // const data = JSON.parse(e.data); //
       // if (data.Type === "container") {
       //   const containerId = data?.Data?.id;
-  
+
       //   if (containerId) {
       //     localStorage.setItem('containerId', containerId);
       //   }
@@ -76,12 +111,32 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const sendHistory = (userCode, programmingID, labPathID, labPathType) => {
+    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+      const historyData = {
+        type: "closed",
+        data: {
+          userCode: userCode,
+          programmingID: programmingID,
+          labPathID: labPathID,
+          labPathType: labPathType,
+        },
+      };
+      ws.current.send(JSON.stringify(historyData));
+      console.log("History data sent to server:", historyData);
+    } else {
+      console.error("WebSocket is not connected");
+    }
+  };
+
   const deleteStorage = () => {
     setUser(null);
     setLoading(false);
     closeWebSocket();
     const firstPath = router.pathname.split("/")[1];
-    if (firstPath !== "login") router.replace("/login");
+    if (firstPath !== "login" && firstPath !== "register") {
+      router.replace("/login");
+    }
   };
 
   const handleLogout = async () => {
@@ -118,11 +173,14 @@ const AuthProvider = ({ children }) => {
             setIsInitialized(true);
             setUser(user);
 
-            if (router.pathname === "/login" || router.pathname === "/register") {
+            if (
+              router.pathname === "/login" ||
+              router.pathname === "/register"
+            ) {
               router.push("/").then(() => router.reload());
             } else {
               setLoading(false);
-              webSocket(); 
+              webSocket();
             }
           } else {
             setLoading(false);
@@ -178,7 +236,8 @@ const AuthProvider = ({ children }) => {
         const user = response?.data?.data;
         setUser(user);
         router.push("/home");
-        webSocket(); 
+        initAuth();
+        webSocket();
       } else {
         showToast("dismiss");
         showToast("error", response.data.message);
@@ -190,8 +249,12 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    initAuth();
-  }, []);
+    if (!["/login", "/register"].includes(router.pathname)) {
+      initAuth();
+    } else {
+      setLoading(false);
+    }
+  }, [router.pathname]);
 
   const values = {
     user,
@@ -204,6 +267,8 @@ const AuthProvider = ({ children }) => {
     register: handleRegister,
     initAuth,
     login: handleLogin,
+    containerLoading,
+    sendHistory,
   };
 
   if (!isInitialized && loading) return <Spinner />;

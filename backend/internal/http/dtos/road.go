@@ -61,6 +61,8 @@ type RoadDTO struct {
 	Title         string    `json:"title"`
 	Description   string    `json:"description"`
 	Name          string    `json:"name"`
+	FileExtention string    `json:"fileExtention"`
+	MonacoEditor  string    `json:"monacoEditor"`
 	IconPath      string    `json:"iconPath"`
 	IsStarted     bool      `json:"roadIsStarted"`
 	IsFinished    bool      `json:"roadIsFinished"`
@@ -68,11 +70,13 @@ type RoadDTO struct {
 	Paths         []PathDTO `json:"paths"`
 }
 
-func (m *RoadDTOManager) ToRoadDTO(road domains.Road, paths []PathDTO, isImageExists bool, inventoryLanguage domains.InventoryLanguage) RoadDTO {
+func (m *RoadDTOManager) ToRoadDTO(road domains.Road, paths []PathDTO, isImageExists bool, inventoryLanguage domains.InventoryLanguage, fileExtention, monacoEditor string) RoadDTO {
 	return RoadDTO{
 		Title:         inventoryLanguage.GetLang(),
 		Description:   inventoryLanguage.GetDescription(),
 		Name:          road.GetName(),
+		FileExtention: fileExtention,
+		MonacoEditor:  monacoEditor,
 		IconPath:      road.GetIconPath(),
 		Paths:         paths,
 		IsStarted:     road.GetIsStarted(),

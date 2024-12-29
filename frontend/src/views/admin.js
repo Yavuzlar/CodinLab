@@ -8,21 +8,17 @@ import userIcon from "../assets/icons/icons8-male-user-100.png";
 import settingsIcon from "../assets/icons/icons8-settings-128.png";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { getLanguageUsageRates } from "src/store/log/logSlice";
+import { getLanguageUsageRates, getSolitionWeek } from "src/store/log/logSlice";
 import { useEffect } from "react";
 import DonotProggresStatistic from "src/components/progress/DonotProggresStatistic";
+import CustomBreadcrumbs from "src/components/breadcrumbs";
 
 const Admin = () => {
   const theme = useTheme();
+
+  const router = useRouter();
   const dispatch = useDispatch();
-
   const { log: logStatistics } = useSelector((state) => state);
-
-  useEffect(() => {
-    dispatch(getLanguageUsageRates());
-  }, [dispatch]);
-
-  console.log(logStatistics);
 
   const progresses = {
     values: logStatistics.data?.data?.map((item) => item.usagePercentage),
@@ -34,7 +30,14 @@ const Admin = () => {
     theme.palette.info.dark,
   ];
 
-  const router = useRouter();
+  // const Deneme = {
+  //   values: [10.5, 20.764674, 30, 40],
+  //   labels: ["a", "b", "c", "d"],
+  // };
+  useEffect(() => {
+    dispatch(getLanguageUsageRates());
+  }, [dispatch]);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sx={{ display: "flex", gap: 2 }}>
@@ -87,36 +90,6 @@ const Admin = () => {
                   }}
                 >
                   <Translations text="admin.profile.button" />
-                </Typography>
-              </Button>
-
-              <Button
-                onClick={() => router.push("admin/settings")}
-                variant="dark"
-                sx={{
-                  textTransform: "none",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "16px",
-                  borderRadius: "10px",
-                }}
-              >
-                <Image
-                  src={settingsIcon}
-                  alt="settingsIcon"
-                  width={26}
-                  height={26}
-                />
-                <Typography
-                  variant="infoText"
-                  sx={{
-                    color: `${theme.palette.common.white} !important`,
-                    fontWeight: "normal",
-                  }}
-                >
-                  <Translations text="admin.settings.button" />
                 </Typography>
               </Button>
             </Box>
@@ -194,14 +167,14 @@ const Admin = () => {
                         }}
                       >
                         <img
-                          src={"api/v1/" + item.iconPath}
+                          src={"/api/v1/" + item.iconPath}
                           width={30}
                           height={30}
                         />
                         <Typography
                           sx={{ font: "normal normal normal 18px/23px Outfit" }}
                         >
-                          %{item.usagePercentage}
+                          %{Math.round(item.usagePercentage)}
                         </Typography>
                       </Box>
                     </Box>

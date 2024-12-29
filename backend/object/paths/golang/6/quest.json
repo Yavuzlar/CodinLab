@@ -1,0 +1,43 @@
+{
+    "id": 6,
+    "languages": [
+        {
+            "lang": "en",
+            "title": "Find Unique Characters from a String",
+            "description": "Implement a function that returns unique characters from a given string while maintaining their order.",
+            "content": "Create a function that takes a string of characters (e.g., '11010301') as input and returns a new string containing only the unique characters in the order they first appeared.",
+            "note": "1. Use a map to track occurrences of each character.\n2. Iterate through the input string and add characters to the result if they have not been seen before.\n3. Ensure the function preserves the order of characters as they appear in the original string."
+        },
+        {
+            "lang": "tr",
+            "title": "Bir Dizeden Tekil Karakterleri Bulma",
+            "description": "Verilen bir dizeden tekil karakterleri bulup sırasını bozmadan döndüren bir fonksiyon implement edin.",
+            "content": "Karakterlerden oluşan bir dize (örneğin, '11010301') alan bir fonksiyon oluşturun ve yalnızca ilk göründükleri sırayı koruyarak tekil karakterlerden oluşan yeni bir dize döndürün.",
+            "note": "1. Her karakterin oluşumunu izlemek için bir harita kullanın.\n2. Girdi dizisini döngü ile geçin ve daha önce görülmemiş karakterleri sonuca ekleyin.\n3. Fonksiyonun, karakterlerin orijinal dizideki göründüğü sırayı koruduğundan emin olun."
+        }
+    ],
+    "quest": {
+        "difficulty": 3,
+        "funcName": "findUniqueCharacters",
+        "tests": [
+            {
+                "input": ["112234344"],
+                "output": ["1234"]
+            },
+            {
+                "input": ["11012244164"],
+                "output": ["101246"]
+            },
+            {
+                "input": ["511445225343123"],
+                "output": ["51423123"]
+            }
+        ],
+        "codeTemplates": [
+            {
+                "programmingID": 2,
+                "templatePath": "object/paths/golang/6/template.txt"
+            }
+        ]
+    }
+}

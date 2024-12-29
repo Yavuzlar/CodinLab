@@ -14,17 +14,21 @@ import MoonIcon from "src/assets/icons/moon.png";
 import MenuIconBlack from "src/assets/icons/menu-black.png";
 import MenuIconWhite from "src/assets/icons/menu-white.png";
 import axios from "axios";
+import { t } from "i18next";
+import { showToast } from "src/utils/showToast";
+import toast from "react-hot-toast";
 
 const CodeEditor = ({
   params,
   onRun,
   onStop,
+  onChange,
   leng,
   defValue,
   title,
   apiData,
   val,
-  editorRef
+  editorRef,
 }) => {
   const [value, setValue] = useState(null);
   const [defaultValue, setDefaultValue] = useState(defValue);
@@ -32,6 +36,7 @@ const CodeEditor = ({
   const [editorActionsWidth, setEditorActionsWidth] = useState(0);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
   const editorActions = useRef(null);
+  const [language, setLanguage] = useState(leng);
 
   // here we will add the onMount function
   const onMount = (editor) => {
@@ -41,7 +46,10 @@ const CodeEditor = ({
 
   // here we will add the run calls
   const handleRun = async () => {
-    // in the future, we will add the run api call here
+    // const toastId = toast.loading(t("runCode"));
+    showToast("dismiss");
+    showToast("loading", t("runCode"));
+
     try {
       const response = await axios({
         method: "POST",
@@ -51,8 +59,11 @@ const CodeEditor = ({
           "Content-Type": "application/json",
         },
       });
-      onRun(response.data?.message);
+      showToast("dismiss");
+      showToast("success", t("succsesCode"));
+      onRun(response.data);
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message, { id: 2 });
       onRun(error.response?.data?.message || error.message);
     }
   };
@@ -65,6 +76,11 @@ const CodeEditor = ({
       const response = "Stopped from backend";
       onStop(response);
     }, 2000);
+  };
+
+  const handleChange = (newValue) => {
+    setValue(newValue);
+    onChange(newValue);
   };
 
   // for mobile menu options
@@ -84,7 +100,8 @@ const CodeEditor = ({
 
   useEffect(() => {
     setValue(val);
-  }, [val]);
+    setLanguage(leng);
+  }, [val, leng]);
 
   return (
     <Box
@@ -298,11 +315,11 @@ const CodeEditor = ({
         }}
       >
         <Editor
-          language={leng || "javascript"}
+          language={language}
           // defaultValue={defaultValue || "// Write your code here"}
           defaultValue={"// Write your code here"}
           value={value}
-          onChange={(newValue) => setValue(newValue)}
+          onChange={(newValue) => handleChange(newValue)}
           onMount={onMount}
           theme={theme}
           loading={<div>Loading...</div>}

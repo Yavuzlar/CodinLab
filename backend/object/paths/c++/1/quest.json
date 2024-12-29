@@ -1,0 +1,35 @@
+{
+	"id": 1,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Basic Syntax",
+			"description": "Understanding the basic syntax of C++",
+			"content": "With this path ypu will learn about the basic structure of a C++ program, including headers, main function, and statements. To complete this task, you need to ensure that the provided main function prints 'Hello, World!' to the console.\n2. Use `std::cout << \"your message\" << std::endl;` to achieve this.",
+			"note": "1. First, make sure to include the necessary header files:\n\n\t**#include <iostream>**: This is required for using 'std::cout' to print output to the console.\n\t**#include <string>**: This library provides necessary string operations if you need to work with strings in your program.\n\t**using namespace std;**: This statement allows you to omit the 'std::' prefix when using standard library functions like 'cout' and 'endl'. However, it should be used carefully in larger programs to avoid potential naming conflicts.\n2. Use the following statement to print to the console: `std::cout << \"Hello, World!\" << std::endl;` This line sends the 'Hello, World!' message to the console and adds a new line.\n3. In C++ you have to add semicolon(;) to end of every code line"
+		},
+		{
+			"lang": "tr",
+			"title": "Basit yazılış",
+			"description": "C++'ın temellerini öğrenin.",
+			"content": "Bu görev ile c++'ın temel yapısını, başlık dosyalarını, main fonksiyonunu ve ifadeleri öğreneceksiniz. Bu görevi tamamlamak için size vermiş olduğumuz main fonksiyonunun 'Hello, World!' ifadesini ekrana basmasını sağlamanız gerekmektedir. Bunun için std::cout<<\"mesajınız\"<<std:endly; kullanmalısınız.",
+			"note": "1. İlk olarak header dosyalarını eklediğinizden emin olun:\n\n\t**#include <iostream>**: Konsola çıktı yazdırmak için 'std::cout' kullanabilmeniz için gereklidir.\n\t**#include <string>**: Programınızda stringlerle çalışmanız gerektiğinde gerekli string işlemlerini sağlar.\n\t**using namespace std;**: Bu ifade, standart kütüphane fonksiyonlarını ('cout' ve 'endl' gibi) kullanırken 'std::' önekini yazmamanıza olanak tanır. Ancak, daha büyük programlarda isim çakışmalarına yol açabileceği için dikkatli kullanılmalıdır.\n2. Konsola yazdırmak için şu ifadeyi kullanın: `std::cout << \"Hello, World!\" << std::endl;` Bu ifade 'Hello, World!' mesajını konsola gönderir ve yeni bir satır ekler.\n3. C++ da her kod satırının sonuna noktalı virgül(;) eklenmesi gerekmektedir."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "main",
+		"tests": [
+			{
+				"input": [],
+				"output": ["Hello, World!"]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath": "object/paths/c++/1/template.txt"
+			}
+		]
+	}
+}

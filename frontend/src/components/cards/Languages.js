@@ -86,7 +86,7 @@ const Languages = ({ language }) => {
         }}
       >
         <img
-          src={"api/v1/" + language.iconPath}
+          src={"/api/v1/" + language.iconPath}
           alt={language.name}
           width={50}
           height={50}

@@ -1,0 +1,66 @@
+## FRONTEND
+
+package main;
+
+import "fmt"
+
+func $funcname$(s []int) []int {
+    // Write your code here
+
+    return 0
+}
+
+func main() {
+	fmt.Println("Enter a list of numbers separated by commas (e.g., 1, 2, 3):")
+	var input string
+	fmt.Scanln(&input)
+
+	strNumbers := strings.Split(input, ",")
+	var numbers []int
+
+	for _, str := range strNumbers {
+		num, err := strconv.Atoi(strings.TrimSpace(str))
+		if err != nil {
+			fmt.Println("Invalid number:", str)
+			return
+		}
+		numbers = append(numbers, num)
+	}
+
+	sortedArray := $funcname$(numbers)
+
+	fmt.Println("Sorted array:", sortedArray)
+}
+
+## DOCKER
+
+package main
+
+$imps$
+
+import "reflect"
+
+$usercode$
+
+func main(){
+    $checks$
+    fmt.Printf("$success$|||%v|||_|||_", result$res$)
+}
+
+## CHECK
+
+
+inputArr$rnd$ := []int{$input$}
+outputArr$rnd$ := []int{$output$}
+
+result$rnd$ := $funcname$(inputArr$rnd$)
+if (!reflect.DeepEqual(result$rnd$, outputArr$rnd$) ){
+    fmt.Print("_|||")
+   
+    fmt.Printf("%v ", result$rnd$)
+    fmt.Print("|||")
+    
+    fmt.Printf("%v ", outputArr$rnd$)
+    fmt.Println("|||_")
+    return
+}

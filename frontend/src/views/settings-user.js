@@ -7,7 +7,7 @@ import {
   Grid,
   IconButton,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import Image from "next/image";
 import ComputerImage from "../assets/3d/3d-casual-life-website-browser-window-in-laptop.png";
@@ -28,8 +28,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { changePassword, changeProfile } from "src/store/user/userSlice";
+import CustomBreadcrumbs from "src/components/breadcrumbs";
 
 const settings = () => {
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const { user: stateUser } = useSelector((state) => state);
+
   const [passwordSettingsData, setPasswordSettingsData] = useState();
   const [infoSettingsData, setInfoSettingsData] = useState({});
 
@@ -58,12 +63,60 @@ const settings = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    const validateInfoSettings = async () => {
+      if (infoSettingsSubmitted) {
+        const validationInfoErrors = await profileSettingsValidation(
+          infoSettingsData
+        );
+        setErrorInfo(validationInfoErrors);
+      }
+    };
+    validateInfoSettings();
+  }, [infoSettingsData, infoSettingsSubmitted]);
+
+  useEffect(() => {
+    const validateInfoSettings = async () => {
+      if (infoSettingsSubmitted) {
+        const validationInfoErrors = await profileSettingsValidation(
+          infoSettingsData
+        );
+        setErrorInfo(validationInfoErrors);
+      }
+    };
+    validateInfoSettings();
+  }, [infoSettingsData, infoSettingsSubmitted]);
+
+  useEffect(() => {
+    dispatch(fetchProfileUser());
+  }, []);
+
+  useEffect(() => {
+    //this is for the api call
+    dispatch(fetchProfileUser());
+  }, []);
+
+  useEffect(() => {
+    //this is the  data for the user in api
+    if (stateUser.data) {
+      //this is checking if the data is available
+      setInfoSettingsData({
+        name: stateUser.data.data?.name,
+        surname: stateUser.data.data?.surname,
+        username: stateUser.data.data?.username,
+        githubProfile: stateUser.data.data?.githubProfile,
+      });
+    }
+  }, [stateUser.data]);
+
   const hanldeClickShowOldPassword = () => {
     setShowOldPassword(!showOldPassword);
   };
+
   const hanldeClickShowNewPassword = () => {
     setShowNewPassword(!showNewPassword);
   };
+
   const hanldeClickShowConfirmPassword = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
@@ -75,9 +128,6 @@ const settings = () => {
   const handleClose = () => {
     setOpenDialog(false);
   };
-
-  const dispatch = useDispatch();
-  const { user: stateUser } = useSelector((state) => state);
 
   const handleInfoSettings = (e) => {
     setInfoSettingsData({
@@ -149,8 +199,6 @@ const settings = () => {
     }
   };
 
-  const theme = useTheme();
-
   const handleSubmitInfoSettings = async (e) => {
     e.preventDefault();
     setInfoSettingsSubmitted(true);
@@ -159,14 +207,14 @@ const settings = () => {
       infoSettingsData
     );
     setErrorInfo(validationInfoErrors);
-    if(!validationInfoErrors || Object.keys(validationInfoErrors).length === 0
-    ){
+    if (
+      !validationInfoErrors ||
+      Object.keys(validationInfoErrors).length === 0
+    ) {
       setOpenDialog(true);
     }
-
   };
 
-  
   const handleDialogSubmit = () => {
     const dataToSend = {
       ...infoSettingsData,
@@ -197,55 +245,17 @@ const settings = () => {
       console.log("Catch Hatası", error);
     }
   };
-
-  useEffect(() => {
-    const validateInfoSettings = async () => {
-      if (infoSettingsSubmitted) {
-        const validationInfoErrors = await profileSettingsValidation(
-          infoSettingsData
-        );
-        setErrorInfo(validationInfoErrors);
-      }
-    };
-    validateInfoSettings();
-  }, [infoSettingsData, infoSettingsSubmitted]);
-
-  useEffect(() => {
-    const validateInfoSettings = async () => {
-      if (infoSettingsSubmitted) {
-        const validationInfoErrors = await profileSettingsValidation(
-          infoSettingsData
-        );
-        setErrorInfo(validationInfoErrors);
-      }
-    };
-    validateInfoSettings();
-  }, [infoSettingsData, infoSettingsSubmitted]);
-
-  useEffect(() => {
-    dispatch(fetchProfileUser());
-  }, []);
-
-  useEffect(() => {
-    //this is for the api call
-    dispatch(fetchProfileUser());
-  }, []);
-
-  useEffect(() => {
-    //this is the  data for the user in api
-    if (stateUser.data) {
-      //this is checking if the data is available
-      setInfoSettingsData({
-        name: stateUser.data.data?.name,
-        surname: stateUser.data.data?.surname,
-        username: stateUser.data.data?.username,
-        githubProfile: stateUser.data.data?.githubProfile,
-      });
-    }
-  }, [stateUser.data]);
+  const breacrumbs = [
+    {
+      path: "/settings",
+      title: <Translations text={"settings"} />,
+      permission: "settings",
+    },
+  ];
 
   return (
-    <div>
+    <Box>
+      <CustomBreadcrumbs titles={breacrumbs} />
       <Box
         sx={{
           display: "flex",
@@ -545,7 +555,7 @@ const settings = () => {
                   </FormControl>
 
                   <Button
-                   onClick={handleSubmitInfoSettings}
+                    onClick={handleSubmitInfoSettings}
                     variant="dark"
                     sx={{
                       marginTop: 4,
@@ -802,121 +812,108 @@ const settings = () => {
         </Box>
       </Box>
 
-      <Dialog open={openDialog} onClose={handleClose}
+      <Dialog
+        open={openDialog}
+        onClose={handleClose}
         sx={{
-        "& .MuiDialog-paper": {
-          color: (theme) => `${theme.palette.text.primary} !important`,
-          borderRadius: "16px",
-          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-          width: "100%",
-          maxWidth: "500px",
-          padding: "20px",
-        },
+          "& .MuiDialog-paper": {
+            color: (theme) => `${theme.palette.text.primary} !important`,
+            borderRadius: "16px",
+            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+            width: "100%",
+            maxWidth: "500px",
+            padding: "20px",
+          },
         }}
       >
-  <DialogTitle>
-    <Translations text={"dialog.title.password"} />
-  </DialogTitle>
-  <DialogContent>
-    <DialogContentText
-      sx={{
-        color: (theme) =>
-          `${theme.palette.text.primary} !important`,
-      }}
-    >
-      <Translations text={"dialog.content.password"} />
-    </DialogContentText>
-    <TextField
-      sx={{
-        marginTop: "20px",
-        borderRadius: "15px",
-        border : "2px solid #0A3B7A",
-
-        "& .MuiInputBase-root" :{
-          backgroundColor: (theme) =>
-            `${theme.palette.background.default} !important`,
-        },
-
-        "& .MuiOutlinedInput-root": {
-          borderRadius: "15px",
-          "&.Mui-focused fieldset": {
-            borderColor: (theme) =>
-              `${theme.palette.primary.dark} !important`,
-          },
-        },
-
-        "& .MuiInputBase-input": {
-          color: "#0A3B7A",
-          fontWeight: "bold",
-          marginTop: "5px",
-        },
-
-        "& .MuiInputLabel-root": {
-          color: (theme) =>
-            `${theme.palette.primary.dark} !important`,
-            fontWeight: "bold",
-        },
-
-        "& .Mui-focused": {
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#0A3B7A",
-          },
-        },
-
-       
-
-      }}
-
-      autoFocus
-      margin="dense"
-      label={<Translations text={"settings.old.password"} />}
-      type={showPassword ? "text" : "password"}
-      variant="filled"
-      fullWidth
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-      InputProps={{
-        endAdornment: (
-          <IconButton
-            onClick={hanldeClickShowPassword}
-            edge="end"
+        <DialogTitle>
+          <Translations text={"dialog.title.password"} />
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            sx={{
+              color: (theme) => `${theme.palette.text.primary} !important`,
+            }}
           >
-            <Image
-              style={{ zIndex: 99 }}
-              src={
-                showPassword
-                  ? visibilityOnIcon
-                  : visibilityOffIcon
-              }
-              alt={
-                showPassword
-                  ? "visibilityOnIcon"
-                  : "visibilityOffIcon"
-              }
-              width={30}
-              height={30}
-            />
-          </IconButton>
-        ),
-      }}
-    />
-  </DialogContent>
-  <DialogActions
-    sx={{
-      display: "flex",
-      justifyContent: "space-between",
-      padding: "20px",
-    }}
-  >
-    <Button  onClick={handleClose}  variant="dark">
-    <Translations text={"dialog.button.cancel"} />
-    </Button>
-    <Button onClick={handleDialogSubmit} variant="dark">
-    <Translations text={"dialog.button.submit"} />
-    </Button>
-  </DialogActions>
-</Dialog>
-    </div>
+            <Translations text={"dialog.content.password"} />
+          </DialogContentText>
+          <TextField
+            sx={{
+              marginTop: "20px",
+              borderRadius: "15px",
+              border: "2px solid #0A3B7A",
+
+              "& .MuiInputBase-root": {
+                backgroundColor: (theme) =>
+                  `${theme.palette.background.default} !important`,
+              },
+
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "15px",
+                "&.Mui-focused fieldset": {
+                  borderColor: (theme) =>
+                    `${theme.palette.primary.dark} !important`,
+                },
+              },
+
+              "& .MuiInputBase-input": {
+                color: "#0A3B7A",
+                fontWeight: "bold",
+                marginTop: "5px",
+              },
+
+              "& .MuiInputLabel-root": {
+                color: (theme) => `${theme.palette.primary.dark} !important`,
+                fontWeight: "bold",
+              },
+
+              "& .Mui-focused": {
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#0A3B7A",
+                },
+              },
+            }}
+            autoFocus
+            margin="dense"
+            label={<Translations text={"settings.old.password"} />}
+            type={showPassword ? "text" : "password"}
+            variant="filled"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={hanldeClickShowPassword} edge="end">
+                  <Image
+                    style={{ zIndex: 99 }}
+                    src={showPassword ? visibilityOnIcon : visibilityOffIcon}
+                    alt={
+                      showPassword ? "visibilityOnIcon" : "visibilityOffIcon"
+                    }
+                    width={30}
+                    height={30}
+                  />
+                </IconButton>
+              ),
+            }}
+          />
+        </DialogContent>
+        <DialogActions
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "20px",
+          }}
+        >
+          <Button onClick={handleClose} variant="dark">
+            <Translations text={"dialog.button.cancel"} />
+          </Button>
+          <Button onClick={handleDialogSubmit} variant="dark">
+            <Translations text={"dialog.button.submit"} />
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 

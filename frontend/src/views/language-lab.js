@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   FormControl,
@@ -20,33 +20,23 @@ import { Search } from "@mui/icons-material";
 import { t } from "i18next";
 import { theme } from "src/configs/theme";
 import { useRouter } from "next/router";
+import { AuthContext } from "src/context/AuthContext";
 
-const languages = {
-  c: { image: C, title: "C Language" },
-  cpp: { image: Cpp, title: "C++ Language" },
-  go: { image: Go, title: "Go Language" },
-  javascript: { image: Js, title: "JavaScript" },
-  python: { image: Python, title: "Python" },
-};
+
 
 const LanguageLab = ({ language = "" }) => {
+  const programingId = language;
+
+  const lgmd_down = useMediaQuery((theme) => theme.breakpoints.down("lgmd"));
+  const { containerLoading } = useContext(AuthContext)
+
+  const [iconPath, setIconPath] = useState("");
   const [filters, setFilters] = useState({
     status: "all",
     difficulty: "all",
     search: "",
     sort: "",
   });
-
-  const selectedLanguage = languages[language.toLowerCase()];
-  const lgmd_down = useMediaQuery((theme) => theme.breakpoints.down("lgmd"));
-
-  const router = useRouter();
-  
-  const programingId = language;
-
-
-
-  console.log("programingId", programingId);
 
   return (
     <div>
@@ -61,16 +51,14 @@ const LanguageLab = ({ language = "" }) => {
               flexDirection: lgmd_down ? "column" : "row",
             }}
           >
-            {selectedLanguage && (
-              <Box>
-                <Image
-                  src={selectedLanguage.image}
-                  height={65}
-                  width={65}
-                  alt={selectedLanguage.title}
-                />
-              </Box>
-            )}
+            <Box>
+              <img
+                src={"/api/v1/" + iconPath}
+                height={65}
+                width={65}
+              // alt={selectedLanguage.title}
+              />
+            </Box>
 
             <Grid
               container
@@ -144,7 +132,7 @@ const LanguageLab = ({ language = "" }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <LabInfo programingId={programingId} />
+          <LabInfo containerLoading={containerLoading} setIconPath={setIconPath} filter={filters} programingId={programingId} />
         </Grid>
       </Grid>
     </div>

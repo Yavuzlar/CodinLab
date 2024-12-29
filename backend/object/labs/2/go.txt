@@ -5,17 +5,36 @@ package main;
 import "fmt"
 
 
-func $funcname$(s []int) bool {
+func $funcname$(s []int) []int {
     // Write your code here
 
-    return false
+    return 0
 }
 
 func main(){
-    var input string
-    fmt.Println("Lütfen bir string değer girin:")
-    fmt.Scan(&input) 
-    fmt.Println("Girdiğiniz string değer:", $funcname$(input))
+    scanner := bufio.NewScanner(os.Stdin)
+	fmt.Println("Enter numbers (type 'done' when finished):")
+    var input []int
+
+
+	for {
+		scanner.Scan()
+		line := scanner.Text()
+
+		if line == "done" {
+			break
+		}
+        
+        num, err := strconv.Atoi(line)
+        if err != nil {
+            fmt.Println("Please enter a valid number or 'done' to finish.")
+            continue
+        }
+
+		input = append(input, line)
+	}
+
+	fmt.Println("Output:", $funcname$(input))
 }
 
 ## DOCKER
@@ -30,8 +49,7 @@ $usercode$
 
 func main(){
     $checks$
-
-    fmt.Println("$success$")
+    fmt.Printf("$success$|||%v|||_|||_",result$res$)
 }
 
 ## CHECK
@@ -41,6 +59,12 @@ outputArr$rnd$ := []int{$output$}
 
 result$rnd$ := $funcname$(inputArr$rnd$)
 if (!reflect.DeepEqual(result$rnd$, outputArr$rnd$) ){
-    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    fmt.Print("_|||")
+   
+    fmt.Printf("%v ", result$rnd$)
+    fmt.Print("|||")
+    
+    fmt.Printf("%v ", outputArr$rnd$)
+    fmt.Println("|||_")
     return
 }

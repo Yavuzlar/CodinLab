@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Box, Card, CardContent, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import InfoCard from "src/components/cards/Info";
 import LanguageProgress from "src/components/cards/LanguageProgress";
@@ -9,36 +9,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserLanguageLabStats } from "src/store/language/languageSlice";
 import {
   getDifficultyStatistics,
-  getLabsProgressStats
+  getLabsProgressStats,
 } from "src/store/statistics/statisticsSlice";
 import { CircularProgressStatistics } from "src/components/progress/CircularProgressStatistics";
-import { useRouter } from "next/router";
+import { theme } from "src/configs/theme";
 
 const Labs = () => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const searchPlaceholder = t("labs.search.placeholder");
+
+  const { language: stateLanguage, statistics: stateStatistics } = useSelector(
+    (state) => state
+  );
+
   const [filters, setFilters] = useState({
     status: "all", // all, in-progress, completed
     search: "",
     sort: "", // "", asc, desc
   });
-  const { t } = useTranslation();
-  const searchPlaceholder = t("labs.search.placeholder");
-
-  const dispatch = useDispatch();
-  const { language: stateLanguage, statistics: stateStatistics } = useSelector(
-    (state) => state
-  );
-  
-  const rotuer = useRouter();
-
-  
-
-  useEffect(() => {
-    dispatch(getUserLanguageLabStats());
-    dispatch(getDifficultyStatistics());
-    dispatch(getLabsProgressStats());
-  }, [dispatch]);
-
-  console.log("stateLanguage", stateLanguage);
 
   const labsStatsData = stateLanguage.userLanguageLabStatsData?.data;
 
@@ -47,34 +37,19 @@ const Labs = () => {
       id: 1,
       name: t("labs.difficulty.easy"),
       value: stateStatistics.difficultyStatsData.data?.easyPercentage,
+      color: theme.palette.difficulty.easy,
     },
     {
       id: 2,
       name: t("labs.difficulty.medium"),
       value: stateStatistics.difficultyStatsData.data?.mediumPercentage,
+      color: theme.palette.difficulty.medium,
     },
     {
       id: 3,
       name: t("labs.difficulty.hard"),
       value: stateStatistics.difficultyStatsData.data?.hardPercentage,
-    },
-  ];
-
-  const difficultyProgresses = [
-    {
-      name: "Easy", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.difficultyStatsData.data?.easyPercentage,
-      color: "#39CE19",
-    },
-    {
-      name: "Medium", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.difficultyStatsData.data?.mediumPercentage,
-      color: "#EE7A19",
-    },
-    {
-      name: "Hard", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.difficultyStatsData.data?.hardPercentage,
-      color: "#DC0101",
+      color: theme.palette.difficulty.hard,
     },
   ];
 
@@ -83,26 +58,51 @@ const Labs = () => {
       id: 1,
       name: t("labs.progress.stats.progress"),
       value: stateStatistics.labsProgressStatsData.data?.progress,
+      color: theme.palette.primary.dark,
     },
     {
       id: 2,
       name: t("labs.progress.stats.completed"),
       value: stateStatistics.labsProgressStatsData.data?.completed,
+      color: theme.palette.primary.light,
     },
   ];
 
-  const labsProgresses = [
-    {
-      name: "Progress", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.labsProgressStatsData.data?.progress,
-      color: "#8FDDFD",
-    },
-    {
-      name: "Completed", // when CircularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.labsProgressStatsData.data?.completed,
-      color: "#0A3B7A",
-    },
-  ];
+  useEffect(() => {
+    dispatch(getUserLanguageLabStats());
+    dispatch(getDifficultyStatistics());
+    dispatch(getLabsProgressStats());
+  }, [dispatch]);
+
+  const { status, search, sort } = filters
+  const filterLabs = () => {
+    let filteredLabs = labsStatsData;
+
+    switch (status) {
+      case "completed":
+        filteredLabs = filteredLabs.filter((lab) => lab.completedLabs == lab.totalLabs);
+        break;
+      case "in-progress":
+        filteredLabs = filteredLabs.filter((lab) => lab.completedLabs > 0);
+        break;
+    }
+
+    switch (sort) {
+      case "desc":
+        filteredLabs = [...filteredLabs].sort((a, b) => b.id - a.id);
+        break;
+      case "asc":
+        filteredLabs = [...filteredLabs].sort((a, b) => a.id - b.id);
+        break;
+    }
+
+    if (search != "") {
+      filteredLabs = filteredLabs.filter((road) =>
+        road.name && road.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    return filteredLabs;
+  };
 
   return (
     <Grid container spacing={2}>
@@ -137,60 +137,11 @@ const Labs = () => {
                         justifyContent: "center",
                       }}
                     >
-                      <CircularProgressStatistics progresses={labsProgresses} />
+                      <CircularProgressStatistics
+                        progresses={labsProgressStats}
+                        flexDirection={"column"}
+                      />
                     </Box>
-
-                    {labsProgressStats.map((progress) => (
-                      <Box
-                        key={progress.id}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          mt: "1.5rem",
-
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            width: "15px",
-                            height: "15px",
-                            backgroundColor:
-                              progress.name ===
-                              t("labs.progress.stats.progress")
-                                ? "#8FDDFD"
-                                : "#0A3B7A",
-                            borderRadius: "50%",
-                            marginRight: "0.5rem",
-
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            width: "144px",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              textAlign: "left",
-                              width: "100%",
-                            }}
-                          >
-                            {progress.name}
-                          </Typography>
-                          <Typography
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            {progress.value}%
-                          </Typography>
-                        </Box>
-                      </Box>
-                    ))}
                   </CardContent>
                 </Card>
               </Grid>
@@ -206,61 +157,10 @@ const Labs = () => {
                       }}
                     >
                       <CircularProgressStatistics
-                        progresses={difficultyProgresses}
+                        progresses={difficultyStats}
+                        flexDirection={"column"}
                       />
                     </Box>
-
-                    {difficultyStats.map((difficulty) => (
-                      <Box
-                        key={difficulty.id}
-                        sx={{
-                          display: "flex",
-                          mt: "1.5rem",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            width: "15px",
-                            height: "15px",
-                            backgroundColor:
-                              difficulty.name === t("labs.difficulty.easy")
-                                ? "#39CE19"
-                                : difficulty.name ===
-                                  t("labs.difficulty.medium")
-                                ? "#EE7A19"
-                                : "#DC0101",
-                            borderRadius: "50%",
-                            marginRight: "0.5rem",
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            width: "104px",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              textAlign: "left",
-                              width: "100%",
-                            }}
-                          >
-                            {difficulty.name}
-                          </Typography>
-                          <Typography
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            {difficulty.value}%
-                          </Typography>
-                        </Box>
-                      </Box>
-                    ))}
                   </CardContent>
                 </Card>
               </Grid>
@@ -271,17 +171,15 @@ const Labs = () => {
 
       <Grid
         item
-        container
-        xs={12}
         md={5}
-        spacing={2}
-        sx={{
+        xs={12}
+        e sx={{
           maxHeight: "calc(100vh - 143px)",
           overflow: "auto",
         }}
       >
-        {labsStatsData?.map((language, index) => (
-          <Grid item xs={12} key={index}>
+        {filterLabs()?.map((language, index) => (
+          <Grid item mb={2} xs={12} key={index} >
             <LanguageProgress language={language} type="lab" />
           </Grid>
         ))}

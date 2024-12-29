@@ -1,0 +1,35 @@
+{
+    "id": 7,
+    "languages": [
+        {
+            "lang": "en",
+            "title": "Functions in Python",
+            "description": "Learn how to create and use functions in Python, including the use of parameters and return values.",
+            "content": "Create a Python function named `greet` that takes a `name` parameter and prints a greeting message like \"Hello, John!\". If no name is provided, it should print \"Hello, stranger!\". Write and call this function in your code.",
+            "note": "1. In Python, functions are created using the `def` keyword.\n2. Functions can have parameters or be without parameters.\n   - A parametric function is one that takes arguments. Example:\n     ```python\n     def add(a, b):\n         return a + b  # Returns the sum of a and b\n     ```\n   - A non-parametric function does not take any arguments. Example:\n     ```python\n     def greet():\n         print('Hello, world!')  # Prints a greeting message\n     ```\n3. The `return` statement is used to return a value from a function. If no `return` statement is used, the function returns `None` by default.\n4. To call a function, use its name followed by parentheses. Example:\n   ```python\n   greet()  # Calls the greet function\n   add(5, 3)  # Calls the add function with arguments 5 and 3\n   ```"
+        },
+        {
+            "lang": "tr",
+            "title": "Python'da Fonksiyonlar",
+            "description": "Python'da fonksiyonların nasıl oluşturulacağını ve kullanılacağını öğrenin, parametreler ve dönüş değerleri dahil.",
+            "content": "Bir `greet` adlı Python fonksiyonu oluşturun. Bu fonksiyon, bir `name` parametresi almalı ve \"Merhaba, John!\" gibi bir karşılama mesajı yazdırmalıdır. Eğer isim belirtilmezse, \"Merhaba, yabancı!\" yazdırmalıdır. Fonksiyonu kodunuzda yazın ve çağırın.",
+            "note": "1. Python'da fonksiyonlar `def` anahtar kelimesi ile oluşturulur.\n2. Fonksiyonlar parametreli olabilir veya parametresiz olabilir.\n   - Parametreli bir fonksiyon, argümanlar alan bir fonksiyondur. Örnek:\n     ```python\n     def topla(a, b):\n         return a + b  # a ve b'nin toplamını döner\n     ```\n   - Parametresiz bir fonksiyon, herhangi bir argüman almaz. Örnek:\n     ```python\n     def selamla():\n         print('Merhaba, dünya!')  # Selamlama mesajı yazdırır\n     ```\n3. `return` ifadesi, bir değeri fonksiyondan döndürmek için kullanılır. Eğer `return` kullanılmazsa, fonksiyon varsayılan olarak `None` döner.\n4. Bir fonksiyonu çağırmak için ismini ve parantezleri kullanın. Örnek:\n   ```python\n   selamla()  # selamla fonksiyonunu çağırır\n   topla(5, 3)  # 5 ve 3 argümanlarıyla topla fonksiyonunu çağırır\n   ```"
+        }
+    ],
+    "quest": {
+        "difficulty": 1,
+        "funcName": "",
+        "tests": [
+            {
+                "input": [],
+                "output": []
+            }
+        ],
+        "codeTemplates": [
+            {
+                "programmingID": 3,
+                "templatePath": "object/paths/python/7/template.txt"
+            }
+        ]
+    }
+}

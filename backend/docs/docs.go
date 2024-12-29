@@ -677,7 +677,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/log/solution/byday": {
+        "/private/log/solution/byday/{year}": {
             "get": {
                 "description": "Retrieves the number of lab and road solutions solved day by day.",
                 "consumes": [
@@ -690,6 +690,15 @@ const docTemplate = `{
                     "Log"
                 ],
                 "summary": "GetSolutionsByDay",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Desired Year",
+                        "name": "year",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -715,9 +724,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/private/log/solution/hours": {
+        "/private/log/solution/week": {
             "get": {
-                "description": "Retrieves the total hours spent on lab and road solutions for each programming language in the last week.",
+                "description": "Retrieves the total counts for lab and road solutions for each programming language in the last week.",
                 "consumes": [
                     "application/json"
                 ],
@@ -727,7 +736,7 @@ const docTemplate = `{
                 "tags": [
                     "Log"
                 ],
-                "summary": "GetSolutionsHoursByProgramming",
+                "summary": "GetSolutionsByProgramming",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -742,7 +751,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/dto.SolutionsHoursByProgrammingDTO"
+                                                "$ref": "#/definitions/dto.SolutionsByProgrammingDTO"
                                             }
                                         }
                                     }
@@ -1458,28 +1467,34 @@ const docTemplate = `{
         "dto.SolutionsByDayDTO": {
             "type": "object",
             "properties": {
+                "count": {
+                    "type": "integer"
+                },
                 "date": {
                     "type": "string"
                 },
-                "labCount": {
-                    "type": "integer"
-                },
-                "roadCount": {
+                "level": {
                     "type": "integer"
                 }
             }
         },
-        "dto.SolutionsHoursByProgrammingDTO": {
+        "dto.SolutionsByProgrammingDTO": {
             "type": "object",
             "properties": {
-                "labHours": {
-                    "type": "number"
+                "labCount": {
+                    "type": "integer"
                 },
                 "programmingID": {
                     "type": "integer"
                 },
-                "roadHours": {
-                    "type": "number"
+                "programmingName": {
+                    "type": "string"
+                },
+                "roadCount": {
+                    "type": "integer"
+                },
+                "totalCount": {
+                    "type": "integer"
                 }
             }
         },

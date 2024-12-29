@@ -1,0 +1,39 @@
+{
+	"id": 8,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Range-Based For Loop",
+			"description": "Understanding range-based for loops in C++",
+			"content": "Range-based for loops provide a simpler way to iterate over elements in a collection or array. In this task, you will create a function called 'sumArray' that calculates the sum of all elements in an integer array using a range-based for loop.",
+			"note": "1. Inside the function:\n   - Initialize a variable to store the sum.\n   - Use a range-based for loop to iterate through the vector.\n   - Add each element to the sum.\n2. Return the calculated sum."
+		},
+		{
+			"lang": "tr",
+			"title": "Range-Based For Döngüsü",
+			"description": "C++'ta range-based for döngülerini öğrenin.",
+			"content": "Range-based for döngüleri, bir koleksiyon veya dizi üzerindeki elemanlarda gezinmenin daha basit bir yolunu sağlar. Bu görevde, bir tam sayı dizisindeki tüm elemanların toplamını hesaplayan 'sumArray' adlı bir fonksiyon oluşturacaksınız.",
+			"note": "1. Fonksiyon içinde:\n   - Toplamı saklamak için bir değişken tanımlayın.\n   - Vektörü dolaşmak için bir range-based for döngüsü kullanın.\n   - Her bir elemanı toplama ekleyin.\n2. Hesaplanan toplamı döndürün."
+		}
+	],
+	"quest": {
+		"difficulty": 2,
+		"funcName": "sumArray",
+		"tests": [
+			{
+				"input": [[1, 2, 3, 4, 5]],
+				"output": [15]
+			},
+			{
+				"input": [[10, 20, 30]],
+				"output": [60]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath": "object/paths/c++/8/template.txt"
+			}
+		]
+	}
+}

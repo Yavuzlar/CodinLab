@@ -1,0 +1,47 @@
+{
+	"id": 4,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Control Structures",
+			"description": "Master Go's control structures such as `if-else` statements.",
+			"content": "Control structures allow you to control the flow of your program. In this task, you'll learn to use the `if-else` statement to make decisions based on conditions. This is one of the fundamental concepts for writing dynamic programs.",
+			"note": "1. Define a function called `checkEvenOdd` that takes an integer as input.\n2. Use an `if-else` statement to determine if the number is even or odd. Print 'Even' if the number is even and 'Odd' if it's odd.\n3. Test your function with a variety of numbers, including negative and zero, to ensure it behaves as expected."
+		},
+		{
+			"lang": "tr",
+			"title": "Kontrol Yapıları",
+			"description": "Go'daki `if-else` yapılarını öğrenin.",
+			"content": "Kontrol yapıları, programınızın akışını kontrol etmenizi sağlar. Bu görevde, koşullara bağlı olarak karar vermek için `if-else` yapısını kullanmayı öğreneceksiniz. Bu, dinamik programlar yazmak için temel bir kavramdır.",
+			"note": "1. Bir tamsayı alan `checkEvenOdd` adlı bir fonksiyon tanımlayın.\n2. Sayının çift mi yoksa tek mi olduğunu belirlemek için bir `if-else` yapısı kullanın. Çift sayı için 'Even', tek sayı için 'Odd' yazdırın.\n3. Fonksiyonunuzu negatif sayılar ve sıfır da dahil olmak üzere çeşitli sayılarla test ederek doğru çalıştığından emin olun."
+		}
+	],
+	"quest": {
+		"difficulty": 2,
+		"funcName": "checkEvenOdd",
+		"tests": [
+			{
+				"input": [3],
+				"output": ["Odd"]
+			},
+			{
+				"input": [2],
+				"output": ["Even"]
+			},
+			{
+				"input": [0],
+				"output": ["Even"]
+			},
+			{
+				"input": [-1],
+				"output": ["Odd"]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 2,
+				"templatePath": "object/paths/golang/4/template.txt"
+			}
+		]
+	}
+}

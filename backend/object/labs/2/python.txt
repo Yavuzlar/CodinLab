@@ -1,8 +1,8 @@
 ## FRONTEND
 
-def $funcname$(s: list[int]) -> bool:
+def $funcname$(s: list[int]) -> list[int]:
     # Write your code here
-    return False
+    return []
 
 def main():
     input_str = input("Lütfen bir string değer girin: ")
@@ -15,7 +15,7 @@ import $imps$
 $usercode$
 
 $checks$
-print("$success$")
+print(f"$success$|||{result$res$}|||_|||_")
 
 ## CHECK
 
@@ -24,5 +24,13 @@ output_arr$rnd$ = [$output$]
 
 result$rnd$ = $funcname$(input_arr$rnd$)
 if result$rnd$ != output_arr$rnd$:
-    print(f"Test Failed: Expected {output_arr$rnd$}, but got {result$rnd$}")
+    print("_|||", end="")
+    
+    print(result$rnd$, end="")
 
+    print("|||", end="")
+
+    print(output_arr$rnd$, end="")
+    
+    print("|||_")
+    exit(1)

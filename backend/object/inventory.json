@@ -6,19 +6,28 @@
         "labDir": "object/labs",
         "pathDir": "object/paths/c++",
         "iconPath": "images/c++.png",
-        "cmd": ["sh", "-c", "g++ -o main main.cpp && ./main"],
-        "bashCmd":  ["bash", "-c", "./main.sh"],
+        "cmd": [
+            "sh",
+            "-c",
+            "g++ -o main main.cpp && ./main"
+        ],
+        "bashCmd": [
+            "bash",
+            "-c",
+            "./main.sh"
+        ],
         "fileExtension": "cpp",
+        "monacoEditor": "cpp",
         "languages": [
             {
                 "lang": "en",
                 "title": "What is C++",
-                "description": "Learn the basics of C++ programming"
+                "description": "C is a general-purpose programming language. It was created in the 1970s by Dennis Ritchie and remains very widely used and influential."
             },
             {
                 "lang": "tr",
                 "title": "C++ nedir?",
-                "description": "C++'ın temellerini öğrenin."
+                "description": "C genel amaçlı bir programlama dilidir. 1970'lerde Dennis Ritchie tarafından yaratılmıştır ve hala çok yaygın olarak kullanılmakta ve etkili olmaya devam etmektedir."
             }
         ]
     },
@@ -29,9 +38,18 @@
         "labDir": "object/labs",
         "pathDir": "object/paths/golang",
         "iconPath": "images/go.png",
-        "cmd": ["sh","-c","go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go && go run ../main.go"],
-        "bashCmd":  ["bash", "-c", "../main.sh"],
+        "cmd": [
+            "sh",
+            "-c",
+            "go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go && go run ../main.go"
+        ],
+        "bashCmd": [
+            "bash",
+            "-c",
+            "../main.sh"
+        ],
         "fileExtension": "go",
+        "monacoEditor": "go",
         "languages": [
             {
                 "lang": "en",
@@ -52,9 +70,18 @@
         "labDir": "object/labs",
         "pathDir": "object/paths/python",
         "iconPath": "images/python.png",
-        "cmd": ["sh", "-c", "python ../main.py"],
-        "bashCmd": ["bash", "-c", "../main.sh"],
+        "cmd": [
+            "sh",
+            "-c",
+            "python ../main.py"
+        ],
+        "bashCmd": [
+            "bash",
+            "-c",
+            "../main.sh"
+        ],
         "fileExtension": "py",
+        "monacoEditor": "python",
         "languages": [
             {
                 "lang": "en",
@@ -65,6 +92,38 @@
                 "lang": "tr",
                 "title": "Python nedir?",
                 "description": "Python programlama dilinin temellerini öğrenin."
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "JavaScript",
+        "dockerImage": "node:18",
+        "labDir": "object/labs",
+        "pathDir": "object/paths/js",
+        "iconPath": "images/javascript.png",
+        "cmd": [
+            "sh",
+            "-c",
+            "node main.js"
+        ],
+        "bashCmd": [
+            "bash",
+            "-c",
+            "../main.sh"
+        ],
+        "fileExtension": "js",
+        "monacoEditor": "javascript",
+        "languages": [
+            {
+                "lang": "en",
+                "title": "What is JavaScript?",
+                "description": "Learn the basics of JavaScript programming"
+            },
+            {
+                "lang": "tr",
+                "title": "JavaScript nedir?",
+                "description": "JavaScript programlama dilinin temellerini öğrenin."
             }
         ]
     }

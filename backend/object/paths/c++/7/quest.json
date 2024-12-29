@@ -1,0 +1,39 @@
+{
+	"id": 7,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Vectors",
+			"description": "Understanding vectors in C++",
+			"content": "Vectors are dynamic arrays in C++ that allow elements to be added or removed during runtime. Unlike arrays, vectors can resize themselves as needed.\n\n#### Key Features of Vectors:\n1. **Dynamic Size**: The size of a vector can change at runtime as elements are added or removed.\n2. **Homogeneous Elements**: All elements in a vector must be of the same data type.\n3. **Efficient Access**: Like arrays, elements can be accessed using their index for fast retrieval.\n4. **Contiguous Memory**: Vectors are stored in contiguous memory locations, allowing efficient access.\n\n#### Example:\n```cpp\n#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> numbers = {10, 20, 30, 40, 50};\n    cout << \"First element: \" << numbers[0] << endl;\n    cout << \"Last element: \" << numbers[numbers.size() - 1] << endl;\n    return 0;\n}\n```\n\nIn this task, you will work with a function called 'findMax' that takes a vector of integers and returns the maximum value in the vector.",
+			"note": "Inside the function:\n   - Use a loop to iterate over the vector.\n   - Create a variable named `max`.\n   - Compare each value in the vector with `max`. If the next value in the vector is greater than `max`, update it.\n   - Return the maximum value."
+		},
+		{
+			"lang": "tr",
+			"title": "Vektörler",
+			"description": "C++'ta vektörleri anlamayı öğrenin.",
+			"content": "Vektörler, C++'ta dinamik diziler olup, çalışma zamanında eleman eklenebilir veya çıkarılabilir. Dizilerin aksine, vektörler ihtiyaç duyulduğunda kendilerini yeniden boyutlandırabilirler.\n\n#### Vektörlerin Temel Özellikleri:\n1. **Dinamik Boyut**: Bir vektör, çalışma zamanında eleman eklenip çıkarılabileceği için boyutu değişebilir.\n2. **Homojen Elemanlar**: Vektördeki tüm elemanlar aynı veri türüne sahip olmalıdır.\n3. **Verimli Erişim**: Dizilerde olduğu gibi, elemanlara indeks kullanılarak hızlıca erişilebilir.\n4. **Ardışık Bellek**: Vektörler, ardışık bellek konumlarında saklanır, bu da hızlı erişim sağlar.\n\n#### Örnek:\n```cpp\n#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> sayilar = {10, 20, 30, 40, 50};\n    cout << \"İlk eleman: \" << sayilar[0] << endl;\n    cout << \"Son eleman: \" << sayilar[sayilar.size() - 1] << endl;\n    return 0;\n}\n```\n\nBu görevde, bir tam sayı vektörünü alan ve vektördeki en büyük değeri döndüren 'findMax' fonksiyonunu oluşturacaksınız.",
+			"note": "Fonksiyon içinde:\n   - Vektörü yinelemek için bir döngü kullanın.\n   - Bir `max` değişkeni oluşturun.\n   - Eğer döngüdeki sıradaki değer `max` değişkeninden büyükse, `max` değerini güncelleyin.\n   - En büyük değeri döndürün."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "findMax",
+		"tests": [
+			{
+				"input": [[3, 5, 7, 2, 8], 5],
+				"output": [8]
+			},
+			{
+				"input": [[1, 2, 3, 4, 5], 5],
+				"output": [5]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath": "object/paths/c++/7/template.txt"
+			}
+		]
+	}
+}

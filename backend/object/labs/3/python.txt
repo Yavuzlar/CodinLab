@@ -8,7 +8,6 @@ if __name__ == "__main__":
     input_str = input("Bir string girin: ")
     print($funcname$(input_str))
 
-
 ## DOCKER
 
 $imps$
@@ -16,11 +15,11 @@ $imps$
 $usercode$
 
 $checks$
-print("$success$")
+print(f"$success$|||{result$res$}|||_|||_")
 
 ## CHECK
 
 result$rnd$ = $funcname$($input$)
 if result$rnd$ != $output$:
-    print(f"Test Failed: Expected $out$, but got {result$rnd$}")
-    exit($rnd$)
+    print(f"_|||{result$rnd$}|||{$output$}|||_")
+    exit(1)

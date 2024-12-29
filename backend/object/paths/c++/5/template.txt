@@ -1,0 +1,43 @@
+## FRONTEND
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int $funcname$(int n) {
+    // Write your code here
+}
+
+int main() {
+    int n;
+    
+    cout << "n değerini girin: ";
+    cin >> n;
+    
+    int result = $funcname$(n);
+    
+    cout << "Ardışık " << n << " tamsayının toplamı: " << result << endl;
+    return 0;
+}
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+int main(){
+    $checks$
+
+    std::cout << "$success$|||" << result$res$ << "|||_|||_" << std::endl;
+    return 0;
+}
+
+## CHECK
+
+int result$rnd$ = $funcname$($input$);
+if (result$rnd$ != $output$) {
+    std::cout << "_|||" << result$rnd$ << "|||$out$|||_" << std::endl;
+    return 0;
+}

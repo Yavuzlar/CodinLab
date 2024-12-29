@@ -1,4 +1,4 @@
-import { Box, Button, Card, Typography } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Typography } from "@mui/material";
 import TestTubeRed from "../../assets/icons/red.png";
 import TestTubeOrange from "../../assets/icons/orange.png";
 import TestTubeGreen from "../../assets/icons/green.png";
@@ -9,7 +9,9 @@ import { useEffect } from "react";
 import { getLabsById } from "src/store/lab/labSlice";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
-const LabInfo = ({ programingId }) => {
+import { theme } from "src/configs/theme";
+import { status } from "nprogress";
+const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
   const dispatch = useDispatch();
   const { lab: stateLabs } = useSelector((state) => state);
 
@@ -20,11 +22,60 @@ const LabInfo = ({ programingId }) => {
   useEffect(() => {
     dispatch(
       getLabsById({
+        router: router,
         programmingID: programingId,
         language: i18n.language,
       })
     );
   }, [dispatch, programingId, i18n.language]);
+
+
+  useEffect(() => {
+    if (stateLabs) {
+      setIconPath(stateLabs?.data?.iconPath)
+    }
+  }, [stateLabs?.data])
+
+  const isImageExist = stateLabs.data?.isImageExists
+  const { status, difficulty, search, sort } = filter
+
+  const filterLabs = () => {
+    let filteredLabs = stateLabs.data?.labs;
+
+    switch (status) {
+      case "completed":
+        filteredLabs = filteredLabs.filter((lab) => lab.isFinished);
+        break;
+    }
+
+    switch (difficulty) {
+      case "easy":
+        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 1)
+        break
+      case "medium":
+        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 2)
+        break
+      case "hard":
+        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 3)
+        break
+    }
+
+    switch (sort) {
+      case "desc":
+        filteredLabs = [...filteredLabs].sort((a, b) => b.id - a.id);
+        break;
+      case "asc":
+        filteredLabs = [...filteredLabs].sort((a, b) => a.id - b.id);
+        break;
+    }
+
+    if (search != "") {
+      filteredLabs = filteredLabs.filter((lab) =>
+        lab.language.title && lab.language.title.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    return filteredLabs;
+  };
 
   return (
     <Box
@@ -35,7 +86,7 @@ const LabInfo = ({ programingId }) => {
         justifyContent: "center",
       }}
     >
-      {stateLabs.data?.labs?.map((lab, index) => (
+      {filterLabs()?.map((lab, index) => (
         <Card
           sx={{
             width: "375px",
@@ -47,6 +98,7 @@ const LabInfo = ({ programingId }) => {
             gap: "1rem",
             padding: "1rem",
             borderRadius: "16px",
+            backgroundColor: lab.isFinished ? theme.palette.success.dark : "",
           }}
           key={index}
         >
@@ -63,8 +115,8 @@ const LabInfo = ({ programingId }) => {
                 lab.difficulty === 1
                   ? TestTubeGreen
                   : lab.difficulty === 2
-                  ? TestTubeOrange
-                  : TestTubeRed
+                    ? TestTubeOrange
+                    : TestTubeRed
               }
               alt="difficulty"
               width={40}
@@ -87,6 +139,7 @@ const LabInfo = ({ programingId }) => {
 
             <Button
               variant={lab.finished ? "dark" : "light"}
+              disabled={!isImageExist}
               sx={{
                 borderRadius: "16px",
                 marginTop: "20px",
@@ -99,17 +152,19 @@ const LabInfo = ({ programingId }) => {
                 letterSpacing: "0",
               }}
               onClick={() => {
-                // this router sistem will be changed to the following cuse this is not true.
-                // this is the try to solve the problem of the router.
-                // router.push(`/labs/${programingId}/${lab.id}`);
-              router.push(`/labs/${programingId}/${lab.id}`);
+                router.push(`/labs/${programingId}/${lab.id}`);
               }
               }
             >
-              {lab.isFinished ? (
-                <Translations text={"lab.button.review"} />
+              {containerLoading ? (
+                <CircularProgress size={24} sx={{ position: 'absolute' }} />
               ) : (
-                <Translations text={"lab.button.solve"} />
+                // Eğer xax false ise normal yazılar gösterilecek
+                lab.isFinished ? (
+                  <Translations text={"lab.button.review"} />
+                ) : (
+                  <Translations text={"lab.button.solve"} />
+                )
               )}
             </Button>
           </Box>

@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
 	"github.com/Yavuzlar/CodinLab/internal/http/session_store"
@@ -112,7 +113,7 @@ func (h *PrivateHandler) GetRoad(c *fiber.Ctx) error {
 			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
 			pathDTOs = append(pathDTOs, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTO, ""))
 		}
-		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs, isExists, *inventoryInformation.GetLanguage())
+		roadDTO = h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathDTOs, isExists, *inventoryInformation.GetLanguage(), inventoryInformation.GetFileExtension(), inventoryInformation.GetMonacoEditor())
 	}
 
 	return response.Response(200, "GetRoads successful", roadDTO)
@@ -151,7 +152,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension(), true)
 	if err != nil {
 		return err
 	}
@@ -163,7 +164,7 @@ func (h *PrivateHandler) GetPath(c *fiber.Ctx) error {
 			languageDTO := h.dtoManager.RoadDTOManager.ToLanguageRoadDTO(path.GetLanguages(), language)
 			pathsDTO = append(pathsDTO, h.dtoManager.RoadDTOManager.ToPathDTO(path, languageDTO, frontendTemplate))
 		}
-		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO, isExists, *inventoryInformation.GetLanguage()))
+		roadDTO = append(roadDTO, h.dtoManager.RoadDTOManager.ToRoadDTO(road, pathsDTO, isExists, *inventoryInformation.GetLanguage(), inventoryInformation.GetFileExtension(), inventoryInformation.GetMonacoEditor()))
 	}
 
 	if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentStarted); err != nil {
@@ -239,14 +240,25 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
-	if err != nil {
-		return err
-	}
 	road, err := h.services.RoadService.GetPathByID(userSession.UserID, programmingID, pathID)
 	if err != nil {
 		return err
 	}
+
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), false)
+	if err != nil {
+		return err
+	}
+
+	if frontendTemplate == answerRoadDTO.UserCode {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "SAME_CODE_ERROR", err)
+	}
+
+	userCodePath, tmpPath, err := h.services.CodeService.UploadUserCode(userSession.UserID, programmingID, pathID, domains.TypePath, programmingInformation.GetFileExtension(), answerRoadDTO.UserCode)
+	if err != nil {
+		return err
+	}
+
 	codeTmp := road.GetQuest().GetCodeTemplates()[0] // Çünkü road hangi dil için ise onun template'i kullanılıcak başka gerek yok.
 
 	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplatePath(), road.GetQuest().GetFuncName(), answerRoadDTO.UserCode, road.GetQuest().GetTests())
@@ -264,18 +276,15 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 			break
 		}
 	}
-	// TODO: Belki Getirebilirsin
-	// if conn == nil {
-	// 	return response.Response(500, "This user was not found in socket.", nil)
-	// }
 
+	// If funcName is empty. You no need function to run the code. Like python or js
 	var logs string
-	if strings.EqualFold(road.GetQuest().GetFuncName(), "main") {
+	if strings.EqualFold(strings.ToLower(road.GetQuest().GetFuncName()), "main") || road.GetQuest().GetFuncName() == "" {
 		err = h.services.CodeService.CreateBashFile(programmingInformation.GetCmd(), road.GetQuest().GetTests(), userSession.UserID, programmingInformation.GetPathDir())
 		if err != nil {
 			return err
 		}
-		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetShCmd(), conn)
+		logs, err = h.services.CodeService.RunContainerWithTar(c.Context(), programmingInformation.GetDockerImage(), userCodePath, fmt.Sprintf("main.%v", programmingInformation.GetFileExtension()), programmingInformation.GetShCmd(), conn)
 		if err != nil {
 			return err
 		}
@@ -286,13 +295,24 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		}
 	}
 
+	// Eğer sorunun testi yok ise yani cevap gerekmyiorsa da eğer answer yollarsa loga kaydet bitti diye.
 	if strings.Contains(logs, "Test Passed") {
 		if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentCompleted); err != nil {
 			return err
 		}
 	}
 
-	return response.Response(200, logs, nil)
+	parsedLog, err := h.services.CodeService.ParseCodeLog(logs)
+	if err != nil {
+		return err
+	}
+
+	//if there is no error and the function does not produce output, it gives EMPTY_OUTPUT_ERROR
+	if parsedLog.Output == "" && parsedLog.ErrorMessage == "" {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "EMPTY_OUTPUT_ERROR", err)
+	}
+
+	return response.Response(200, "RoadAnswer Successfull", parsedLog)
 }
 
 // @Tags Road
@@ -327,7 +347,7 @@ func (h *PrivateHandler) ResetPathHistory(c *fiber.Ctx) error {
 		return err
 	}
 
-	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension())
+	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, pathID, domains.TypePath, inventoryInformation.GetFileExtension(), true)
 	if err != nil {
 		return err
 	}

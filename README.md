@@ -1,3 +1,4 @@
+
 <img src="https://github.com/Yavuzlar/CodinLab/blob/64-preparing-of-readmemd-file-of-the-project/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" >
 
 ## Table of Contents
@@ -80,6 +81,18 @@ Join our journey to help everyone learn software development from scratch and be
 ## How to Make your Labs Or Path?
 
 ### Inventory JSON Explanation
+=======
+[![Docker](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml)
+# CodinLab
+CodinLab software development laboratory
+
+## Installation
+```bash
+    docker run -p"80:80" -v "/var/run/docker.sock:/var/run/docker.sock" ghcr.io/yavuzlar/codinlab:latest
+```
+
+## Inventory JSON Explanation
+
 
 This inventory JSON contains all the programming languages supported by CodinLab. You can add as many languages as you want to the array by filling in the required fields in the desired format.
 
@@ -135,7 +148,9 @@ A JSON example of the C++ programming language is provided below.
     }
 ```
 
+
 ### Quest JSON Explanation
+
 
 This JSON represents a path question or a lab question in a roadmap on codinlab; now we will explain it.
 
@@ -205,11 +220,13 @@ Below is an example of how to create a question JSON. This question supports two
 }
 ```
 
+
 ### Code Template Explanation
 
 This file describes the template used in Codinlab for generating questions and testing solutions.
 
 #### Constants
+
 
 1. **$funcname$**: Holds the name of the function for the given problem.
 2. **$imps$**: Contains the import statements from the user's submitted code. These imports can be customized depending on the Frontend or Docker template.
@@ -220,7 +237,9 @@ This file describes the template used in Codinlab for generating questions and t
 7. **$checks$**: Contains the logic for checking a single test. This is later used in the Docker template, where it applies the test logic to all test inputs and outputs.
 8. **$success$**: This constant is used to indicate a successful test. It should be printed at the end if all tests pass.
 
+
 #### Sections
+
 
 When writing templates, each section should begin with a header formatted as follows:
 
@@ -230,7 +249,10 @@ When writing templates, each section should begin with a header formatted as fol
 
 - `## CHECK`: This section defines the logic for verifying the correctness of the tests. It includes the initialization of test inputs and the comparison of the function's output against the expected result. This ensures that all tests are properly validated.
 
+
 ##### FRONTEND
+
+
 
 Defines the template to be sent to the frontend. In this section:
 
@@ -265,7 +287,9 @@ int main() {
 }
 ```
 
+
 ##### DOCKER
+
 
 Defines the template for Docker-based testing. In this section:
 
@@ -292,6 +316,8 @@ int main() {
 
 ##### CHECK
 
+
+
 - The function's result is then should be compared against the expected output, which is stored in $output$. If the result does not match $output$, the test will fail.
 - The test inputs are initialized using $input$. If the input is an array, each element will be joined with a comma (`,`), meaning all array elements will appear side by side.
 - The function is tested by comparing the result against $output$.
@@ -309,6 +335,4 @@ if (result$rnd$ != $output$) {
     exit($rnd$);
 }
 ```
-
-
 

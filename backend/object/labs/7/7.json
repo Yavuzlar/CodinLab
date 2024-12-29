@@ -1,0 +1,52 @@
+{
+	"id": 7,
+	"languages": [
+		{
+            "lang": "en",
+            "title": "What IF this LOOP never ends?",
+            "description": "In this lab, you need to check if the array is sorted. If not, you need to sort it!",
+            "note": "Use a while loop in this lab. You need to learn it too! But be careful in the lab's name :). Check if the array is sorted. If not, sort it and return the array. Don't use the built-in sort function, implement the sorting algorithm yourself",
+            "hint": "Consider using the bubble sort algorithm. Keep looping through the array, comparing adjacent elements and swapping them if they're out of order. Repeat until the array is sorted."
+        },        
+		{
+            "lang": "tr",
+            "title": "Ya bu DÖNGÜ Asla Bitmezse?",
+            "description": "Bu laboratuvarda dizinin sıralı olup olmadığını kontrol etmelisiniz. Eğer sıralı değilse, sıralayın!",
+            "note": "Bu laboratuvarı while döngüsü kullanarak yapmalısınız.Çünkü bu döngünün kullanımını da öğrenmeniz lazım! Ama kullanırken laboratuvarın ismine de dikkat edin! :) Dizinin sıralı olup olmadığını kontrol etmelisiniz. Eğer sıralı değilse, sıralayın ve diziyi geri döndürün. Özel sıralama fonksiyonunu kullanmayın, sıralama algoritmasını kendiniz oluşturun.",
+            "hint": "Bubble sort algoritmasını kullanmayı düşünebilirsiniz. Diziyi sürekli döngüyle gezip, yan yana olan elemanları karşılaştırın ve eğer sırasızlarsa yer değiştirin. Bu işlemi dizi sıralanana kadar tekrarlayın."
+        }
+        
+	],
+	"quest": {
+		"difficulty": 2,
+		"funcName": "sortArray",
+		"tests": [
+			{
+				"input": [[123, 44, 1, 6, 79, 22]],
+				"output": [[1, 6, 22, 44, 79, 123]]
+			},
+			{
+                "input": [[0, -1, -5, 3, 2, -3]],
+                "output": [[-5,-3, -1, 0, 2, 3]]
+            },
+			{
+				"input": [[56, 23, 11, 65, 7, -3]],
+				"output": [[-3, 7, 11, 23, 56, 65]]
+			},
+			{
+				"input": [[1,2,3,4,5,6]],
+				"output": [[1,2,3,4,5,6]]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath": "object/labs/7/c++.txt"
+			},
+			{
+				"programmingID": 2,
+				"templatePath": "object/labs/7/go.txt"
+			}
+		]
+	}
+}

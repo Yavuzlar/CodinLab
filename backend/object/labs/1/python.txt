@@ -20,15 +20,15 @@ $imps$
 $usercode$
 
 $checks$
-print("$success$")
+print(f"$success$|||{result$res$}|||_|||_")
 
 ## CHECK
 
 result$rnd$ = $funcname$($input$)
 
-# JSON'dan gelen true/false değerini Python True/False değerine çeviriyoruz
 expected_output = True if '$output$' == 'true' else False
 
 if result$rnd$ != expected_output:
-    print(f"Test Failed: Expected {expected_output}, but got {result$rnd$}")
+    print(f"_|||{result$rnd$}|||{expected_output}|||_")
     exit(1)
+

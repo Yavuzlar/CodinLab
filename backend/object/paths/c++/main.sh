@@ -1,22 +1,29 @@
 test=(-tests-)
+
+if [ ${#test[@]} -eq 0 ]; then
+    result=$(./main)
+    echo "Test Passed|||$result|||_|||_"
+    exit 0
+fi
+
+
 for i in "${!test[@]}"; do
     expected_result="${test[$i]}"
     
     compile_output=$(g++ -o main main.cpp 2>&1) 
     
     if [ $? -ne 0 ]; then 
-        echo "Compilation failed:"
-        echo "$compile_output" 
+        echo "_|||_|||_|||$compile_output" 
         exit 1 
     fi
+
     
     result=$(./main)
 
     if [[ "$result" == "$expected_result" ]]; then
-        echo "Test Passed"
+        echo "Test Passed|||$result|||_|||_"
     else
-        echo "Test Failed:"
-        echo " Expected: $expected_result,"
-        echo "but got $result"
+        echo "_|||$result|||$expected_result|||_"
+        exit 2
     fi
 done

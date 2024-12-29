@@ -12,12 +12,15 @@ func NewLabDTOManager() LabDTOManager {
 }
 
 type LabDTO struct {
-	ID         int            `json:"id"`
-	Languages  LabLanguageDTO `json:"language"`
-	Template   string         `json:"template,omitempty"`
-	IsStarted  bool           `json:"isStarted"`
-	IsFinished bool           `json:"isFinished"`
-	Difficulty int            `json:"difficulty"`
+	ID              int            `json:"id"`
+	ProgrammingName string         `json:"programmingName"`
+	Languages       LabLanguageDTO `json:"language"`
+	Template        string         `json:"template,omitempty"`
+	IsStarted       bool           `json:"isStarted"`
+	IsFinished      bool           `json:"isFinished"`
+	Difficulty      int            `json:"difficulty"`
+	FileExtention   string         `json:"fileExtention"`
+	MonacoEditor    string         `json:"monacoEditor"`
 }
 
 type LabForAllDTO struct {
@@ -35,6 +38,7 @@ type LabsDTO struct {
 type LabsForAllDTO struct {
 	Labs          []LabForAllDTO `json:"labs"`
 	IsImageExists bool           `json:"isImageExists"`
+	IconPath      string         `json:"iconPath"`
 }
 
 func (m *LabDTOManager) ToLabsDTO(labs []LabDTO, isImageExists bool) LabsDTO {
@@ -44,22 +48,26 @@ func (m *LabDTOManager) ToLabsDTO(labs []LabDTO, isImageExists bool) LabsDTO {
 	}
 }
 
-func (m *LabDTOManager) ToLabsForAllDTO(labs []LabForAllDTO, isImageExists bool) LabsForAllDTO {
+func (m *LabDTOManager) ToLabsForAllDTO(labs []LabForAllDTO, isImageExists bool, iconPath string) LabsForAllDTO {
 	return LabsForAllDTO{
 		Labs:          labs,
 		IsImageExists: isImageExists,
+		IconPath:      iconPath,
 	}
 }
 
 // This is for get lab by id
-func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, template string) LabDTO {
+func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, template string, programmingName, fileExtention, monacoEditor string) LabDTO {
 	return LabDTO{
-		ID:         lab.GetID(),
-		Languages:  languagesDTO,
-		Template:   template,
-		IsStarted:  lab.GetIsStarted(),
-		IsFinished: lab.GetIsFinished(),
-		Difficulty: lab.GetQuest().GetDifficulty(),
+		ID:              lab.GetID(),
+		ProgrammingName: programmingName,
+		Languages:       languagesDTO,
+		Template:        template,
+		IsStarted:       lab.GetIsStarted(),
+		IsFinished:      lab.GetIsFinished(),
+		Difficulty:      lab.GetQuest().GetDifficulty(),
+		FileExtention:   fileExtention,
+		MonacoEditor:    monacoEditor,
 	}
 }
 

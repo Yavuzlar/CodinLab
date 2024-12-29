@@ -1,0 +1,9 @@
+## FRONTEND
+
+#include <iostream>
+
+int $funcname$() {
+   // Write your code here
+
+   return 0;
+}

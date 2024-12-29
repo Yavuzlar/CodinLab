@@ -39,41 +39,28 @@ const Login = () => {
   const [visiblePasswordLabel, setVisiblePasswordLabel] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
-  // enter tuşu ile login olma
-  addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      handleSubmit();
-    }
-  });
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  // const handleMouseDownPassword = (event) => {
-  //   event.preventDefault();
-  // };
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
 
-    if (e.target.name === "username") {
-      setUsername(e.target.value);
-      handleVisibleUsernameLabel(e.target.value);
+    if (name === "username") {
+      setUsername(value);
+      setVisibleUsernameLabel(value !== "");
     }
 
-    if (e.target.name === "password") {
-      setPassword(e.target.value);
-      handleVisiblePasswordLabel(e.target.value);
+    if (name === "password") {
+      setPassword(value);
+      setVisiblePasswordLabel(value !== "");
     }
   };
 
-  const handleVisibleUsernameLabel = (username) => {
-    setVisibleUsernameLabel(username !== "");
-  };
-
-  const handleVisiblePasswordLabel = (password) => {
-    setVisiblePasswordLabel(password !== "");
-  };
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setFormSubmit(true);
+
     const validationErrors = await loginValidation(formData);
     setErrors(validationErrors);
 
@@ -81,10 +68,13 @@ const Login = () => {
       console.log("Form has errors:", validationErrors);
       return;
     }
-    // Call API
+
+    // API çağrısı
     try {
       await login(formData);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   const goRegisterPage = () => {
@@ -92,15 +82,18 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (formSubmit) {
-      const validateForm = async () => {
-        const validationErrors = await loginValidation(formData);
-        setErrors(validationErrors);
-        console.log(validationErrors, "errors");
-      };
-      validateForm();
-    }
-  }, [formData, formSubmit]);
+    const handleEnterPress = (event) => {
+      if (event.key === "Enter") {
+        handleSubmit(event);
+      }
+    };
+
+    window.addEventListener("keydown", handleEnterPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleEnterPress);
+    };
+  }, [formData]);
 
   const { t } = useTranslation();
   const sm_down = useMediaQuery((theme) => theme.breakpoints.down("sm"));

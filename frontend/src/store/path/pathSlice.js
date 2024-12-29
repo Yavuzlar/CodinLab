@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Router } from "next/router";
 
 const initialState = {
-  loading: false,
+  loading: true,
   data: [],
   error: false,
 };
@@ -24,7 +25,7 @@ export const fetchPathById = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message || error.message);
+      return rejectWithValue(error);
     }
   }
 );

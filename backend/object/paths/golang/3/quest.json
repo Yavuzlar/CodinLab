@@ -1,0 +1,43 @@
+{
+	"id": 3,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Functions",
+			"description": "Understand how to define and use functions in Go.",
+			"content": "In this task, you will explore the fundamentals of creating and using functions in Go. Functions are blocks of reusable code designed to perform a specific task. You will learn to define a function with a name, pass parameters to it, and return a value. Functions help to keep your code organized and improve its reusability.",
+			"note": "1. Define a function named `add` that accepts two integers as parameters and returns their sum. Use the syntax `func add(a int, b int) int` for the function.\n2. Call the `add` function from the `main` function by providing two integer arguments. Store the returned value in a variable and print the result using `fmt.Println`.\n3. Test the `add` function with different cases, including positive, negative, and zero values, to ensure its correctness and reliability."
+		},
+		{
+			"lang": "tr",
+			"title": "Fonksiyonlar",
+			"description": "Go dilinde fonksiyonların nasıl tanımlandığını ve kullanıldığını öğrenin.",
+			"content": "Bu görevde, Go dilinde fonksiyon oluşturmanın ve kullanmanın temellerini keşfedeceksiniz. Fonksiyonlar, belirli bir görevi gerçekleştirmek için tasarlanmış, tekrar kullanılabilir kod bloklarıdır. Bir fonksiyonun nasıl bir isimle tanımlanacağını, parametreler alacağını ve bir değer döndüreceğini öğreneceksiniz. Fonksiyonlar kodunuzu düzenli tutar ve yeniden kullanılabilirliğini artırır.",
+			"note": "1. İki tam sayı parametresi alan ve bunların toplamını döndüren `add` adında bir fonksiyon tanımlayın. Fonksiyon için `func add(a int, b int) int` sözdizimini kullanın.\n2. `main` fonksiyonundan `add` fonksiyonunu çağırarak iki tam sayı argümanı geçirin. Döndürülen değeri bir değişkene kaydedin ve sonucu `fmt.Println` kullanarak yazdırın.\n3. `add` fonksiyonunu farklı durumlarla (pozitif, negatif ve sıfır değerler) test edin ve fonksiyonun doğru ve güvenilir çalıştığından emin olun."
+		}
+	],
+	"quest": {
+		"difficulty": 2,
+		"funcName": "add",
+		"tests": [
+			{
+				"input": [5, 7],
+				"output": [12]
+			},
+			{
+				"input": [-3, 4],
+				"output": [1]
+			},
+			{
+				"input": [3, 0],
+				"output": [3]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 2,
+				"templatePath": "object/paths/golang/3/template.txt"
+			}
+		]
+	}
+}

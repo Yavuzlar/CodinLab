@@ -1,0 +1,9 @@
+## FRONTEND
+
+package main;
+
+import "fmt"
+
+func $funcname$() {
+    // Write your code here
+}

@@ -1,0 +1,58 @@
+{
+    "id": 9,
+    "languages": [
+        {
+            "lang": "en",
+            "title": "Finding the Maximum of Two Numbers in Python",
+            "description": "Learn how to create a Python function that compares two numbers and returns the larger one.",
+            "content": "Write a Python function named `find_max` that takes two parameters `a` and `b`. The function should compare the two numbers and return the larger one. If both numbers are equal, return either of them. Call the function with example values and print the output.",
+            "note": "1. Use an `if-else` statement to compare the two numbers.\n2. Return the larger number using the `return` statement.\n   Example:\n   ```python\n   def find_max(a, b):\n       if a > b:\n           return a\n       else:\n           return b\n   ```\n3. Test the function with example inputs and print the results to see if it works correctly. Example:\n   ```python\n   print(find_max(5, 10))  # Outputs: 10\n   ```"
+        },
+        {
+            "lang": "tr",
+            "title": "Python'da İki Sayının Maksimumunu Bulma",
+            "description": "İki sayıyı karşılaştırıp büyük olanı döndüren bir Python fonksiyonunun nasıl oluşturulacağını öğrenin.",
+            "content": "İki parametre `a` ve `b` alan, bu sayıları karşılaştırıp büyük olanı döndüren `find_max` adlı bir Python fonksiyonu yazın. Eğer iki sayı eşitse, herhangi birini döndürebilirsiniz. Fonksiyonu örnek değerlerle çağırın ve sonucu yazdırın.",
+            "note": "1. İki sayıyı karşılaştırmak için bir `if-else` ifadesi kullanın.\n2. Büyük sayıyı `return` ifadesiyle döndürün.\n   Örnek:\n   ```python\n   def find_max(a, b):\n       if a > b:\n           return a\n       else:\n           return b\n   ```\n3. Fonksiyonu örnek girdilerle test edin ve sonuçları yazdırarak çalışıp çalışmadığını kontrol edin. Örnek:\n   ```python\n   print(find_max(5, 10))  # Çıktı: 10\n   ```"
+        }
+    ],
+    "quest": {
+        "difficulty": 1,
+        "funcName": "find_max",
+        "tests": [
+            {
+                "input": [
+                    3,
+                    7
+                ],
+                "output": [
+                    7
+                ]
+            },
+            {
+                "input": [
+                    10,
+                    5
+                ],
+                "output": [
+                    10
+                ]
+            },
+            {
+                "input": [
+                    4,
+                    4
+                ],
+                "output": [
+                    4
+                ]
+            }
+        ],
+        "codeTemplates": [
+            {
+                "programmingID": 3,
+                "templatePath": "object/paths/python/9/template.txt"
+            }
+        ]
+    }
+}

@@ -22,12 +22,12 @@ func newCommonService(
 func (s *commonService) GetInventoryInformation(programmingID, language string) (inventoryInformation *domains.InventoryInformation, err error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessage(400, "Invalid Programming Language ID")
+		return nil, service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
 	}
 
 	inventory, err := s.parserService.GetInventory()
 	if err != nil {
-		return nil, service_errors.NewServiceErrorWithMessage(500, "error by getting programming language information")
+		return nil, service_errors.NewServiceErrorWithMessage(500, domains.ErrGettingProgrammingLanguages)
 	}
 	for _, inv := range inventory {
 		if inv.ID == intProgrammingID {
@@ -40,12 +40,12 @@ func (s *commonService) GetInventoryInformation(programmingID, language string) 
 				}
 			}
 
-			inventoryInformation = domains.NewInventoryInformation(inv.Name, inv.DockerImage, inv.FileExtension, inv.PathDir, inv.ID, inv.Cmd, inv.ShCmd, langInfo)
+			inventoryInformation = domains.NewInventoryInformation(inv.IconPath, inv.Name, inv.DockerImage, inv.FileExtension, inv.MonacoEditor, inv.PathDir, inv.ID, inv.Cmd, inv.ShCmd, langInfo)
 			break
 		}
 	}
 	if inventoryInformation == nil {
-		return nil, service_errors.NewServiceErrorWithMessage(404, "Programming Language Not Found")
+		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrProgrammingLanguageNotFound)
 	}
 
 	return

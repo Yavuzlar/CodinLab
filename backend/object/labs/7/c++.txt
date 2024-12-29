@@ -1,0 +1,51 @@
+## FRONTEND
+
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+std::vector<int> $funcname$(std::vector<int> inputArr) {
+    // Write your code here
+    std::vector<int> sortedArr = inputArr;
+
+    return sortedArr;
+}
+
+int main() {
+    vector<int> array = {2,1,5,4,3};
+
+    std:cout << "Sorted array: ";
+    for (char i: path)
+        std::cout << i << ' ';
+
+    return 0;
+}
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+int main(){
+    $checks$
+    std::cout << "$success$|||" << result$res$ <<"|||_|||_" << std::endl;
+}
+
+## CHECK
+
+bool areVectorsEqual(const std::vector<int>& vec1, const std::vector<int>& vec2) {
+    return vec1 == vec2;
+}
+
+std::vector<int> inputArr$rnd$ = {$input$};
+std::vector<int> outputArr$rnd$ = {$output$};
+
+std::vector<int> result$rnd$ = $funcname$(inputArr$rnd$)
+if (result$rnd$ != $output$){
+    std::cout << "_|||" << result$rnd$ <<"|||$out$|||_" << std::endl;
+    return 0;
+}

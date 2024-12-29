@@ -53,7 +53,6 @@ const Filter = ({
         minHeight: "44px",
         flexWrap: "wrap",
         gap: '1rem',
-        position: 'relative',
 
       }}
     >
@@ -84,7 +83,7 @@ const Filter = ({
         })}
       </Box>
 
-      <Box sx={{ height: "44px", minWidth: 'fit-content' }}>
+      <Box sx={{ height: "44px", minWidth: 'fit-content', }}>
         <SortFilter
           filters={filters}
           setFilters={setFilters}
@@ -92,45 +91,7 @@ const Filter = ({
         />
       </Box>
 
-      <Box sx={{ width: '100%' }}>
-        <FormControl fullWidth>
-          <TextField
-            name="search-in-labs"
-            placeholder={searchPlaceholder}
-            variant="outlined"
-            size="small"
-            onChange={(e) => {
-              setFilters({ ...filters, search: e.target.value });
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment sx={{ zIndex: 10, mr: 1 }}>
-                  <Search />
-                </InputAdornment>
-              ),
-              style: { color: theme.palette.text.primary },
-            }}
-            sx={{
-              "& .MuiInputBase-input": {
-                color: theme.palette.text.primary,
-                zIndex: 9,
-                "&::placeholder": {
-                  color: theme.palette.text.primary,
-                  opacity: 0.7,
-                },
-              },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  backgroundColor: theme.palette.primary.main,
-                },
-              },
 
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        </FormControl>
-      </Box>
     </Box>
   );
 };

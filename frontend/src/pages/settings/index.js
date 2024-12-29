@@ -4,6 +4,6 @@ const SettingsUsers = () => <SettingsPage />;
 
 SettingsUsers.acl = {
   action: "read",
-  permission: "settings",
+  permission: "userSettings",
 };
 export default SettingsUsers;

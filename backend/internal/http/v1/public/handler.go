@@ -1,8 +1,6 @@
 package public
 
 import (
-	"sync"
-
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
@@ -16,7 +14,6 @@ type PublicHandler struct {
 	session_store *session.Store
 	dtoManager    *dto.DTOManager
 	clients       map[*domains.Client]bool
-	mu            sync.Mutex
 }
 
 func NewPublicHandler(

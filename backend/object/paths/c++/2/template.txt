@@ -1,0 +1,39 @@
+## FRONTEND
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+string $funcname$() {
+    // Write your code here
+}
+
+int main() {
+    string result = $funcname$();
+    
+    std::cout << "Fonksiyondan dönen sonuç: " << result << std::endl;
+    return 0;
+}
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+int main() {
+    $checks$
+
+    std::cout << "$success$|||" << result$res$ <<"|||_|||_" << std::endl;
+
+    return 0;
+}
+
+## CHECK
+
+std::string result$rnd$ = $funcname$($input$);
+if (result$rnd$ != $output$) {
+    std::cout << "_|||" << result$rnd$ << "|||$out$|||_" << std::endl;
+    return 0;
+}

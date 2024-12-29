@@ -44,8 +44,7 @@ $usercode$
 
 func main(){
     $checks$
-
-    fmt.Println("$success$")
+    fmt.Printf("$success$|||%v|||_|||_", result$res$)
 }
 
 ## CHECK
@@ -54,6 +53,6 @@ inputArr$rnd$ := []string{$input$}
 
 result$rnd$ := $funcname$(inputArr$rnd$)
 if (result$rnd$ != $output$){
-    fmt.Printf("Test Failed: Expected $out$, but got %v", result$rnd$)
+    fmt.Printf("_|||%v|||$out$|||_", result$rnd$)
     return
 }

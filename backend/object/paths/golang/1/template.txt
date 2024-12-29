@@ -1,0 +1,7 @@
+## FRONTEND
+
+package main
+
+func $funcname$() {
+    // Write your code here
+}

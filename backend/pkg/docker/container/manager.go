@@ -106,21 +106,19 @@ func (m *Manager) ReadContainerLogs(ctx context.Context, containerID string) (st
 		if len(logLine) > 8 {
 			logLine = logLine[8:]
 		}
-		logLine = strings.TrimSuffix(logLine, "\n")
 
-		re := regexp.MustCompile(`(?s).*?(#|Test)`)
-
-		logLine = re.ReplaceAllString(logLine, "$1")
-
+		// Burada yeni satır karakterlerini koruyarak logLine'ı doğrudan ekleyin
 		result.WriteString(logLine)
 	}
 
 	return m.cleanLogLine(result.String()), nil
 }
 
+// Log temizleme fonksiyonu
 func (m *Manager) cleanLogLine(line string) string {
+	// Tüm özel karakterleri temizle ve yeni satırları koru
 	rePointer := regexp.MustCompile(`\s*\|\s*\^+.*`)
-	reNonAscii := regexp.MustCompile(`[^\x20-\x7E]+`)
+	reNonAscii := regexp.MustCompile(`[^\x20-\x7E\n]+`) // \n karakterini koru
 
 	line = rePointer.ReplaceAllString(line, "")
 	line = reNonAscii.ReplaceAllString(line, "")

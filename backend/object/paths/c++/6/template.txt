@@ -1,0 +1,48 @@
+## FRONTEND
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int $funcname$(int dizi[], int boyut) {
+    // Write your code here
+}
+
+int main() {
+    int dizi[5];
+
+    std::cout << "Lütfen 5 sayı giriniz:" << std::endl;
+    for (int i = 0; i < 5; i++) {
+        std::cout << "Sayı " << i + 1 << ": ";
+        std::cin >> dizi[i];
+    }
+
+    int max=$funcname$(dizi,5);
+    std::cout << "Girilen sayılar arasındaki en büyük sayı: " << max << std::endl;
+
+    return 0;
+}
+
+## DOCKER
+
+$imps$
+#include <vector>
+
+$usercode$
+
+int main(){
+    $checks$
+
+    std::cout << "$success$|||" << result$res$<< "|||_|||_" << std::endl;
+    return 0;
+}
+
+## CHECK
+
+std::vector<int> dizi$rnd$ = {$input$};
+int result$rnd$ = $funcname$(dizi$rnd$.data(), dizi$rnd$.size());
+if (result$rnd$ != $output$) {
+    std::cout << "_|||" << result$rnd$ << "|||$out$|||_" << std::endl;
+    return 0;
+}

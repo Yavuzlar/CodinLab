@@ -9,8 +9,8 @@ const Output = ({ value, params }) => {
     value ||
     t("codeEditor.output.display");
 
-  const width = params.width ? params.width : "50%";
-  const height = params.height ? params.height : "50%";
+  // const width = params.width ? params.width : "50%";
+  // const height = params.height ? params.height : "50%";
 
   return (
     <Box
@@ -25,6 +25,7 @@ const Output = ({ value, params }) => {
         color: "white",
         height: params.height || "auto",
         width: params.width || "auto",
+        
       }}
     >
       <Box
@@ -89,9 +90,10 @@ const Output = ({ value, params }) => {
             paddingBottom: "24px",
             paddingTop: "8px",
             fontWeight: "normal",
+            whiteSpace: 'pre-line'
           }}
         >
-          {value}
+          {value?.output}
         </Box>
       </Box>
     </Box>

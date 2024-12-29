@@ -1,24 +1,31 @@
-test=(-tests-)
+#!/bin/bash
+test=(-tests-) # test dizisi tanımlandı
+
+export TERM=xterm  # TERM değişkeni ayarlandı
+
+# Eğer test dizisi boşsa, bir kere çalıştır. Cevap gerekmeyen öğrenmek için olan bir pathdir.
+if [ ${#test[@]} -eq 0 ]; then
+    result=$(node main.js)
+    echo "Test Passed|||$result|||_|||_"
+    exit 0
+fi
+
+# Test döngüsü
 for i in "${!test[@]}"; do
     expected_result="${test[$i]}"
     
-   $(go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go 2>&1)
-    
-    compile_output=$(go build -o main ../main.go 2>&1)
-    
-    if [ $? -ne 0 ]; then
-        echo "Compilation failed:"
-        echo "$compile_output" 
-        exit 1  
-    fi
-    
-    result=$(go run ../main.go)
+    go install golang.org/x/tools/cmd/goimports@latest > /dev/null 2>&1
+    goimports -w ../main.go > /dev/null 2>&1
 
+    # GO dosyasını çalıştır 
+    compile_output=$(go build -o main ../main.go 2>&1)
+    result=$(go run ../main.go)  
+
+    # Sonucu beklenen sonuç ile karşılaştır
     if [[ "$result" == "$expected_result" ]]; then
-        echo "Test Passed"
+        echo "Test Passed|||$result|||_|||_"
     else
-        echo "Test Failed:"
-        echo " Expected: $expected_result,"
-        echo "but got $result"
+        echo "_|||$result|||$expected_result|||_"
+        exit 2
     fi
 done

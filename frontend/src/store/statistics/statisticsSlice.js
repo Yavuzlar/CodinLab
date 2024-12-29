@@ -5,10 +5,13 @@ import axios from "axios";
 const initialState = {
   loading: false,
   data: [],
+  levelData: [],
   advancementData: [],
+  developmentData: [],
   difficultyStatsData: [],
   labsProgressStatsData: [],
   error: false,
+  roadProgressStatsData: [],
 };
 
 export const fetchAdvancement = createAsyncThunk(
@@ -20,10 +23,10 @@ export const fetchAdvancement = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -37,13 +40,13 @@ export const GetUserLevel = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(error.message);
     }
   }
-); 
+);
 
 export const getUserDevelopment = createAsyncThunk(
   "statistics/getUserDevelopment",
@@ -54,13 +57,13 @@ export const getUserDevelopment = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(error.message);
     }
   }
-); 
+);
 
 export const getDifficultyStatistics = createAsyncThunk(
   "statistics/getDifficultyStatistics",
@@ -71,10 +74,10 @@ export const getDifficultyStatistics = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -88,10 +91,27 @@ export const getLabsProgressStats = createAsyncThunk(
         method: "GET",
       });
       if (response.status === 200) {
-        return response.data; 
+        return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message); 
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getRoadProgressStats = createAsyncThunk(
+  "statistics/getRoadProgressStats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        url: "/api/v1/private/road/progress/stats",
+        method: "GET",
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -101,28 +121,29 @@ const statisticsSlice = createSlice({
   initialState: initialState,
   extraReducers: (builder) => {
     builder
-    .addCase(fetchAdvancement.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(fetchAdvancement.fulfilled, (state, action) => {
-      state.advancementData = action.payload;
-      state.loading = false;
-    })
-    .addCase(fetchAdvancement.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
+      .addCase(fetchAdvancement.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAdvancement.fulfilled, (state, action) => {
+        state.advancementData = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchAdvancement.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(GetUserLevel.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(GetUserLevel.fulfilled, (state, action) => {
-        state.data = action.payload;
+        state.levelData = action.payload;
         state.loading = false;
       })
       .addCase(GetUserLevel.rejected, (state, action) => {
         state.loading = false;
+        console.log(action)
         state.error = action.payload;
       })
       .addCase(getUserDevelopment.pending, (state) => {
@@ -130,7 +151,7 @@ const statisticsSlice = createSlice({
         state.error = null;
       })
       .addCase(getUserDevelopment.fulfilled, (state, action) => {
-        state.data = action.payload;
+        state.developmentData = action.payload;
         state.loading = false;
       })
       .addCase(getUserDevelopment.rejected, (state, action) => {
@@ -158,6 +179,18 @@ const statisticsSlice = createSlice({
         state.loading = false;
       })
       .addCase(getLabsProgressStats.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getRoadProgressStats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getRoadProgressStats.fulfilled, (state, action) => {
+        state.roadProgressStatsData = action.payload;
+        state.loading = false;
+      })
+      .addCase(getRoadProgressStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

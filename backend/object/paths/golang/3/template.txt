@@ -1,0 +1,42 @@
+## FRONTEND
+
+package main;
+
+import "fmt"
+
+func $funcname$(n1 int,n2 int) int {
+    // Write your code here
+}
+
+func main() {
+    var n1, n2 int
+    fmt.Println("Lütfen bir int değer girin:")
+    fmt.Scan(&n1)
+
+    fmt.Println("Lütfen bir int değer girin:")
+    fmt.Scan(&n2)  
+    fmt.Println("Fonksiyondan dönen sonuç: ", $funcname$(n1,n2))
+}
+
+## DOCKER
+
+package main
+
+$imps$
+
+$usercode$
+
+func main(){
+    $checks$
+}
+
+## CHECK
+
+result$rnd$ := $funcname$($input$)
+if (result$rnd$ != $output$){
+    fmt.Printf("_|||%v|||$out$|||_", result$rnd$)
+    return
+}else{
+    fmt.Printf("$success$|||%v|||_|||_", result$rnd$)
+    return
+}
