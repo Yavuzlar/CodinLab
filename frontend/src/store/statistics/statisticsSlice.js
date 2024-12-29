@@ -26,7 +26,7 @@ export const fetchAdvancement = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -43,7 +43,7 @@ export const GetUserLevel = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -60,7 +60,7 @@ export const getUserDevelopment = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -77,7 +77,7 @@ export const getDifficultyStatistics = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -94,7 +94,7 @@ export const getLabsProgressStats = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -111,7 +111,7 @@ export const getRoadProgressStats = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -143,6 +143,7 @@ const statisticsSlice = createSlice({
       })
       .addCase(GetUserLevel.rejected, (state, action) => {
         state.loading = false;
+        console.log(action)
         state.error = action.payload;
       })
       .addCase(getUserDevelopment.pending, (state) => {

@@ -24,7 +24,7 @@ export const fetchProfileUser = createAsyncThunk(
         return response.data; //return the data
       }
     } catch (error) {
-      return rejectWithValue(response.message); //return the error message
+      return rejectWithValue(error.message); //return the error message
     }
   }
 );
@@ -44,7 +44,7 @@ export const changeProfile = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.message || error.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -64,7 +64,7 @@ export const changePassword = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.message || error.message);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -82,7 +82,7 @@ export const getAdminUser = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return rejectWithValue(response.message);
+      return rejectWithValue(error.message);
     }
   }
 );

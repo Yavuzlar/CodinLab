@@ -39,6 +39,7 @@ const Login = () => {
   const [visiblePasswordLabel, setVisiblePasswordLabel] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
+
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleChange = (e) => {
