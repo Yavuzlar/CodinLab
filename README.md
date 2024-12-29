@@ -18,7 +18,7 @@ CODINLAB is an **open-source software lab** designed to help users learn program
 
 The project is easily extensible and deployable via **Docker Compose**, making it simple for developers to get started or contribute to the project.
 
-![CODINLAB Dashboard Screenshot](https://github.com/Yavuzlar/CodinLab/blob/64-preparing-of-readmemd-file-of-the-project/design/assets/screenshots/codinlab.png)
+![CODINLAB Dashboard Screenshot](https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/screenshots/codinlab.png)
 
 ## Features
 
