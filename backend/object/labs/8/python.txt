@@ -1,0 +1,32 @@
+## FRONTEND
+
+def $funcname$(nums: list) -> list:
+    # Write your code here
+
+    return []  
+
+def main():
+    input_nums = eval(input("Lütfen bir liste sayısı girin (örnek: [1, 2, 3]): "))
+    print("Tekrarlayan sayılar:", $funcname$(input_nums))
+
+if __name__ == "__main__":
+    main()
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+$checks$
+print(f"$success$|||{result$res$}|||_|||_")
+
+## CHECK
+
+result$rnd$ = $funcname$($input$)
+
+expected_output = $output$
+
+if result$rnd$ != expected_output:
+    print(f"_|||{result$rnd$}|||{expected_output}|||_")
+    exit(1)

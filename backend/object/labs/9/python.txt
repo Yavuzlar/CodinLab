@@ -1,0 +1,32 @@
+## FRONTEND
+
+def $funcname$(s: str) -> int:
+  
+
+    return 0  
+
+def main():
+    input_str = input("Lütfen bir string girin: ")
+    print("En uzun tekrarsız alt dizinin uzunluğu:", $funcname$(input_str))
+
+if __name__ == "__main__":
+    main()
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+$checks$
+print(f"$success$|||{result$res$}|||_|||_")
+
+## CHECK
+
+result$rnd$ = $funcname$($input$)
+
+expected_output = $output$
+
+if result$rnd$ != expected_output:
+    print(f"_|||{result$rnd$}|||{expected_output}|||_")
+    exit(1)
