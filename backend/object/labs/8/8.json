@@ -1,0 +1,47 @@
+{
+	"id": 8,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Who Are These Duplicates?",
+			"description": "Given an array of integers, return a new array containing all the numbers that appear more than once.",
+			"note": "Ensure the output array does not contain duplicates and maintains the order of first occurrence.",
+			"hint": "Use a data structure to keep track of seen numbers and identify duplicates."
+		},
+		{
+			"lang": "tr",
+			"title": "Kim Bu Tekrarlayan Sayılar?",
+			"description": "Bir tamsayı array'i verildiğinde, birden fazla kez görünen sayıları içeren yeni bir array döndür.",
+			"note": "Sonuç array'inde tekrarlanan sayılar bulunmamalı ve ilk göründükleri sırayı korumalıdır.",
+			"hint": "Görülen sayıları takip etmek ve tekrarları belirlemek için bir veri yapısı kullan."
+		}
+	],
+	"quest": {
+		"difficulty": 2,
+		"funcName": "findDuplicates",
+		"tests": [
+			{
+				"input": [[1, 2, 3, 2, 4, 5, 6, 5]],
+				"output": [[2, 5]]
+			},
+			{
+				"input": [[10, 20, 10, 20, 30, 40, 50, 50]],
+				"output": [[10, 20, 50]]
+			},
+			{
+				"input": [[1, 2, 3, 4, 5]],
+				"output": [[]]
+			},
+			{
+				"input": [[0, 0, -1, -1, -2, -2, 3, 3]],
+				"output": [[0, -1, -2, 3]]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 3,
+				"templatePath": "object/labs/8/python.txt"
+			}
+		]
+	}
+}

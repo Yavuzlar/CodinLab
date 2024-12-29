@@ -1,0 +1,51 @@
+## FRONTEND
+
+def $funcname$(s):
+    # Write your code here
+
+    return -1
+
+def main():
+    print("Enter true/false values (type 'done' when finished):")
+
+    input_list = []
+
+    while True:
+        line = input().strip()
+
+        if line == "done":
+            break
+
+        if line.lower() == "true" or line.lower() == "false":
+            input_list.append(line.lower() == "true")
+        else:
+            print("Invalid input, please enter 'true' or 'false'.")
+
+    print("Output:", $funcname$(input_list))
+
+if __name__ == "__main__":
+    main()
+
+
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+if __name__ == "__main__":
+    $checks$
+    print(f"$success$|||{result$res$}|||_|||_")
+
+
+## CHECK
+
+inputArr$rnd$ = $input$
+
+result$rnd$ = $$funcname$$(inputArr$rnd$)
+expected_output = $output$
+
+if result$rnd$ != expected_output:
+    print(f"_|||{result$rnd$}|||{expected_output}|||_")
+    exit(1)

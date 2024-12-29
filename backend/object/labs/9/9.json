@@ -1,0 +1,51 @@
+{
+	"id": 9,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "How Far Can We Go?",
+			"description": "Given a string, find the length of the longest substring without repeating characters.",
+			"note": "A substring is a contiguous sequence of characters within a string.",
+			"hint": "Use a sliding window and a set to track unique characters in the current substring."
+		},
+		{
+			"lang": "tr",
+			"title": "Ne Kadar İleri Gidebiliriz?",
+			"description": "Bir string verildiğinde, tekrarlayan karakter içermeyen en uzun alt dizinin uzunluğunu bulun.",
+			"note": "Alt dizi, bir string içinde bitişik karakterlerden oluşan bir dizidir.",
+			"hint": "Kaydırmalı pencere (sliding window) ve mevcut alt dizideki benzersiz karakterleri takip etmek için bir set kullanın."
+		}
+	],
+	"quest": {
+		"difficulty": 3,
+		"funcName": "lengthOfLongestSubstring",
+		"tests": [
+			{
+				"input": ["abcabcbb"],
+				"output": [3]
+			},
+			{
+				"input": ["bbbbb"],
+				"output": [1]
+			},
+			{
+				"input": ["pwwkew"],
+				"output": [3]
+			},
+			{
+				"input": ["abcdef"],
+				"output": [6]
+			},
+			{
+				"input": [" "],
+				"output": [1]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 3,
+				"templatePath": "object/labs/9/python.txt"
+			}
+		]
+	}
+}
