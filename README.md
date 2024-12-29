@@ -76,10 +76,8 @@ CODINLAB provides two types of labs:
 We welcome contributions from the community! Whether you want to add new roadmaps, develop labs, or fix bugs, your efforts are invaluable. 
 Join our journey to help everyone learn software development from scratch and beyond, through open-source collaboration with CODINLAB!
 <br></br>
-
-
 ## How to Make your Labs Or Path?
-
+<br></br>
 ### Inventory JSON Explanation
 
 This inventory JSON contains all the programming languages supported by CodinLab. You can add as many languages as you want to the array by filling in the required fields in the desired format.
@@ -135,7 +133,7 @@ A JSON example of the C++ programming language is provided below.
         ]
     }
 ```
-
+<br></br>
 ### Quest JSON Explanation
 
 This JSON represents a path question or a lab question in a roadmap on codinlab; now we will explain it.
@@ -205,7 +203,7 @@ Below is an example of how to create a question JSON. This question supports two
 	}
 }
 ```
-
+<br></br>
 ### Code Template Explanation
 
 This file describes the template used in Codinlab for generating questions and testing solutions.
