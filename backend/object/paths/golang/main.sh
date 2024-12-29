@@ -16,6 +16,13 @@ for i in "${!test[@]}"; do
 
     # GO dosyasını çalıştır 
     compile_output=$(go build -o main ../main.go 2>&1)
+
+        if [ $? -ne 0 ]; then 
+        echo "_|||_|||_|||$compile_output" 
+        exit 1 
+        fi
+
+
     result=$(go run ../main.go)  
 
     # Sonucu beklenen sonuç ile karşılaştır
