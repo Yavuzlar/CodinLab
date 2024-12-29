@@ -73,6 +73,14 @@ CODINLAB provides two types of labs:
   
 - **Algorithmic Labs**: Labs that focus on language-independent algorithmic challenges and data structures, helping users improve their problem-solving skills.
 
+## Contributing
+
+We welcome contributions from the community! Whether you want to add new roadmaps, develop labs, or fix bugs, your efforts are invaluable. 
+
+---
+
+Join our journey to help everyone learn software development from scratch and beyond, through open-source collaboration with CODINLAB!
+
 ## Inventory JSON Explanation
 
 This inventory JSON contains all the programming languages supported by CodinLab. You can add as many languages as you want to the array by filling in the required fields in the desired format.
@@ -305,10 +313,4 @@ if (result$rnd$ != $output$) {
 ```
 
 
-## Contributing
 
-We welcome contributions from the community! Whether you want to add new roadmaps, develop labs, or fix bugs, your efforts are invaluable. 
-
----
-
-Join our journey to help everyone learn software development from scratch and beyond, through open-source collaboration with CODINLAB!
