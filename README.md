@@ -81,7 +81,6 @@ Join our journey to help everyone learn software development from scratch and be
 ## How to Make your Labs Or Path?
 
 ### Inventory JSON Explanation
-=======
 [![Docker](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml)
 # CodinLab
 CodinLab software development laboratory
