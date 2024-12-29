@@ -23,7 +23,7 @@ The project is easily extensible and deployable via **Docker Compose**, making i
   - Python
   - C++
   - Golang
-  - And more...
+  - Javascript
   
   Each roadmap offers focused learning on different areas such as:
     - Basic Syntax and Concepts
