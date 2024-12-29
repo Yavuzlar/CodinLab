@@ -7,6 +7,7 @@
 - [Installation](#installation)
 - [Roadmaps](#roadmaps)
 - [Labs](#labs)
+- [Inventory JSON Explanation](#inventory-json-explanation)
 - [Contributing](#contributing)
 
 ## What is CODINLAB?
