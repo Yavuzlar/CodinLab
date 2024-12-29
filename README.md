@@ -8,6 +8,7 @@
 - [Roadmaps](#roadmaps)
 - [Labs](#labs)
 - [Contributing](#contributing)
+- [How to Make your Labs Or Path?](#how-to-make-your-labs-Or-path?)
 
 
 ## What is CODINLAB?
