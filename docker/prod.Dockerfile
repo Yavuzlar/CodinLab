@@ -19,6 +19,7 @@ go build -ldflags "-s -w -X 'github.com/Yavuzlar/CodinLab/internal/config.APP_VE
 FROM node:alpine AS frontend
 WORKDIR /app
 COPY ./frontend/. .
+RUN apk update && apk add ca-certificates && update-ca-certificates
 RUN npm install && npm run build
 
 
