@@ -1,4 +1,4 @@
-<img src="https://github.com/Yavuzlar/CodinLab/blob/main/frontend/src/assets/logo/codinlab-logo-main.png?raw=true" alt="CodinLab Logo" width="300" height="450">
+<img src="https://github.com/Yavuzlar/CodinLab/blob/64-preparing-of-readmemd-file-of-the-project/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" >
 
 ## Table of Contents
 
