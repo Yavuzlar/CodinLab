@@ -74,10 +74,11 @@ CODINLAB provides two types of labs:
 ## Contributing
 
 We welcome contributions from the community! Whether you want to add new roadmaps, develop labs, or fix bugs, your efforts are invaluable. 
-
----
-
 Join our journey to help everyone learn software development from scratch and beyond, through open-source collaboration with CODINLAB!
+<br></br>
+
+
+## How to Make your Labs Or Path?
 
 ### Inventory JSON Explanation
 
