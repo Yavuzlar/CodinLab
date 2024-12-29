@@ -1,3 +1,87 @@
+
+<img src="https://github.com/Yavuzlar/CodinLab/blob/64-preparing-of-readmemd-file-of-the-project/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" >
+
+## Table of Contents
+
+- [What is CODINLAB?](#what-is-codinlab)
+- [Features](#features)
+- [Installation](#installation)
+- [Roadmaps](#roadmaps)
+- [Labs](#labs)
+- [Contributing](#contributing)
+- [How to Make your Labs Or Path?](#how-to-make-your-labs-or-path)
+
+
+## What is CODINLAB?
+
+CODINLAB is an **open-source software lab** designed to help users learn programming from scratch. Developed with **Golang** as the backend and **React.js** for the frontend, CODINLAB provides comprehensive **roadmaps** and **hands-on labs** that allow users to grasp the syntax and structure of various programming languages, along with a focus on specific topics within those languages. 
+
+The project is easily extensible and deployable via **Docker Compose**, making it simple for developers to get started or contribute to the project.
+
+![CODINLAB Dashboard Screenshot](https://github.com/Yavuzlar/CodinLab/blob/64-preparing-of-readmemd-file-of-the-project/design/assets/screenshots/codinlab.png)
+
+## Features
+
+- **Language-Specific Roadmaps**: Roadmaps provide a step-by-step guide to learning languages like:
+  - Python
+  - C++
+  - Golang
+  - Javascript
+  
+  Each roadmap offers focused learning on different areas such as:
+    - Basic Syntax and Concepts
+    - Object-Oriented Programming (OOP)
+    - Functional Programming
+    - Backend and Frontend Development
+
+- **Algorithmic Labs**: Improve problem-solving skills through language-agnostic challenges that focus on data structures and algorithms.
+  
+- **Sample Projects**: Apply your skills by building real-world projects included in the roadmaps.
+  
+- **Progress Tracking**: Keep track of your development journey as you complete labs and projects within each roadmap.
+
+- **User Management**: Organize and manage different users with role-based permissions and customizable access control.
+
+- **Extensible Architecture**: Easily extend CODINLAB with new roadmaps, languages, or additional labs using the plugin architecture.
+
+- **Docker Compose Support**: Quick and straightforward setup with Docker Compose, making deployment a breeze for any user.
+
+## Installation
+
+To run CODINLAB locally, follow these steps:
+
+1. Use Docker Run to launch the application:
+
+    ```bash
+    docker run -p"80:80" -v "/var/run/docker.sock:/var/run/docker.sock" ghcr.io/yavuzlar/codinlab:latest
+    ```
+
+2. Once the application is up, open your browser and go to `http://localhost:80` to start using CODINLAB.
+
+## Roadmaps
+
+CODINLAB offers various **roadmaps** that guide users from basic to advanced programming concepts. These roadmaps are tailored to help you understand the following:
+
+- **Programming Language Syntax**: Grasp the fundamental syntax and structures of different languages.
+- **Specific Language Areas**: Focus on key areas such as backend development, functional programming, and object-oriented design.
+- **Data Structures and Algorithms**: Master essential problem-solving techniques used in the real world for any software development role.
+
+## Labs
+
+CODINLAB provides two types of labs:
+- **Language-Specific Labs**: Hands-on labs designed to help users dive deep into specific programming languages with exercises and sample projects.
+  
+- **Algorithmic Labs**: Labs that focus on language-independent algorithmic challenges and data structures, helping users improve their problem-solving skills.
+
+## Contributing
+
+We welcome contributions from the community! Whether you want to add new roadmaps, develop labs, or fix bugs, your efforts are invaluable. 
+Join our journey to help everyone learn software development from scratch and beyond, through open-source collaboration with CODINLAB!
+<br></br>
+## How to Make your Labs Or Path?
+
+### Inventory JSON Explanation
+=======
 [![Docker](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml)
 # CodinLab
 CodinLab software development laboratory
@@ -8,6 +92,7 @@ CodinLab software development laboratory
 ```
 
 ## Inventory JSON Explanation
+
 
 This inventory JSON contains all the programming languages supported by CodinLab. You can add as many languages as you want to the array by filling in the required fields in the desired format.
 
@@ -63,7 +148,9 @@ A JSON example of the C++ programming language is provided below.
     }
 ```
 
-## Quest JSON Explanation
+
+### Quest JSON Explanation
+
 
 This JSON represents a path question or a lab question in a roadmap on codinlab; now we will explain it.
 
@@ -133,11 +220,13 @@ Below is an example of how to create a question JSON. This question supports two
 }
 ```
 
-## Code Template Explanation
+
+### Code Template Explanation
 
 This file describes the template used in Codinlab for generating questions and testing solutions.
 
-### Constants
+#### Constants
+
 
 1. **$funcname$**: Holds the name of the function for the given problem.
 2. **$imps$**: Contains the import statements from the user's submitted code. These imports can be customized depending on the Frontend or Docker template.
@@ -148,7 +237,9 @@ This file describes the template used in Codinlab for generating questions and t
 7. **$checks$**: Contains the logic for checking a single test. This is later used in the Docker template, where it applies the test logic to all test inputs and outputs.
 8. **$success$**: This constant is used to indicate a successful test. It should be printed at the end if all tests pass.
 
-### Sections
+
+#### Sections
+
 
 When writing templates, each section should begin with a header formatted as follows:
 
@@ -158,7 +249,10 @@ When writing templates, each section should begin with a header formatted as fol
 
 - `## CHECK`: This section defines the logic for verifying the correctness of the tests. It includes the initialization of test inputs and the comparison of the function's output against the expected result. This ensures that all tests are properly validated.
 
-#### FRONTEND
+
+##### FRONTEND
+
+
 
 Defines the template to be sent to the frontend. In this section:
 
@@ -193,7 +287,9 @@ int main() {
 }
 ```
 
-#### DOCKER
+
+##### DOCKER
+
 
 Defines the template for Docker-based testing. In this section:
 
@@ -218,7 +314,9 @@ int main() {
 }
 ```
 
-#### CHECK
+##### CHECK
+
+
 
 - The function's result is then should be compared against the expected output, which is stored in $output$. If the result does not match $output$, the test will fail.
 - The test inputs are initialized using $input$. If the input is an array, each element will be joined with a comma (`,`), meaning all array elements will appear side by side.
@@ -237,3 +335,4 @@ if (result$rnd$ != $output$) {
     exit($rnd$);
 }
 ```
+
