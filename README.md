@@ -1,3 +1,4 @@
+[![Docker](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml)
 
 <img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" >
 
@@ -81,17 +82,6 @@ Join our journey to help everyone learn software development from scratch and be
 ## How to Make your Labs Or Path?
 
 ### Inventory JSON Explanation
-[![Docker](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml)
-# CodinLab
-CodinLab software development laboratory
-
-## Installation
-```bash
-    docker run -p"80:80" -v "/var/run/docker.sock:/var/run/docker.sock" ghcr.io/yavuzlar/codinlab:latest
-```
-
-## Inventory JSON Explanation
-
 
 This inventory JSON contains all the programming languages supported by CodinLab. You can add as many languages as you want to the array by filling in the required fields in the desired format.
 
