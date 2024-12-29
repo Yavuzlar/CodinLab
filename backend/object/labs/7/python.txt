@@ -38,7 +38,7 @@ print(f"$success$|||{result$res$}|||_|||_")
 
 ## CHECK
 
-result$rnd$ = $sortArray$($input$)
+result$rnd$ = $funcname$($input$)
 
 expected_output = $output$
 
