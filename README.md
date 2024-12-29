@@ -1,5 +1,5 @@
 
-<img src="https://github.com/Yavuzlar/CodinLab/blob/64-preparing-of-readmemd-file-of-the-project/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" >
+<img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" >
 
 ## Table of Contents
 
