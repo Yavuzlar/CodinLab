@@ -50,20 +50,13 @@ The project is easily extensible and deployable via **Docker Compose**, making i
 
 To run CODINLAB locally, follow these steps:
 
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/Yavuzlar/CodinLab.git
-    cd codinlab/docker
-    ```
-
-2. Use Docker Run to launch the application:
+1. Use Docker Run to launch the application:
 
     ```bash
     docker run -p"80:80" -v "/var/run/docker.sock:/var/run/docker.sock" ghcr.io/yavuzlar/codinlab:latest
     ```
 
-3. Once the application is up, open your browser and go to `http://localhost:80` to start using CODINLAB.
+2. Once the application is up, open your browser and go to `http://localhost:80` to start using CODINLAB.
 
 ## Roadmaps
 
