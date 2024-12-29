@@ -8,9 +8,6 @@
 - [Roadmaps](#roadmaps)
 - [Labs](#labs)
 - [Contributing](#contributing)
-- [Inventory JSON Explanation](#inventory-json-explanation)
-- [Quest JSON Explanation](#quest-json-explanation)
-- [Code Template Explanation](#code-template-explanation)
 
 
 ## What is CODINLAB?
@@ -82,7 +79,7 @@ We welcome contributions from the community! Whether you want to add new roadmap
 
 Join our journey to help everyone learn software development from scratch and beyond, through open-source collaboration with CODINLAB!
 
-## Inventory JSON Explanation
+### Inventory JSON Explanation
 
 This inventory JSON contains all the programming languages supported by CodinLab. You can add as many languages as you want to the array by filling in the required fields in the desired format.
 
@@ -138,7 +135,7 @@ A JSON example of the C++ programming language is provided below.
     }
 ```
 
-## Quest JSON Explanation
+### Quest JSON Explanation
 
 This JSON represents a path question or a lab question in a roadmap on codinlab; now we will explain it.
 
@@ -208,11 +205,11 @@ Below is an example of how to create a question JSON. This question supports two
 }
 ```
 
-## Code Template Explanation
+### Code Template Explanation
 
 This file describes the template used in Codinlab for generating questions and testing solutions.
 
-### Constants
+#### Constants
 
 1. **$funcname$**: Holds the name of the function for the given problem.
 2. **$imps$**: Contains the import statements from the user's submitted code. These imports can be customized depending on the Frontend or Docker template.
@@ -223,7 +220,7 @@ This file describes the template used in Codinlab for generating questions and t
 7. **$checks$**: Contains the logic for checking a single test. This is later used in the Docker template, where it applies the test logic to all test inputs and outputs.
 8. **$success$**: This constant is used to indicate a successful test. It should be printed at the end if all tests pass.
 
-### Sections
+#### Sections
 
 When writing templates, each section should begin with a header formatted as follows:
 
@@ -233,7 +230,7 @@ When writing templates, each section should begin with a header formatted as fol
 
 - `## CHECK`: This section defines the logic for verifying the correctness of the tests. It includes the initialization of test inputs and the comparison of the function's output against the expected result. This ensures that all tests are properly validated.
 
-#### FRONTEND
+##### FRONTEND
 
 Defines the template to be sent to the frontend. In this section:
 
@@ -268,7 +265,7 @@ int main() {
 }
 ```
 
-#### DOCKER
+##### DOCKER
 
 Defines the template for Docker-based testing. In this section:
 
@@ -293,7 +290,7 @@ int main() {
 }
 ```
 
-#### CHECK
+##### CHECK
 
 - The function's result is then should be compared against the expected output, which is stored in $output$. If the result does not match $output$, the test will fail.
 - The test inputs are initialized using $input$. If the input is an array, each element will be joined with a comma (`,`), meaning all array elements will appear side by side.
