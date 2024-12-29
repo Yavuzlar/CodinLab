@@ -242,7 +242,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		}
 	}
 
-	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTemplate.GetTemplatePath(), lab.GetQuest().GetFuncName(), answerLabDTO.UserCode, lab.GetQuest().GetTests())
+	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTemplate.GetTemplatePath(), lab.GetQuest().GetFuncName(), answerLabDTO.UserCode, lab.GetQuest().GetTests(), inventoryInformation.GetName())
 	if err != nil {
 		return err
 	}

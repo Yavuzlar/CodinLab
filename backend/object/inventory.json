@@ -41,7 +41,7 @@
         "cmd": [
             "sh",
             "-c",
-            "go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go && go run ../main.go"
+            "go run ../main.go"
         ],
         "bashCmd": [
             "bash",

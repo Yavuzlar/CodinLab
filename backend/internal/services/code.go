@@ -319,7 +319,7 @@ func (s *codeService) UploadUserCode(userID, programmingID, labPathID, codeType,
 	return codePath, codeTmpPath, nil
 }
 
-func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []domains.Test) (string, error) {
+func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []domains.Test, inventoryName string) (string, error) {
 	templateMap, err := s.readTemplate(templatePath)
 	if err != nil {
 		return "", err
@@ -350,10 +350,14 @@ func (s *codeService) CodeDockerTemplateGenerator(templatePath, funcName, userCo
 
 	dockerImports, newDocker := extractor.ExtractImports(docker, false)
 
-	allImports := s.bindImports(dockerImports, frontImports)
+	allImports := ""
+	if strings.EqualFold(inventoryName, "GO") && !strings.EqualFold(funcName, "main") {
+		allImports = extractor.CombineImportsForGolang(frontImports, dockerImports)
+	} else {
+		allImports = s.bindImports(dockerImports, frontImports)
+	}
 
 	docker = strings.Replace(newDocker, "$imps$", allImports, -1)
-
 	return docker, nil
 }
 
