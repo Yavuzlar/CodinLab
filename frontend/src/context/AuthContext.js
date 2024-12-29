@@ -236,6 +236,7 @@ const AuthProvider = ({ children }) => {
         const user = response?.data?.data;
         setUser(user);
         router.push("/home");
+        initAuth();
         webSocket();
       } else {
         showToast("dismiss");
@@ -248,8 +249,12 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    initAuth();
-  }, []);
+    if (!["/login", "/register"].includes(router.pathname)) {
+      initAuth();
+    } else {
+      setLoading(false);
+    }
+  }, [router.pathname]);
 
   const values = {
     user,
