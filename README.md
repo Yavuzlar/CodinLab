@@ -1,7 +1,7 @@
 [![Docker](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml)
 
 <p align="center">
-<img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" height="200"> 
+<img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" height="160"> 
 </p>
 <br>
 
