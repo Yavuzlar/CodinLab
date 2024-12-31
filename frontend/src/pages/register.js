@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import Image from "next/image";
-import CodinLabLogo from "../assets/logo/codinlab-logo-main.png";
+import CodinLabLogo from "../assets/logo/main-vertical-square.png";
 import visibilityOnIcon from "../assets/icons/icons8-eye-1.png";
 import visibilityOffIcon from "../assets/icons/eye-hidden.png";
 import LanguageSelector from "src/layout/components/navigation/item/LanguageSelector";
@@ -220,18 +220,9 @@ const Register = () => {
                 <Image
                   src={CodinLabLogo}
                   alt="codinlab-logo"
-                  width={80}
-                  height={120}
+                  width={200}
+                  height={200}
                 />
-                <Typography
-                  textAlign="center"
-                  variant="body1"
-                  fontFamily="Outfit"
-                  fontWeight="600"
-                  fontSize="35px"
-                >
-                  {themeConfig.projectName}
-                </Typography>
               </Box>
               <FormControl>
                 <Grid container direction="column" gap={3}>
