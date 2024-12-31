@@ -17,7 +17,7 @@ func NewServer(cfg *config.Config, errHandler ...func(c *fiber.Ctx, err error) e
 	fiberConfig := fiber.Config{
 		ReadTimeout:  cfg.HTTP.ReadTimeout,
 		WriteTimeout: cfg.HTTP.WriteTimeout,
-		ServerHeader: "Codeinlab " + cfg.Application.Version,
+		ServerHeader: "CodeinLab " + cfg.Application.Version,
 		ProxyHeader:  cfg.HTTP.ProxyHeader,
 	}
 	if len(errHandler) > 0 {

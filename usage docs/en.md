@@ -1,4 +1,3 @@
-
 # CodinLab Project Documentation
 
 This document is created to help users add content to the **CodinLab** project.

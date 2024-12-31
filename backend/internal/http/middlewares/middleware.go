@@ -4,12 +4,10 @@ import (
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/config"
-	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
-	"github.com/gofiber/fiber/v2/middleware/limiter"
 )
 
 func InitMiddlewares(cfg *config.Config) (mws []func(*fiber.Ctx) error) {
@@ -28,14 +26,15 @@ func InitMiddlewares(cfg *config.Config) (mws []func(*fiber.Ctx) error) {
 
 	mws = append(mws, cors, helmetMid)
 
-	if !cfg.Application.DevMode {
-		limitter := limiter.New(limiter.Config{
-			Max: 50,
-			LimitReached: func(c *fiber.Ctx) error {
-				return service_errors.NewServiceErrorWithMessage(429, "too many requests")
-			},
-		})
-		mws = append(mws, limitter)
-	}
+	// Limitter Stopped
+	// if !cfg.Application.DevMode {
+	// 	limitter := limiter.New(limiter.Config{
+	// 		Max: 50,
+	// 		LimitReached: func(c *fiber.Ctx) error {
+	// 			return service_errors.NewServiceErrorWithMessage(429, "too many requests")
+	// 		},
+	// 	})
+	// 	mws = append(mws, limitter)
+	// }
 	return
 }
