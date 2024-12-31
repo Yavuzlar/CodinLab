@@ -187,8 +187,6 @@ const AuthProvider = ({ children }) => {
           }
         } else {
           setLoading(false);
-          showToast("dismiss");
-          showToast("error", response.data.message);
           handleLogout();
         }
       })
