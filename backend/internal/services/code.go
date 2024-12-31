@@ -159,6 +159,7 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 	// İşlem tamamlandığında kanaldan sonuç alınır
 	select {
 	case result := <-resultChan:
+		fmt.Println("selam", result, result.err)
 		if result.err != nil {
 			return false, service_errors.NewServiceErrorWithMessage(500, domains.ErrDockerImage)
 		}

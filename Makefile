@@ -22,16 +22,6 @@ down:
 	fi
 	@echo "\n[+] Project is stopped and containers are removed..."
 
-build:
-	@echo "[i] Production mode is not active for now.\n"
-	@if command -v docker-compose > /dev/null; then \
-		echo "[i] Using docker-compose..."; \
-		docker-compose -f docker/prod.docker-compose.yaml -p codinlab build; \
-	else \
-		echo "[i] Using docker compose..."; \
-		docker compose -f docker/prod.docker-compose.yaml -p codinlab build; \
-	fi
-
 dev-build:
 	@echo "[i] Production mode is not active for now.\n"
 	@if command -v docker-compose > /dev/null; then \

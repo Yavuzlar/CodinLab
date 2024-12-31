@@ -9,7 +9,7 @@ import Spinner from "src/components/spinner";
 
 const defaultProvider = {
   user: null,
-  loading: true,
+  loading: false,
   isInitialized: false,
   containerLoading: false,
   setUser: () => null,
@@ -129,15 +129,17 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const deleteStorage = () => {
-    setUser(null);
-    setLoading(false);
-    closeWebSocket();
-    const firstPath = router.pathname.split("/")[1];
-    if (firstPath !== "login" && firstPath !== "register") {
-      router.replace("/login");
-    }
-  };
+  const createSession = (data) => {
+    setUser(data) // Set the user data to the state
+    webSocket();
+    localStorage.setItem(authConfig.userDataName, JSON.stringify(data)) // Set the user data to the local storage
+  }
+
+  const restoreStorage = () => {
+    setLoading(false)
+    setUser(defaultProvider.user)
+    localStorage.removeItem(authConfig.userDataName)
+  }
 
   const handleLogout = async () => {
     try {
@@ -146,7 +148,9 @@ const AuthProvider = ({ children }) => {
         method: "POST",
       });
       if (response.status === 200) {
-        deleteStorage();
+        restoreStorage();
+
+        router.push("/login");
       } else {
         showToast("dismiss");
         showToast("error", response.data.message);
@@ -170,17 +174,12 @@ const AuthProvider = ({ children }) => {
           const user = response?.data?.data;
 
           if (user && user?.role) {
+            createSession(user) // Create a session for the user
+            setLoading(false) // Set loading to false
             setIsInitialized(true);
-            setUser(user);
 
-            if (
-              router.pathname === "/login" ||
-              router.pathname === "/register"
-            ) {
-              router.push("/").then(() => router.reload());
-            } else {
-              setLoading(false);
-              webSocket();
+            if (["/login", "/register"].includes(router.pathname)) {
+              router.push("/")
             }
           } else {
             setLoading(false);
@@ -234,27 +233,24 @@ const AuthProvider = ({ children }) => {
 
       if (response.status === 200) {
         const user = response?.data?.data;
-        setUser(user);
-        router.push("/home");
-        initAuth();
-        webSocket();
+
+        createSession(user) // Create a session for the user
+        router.push("/");
       } else {
         showToast("dismiss");
         showToast("error", response.data.message);
+        restoreStorage() // Delete the user data
       }
     } catch (error) {
       showToast("dismiss");
       showToast("error", t(error.response.data.message));
+      restoreStorage() // Delete the user data
     }
   };
 
   useEffect(() => {
-    if (!["/login", "/register"].includes(router.pathname)) {
-      initAuth();
-    } else {
-      setLoading(false);
-    }
-  }, [router.pathname]);
+    initAuth();
+  }, []);
 
   const values = {
     user,

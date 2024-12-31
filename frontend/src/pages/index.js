@@ -12,6 +12,7 @@ import Spinner from "src/components/spinner";
 
 // ** Hook Imports
 import { useAuth } from "src/hooks/useAuth";
+import authConfig from "src/configs/auth";
 
 export const getHomeRoute = (role) => {
   return "/home";
@@ -26,10 +27,10 @@ const Home = () => {
     if (!router.isReady) {
       return;
     }
+    console.log("qweqwe");
 
-    if (auth.user && auth.user?.role) {
-      const homeRoute = getHomeRoute(auth.user?.role);
-
+    if (localStorage.getItem(authConfig.userDataName) && auth.user?.role) {
+      const homeRoute = getHomeRoute(auth.user.role);
       // Redirect user to Home URL
       auth.setLoading(false)
       router.replace(homeRoute);
