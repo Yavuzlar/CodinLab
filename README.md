@@ -1,7 +1,7 @@
 [![Docker](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Yavuzlar/CodinLab/actions/workflows/docker-publish.yml)
 
 <p align="center">
-<img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" height="160"> 
+<img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/main-horizontal.png" alt="CodinLab Logo" height="200"> 
 </p>
 <br>
 
@@ -17,6 +17,8 @@
 - [Roadmaps](#roadmaps)
 - [Labs](#labs)
 - [Contributing](#contributing)
+  - [Content Update Instructions](#content-update-instructions)
+    - [How to contribute/add or update content?](#how-to-contributeadd-or-update-content)
   - [Content Contributors](#content-contributors)
 - [Supporters](#supporters)
 
@@ -54,7 +56,7 @@ To run CodinLab locally, follow these steps:
     docker run -p"80:80" -v "/var/run/docker.sock:/var/run/docker.sock" ghcr.io/yavuzlar/codinlab:latest
     ```
 
-2. Once the application is up, open your browser and go to <a href="http://localhost/" target="_blank">`http://localhost`</a> or <a href="http://localhost/" target="_blank">`http://127.0.0.1`</a> to start using CodinLab.
+2. Once the application is up, open your browser and go to `http://localhost` or `http://127.0.0.1` to start using CodinLab.
 
 ### Manuel Installation
 
@@ -70,12 +72,12 @@ To run CodinLab locally, follow these steps:
    ```sh
     docker run -d -p 80:80 yavuzlar/codinlab
    ```
-4. Go to <a href="http://localhost/" target="_blank">`http://localhost`</a> or <a href="http://localhost/" target="_blank">`http://127.0.0.1`</a>
+4. Go to `http://localhost` or `http://127.0.0.1`
 
 ## Usage & Credentials
 
 1. Apply installation instructions.
-2. Open your browser and go to <a href="http://localhost/" target="_blank">`http://localhost`</a> or <a href="http://localhost/" target="_blank">`http://127.0.0.1`</a>
+2. Open your browser and go to `http://localhost` or `http://127.0.0.1`
 3. Use credentials to login.
 
    ```
@@ -104,6 +106,12 @@ CodinLab provides two types of labs:
 We welcome contributions from the community! Whether you want to add new content to roadmaps, develop labs or fix bugs, your efforts are invaluable. 
 
 Join our journey to help everyone learn software development from scratch, through open-source collaboration with CodinLab!
+
+### Content Update Instructions
+#### How to contribute/add or update content?
+[EN] Check content settings documents in English: [Instructions](https://github.com/Yavuzlar/CodinLab/blob/main/usage%20docs/en.md)
+
+[TR] İçerikleri nasıl düzenleyebileceğinize bakın: [Kullanım Talimatları](https://github.com/Yavuzlar/CodinLab/blob/main/usage%20docs/tr.md)
 
 ### Content Contributors
 - Hüseyin Tazegül
