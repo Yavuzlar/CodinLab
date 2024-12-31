@@ -120,4 +120,8 @@ Join our journey to help everyone learn software development from scratch, throu
 ## Supporters
 
 <a href="https://sibervatan.org/" target="_blank"><img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/sibervatan.png" alt="CodinLab Logo" height="64"></a>
+<<<<<<< HEAD
 &emsp;<a href="https://yavuzlar.org/" target="_blank"><img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/yavuzlar.png" alt="CodinLab Logo" height="64"></a>
+=======
+&emsp;<a href="https://yavuzlar.org/" target="_blank"><img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/yavuzlar.png" alt="CodinLab Logo" height="64"></a>
+>>>>>>> d522525 (README.md file, backend session config and frontend auth functions have been updated)
