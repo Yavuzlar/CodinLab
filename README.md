@@ -56,7 +56,7 @@ To run CodinLab locally, follow these steps:
     docker run -p"80:80" -v "/var/run/docker.sock:/var/run/docker.sock" ghcr.io/yavuzlar/codinlab:latest
     ```
 
-2. Once the application is up, open your browser and go to `http://localhost` or `http://127.0.0.1` to start using CodinLab.
+2. Once the application is up, open your browser and go to <a href="http://localhost/" target="_blank">`http://localhost`</a> or <a href="http://localhost/" target="_blank">`http://127.0.0.1`</a> to start using CodinLab.
 
 ### Manuel Installation
 
@@ -72,12 +72,12 @@ To run CodinLab locally, follow these steps:
    ```sh
     docker run -d -p 80:80 yavuzlar/codinlab
    ```
-4. Go to `http://localhost` or `http://127.0.0.1`
+4. Go to <a href="http://localhost/" target="_blank">`http://localhost`</a> or <a href="http://localhost/" target="_blank">`http://127.0.0.1`</a>
 
 ## Usage & Credentials
 
 1. Apply installation instructions.
-2. Open your browser and go to `http://localhost` or `http://127.0.0.1`
+2. Open your browser and go to <a href="http://localhost/" target="_blank">`http://localhost`</a> or <a href="http://localhost/" target="_blank">`http://127.0.0.1`</a>
 3. Use credentials to login.
 
    ```
@@ -119,4 +119,5 @@ Join our journey to help everyone learn software development from scratch, throu
 
 ## Supporters
 
-<img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/sibervatan.png" alt="CodinLab Logo" height="64">&emsp;<img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/yavuzlar.png" alt="CodinLab Logo" height="64">
+<a href="https://sibervatan.org/" target="_blank"><img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/sibervatan.png" alt="CodinLab Logo" height="64"></a>
+&emsp;<a href="https://yavuzlar.org/" target="_blank"><img src="https://github.com/Yavuzlar/CodinLab/blob/main/design/assets/logo/yavuzlar.png" alt="CodinLab Logo" height="64"></a>
