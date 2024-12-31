@@ -45,7 +45,7 @@ func NewSessionStore(storage ...fiber.Storage) *session.Store {
 	}
 	gob.Register(SessionData{})
 	return session.New(session.Config{
-		CookieSecure:   true,
+		CookieSecure:   false,
 		CookieHTTPOnly: true,
 		Storage:        storage[0],
 	})

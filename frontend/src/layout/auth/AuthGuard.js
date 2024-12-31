@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 // ** Hooks Import
 import { useAuth } from "src/hooks/useAuth";
+import authConfig from "src/configs/auth";
 
 const AuthGuard = (props) => {
   const { children, fallback } = props;
@@ -16,9 +17,7 @@ const AuthGuard = (props) => {
         return;
       }
 
-      if (
-        !auth.user
-      ) {
+      if (auth.user === null && !window.localStorage.getItem(authConfig.userDataName)) {
         router.replace("/login");
       }
     },
