@@ -109,7 +109,7 @@ Join our journey to help everyone learn software development from scratch, throu
 
 ### Content Update Instructions
 #### How to contribute/add or update content?
-[EN] Check content settings documents in English: [Instructions](https://github.com/Yavuzlar/CodinLab/blob/main/usage%20docs/en.md)
+[EN] Check content settings documents: [Instructions](https://github.com/Yavuzlar/CodinLab/blob/main/usage%20docs/en.md)
 
 [TR] İçerikleri nasıl düzenleyebileceğinize bakın: [Kullanım Talimatları](https://github.com/Yavuzlar/CodinLab/blob/main/usage%20docs/tr.md)
 
