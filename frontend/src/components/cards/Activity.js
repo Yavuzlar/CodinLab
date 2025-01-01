@@ -10,7 +10,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import ActivityStatisticComponent from "../statistics/ActivityStatisticComponent";
-// import { data } from "../../data/activityDataExample";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Translations from "../Translations";
@@ -50,8 +49,6 @@ const Activity = () => {
     { length: new Date().getFullYear() - 2023 },
     (_, i) => 2024 + i
   ).reverse();
-
-  // const years = [2024, 2023, 2022, 2021, 2020];
 
   return (
     <Box
@@ -126,7 +123,10 @@ const Activity = () => {
             }}
           >
             {Array.isArray(data) && data.length !== 0 ? (
-              <ActivityStatisticComponent activityData={data} />
+              <ActivityStatisticComponent
+                activityData={data}
+                selectedYear={year}
+              />
             ) : (
               <Typography>
                 <Translations text="admin_activity_calendar_no_data_error" />

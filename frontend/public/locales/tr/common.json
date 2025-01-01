@@ -198,5 +198,15 @@
     "Kas",
     "Ara"
   ],
-  "admin_activity_calendar_total_count": "{{year}} yılında {{count}} aktivite"
+  "admin_activity_calendar_weekdays": [
+    "Pzt",
+    "Sal",
+    "Çar",
+    "Per",
+    "Cum",
+    "Cmt",
+    "Paz"
+  ],
+  "admin_activity_calendar_total_count": "{{year}} yılında {{count}} aktivite",
+  "admin_activity_calendar_no_activity": "Aktivite yok"
 }
