@@ -196,5 +196,15 @@
     "Nov",
     "Dec"
   ],
-  "admin_activity_calendar_total_count": "{{count}} activite on {{year}}"
+  "admin_activity_calendar_weekdays": [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun"
+  ],
+  "admin_activity_calendar_total_count": "{{count}} activite on {{year}}",
+  "admin_activity_calendar_no_activity": "No activity"
 }
