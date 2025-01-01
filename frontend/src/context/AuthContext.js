@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
       console.log("WebSocket is already connected");
       return;
     }
-    console.log("Bağlanılıyor...");
+    console.log("Connecting...");
     ws.current = new WebSocket("ws://localhost/api/v1/private/socket/ws");
 
     ws.current.onopen = () => {
@@ -107,7 +107,7 @@ const AuthProvider = ({ children }) => {
     if (ws.current) {
       ws.current.close();
       ws.current = null;
-      console.log("WebSocket bağlantısı kapatıldı");
+      console.log("WebSocket connection closed.");
     }
   };
 
@@ -130,16 +130,16 @@ const AuthProvider = ({ children }) => {
   };
 
   const createSession = (data) => {
-    setUser(data) // Set the user data to the state
+    setUser(data); // Set the user data to the state
     webSocket();
-    localStorage.setItem(authConfig.userDataName, JSON.stringify(data)) // Set the user data to the local storage
-  }
+    localStorage.setItem(authConfig.userDataName, JSON.stringify(data)); // Set the user data to the local storage
+  };
 
   const restoreStorage = () => {
-    setLoading(false)
-    setUser(defaultProvider.user)
-    localStorage.removeItem(authConfig.userDataName)
-  }
+    setLoading(false);
+    setUser(defaultProvider.user);
+    localStorage.removeItem(authConfig.userDataName);
+  };
 
   const handleLogout = async () => {
     try {
@@ -174,12 +174,12 @@ const AuthProvider = ({ children }) => {
           const user = response?.data?.data;
 
           if (user && user?.role) {
-            createSession(user) // Create a session for the user
-            setLoading(false) // Set loading to false
+            createSession(user); // Create a session for the user
+            setLoading(false); // Set loading to false
             setIsInitialized(true);
 
             if (["/login", "/register"].includes(router.pathname)) {
-              router.push("/")
+              router.push("/");
             }
           } else {
             setLoading(false);
@@ -232,17 +232,17 @@ const AuthProvider = ({ children }) => {
       if (response.status === 200) {
         const user = response?.data?.data;
 
-        createSession(user) // Create a session for the user
+        createSession(user); // Create a session for the user
         router.push("/");
       } else {
         showToast("dismiss");
         showToast("error", response.data.message);
-        restoreStorage() // Delete the user data
+        restoreStorage(); // Delete the user data
       }
     } catch (error) {
       showToast("dismiss");
       showToast("error", t(error.response.data.message));
-      restoreStorage() // Delete the user data
+      restoreStorage(); // Delete the user data
     }
   };
 
