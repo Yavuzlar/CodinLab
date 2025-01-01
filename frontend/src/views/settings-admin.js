@@ -242,9 +242,9 @@ const Settings = () => {
       return;
     }
     try {
-      console.log("TryGönderilenVeri", passwordSettingsData);
+      // console.log("TryGönderilenVeri", passwordSettingsData);
     } catch (error) {
-      console.log("Catch Hatası", error);
+      console.log("Catch Error", error);
     }
   };
 

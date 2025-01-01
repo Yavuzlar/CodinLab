@@ -59,7 +59,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [monacoEditor, setMonacoEditor] = useState("");
   const [userCode, setUserCode] = useState("");
 
-
   const _mdmd = useMediaQuery((theme) => theme.breakpoints.down("mdmd"));
 
   // API data
@@ -97,9 +96,9 @@ const LanguageRoad = ({ language = "", pathId }) => {
   // Error 404
   useEffect(() => {
     if (error?.status == 404) {
-      router.push('/404')
+      router.push("/404");
     }
-  }, [error])
+  }, [error]);
 
   // Set the programming id
   useEffect(() => {
@@ -123,7 +122,6 @@ const LanguageRoad = ({ language = "", pathId }) => {
   useEffect(() => {
     setOutput("");
     if (path) {
-      console.log(path)
       if (path.data.data) {
         const pathData = path.data.data[0].paths[0];
         setExtension(path?.data?.data[0]?.fileExtension);
@@ -198,7 +196,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   useEffect(() => {
     getNextPath();
-  }, [path])
+  }, [path]);
 
   const handleBeforeUnload = (event) => {
     const labPathType = "Road";
@@ -228,7 +226,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   return (
     <>
-      {(!loading && !error) && (
+      {!loading && !error && (
         <Box>
           <CustomBreadcrumbs titles={breadcrums} />
           <Card

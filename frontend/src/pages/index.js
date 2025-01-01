@@ -27,12 +27,11 @@ const Home = () => {
     if (!router.isReady) {
       return;
     }
-    console.log("qweqwe");
 
     if (localStorage.getItem(authConfig.userDataName) && auth.user?.role) {
       const homeRoute = getHomeRoute(auth.user.role);
       // Redirect user to Home URL
-      auth.setLoading(false)
+      auth.setLoading(false);
       router.replace(homeRoute);
     } else if (!auth?.loading) {
       // Redirect user to Login URL

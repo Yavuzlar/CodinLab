@@ -143,7 +143,6 @@ const statisticsSlice = createSlice({
       })
       .addCase(GetUserLevel.rejected, (state, action) => {
         state.loading = false;
-        console.log(action)
         state.error = action.payload;
       })
       .addCase(getUserDevelopment.pending, (state) => {
