@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// IUserRepository is the interface that provides the methods for the user repository.
+// IUserRepository is an interface that provides methods for the user repository.
 type IUserRepository interface {
 	Filter(ctx context.Context, filter UserFilter, limit, page int64) (users []User, dataCount int64, err error)
 	Add(ctx context.Context, user *User) (err error)
@@ -18,7 +18,7 @@ type IUserRepository interface {
 	AdminUpdate(ctx context.Context, user *User) (err error)
 }
 
-// IUserService is the interface that provides the methods for the user service.
+// IUserService is an interface that provides methods for the user service.
 type IUserService interface {
 	Login(ctx context.Context, username, password string) (user *User, err error)
 	Register(ctx context.Context, username, name, surname, password, githubProfile string) (err error)
@@ -40,7 +40,7 @@ type UserFilter struct {
 	Role     string
 }
 
-// User is the struct that represents the user.
+// represents the user.
 type User struct {
 	id            uuid.UUID
 	username      string
@@ -75,7 +75,7 @@ func NewUser(username, password, name, surname, role, githubProfile string, tota
 	return user, nil
 }
 
-// Unmarshal unmarshals the user for database operations. It is used in the repository.
+// unmarshals user data for database operations. It is used in repository.
 func (u *User) Unmarshal(
 	id uuid.UUID,
 	username, password, name, surname, role, githubProfile string,

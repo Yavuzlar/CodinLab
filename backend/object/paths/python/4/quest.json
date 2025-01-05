@@ -5,15 +5,15 @@
             "lang": "en",
             "title": "Basic Arithmetic Operations",
             "description": "Practice using arithmetic operators in Python such as +, -, *, /, and %.",
-            "content": "Create two number variables with the values 20 and 5, and perform addition, subtraction, multiplication, division, and modulus operations. Output the results using `print`.",
-            "note": "Example for addition:\n\n```python\nx = 20\ny = 5\n\nprint('Sum:', x + y)  # Sum: 25\n```\n\nNow, try to implement subtraction, multiplication, division, and modulus operations on your own."
+            "content": "Create two number variables with the values 20 and 5, and perform addition, subtraction, multiplication, division, and modulus operations. Output the results using print.",
+            "note": "Example for addition:\n\n\nx = 20\ny = 5\n\nprint('Sum:', x + y)  \n Sum: 25\n\n\nNow, try to implement subtraction, multiplication, division, and modulus operations on your own."
         },
         {
             "lang": "tr",
             "title": "Temel Aritmetik İşlemler",
             "description": "Python dilinde +, -, *, / ve % gibi aritmetik operatörleri kullanma pratiği yapın.",
-            "content": "20 ve 5 değerlerine sahip iki sayı değişkeni oluşturun ve toplama, çıkarma, çarpma, bölme ve mod işlemlerini gerçekleştirin. Sonuçları `print` kullanarak yazdırın.",
-            "note": "Toplama işlemi örneği:\n\n```python\nx = 20\ny = 5\n\nprint('Toplam:', x + y)  # Toplam: 25\n```\n\nŞimdi, çıkarma, çarpma, bölme ve mod işlemlerini kendiniz yapmayı deneyin."
+            "content": "20 ve 5 değerlerine sahip iki sayı değişkeni oluşturun ve toplama, çıkarma, çarpma, bölme ve mod işlemlerini gerçekleştirin. Sonuçları print kullanarak yazdırın.",
+            "note": "Toplama işlemi örneği:\n\n\nx = 20\ny = 5\n\nprint('Toplam:', x + y)  \n Toplam: 25\n\n\nŞimdi, çıkarma, çarpma, bölme ve mod işlemlerini kendiniz yapmayı deneyin."
         }
     ],
     "quest": {

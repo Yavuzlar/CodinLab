@@ -6,14 +6,14 @@
             "title": "Loops",
             "description": "Understanding loops in C++",
             "content": "Loops are used to execute a block of code repeatedly in C++. In this task, you will learn how to use the 'for' loop to iterate over a range of values. Your task is to create a function called 'sumNumbers' that calculates the sum of numbers from 1 to a given integer `n` using a for loop.",
-            "note": "1. Create a function named 'sumNumbers' that calculates the sum of integers from 1 to `n`.\n2. Start by defining the function:\n   - **Return Type**: The function should return an integer.\n   - **Function Name**: 'sumNumbers'.\n   - **Parameters**: The function should take one integer parameter, `n`, which represents the range limit.\n3. Inside the function:\n   - Use a `for` loop to iterate through numbers from 1 to `n`.\n   - Accumulate the sum of these numbers in a variable.\n   - Return the total sum at the end."
+            "note": "1. Create a function named 'sumNumbers' that calculates the sum of integers from 1 to `n`.\n2. Start by defining the function:\n   - Return Type: The function should return an integer.\n   - Function Name: 'sumNumbers'.\n   - Parameters: The function should take one integer parameter, `n`, which represents the range limit.\n3. Inside the function:\n   - Use a `for` loop to iterate through numbers from 1 to `n`.\n   - Accumulate the sum of these numbers in a variable.\n   - Return the total sum at the end."
         },
         {
             "lang": "tr",
             "title": "Döngüler",
             "description": "C++'ta döngüleri kullanmayı öğrenin.",
             "content": "Döngüler, bir kod bloğunu tekrarlı olarak çalıştırmak için kullanılır. Bu görevde, 'for' döngüsünü kullanarak bir sayı aralığında yineleme yapmayı öğreneceksiniz. Göreviniz, 1'den verilen bir `n` tam sayısına kadar olan sayıların toplamını hesaplayan 'sumNumbers' adlı bir fonksiyon oluşturmaktır.",
-            "note": "1. 1'den `n`'e kadar olan tam sayıların toplamını hesaplayan 'sumNumbers' adlı bir fonksiyon oluşturun.\n2. Fonksiyonu tanımlayın:\n   - **Geri Dönüş Türü**: Fonksiyon bir tam sayı döndürecek.\n   - **Fonksiyon Adı**: 'sumNumbers'.\n   - **Parametreler**: Fonksiyon bir tam sayı parametresi almalı, bu `n` aralık sınırını temsil eder.\n3. Fonksiyon içinde:\n   - 1'den `n`'e kadar olan sayılar arasında yineleme yapmak için bir `for` döngüsü kullanın.\n   - Bu sayıların toplamını bir değişkende biriktirin.\n   - Sonunda toplamı döndürün."
+            "note": "1. 1'den `n`'e kadar olan tam sayıların toplamını hesaplayan 'sumNumbers' adlı bir fonksiyon oluşturun.\n2. Fonksiyonu tanımlayın:\n   - Geri Dönüş Türü: Fonksiyon bir tam sayı döndürecek.\n   - Fonksiyon Adı: 'sumNumbers'.\n   - Parametreler: Fonksiyon bir tam sayı parametresi almalı, bu `n` aralık sınırını temsil eder.\n3. Fonksiyon içinde:\n   - 1'den `n`'e kadar olan sayılar arasında yineleme yapmak için bir `for` döngüsü kullanın.\n   - Bu sayıların toplamını bir değişkende biriktirin.\n   - Sonunda toplamı döndürün."
         }
 	],
 	"quest": {

@@ -1,6 +1,6 @@
 package domains
 
-// IParserService is the interface that provides the methods for the parser service.
+// IParserService is an interface that provides methods for the parser service.
 type IParserService interface {
 	GetLabs() (labs []LabP, err error)
 	GetRoads() (roads []RoadP, err error)
@@ -26,7 +26,7 @@ type InventoryP struct {
 	Languages     []LanguageP `json:"languages"`
 }
 
-// Language represents the details of a programming language.
+// Language represents the details of a specific programming language
 type LanguageP struct {
 	Lang        string `json:"lang"`
 	Title       string `json:"title"`
@@ -62,7 +62,7 @@ type LabP struct {
 	Quest     QuestP      `json:"quest"`
 }
 
-// Path represents a coding learning path.
+// Path represents a learning path for coding
 type PathP struct {
 	ID        int         `json:"id"`
 	Languages []LanguageP `json:"languages"`

@@ -162,7 +162,7 @@ func (s *labService) GetLabByID(userID, labID string) (lab *domains.Lab, err err
 	return lab, err
 }
 
-// User lab level stats by programming language
+// Returns the number of labs completed by the user for each programming language
 func (s *labService) GetUserLanguageLabStats(userID string) (programmingLangugageStats []domains.ProgrammingLanguageStats, err error) {
 	programmingLangugages, _ := s.parserService.GetInventory()
 

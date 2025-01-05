@@ -48,7 +48,6 @@ func (m *Manager) Pull(ctx context.Context, imageReference string) error {
 	}
 	defer out.Close()
 
-	// İndirme işlemini görmek istiyorsan altı aç
 	// Read from the stream until it closes
 	buf := new(bytes.Buffer)
 	_, err = buf.ReadFrom(out)

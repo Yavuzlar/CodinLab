@@ -4,8 +4,8 @@
 		{
 			"lang": "en",
 			"title": "Reverse a String",
-			"description": "Given a string, return the string reversed.",
-			"note": "Ensure that special characters and spaces remain in their respective positions after reversing.",
+			"description": "Reverse the given string and return it",
+			"note": "Ensure that special characters and spaces stay in their original positions after reversing.",
 			"hint": "You can iterate through the string backwards or use built-in methods to reverse it."
 		},
 		{

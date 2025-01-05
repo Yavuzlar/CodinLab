@@ -1,6 +1,6 @@
 package domains
 
-// IRoadService is the interface that provides the methods for the road service.
+// IRoadService is an interface that provides methods for the road service.
 type IRoadService interface {
 	GetRoadFilter(userID, programmingID, pathID string, isStarted, isFinished *bool) ([]Road, error)
 	GetPathByID(userID, programmingID, pathID string) (path *Path, err error)
@@ -8,7 +8,7 @@ type IRoadService interface {
 	GetUserRoadProgressStats(userID string) (progressStats *RoadProgressStats, err error)
 }
 
-// LanguageRoad represents the details of a programming language.
+// LanguageRoad represents the details of a specific programming language.
 type LanguageRoad struct {
 	lang        string
 	title       string

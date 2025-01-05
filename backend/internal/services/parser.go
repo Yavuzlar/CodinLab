@@ -36,12 +36,12 @@ func (s *parserService) checkDir(dir string) (err error) {
 
 // Gets json files.
 func (s *parserService) findJSONFiles(rootDir string) (jsonFiles []string, err error) {
-	// Walk through the directory to find JSON files
+	// Walks through the directory to find JSON files
 	err = filepath.Walk(rootDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-		// Check if the file is a JSON file
+		// Checks if the file is a JSON file
 		if !info.IsDir() && strings.HasSuffix(strings.ToLower(info.Name()), ".json") {
 			jsonFiles = append(jsonFiles, path)
 		}
@@ -55,19 +55,19 @@ func (s *parserService) findJSONFiles(rootDir string) (jsonFiles []string, err e
 }
 
 func (s *parserService) GetInventory() (inventory []domains.InventoryP, err error) {
-	// Check if the directory exists
+	// Checks if the directory exists
 	err = s.checkDir("object")
 	if err != nil {
 		return
 	}
 
-	// Read the JSON file containing language information
+	// Reads the JSON file containing language information
 	jsonData, err := os.ReadFile("object/inventory.json")
 	if err != nil {
 		return nil, err
 	}
 
-	// Unmarshal the JSON data into languages slice
+	// Unmarshals the JSON data into languages slice
 	err = json.Unmarshal(jsonData, &inventory)
 	if err != nil {
 		return nil, err
@@ -77,13 +77,13 @@ func (s *parserService) GetInventory() (inventory []domains.InventoryP, err erro
 }
 
 func (s *parserService) GetLabs() (labs []domains.LabP, err error) {
-	// Check if the directory exists
+	// Checks if the directory exists
 	err = s.checkDir("object")
 	if err != nil {
 		return nil, err
 	}
 
-	// Find JSON files for the lab
+	// Finds JSON files for the lab
 	jsonFiles, err := s.findJSONFiles("object/labs")
 	if err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ func (s *parserService) GetLabs() (labs []domains.LabP, err error) {
 
 	// Loop through each JSON file
 	for _, file := range jsonFiles {
-		// Read the JSON file
+		// Reads the JSON file
 		jsonData, err := os.ReadFile(file)
 		if err != nil {
 			return nil, err
@@ -110,19 +110,19 @@ func (s *parserService) GetLabs() (labs []domains.LabP, err error) {
 }
 
 func (s *parserService) GetRoads() (roads []domains.RoadP, err error) {
-	// Ensure the "object" directory exists
+	// Ensures the "object" directory exists
 	err = s.checkDir("object")
 	if err != nil {
 		return nil, err
 	}
 
-	// Retrieve the list of programming languages
+	// Retrieves the list of programming languages
 	inventory, err := s.GetInventory()
 	if err != nil {
 		return nil, err
 	}
 
-	// Iterate over each language in the inventory
+	// Iterates over each language in the inventory
 	for _, language := range inventory {
 		road := domains.RoadP{
 			ID:            language.ID,
@@ -133,22 +133,22 @@ func (s *parserService) GetRoads() (roads []domains.RoadP, err error) {
 			FileExtension: language.FileExtension,
 		}
 
-		// Locate JSON files within the language's lab directory
+		// Locates JSON files within the language's lab directory
 		jsonFiles, err := s.findJSONFiles(language.PathDir)
 		if err != nil {
 			return nil, err
 		}
 
-		// Iterate over each JSON file found
+		// Iterates over each JSON file found
 		for _, file := range jsonFiles {
-			// Read the content of the JSON file
+			// Reads the content of the JSON file
 			jsonData, err := os.ReadFile(file)
 			if err != nil {
 				return nil, err
 			}
 
 			var path domains.PathP
-			// Unmarshal the JSON data into the path object
+			// Unmarshals the JSON data into the path object
 			err = json.Unmarshal(jsonData, &path)
 			if err != nil {
 				return nil, err
@@ -164,18 +164,18 @@ func (s *parserService) GetRoads() (roads []domains.RoadP, err error) {
 }
 
 func (s *parserService) GetLevels() (levels []domains.LevelP, err error) {
-	// Ensure the "object" directory exists
+	// Ensures the "object" directory exists
 	err = s.checkDir("object")
 	if err != nil {
 		return nil, err
 	}
-	// Read the JSON file containing level information
+	// Reads the JSON file containing level information
 	jsonData, err := os.ReadFile("object/level.json")
 	if err != nil {
 		return nil, err
 	}
 
-	// Unmarshal the JSON data into level slice
+	// Unmarshals the JSON data into level slice
 	err = json.Unmarshal(jsonData, &levels)
 	if err != nil {
 		return nil, err
@@ -189,13 +189,13 @@ func (s *parserService) GetWelcomeBanner() (content []domains.WelcomeContent, er
 	if err != nil {
 		return nil, err
 	}
-	// Read the JSON file containing welcome information
+	// Reads the JSON file containing welcome information
 	jsonData, err := os.ReadFile("object/home/welcome.json")
 	if err != nil {
 		return nil, err
 	}
 
-	// Unmarshal the JSON data into level slice
+	// Unmarshals the JSON data into level slice
 	err = json.Unmarshal(jsonData, &content)
 	if err != nil {
 		return nil, err
@@ -204,18 +204,18 @@ func (s *parserService) GetWelcomeBanner() (content []domains.WelcomeContent, er
 }
 
 func (s *parserService) GetLabBanner() (content []domains.LabContent, err error) {
-	// Ensure the "object" directory exists
+	// Ensures the "object" directory exists
 	err = s.checkDir("object")
 	if err != nil {
 		return nil, err
 	}
-	// Read the JSON file containing welcome information
+	// Reads the JSON file containing welcome information
 	jsonData, err := os.ReadFile("object/home/lab.json")
 	if err != nil {
 		return nil, err
 	}
 
-	// Unmarshal the JSON data into level slice
+	// Unmarshals the JSON data into level slice
 	err = json.Unmarshal(jsonData, &content)
 	if err != nil {
 		return nil, err
@@ -224,18 +224,18 @@ func (s *parserService) GetLabBanner() (content []domains.LabContent, err error)
 }
 
 func (s *parserService) GetRoadBanner() (content []domains.RoadContent, err error) {
-	// Ensure the "object" directory exists
+	// Ensures the "object" directory exists
 	err = s.checkDir("object")
 	if err != nil {
 		return nil, err
 	}
-	// Read the JSON file containing welcome information
+	// Reads the JSON file containing welcome information
 	jsonData, err := os.ReadFile("object/home/road.json")
 	if err != nil {
 		return nil, err
 	}
 
-	// Unmarshal the JSON data into level slice
+	// Unmarshals the JSON data into level slice
 	err = json.Unmarshal(jsonData, &content)
 	if err != nil {
 		return nil, err

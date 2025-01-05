@@ -4,7 +4,7 @@
 		{
 			"lang": "en",
 			"title": "Count True Values",
-			"description": "Given an array of boolean values, return the count of `true` values as an integer.",
+			"description": "Return the count of true values as an integer from the given array of boolean values.",
 			"note": "Ensure that all `true` values are counted correctly.",
 			"hint": "Iterate through the array and count the number of `true` values."
 		},

@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// ILogRepository is the interface that provides the methods for the log repository.
+// ILogRepository is an interface that provides methods for the log repository.
 type ILogRepository interface {
 	Filter(ctx context.Context, filter LogFilter) (logs []Log, dataCount int64, err error)
 	Add(ctx context.Context, log *Log) (err error)
@@ -17,7 +17,7 @@ type ILogRepository interface {
 	CountSolutionsByProgrammingLast7Days(ctx context.Context) (solutions []SolutionsByProgramming, err error)
 }
 
-// ILogService is the interface that provides the methods for the log service.
+// ILogService is an interface that provides methods for the log service.
 type ILogService interface {
 	Add(ctx context.Context, userID, programmingID, labPathID, logType, content string) error
 	GetAllLogs(ctx context.Context, userID, programmingID, labRoadID, logType, content string) (logs []Log, err error)
@@ -32,7 +32,7 @@ type ILogService interface {
 	LanguageUsageRates(ctx context.Context) (languageUsageRates []LanguageUsageRates, err error)
 }
 
-// LogFilter is the struct that represents the log filter.
+// LogFilter is a struct that represents the log filter
 type LogFilter struct {
 	ID            uuid.UUID
 	UserID        uuid.UUID
@@ -42,7 +42,7 @@ type LogFilter struct {
 	Content       string // Success etc.
 }
 
-// Log is the struct that represents the log.
+// Log is a struct that represents the log.
 type Log struct {
 	id            uuid.UUID
 	userId        uuid.UUID
@@ -53,7 +53,7 @@ type Log struct {
 	createdAt     time.Time
 }
 
-// lab and road numbers solved day by day
+// This struct holds data about the daily solved lab and road numbers
 type SolutionsByDay struct {
 	date  time.Time
 	count int
@@ -159,7 +159,7 @@ func (s *LanguageUsageRates) SetUsagePercentage(usagePercentage float32) {
 	s.usagePercentage = usagePercentage
 }
 
-// NewLog creates a new log
+// creates new log
 func NewLog(userID, logType, content string, programmingID, labPathID int32) (*Log, error) {
 	if userID == "" {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "user id is required")
@@ -185,7 +185,7 @@ func NewLog(userID, logType, content string, programmingID, labPathID int32) (*L
 	}, nil
 }
 
-// Unmarshal unmarshals the log for database operations. It is used in the repository.
+// unmarshals logs for database operations. It is used in repository.
 func (l *Log) Unmarshal(
 	id, userId uuid.UUID,
 	lType, content string,

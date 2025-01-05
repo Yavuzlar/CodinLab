@@ -4,14 +4,14 @@
 		{
 			"lang": "en",
 			"title": "Nth Fibonacci Number",
-			"description": "Given an integer `n`, return the nth number in the Fibonacci sequence.",
+			"description": "Assume that the function is given a parameter n and return the nth number in the Fibonacci sequence.",
 			"note": "The Fibonacci sequence is defined as follows: F(0) = 0, F(1) = 1, and F(n) = F(n-1) + F(n-2) for n > 1.",
 			"hint": "Use an iterative or recursive approach to compute the Fibonacci number."
 		},
 		{
 			"lang": "tr",
 			"title": "Nth Fibonacci Sayısı",
-			"description": "Bir tamsayı `n` verildiğinde, Fibonacci dizisindeki n'inci sayıyı döndür.",
+			"description": "Verilen fonksiyona n parametresi verildiğini varsay ve Fibonacci dizisindeki n'inci sayıyı döndür.",
 			"note": "Fibonacci dizisi şu şekilde tanımlanır: F(0) = 0, F(1) = 1 ve F(n) = F(n-1) + F(n-2) n > 1 için.",
 			"hint": "Fibonacci sayısını hesaplamak için iteratif veya rekürsif bir yaklaşım kullanabilirsiniz."
 		}

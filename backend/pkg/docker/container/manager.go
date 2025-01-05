@@ -88,7 +88,7 @@ func (m *Manager) ReadContainerLogs(ctx context.Context, containerID string) (st
 	defer out.Close()
 
 	var result strings.Builder
-	buffer := make([]byte, 1024) // Okuma için bir buffer oluşturun
+	buffer := make([]byte, 1024)
 
 	for {
 		n, err := out.Read(buffer)
@@ -99,7 +99,6 @@ func (m *Manager) ReadContainerLogs(ctx context.Context, containerID string) (st
 			break
 		}
 
-		// Burada `buffer[:n]` kullanarak okunan veriyi işleyebilirsiniz
 		logLine := string(buffer[:n])
 
 		// Cleans answer by removing docker frame (skips first 8 bytes)
@@ -107,7 +106,6 @@ func (m *Manager) ReadContainerLogs(ctx context.Context, containerID string) (st
 			logLine = logLine[8:]
 		}
 
-		// Burada yeni satır karakterlerini koruyarak logLine'ı doğrudan ekleyin
 		result.WriteString(logLine)
 	}
 
@@ -187,12 +185,10 @@ func (m *Manager) RunContainerWithTar(ctx context.Context, tmpCodePath, fileName
 		return "", fmt.Errorf("error removing container: %w", err)
 	}
 
-	// Return logs
 	return logs, nil
 }
 
 func (m *Manager) CopyToContainer(ctx context.Context, containerID, srcPath, destPath, fileName string) error {
-	// Create tarball
 	tarBuffer := new(bytes.Buffer)
 	tw := tar.NewWriter(tarBuffer)
 
@@ -224,7 +220,6 @@ func (m *Manager) CopyToContainer(ctx context.Context, containerID, srcPath, des
 		return fmt.Errorf("error closing tar writer: %w", err)
 	}
 
-	// Copy tarball to container
 	tarReader := bytes.NewReader(tarBuffer.Bytes())
 	if err := m.client.CopyToContainer(ctx, containerID, destPath, tarReader, types.CopyToContainerOptions{}); err != nil {
 		return fmt.Errorf("error copying file to container: %w", err)

@@ -13,7 +13,7 @@
 			"title": "İki En Büyük Sayıyı Bul",
 			"description": "Verilen arraydeki iki en büyük sayıyı bul ve array olarak geri döndür.",
 			"note": "Sorunun Notu",
-			"hint": "Array'i gezerken iki en büyük sayıyı takip et."
+			"hint": "Array'i gezerken iki en büyük sayıyı takip edin."
 		}
 	],
 	"quest": {

@@ -4,8 +4,8 @@
         {
             "lang": "en",
             "title": "Hello World Program",
-            "description": "Learn how to create your first JavaScript program and output 'Hello, World!' to the console.",
-            "content": "Write a JavaScript program that outputs 'Hello, World!' to the console.",
+            "description": "Learn how to create your first JavaScript program and print 'Hello, World!' to the console.",
+            "content": "Write a JavaScript program that prints 'Hello, World!' to the console.",
             "note": "Use the `console.log` method to print 'Hello, World!' to the console."
         },
         {

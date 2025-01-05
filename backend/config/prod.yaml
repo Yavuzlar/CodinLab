@@ -5,7 +5,7 @@ app:
   migrationsPath: "migrations"
   managment:
     username: "admin"
-    password: "admin1234" # En az 8 karakter olmalıdır.
+    password: "admin1234" # must be at least 8 characters
 
 http:
   host: "localhost"

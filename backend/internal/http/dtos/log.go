@@ -22,14 +22,14 @@ type LogDTO struct {
 	Content       string    `json:"content"`
 }
 
-// Lab & Road numbers solved day by day
+// Daily solved lab and road numbers
 type SolutionsByDayDTO struct {
 	Date  time.Time `json:"date"`
 	Count int       `json:"count"`
 	Level int       `json:"level"`
 }
 
-// Represents the total  spent on Lab & Road solutions for each programming language.
+// Represents the total number of Lab & Road solutions for each programming language
 type SolutionsByProgrammingDTO struct {
 	ProgrammingID   int32  `json:"programmingID"`
 	ProgrammingName string `json:"programmingName"`

@@ -2,7 +2,7 @@ package domains
 
 import "context"
 
-// IHomeService is the interface that provides the methods for the home page service.
+// IHomeService is an interface that provides methods for the the home page service.
 type IHomeService interface {
 	GetUserLevel(ctx context.Context, userID string) (*UserLevel, error)
 	GetUserDevelopment(ctx context.Context, userID string) (Development, error)
@@ -32,7 +32,6 @@ type Advancement struct {
 	labPercentage  int32
 }
 
-// Creates a inventory
 func NewInventory(id int, name string, iconPath string) *Inventory {
 	inventory := &Inventory{
 		id:       id,
@@ -42,7 +41,6 @@ func NewInventory(id int, name string, iconPath string) *Inventory {
 	return inventory
 }
 
-// Creates a user development
 func NewUserDevelopment(roadPercentage int32, labPercentage int32) *Development {
 	userDevelopment := &Development{
 		roadPercentage: roadPercentage,
@@ -51,7 +49,6 @@ func NewUserDevelopment(roadPercentage int32, labPercentage int32) *Development 
 	return userDevelopment
 }
 
-// Creates a user advancement
 func NewAdvancement(id int, name string, iconPath string, roadPercentage int32, labPercentage int32) *Advancement {
 	advancement := &Advancement{
 		programmingID:  id,

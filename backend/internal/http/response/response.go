@@ -112,7 +112,7 @@ func ResponseHandler(c *fiber.Ctx, err error) error {
 	})
 }
 
-// Response function for create a new response.
+// Response function is for creating a new response.
 func Response(statusCode int, message string, data interface{}, dataCount ...uint64) error {
 	var count uint64
 	if len(dataCount) > 0 {
