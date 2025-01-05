@@ -101,7 +101,7 @@ func (s *codeService) Pull(ctx context.Context, imageReference, programmingLangu
 			return errSocket
 		}
 	}
-	//Docker image pull işlemini başlatın
+	// Start Docker image pull process
 	err := s.dockerSDK.Images().Pull(ctx, imageReference)
 	if conn != nil {
 		if err != nil {
@@ -156,7 +156,7 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 		}{isExists, err}
 	}()
 
-	// İşlem tamamlandığında kanaldan sonuç alınır
+	// After the process is completed, the result is received from the channel
 	select {
 	case result := <-resultChan:
 		fmt.Println("selam", result, result.err)
@@ -165,7 +165,7 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 		}
 		return result.isExists, nil
 	case <-ctx.Done():
-		return false, ctx.Err() // Eğer context iptal edilirse
+		return false, ctx.Err() // If the context is canceled
 	}
 }
 
@@ -500,7 +500,6 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 		tmp := check
 		tmp = strings.Replace(tmp, "$rnd$", fmt.Sprintf("%v", i), -1)
 
-		// Handle input replacement
 		var inputs []string
 		for _, in := range test.GetInput() {
 			switch v := in.(type) {
@@ -508,34 +507,32 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 				// Add double quotes around string inputs
 				inputs = append(inputs, `"`+v+`"`)
 			case []string:
-				// If input is a []string, format it correctly with double quotes around each element
+				// If input is a []string, it will be formatted correctly with double quotes around each element
 				var quotedStrings []string
 				for _, elem := range v {
 					quotedStrings = append(quotedStrings, `"`+elem+`"`)
 				}
 				inputs = append(inputs, strings.Join(quotedStrings, ", "))
 			case []interface{}:
-				// Handle []interface{} with mixed types
 				var arrayElements []string
 				for _, elem := range v {
 					switch e := elem.(type) {
 					case string:
 						arrayElements = append(arrayElements, `"`+e+`"`)
 					case []string:
-						// Handle nested []string within []interface{}
+						// nested []string is handled within []interface{}
 						var quotedStrings []string
 						for _, s := range e {
 							quotedStrings = append(quotedStrings, `"`+s+`"`)
 						}
 						arrayElements = append(arrayElements, "["+strings.Join(quotedStrings, ", ")+"]")
 					default:
-						// Handle other types normally
+						// other types are handled normally
 						arrayElements = append(arrayElements, fmt.Sprintf("%v", e))
 					}
 				}
 				inputs = append(inputs, strings.Join(arrayElements, ", "))
 			default:
-				// Directly use other types (int, etc.)
 				inputs = append(inputs, fmt.Sprintf("%v", v))
 			}
 		}
@@ -547,11 +544,9 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 		for _, out := range test.GetOutput() {
 			switch v := out.(type) {
 			case string:
-				// Add double quotes around string outputs
 				outputs = append(outputs, `"`+v+`"`)
 				fails = append(fails, fmt.Sprintf("%v", v))
 			case []string:
-				// If output is a []string, format it correctly with double quotes around each element
 				var quotedStrings []string
 				for _, elem := range v {
 					quotedStrings = append(quotedStrings, `"`+elem+`"`)
@@ -559,21 +554,18 @@ func (s *codeService) createChecks(check string, tests []domains.Test) string {
 				outputs = append(outputs, strings.Join(quotedStrings, ", "))
 				fails = append(fails, strings.Join(quotedStrings, ", "))
 			case []interface{}:
-				// Handle []interface{} with mixed types
 				var arrayElements []string
 				for _, elem := range v {
 					switch e := elem.(type) {
 					case string:
 						arrayElements = append(arrayElements, `"`+e+`"`)
 					case []string:
-						// Handle nested []string within []interface{}
 						var quotedStrings []string
 						for _, s := range e {
 							quotedStrings = append(quotedStrings, `"`+s+`"`)
 						}
 						arrayElements = append(arrayElements, "["+strings.Join(quotedStrings, ", ")+"]")
 					default:
-						// Handle other types normally
 						arrayElements = append(arrayElements, fmt.Sprintf("%v", e))
 					}
 				}

@@ -5,7 +5,7 @@
             "lang": "en",
             "title": "Using Conditional Statements",
             "description": "Learn how to use `if`, `else if`, and `else` statements in JavaScript to make decisions based on conditions.",
-            "content": "Write a JavaScript program that checks if a number is positive, negative, or zero and outputs the result.",
+            "content": "Write a JavaScript program that checks if a number is positive, negative, or zero and prints the result.",
             "note": "1. Declare a number variable and assign a value to it.\n2. Use `if`, `else if`, and `else` statements to check the conditions:\n   - `if`: This statement checks if a condition is true. If it is, the code inside the `if` block runs.\n   - `else if`: This statement allows you to check additional conditions if the first `if` condition is false. You can have multiple `else if` statements.\n   - `else`: This statement runs when all the previous `if` and `else if` conditions are false. It handles the 'default' case.\n3. Output the result in the format: 'The number is positive', 'The number is negative', or 'The number is zero'."
         },
         {

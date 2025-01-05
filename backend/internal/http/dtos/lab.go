@@ -56,7 +56,7 @@ func (m *LabDTOManager) ToLabsForAllDTO(labs []LabForAllDTO, isImageExists bool,
 	}
 }
 
-// This is for get lab by id
+// This is for converting a specific lab to DTO
 func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, template string, programmingName, fileExtention, monacoEditor string) LabDTO {
 	return LabDTO{
 		ID:              lab.GetID(),

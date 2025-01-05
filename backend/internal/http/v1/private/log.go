@@ -20,7 +20,7 @@ func (h *PrivateHandler) initLogRoutes(root fiber.Router) {
 
 // @Tags Log
 // @Summary Get all logs
-// @Description Retrieves all logs based on the provided query parameters.
+// @Description Retrieves all logs, based on the provided query parameters.
 // @Accept json
 // @Produce json
 // @Param userID query string false "User ID"

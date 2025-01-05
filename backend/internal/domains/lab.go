@@ -1,6 +1,6 @@
 package domains
 
-// ILabService is the interface that provides the methods for the lab service.
+// ILabService is an interface that provides methods for the lab service.
 type ILabService interface {
 	GetLabsFilter(userID, programmingID, labID string, isStarted, isFinished *bool) ([]Lab, error)
 	GetUserLanguageLabStats(userID string) (programmingLangugageStats []ProgrammingLanguageStats, err error)
@@ -75,7 +75,7 @@ type UserLabDifficultyStats struct {
 	hardPercentage   float32
 }
 
-// UserLabProgressStats  for user general lab progresss statistics
+// UserLabProgressStats is for general lab progress statistics of the user
 type UserLabProgressStats struct {
 	progress  float32
 	completed float32
@@ -122,7 +122,7 @@ func (g *UserLabDifficultyStats) SetHardPercentage(hardPercentage float32) {
 	g.hardPercentage = hardPercentage
 }
 
-// LanguageLab represents the details of a programming language.
+// LanguageLab represents the details of a specific programming language.
 type LanguageLab struct {
 	lang        string
 	title       string
@@ -172,7 +172,7 @@ func (l *LanguageLab) SetHint(hint string) {
 	l.hint = hint
 }
 
-// Lab represents a specific coding lab exercise.
+// Lab struct represents a specific coding lab exercise.
 type Lab struct {
 	id            int
 	programmingID int

@@ -259,7 +259,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	codeTmp := road.GetQuest().GetCodeTemplates()[0] // Çünkü road hangi dil için ise onun template'i kullanılıcak başka gerek yok.
+	codeTmp := road.GetQuest().GetCodeTemplates()[0] // first index is selected because there is only one template for each path quest in the requested programming language
 
 	tmpContent, err := h.services.CodeService.CodeDockerTemplateGenerator(codeTmp.GetTemplatePath(), road.GetQuest().GetFuncName(), answerRoadDTO.UserCode, road.GetQuest().GetTests(), programmingInformation.GetName())
 	if err != nil {
@@ -277,7 +277,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		}
 	}
 
-	// If funcName is empty. You no need function to run the code. Like python or js
+	// If funcName is empty or main, it will run the code without a docker template.
 	var logs string
 	if strings.EqualFold(strings.ToLower(road.GetQuest().GetFuncName()), "main") || road.GetQuest().GetFuncName() == "" {
 		err = h.services.CodeService.CreateBashFile(programmingInformation.GetCmd(), road.GetQuest().GetTests(), userSession.UserID, programmingInformation.GetPathDir())
@@ -295,7 +295,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		}
 	}
 
-	// Eğer sorunun testi yok ise yani cevap gerekmyiorsa da eğer answer yollarsa loga kaydet bitti diye.
+	// If the question does not have a test (every submitted answer is true) it will be saved in the logs as 'finished' directly.
 	if strings.Contains(logs, "Test Passed") {
 		if err := h.services.LogService.Add(c.Context(), userSession.UserID, programmingID, pathID, domains.TypePath, domains.ContentCompleted); err != nil {
 			return err
@@ -307,7 +307,7 @@ func (h *PrivateHandler) AnswerRoad(c *fiber.Ctx) error {
 		return err
 	}
 
-	//if there is no error and the function does not produce output, it gives EMPTY_OUTPUT_ERROR
+	//if there is no error and the function does not produce any output, it gives EMPTY_OUTPUT_ERROR
 	if parsedLog.Output == "" && parsedLog.ErrorMessage == "" {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "EMPTY_OUTPUT_ERROR", err)
 	}

@@ -5,15 +5,15 @@
             "lang": "en",
             "title": "Basic Arithmetic Operations",
             "description": "Practice using arithmetic operators in JavaScript such as +, -, *, /, and %.",
-            "content": "Create two number variables using `let` with the values 20 and 5, and perform addition, subtraction, multiplication, division, and modulus operations. Output the results using `console.log`.",
-            "note": "Example for addition:\n\n```javascript\nlet x = 20;\nlet y = 5;\n\nconsole.log('Sum: ' + (x + y)); // Sum: 25\n```\n\nNow, try to implement subtraction, multiplication, division, and modulus operations on your own."
+            "content": "Create two number variables using `let` with the values 20 and 5, and perform addition, subtraction, multiplication, division, and modulus operations. Print the results using `console.log`.",
+            "note": "Example for addition:\n\n\nlet x = 20;\nlet y = 5;\n\nconsole.log('Sum: ' + (x + y)); // Sum: 25\n\n\nNow, try to implement subtraction, multiplication, division, and modulus operations on your own."
         },
         {
             "lang": "tr",
             "title": "Temel Aritmetik İşlemler",
             "description": "JavaScript dilinde +, -, *, / ve % gibi aritmetik operatörleri kullanma pratiği yapın.",
             "content": "`let` kullanarak 20 ve 5 değerlerine sahip iki sayı değişkeni oluşturun ve toplama, çıkarma, çarpma, bölme ve mod işlemlerini gerçekleştirin. Sonuçları `console.log` kullanarak yazdırın.",
-            "note": "Toplama işlemi örneği:\n\n```javascript\nlet x = 20;\nlet y = 5;\n\nconsole.log('Toplam: ' + (x + y)); // Toplam: 25\n```\n\nŞimdi, çıkarma, çarpma, bölme ve mod işlemlerini kendiniz yapmayı deneyin."
+            "note": "Toplama işlemi örneği:\n\n\nlet x = 20;\nlet y = 5;\n\nconsole.log('Toplam: ' + (x + y)); // Toplam: 25\n\n\nŞimdi, çıkarma, çarpma, bölme ve mod işlemlerini kendiniz yapmayı deneyin."
         }
     ],
     "quest": {

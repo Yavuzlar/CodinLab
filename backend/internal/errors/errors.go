@@ -1,9 +1,9 @@
 package service_errors
 
 /*
-- Hata kodları ve mesajları burada tanımlanır.
-- Kodlar 1000'den başlar ve 1000'er artar.
-- Örnek Hatalar için predefined.go dosyasına bakınız.
+- Error codes and messages are specified here.
+- Error codes start from 1000 and increase by 1000.
+- For example errors, you can refer to the predefined.go file.
 */
 type ServiceError struct {
 	Code    int

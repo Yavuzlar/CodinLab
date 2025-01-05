@@ -13,8 +13,6 @@ import (
 	"github.com/gofiber/websocket/v2"
 )
 
-// UserLanguageLabStatsDto represents the DTO for user language lab statistics
-
 func (h *PrivateHandler) initLabRoutes(root fiber.Router) {
 	root.Get("/labs/:programmingID", h.GetLabs)
 	root.Get("/lab/:labID", h.GetLabByID)
@@ -270,10 +268,6 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 			break
 		}
 	}
-	// TODO: Belki Getirebilirsin
-	// if conn == nil {
-	// 	return response.Response(500, "This user was not found in socket.", nil)
-	// }
 
 	logs, err := h.services.CodeService.RunContainerWithTar(c.Context(), inventoryInformation.GetDockerImage(), tmpPath, fmt.Sprintf("main.%v", inventoryInformation.GetFileExtension()), inventoryInformation.GetCmd(), conn)
 	if err != nil {
@@ -290,7 +284,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-	//if there is no error and the function does not produce output, it gives EMPTY_OUTPUT_ERROR
+	//if there is no error and the function does not produce any output, it gives EMPTY_OUTPUT_ERROR
 	if parsedLog.Output == "" && parsedLog.ErrorMessage == "" {
 		return service_errors.NewServiceErrorWithMessageAndError(400, "EMPTY_OUTPUT_ERROR", err)
 	}

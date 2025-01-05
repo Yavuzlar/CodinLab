@@ -116,7 +116,7 @@ func (s *userService) GetProfile(ctx context.Context, userID string) (user *doma
 		return nil, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
-	//Checking if the user exists and retrieving user
+	//Checks if the user exists and retrieves user
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
 		ID: userIDU,
 	}, 1, 1)
@@ -141,9 +141,9 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, username
 		return err
 	}
 
-	// Checking if username is being updated
+	// Checks if username is being updated
 	if username != "" {
-		//Checking the username is already being used
+		//Checks if the username is already being used
 		filter, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Username: username}, 1, 1)
 		if err != nil {
 			return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
@@ -161,7 +161,7 @@ func (s *userService) UpdateUser(ctx context.Context, userID, password, username
 
 	user.SetGithubProfile(githubProfile)
 
-	//checking if name is updated
+	//checks if the name is updated
 	if name != "" {
 		if err := user.SetName(name); err != nil {
 			return err
@@ -190,7 +190,7 @@ func (s *userService) UpdatePassword(ctx context.Context, userID, password, newP
 		return err
 	}
 
-	// Checking if password is being updated & password match with confirm password
+	//  Checks if the password is being updated and if the password matches the confirmPassword
 	if newPassword != "" {
 		if newPassword != confirmPassword {
 			return service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidCreds)
@@ -208,7 +208,7 @@ func (s *userService) UpdatePassword(ctx context.Context, userID, password, newP
 }
 
 func (s *userService) checkPassword(userPassword, password string) (err error) {
-	// Checking if password matches
+	// Checks if password matches
 	ok, err := hasher_service.CompareHashAndPassword(userPassword, password)
 	if err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrComparingPasswords, err)
@@ -239,7 +239,7 @@ func (s *userService) DeleteUser(ctx context.Context, userID string) (err error)
 	return
 }
 
-// Find users most used programming languages
+// Finds the users most used programming languages
 func (s *userService) BestProgrammingLanguages(ctx context.Context, userID string) (bestProgrammingLanguage string, err error) {
 	programmingLanguageCount := make(map[int32]int)
 	if logs, err := s.logService.GetByUserID(ctx, userID); err != nil {

@@ -5,7 +5,7 @@
             "lang": "en",
             "title": "Variables and Data Types",
             "description": "Learn about different data types in JavaScript, such as number, string, boolean, and character.",
-            "content": "Write a JavaScript program that defines variables with different data types and outputs their values.",
+            "content": "Write a JavaScript program that defines variables with different data types and prints their values.",
             "note": "1. Create variables with the following data types and values:\n - A number with value 10\n - A string with value 'Hello'\n - A boolean with value true\n - A character with value 'A'\n\n2. Output each variable in the format: 'number: 10', 'string: Hello', 'boolean: true', 'character: A'."
         },
         {

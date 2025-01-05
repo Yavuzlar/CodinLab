@@ -25,7 +25,7 @@ type dbModelLogs struct {
 	CreatedAt     sql.NullTime   `db:"created_at"`
 }
 
-// lab and road numbers solved day by day
+// Daily solved lab and road numbers
 type dbModelSolutionsByDay struct {
 	Date      string `db:"date"`
 	LabCount  int    `db:"lab_count"`
@@ -57,7 +57,7 @@ func (r *LogRepository) dbModelSolutionsCountToAppModel(dbModel dbModelSolutions
 	return
 }
 
-// dbModelToAppModel converts dbModelLogs to domains.Log for application operations (e.g. return to client)
+// dbModelToAppModel converts dbModelLogs to domains.Log for application operations
 func (r *LogRepository) dbModelToAppModel(dbModel dbModelLogs) (log domains.Log) {
 	log.Unmarshal(
 		uuid.MustParse(dbModel.ID.String),
@@ -71,7 +71,7 @@ func (r *LogRepository) dbModelToAppModel(dbModel dbModelLogs) (log domains.Log)
 	return
 }
 
-// dbModelFromAppModel converts domains.Log to dbModelLogs for database operations (e.g. insert, update)
+// dbModelFromAppModel converts domains.Log to dbModelLogs for database operations
 func (r *LogRepository) dbModelFromAppModel(domModel domains.Log) (dbModel dbModelLogs) {
 	if domModel.ID() != uuid.Nil {
 		dbModel.ID.String = domModel.ID().String()
@@ -105,7 +105,7 @@ func (r *LogRepository) dbModelFromAppModel(domModel domains.Log) (dbModel dbMod
 	return
 }
 
-// dbModelFromAppModel converts domains.LogFilter to dbModelLogs for database operations (e.g. insert, update)
+// dbModelFromAppModel converts domains.LogFilter to dbModelLogs for database operations
 func (r *LogRepository) dbModelFromAppFilter(filter domains.LogFilter) (dbFilter dbModelLogs) {
 	if filter.ID != uuid.Nil {
 		dbFilter.ID.String = filter.ID.String()
@@ -195,12 +195,12 @@ func (r *LogRepository) Add(ctx context.Context, log *domains.Log) (err error) {
 }
 
 func (r *LogRepository) IsExists(ctx context.Context, log *domains.Log) (exists bool, err error) {
-	// if log type is user you can add multiple log.
+	// if log type is user, multiple logs can be added.
 	if canMultipleLogExists(log.Type()) {
 		return false, nil
 	}
 
-	// Checks the logs already in the db. If the log exists then we will not insert a new one.
+	// Checks the logs which are already in the db. If the log exists, new one will not be inserted.
 	query := `
 		SELECT
 			EXISTS (

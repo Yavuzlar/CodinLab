@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// IAdminService is the interface that provides the methods for the admin service.
+// IAdminService is an interface that provides methods for the admin service
 type IAdminService interface {
 	CreateUser(ctx context.Context, username, name, surname, password, role, githubProfile string) (err error)
 	GetAllUsers(ctx context.Context) (adminModelUsers []AdminUserDetail, err error)
@@ -16,7 +16,7 @@ type IAdminService interface {
 	BestProgrammingLanguage(ctx context.Context, userID string) (bestLanguage string, err error)
 }
 
-// AdminUserDetail represents a user model in the admin panel
+// AdminUserDetail represents a user model in admin panel
 type AdminUserDetail struct {
 	id           uuid.UUID
 	username     string
@@ -40,7 +40,7 @@ func (u *AdminUserDetail) GetID() uuid.UUID {
 	return u.id
 }
 
-// GetOrder returns the order of the user
+// GetOrder returns an order of the user
 func (u *AdminUserDetail) GetOrder() int {
 	return u.order
 }

@@ -4,7 +4,7 @@
 		{
 			"lang": "en",
 			"title": "Palindrome Checker",
-			"description": "Checks if a given string is a palindrome",
+			"description": "Checks if the given string is a palindrome",
 			"note": "Questions Note",
 			"hint": "Compare characters from the beginning and end of the string moving towards the center."
 		},

@@ -72,8 +72,8 @@ func Run(cfg *config.Config) {
 		}
 	}()
 	c := make(chan os.Signal, 1)                    // Create channel to signify a signal being sent
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM) // When an interrupt or termination signal is sent, notify the channel
-	<-c                                             // This blocks the main thread until an interrupt is received
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM) // When an interrupt or termination signal is sent,the channel will be notified
+	<-c                                             // This blocks the main thread until an interruption is received
 	fmt.Println("Gracefully shutting down...")      // Daha iyi yapılabilir !!
 	_ = fiberSrv.Shutdown(context.Background())
 	if err := conn.Close(); err != nil {

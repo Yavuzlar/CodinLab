@@ -96,7 +96,7 @@ func (l *logService) GetByUserID(ctx context.Context, userID string) (logs []dom
 	return
 }
 
-// Recives Logs with Spesific Type
+// Receives logs with a specific type
 func (l *logService) GetByType(ctx context.Context, logType string) (logs []domains.Log, err error) {
 	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{LType: logType})
 	if err != nil {
@@ -106,7 +106,7 @@ func (l *logService) GetByType(ctx context.Context, logType string) (logs []doma
 	return
 }
 
-// Recives Logs with Spesific Content
+// Receives Logs with specific Content
 func (l *logService) GetByContent(ctx context.Context, content string) (logs []domains.Log, err error) {
 	logs, _, err = l.logRepositories.Filter(ctx, domains.LogFilter{Content: content})
 	if err != nil {
@@ -116,7 +116,7 @@ func (l *logService) GetByContent(ctx context.Context, content string) (logs []d
 	return
 }
 
-// Recives Logs with Spesific Title
+// Receives Logs with specific Title
 func (l *logService) GetByProgrammingID(ctx context.Context, programmingID string) (logs []domains.Log, err error) {
 	programmingIDInt, err := strconv.Atoi(programmingID)
 	if err != nil {
@@ -155,7 +155,7 @@ func (l *logService) Add(ctx context.Context, userID, programmingID, labPathID, 
 		return err
 	}
 
-	// We save the new log to the database
+	// new logs are saved to the database
 	if err = l.logRepositories.Add(ctx, newLog); err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrAddingLog, err)
 	}

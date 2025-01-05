@@ -98,7 +98,7 @@ func (s *adminService) GetProfile(ctx context.Context, userID string) (user *dom
 		return nil, service_errors.NewServiceErrorWithMessageAndError(400, domains.ErrInvalidUserID, err)
 	}
 
-	//Checking if the user exists and retrieving user
+	//Checking if the user exists, If it does, the user will be returned
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
 		ID: userIDU,
 	}, 1, 1)
@@ -119,9 +119,9 @@ func (s *adminService) UpdateUser(ctx context.Context, userID, role, username, g
 		return err
 	}
 
-	// Checking if username is being updated
+	// Checks if username is being updated
 	if username != "" {
-		//Checking the username is already being used
+		// Checks if the username is already being used
 		filter, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Username: username}, 1, 1)
 		if err != nil {
 			return service_errors.NewServiceErrorWithMessageAndError(500, domains.ErrFilteringUsers, err)
@@ -186,7 +186,7 @@ func (s *adminService) DeleteUser(ctx context.Context, userID string) (err error
 	return
 }
 
-// Find users most used languages
+// Finds users most used languages
 func (s *adminService) BestProgrammingLanguage(ctx context.Context, userID string) (bestLanguage string, err error) {
 	languageCount := make(map[int32]int)
 	if logs, err := s.logService.GetByUserID(ctx, userID); err != nil {
