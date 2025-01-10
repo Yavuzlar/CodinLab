@@ -122,8 +122,6 @@ const LabQuestion = ({ language = "", questionId }) => {
     difficulty: "",
     description: "",
     questionNote: "",
-    expectedOutputNote: "",
-    expectedOutput: "",
     hint: "",
     template: "",
     fileExtention: "",
@@ -182,6 +180,10 @@ const LabQuestion = ({ language = "", questionId }) => {
   const editorRef = useRef(null);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    console.log("Output:", output);
+  }, [output]);
+
   const handleRun = (outputData) => {
     setOutput(outputData?.data);
     setIsSubmitted(true);
@@ -220,6 +222,9 @@ const LabQuestion = ({ language = "", questionId }) => {
   };
 
   const handleChange = (outputData) => {
+    setIsCorrect(false);
+    setIsFailed(false);
+    setIsSubmitted(false);
     setUserCode(outputData);
   };
 
@@ -253,8 +258,6 @@ const LabQuestion = ({ language = "", questionId }) => {
         difficulty: labSlice.data[0]?.difficulty,
         description: labSlice.data[0]?.language?.description,
         questionNote: labSlice.data[0]?.language?.note,
-        expectedOutputNote: labSlice.data[0]?.language?.expectedOutputNote,
-        expectedOutput: labSlice.data[0]?.language?.expectedOutput,
         hint: labSlice.data[0]?.language?.hint,
         template: labSlice.data[0]?.template,
         fileExtention: labSlice.data[0]?.fileExtention,
@@ -345,7 +348,11 @@ const LabQuestion = ({ language = "", questionId }) => {
                 </Button>
 
                 <Tooltip title={t("roads.lab.restart.button")}>
-                  <Button variant="dark" onClick={handleReset} disabled={isRunning}>
+                  <Button
+                    variant="dark"
+                    onClick={handleReset}
+                    disabled={isRunning}
+                  >
                     <RestartAltIcon />
                   </Button>
                 </Tooltip>
@@ -375,7 +382,7 @@ const LabQuestion = ({ language = "", questionId }) => {
               {/* Question Description */}
               <Typography variant="body1">{labData.description}</Typography>
 
-              {output && output.output && (
+              {((isCorrect || isFailed) && (output.output && output.expectedOutput)) ? (
                 <Alert
                   severity={output.isCorrect ? "success" : "error"}
                   variant="filled"
@@ -391,7 +398,7 @@ const LabQuestion = ({ language = "", questionId }) => {
                         .replace("$$$", output.expectedOutput)
                         .replace("***", output.output)}`}
                 </Alert>
-              )}
+              ) : null}
 
               {/* Question Note */}
               <Box
@@ -444,7 +451,7 @@ const LabQuestion = ({ language = "", questionId }) => {
               </Typography>
             )}
 
-            {isFailed && (
+            {isFailed ? (
               <Typography
                 variant="body1"
                 fontWeight="700"
@@ -453,7 +460,7 @@ const LabQuestion = ({ language = "", questionId }) => {
               >
                 {t("labs.question.failed")}
               </Typography>
-            )}
+            ) : null}
 
             {/* Expected output card */}
             {isSubmitted && (
