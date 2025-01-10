@@ -241,11 +241,6 @@ const Settings = () => {
     if (validationPasswordErrors) {
       return;
     }
-    try {
-      // console.log("TryGönderilenVeri", passwordSettingsData);
-    } catch (error) {
-      console.log("Catch Error", error);
-    }
   };
 
   const smd_down = useMediaQuery((theme) => theme.breakpoints.down("smd"));

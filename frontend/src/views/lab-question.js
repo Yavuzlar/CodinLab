@@ -206,7 +206,7 @@ const LabQuestion = ({ language = "", questionId }) => {
         editorRef.current.setValue(apiTemplate);
       }
     } catch (error) {
-      console.log("Reset response error", error);
+      console.error("Reset response error", error);
     }
   };
 
