@@ -113,6 +113,7 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const [isCorrect, setIsCorrect] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
   const [output, setOutput] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [labData, setLabData] = useState({
@@ -186,6 +187,10 @@ const LabQuestion = ({ language = "", questionId }) => {
     setIsSubmitted(true);
   };
 
+  const handlePending = (isPending) => {
+    setIsRunning(isPending);
+  }
+
   const handleStop = (outputData) => {
     // this api for get stop code component (stop code component is the last component in the container)
     // but not use it in this component
@@ -204,6 +209,10 @@ const LabQuestion = ({ language = "", questionId }) => {
       if (response.status === 200) {
         const apiTemplate = response.data?.data?.template || "";
         editorRef.current.setValue(apiTemplate);
+        setIsCorrect(false);
+        setIsFailed(false);
+        setOutput("");
+        setIsSubmitted(false);
       }
     } catch (error) {
       console.error("Reset response error", error);
@@ -256,13 +265,15 @@ const LabQuestion = ({ language = "", questionId }) => {
   }, [labSlice.data]);
 
   useEffect(() => {
-    dispatch(
-      getLabByProgramingId({
-        labID: questionId,
-        programmingID: programmingID,
-        language: i18n.language,
-      })
-    );
+    if (programmingID && questionId) {
+      dispatch(
+        getLabByProgramingId({
+          labID: questionId,
+          programmingID: programmingID,
+          language: i18n.language,
+        })
+      );
+    }
   }, [language, questionId]);
 
   return (
@@ -333,8 +344,8 @@ const LabQuestion = ({ language = "", questionId }) => {
                   </Typography>
                 </Button>
 
-                <Tooltip title={t("roads.path.restart.button")}>
-                  <Button variant="dark" onClick={handleReset}>
+                <Tooltip title={t("roads.lab.restart.button")}>
+                  <Button variant="dark" onClick={handleReset} disabled={isRunning}>
                     <RestartAltIcon />
                   </Button>
                 </Tooltip>
@@ -411,6 +422,7 @@ const LabQuestion = ({ language = "", questionId }) => {
             <CodeEditor
               params={params}
               onRun={handleRun}
+              onPending={handlePending}
               onStop={handleStop}
               onChange={handleChange}
               leng={labData.monacoEditor}

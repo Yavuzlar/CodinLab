@@ -116,6 +116,7 @@
   "userlist.edit.desc": "User Edit",
   "userlist.edit.content": "Please enter the new information of the user you want to edit.",
   "roads.path.restart.button": "Restart the path",
+  "roads.lab.restart.button": "Restart the lab",
   "codeEditor.output": "Output",
   "codeEditor.output.display": "Output will be displayed here",
   "home.development.title": "Development",

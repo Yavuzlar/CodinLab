@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 const CodeEditor = ({
   params,
   onRun,
+  onPending,
   onStop,
   onChange,
   leng,
@@ -46,6 +47,7 @@ const CodeEditor = ({
 
   // here we will add the run calls
   const handleRun = async () => {
+    onPending(true);
     // const toastId = toast.loading(t("runCode"));
     showToast("dismiss");
     showToast("loading", t("runCode"));
@@ -66,6 +68,7 @@ const CodeEditor = ({
       toast.error(error.response?.data?.message || error.message, { id: 2 });
       onRun(error.response?.data?.message || error.message);
     }
+    onPending(false);
   };
 
   // here we will add the stop api calls
