@@ -48,6 +48,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [languageName, setLanguageName] = useState("");
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [isNextPathAvailable, setIsNextPathAvailable] = useState(true);
   const [extension, setExtension] = useState("");
   const [title, setTitle] = useState("");
@@ -107,7 +108,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   // Fetch the path by id
   useEffect(() => {
-    if (programmingId && pathId) {
+    if (programmingId && pathId && i18n.language) {
       dispatch(
         fetchPathById({
           language: i18n.language,
@@ -155,6 +156,10 @@ const LanguageRoad = ({ language = "", pathId }) => {
     setOutput(outputData?.data);
   };
 
+  const handlePending = (isPending) => {
+    setIsPending(isPending);
+  }
+
   const handleStop = (outputData) => {
     setOutput(outputData);
   };
@@ -174,6 +179,8 @@ const LanguageRoad = ({ language = "", pathId }) => {
       if (response.status === 200) {
         const apiTemplate = response.data?.data?.template || "";
         editorRef.current.setValue(apiTemplate);
+
+        setOutput("");
       }
     } catch (error) {
       console.error("Reset response error", error);
@@ -181,6 +188,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   };
 
   const getNextPath = async () => {
+    if (programmingId && pathId) {
     try {
       const response = await axios({
         method: "GET",
@@ -192,6 +200,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
     } catch (error) {
       setIsNextPathAvailable(false);
     }
+  }
   };
 
   useEffect(() => {
@@ -272,6 +281,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
                       minWidth: "1rem",
                     }}
                     onClick={handleReset}
+                    disabled={isPending}
                   >
                     <RestartAltIcon />
                   </Button>
@@ -319,6 +329,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
               <CodeEditor
                 key={template}
                 onRun={handleRun}
+                onPending={handlePending}
                 onStop={handleStop}
                 onChange={handleChange}
                 leng={monacoEditor}
