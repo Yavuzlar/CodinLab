@@ -1,5 +1,5 @@
 import { Editor } from "@monaco-editor/react";
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import { Button,Box, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -32,6 +32,7 @@ const CodeEditor = ({
   editorRef,
 }) => {
   const [value, setValue] = useState(null);
+  const [isRunning, setIsRunning] = useState(false);
   const [defaultValue, setDefaultValue] = useState(defValue);
   const [theme, setTheme] = useState("vs-dark");
   const [editorActionsWidth, setEditorActionsWidth] = useState(0);
@@ -47,6 +48,7 @@ const CodeEditor = ({
 
   // here we will add the run calls
   const handleRun = async () => {
+    setIsRunning(true);
     onPending(true);
     // const toastId = toast.loading(t("runCode"));
     showToast("dismiss");
@@ -68,7 +70,9 @@ const CodeEditor = ({
       toast.error(error.response?.data?.message || error.message, { id: 2 });
       onRun(error.response?.data?.message || error.message);
     }
+    setIsRunning(false);
     onPending(false);
+
   };
 
   // here we will add the stop api calls
@@ -196,6 +200,7 @@ const CodeEditor = ({
                     handleRun();
                     closeMobileMenu();
                   }}
+                  disabled={isRunning}
                 >
                   <Image
                     src={theme === "vs-dark" ? PlayIconWhite : PlayIconBlack}
@@ -257,14 +262,27 @@ const CodeEditor = ({
               }}
             >
               <Tooltip title="Run" placement="top" followCursor>
-                <Image
-                  src={theme === "vs-dark" ? PlayIconWhite : PlayIconBlack}
-                  alt="My SVG"
-                  width={30}
-                  height={30}
-                  style={{ cursor: "pointer" }}
-                  onClick={handleRun}
-                />
+                <Button
+                  sx={{
+                    margin: "0px",
+                    minWidth: "0px",
+                    padding: "0px",
+                    backgroundColor: "transparent",
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                    },
+                  }}
+                  disabled={isRunning}
+                >
+                  <Image
+                    src={theme === "vs-dark" ? PlayIconWhite : PlayIconBlack}
+                    alt="My SVG"
+                    width={30}
+                    height={30}
+                    style={{ cursor: "pointer" }}
+                    onClick={handleRun}
+                  />
+                </Button>
               </Tooltip>
               <Tooltip title="Stop" placement="top" followCursor>
                 <Image
