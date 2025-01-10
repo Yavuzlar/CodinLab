@@ -51,7 +51,6 @@ const Register = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
-      console.log("Form has errors:", validationErrors);
       return;
     }
     // Call API

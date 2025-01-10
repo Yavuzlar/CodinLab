@@ -239,11 +239,6 @@ const settings = () => {
     if (validationPasswordErrors) {
       return;
     }
-    try {
-      // console.log("TryGönderilenVeri", passwordSettingsData);
-    } catch (error) {
-      console.log("Catch Error", error);
-    }
   };
   const breacrumbs = [
     {

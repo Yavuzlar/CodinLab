@@ -39,19 +39,16 @@ const AuthProvider = ({ children }) => {
 
   const webSocket = () => {
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-      console.log("WebSocket is already connected");
       return;
     }
-    console.log("Connecting...");
     ws.current = new WebSocket("ws://localhost/api/v1/private/socket/ws");
 
     ws.current.onopen = () => {
-      console.log("Connected to WebSocket");
+      
     };
 
     ws.current.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      console.log("Message from server:", data);
 
       if (data.Type === "Pull") {
         const message = data.Data.message;
@@ -81,20 +78,9 @@ const AuthProvider = ({ children }) => {
           showToast("success", formattedMessage);
         }
       }
-
-      // this part is for get container id from websocket but not used in this project
-      // const data = JSON.parse(e.data); //
-      // if (data.Type === "container") {
-      //   const containerId = data?.Data?.id;
-
-      //   if (containerId) {
-      //     localStorage.setItem('containerId', containerId);
-      //   }
-      // }
     };
 
     ws.current.onclose = () => {
-      console.log("WebSocket disconnected. Attempting to reconnect...");
       setTimeout(webSocket, 5000);
     };
 
@@ -107,7 +93,6 @@ const AuthProvider = ({ children }) => {
     if (ws.current) {
       ws.current.close();
       ws.current = null;
-      console.log("WebSocket connection closed.");
     }
   };
 
@@ -123,7 +108,6 @@ const AuthProvider = ({ children }) => {
         },
       };
       ws.current.send(JSON.stringify(historyData));
-      console.log("History data sent to server:", historyData);
     } else {
       console.error("WebSocket is not connected");
     }
