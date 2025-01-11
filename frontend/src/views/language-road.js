@@ -49,7 +49,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPending, setIsPending] = useState(false);
-  const [isNextPathAvailable, setIsNextPathAvailable] = useState(true);
+  const [isNextPathAvailable, setIsNextPathAvailable] = useState(false);
   const [extension, setExtension] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -189,13 +189,16 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const getNextPath = async () => {
     if (programmingId && pathId) {
+    const pathIdInt = parseInt(pathId) + 1;
     try {
       const response = await axios({
         method: "GET",
-        url: `/api/v1/private/road/path/${programmingId}/${pathId}`,
+        url: `/api/v1/private/road/path/${programmingId}/${pathIdInt}`,
       });
       if (response.status === 200) {
         setIsNextPathAvailable(true);
+      } else {
+        setIsNextPathAvailable(false);
       }
     } catch (error) {
       setIsNextPathAvailable(false);
@@ -287,24 +290,23 @@ const LanguageRoad = ({ language = "", pathId }) => {
                   </Button>
                 </Tooltip>
               )}
-
-              <Button
-                variant="light"
-                sx={{
-                  position: "absolute",
-                  right: "1rem",
-                  bottom: "1rem",
-                  fontWeight: 700,
-                  fontFamily: "Outfit",
-                  textTransform: "capitalize",
-                  py: 1,
-                  px: 3,
-                }}
-                onClick={handleNextPath}
-                disabled={!isFinished && isNextPathAvailable}
-              >
-                {t("roads.path.next_path")}
-              </Button>
+                <Button
+                  variant="light"
+                  sx={{
+                    position: "absolute",
+                    right: "1rem",
+                    bottom: "1rem",
+                    fontWeight: 700,
+                    fontFamily: "Outfit",
+                    textTransform: "capitalize",
+                    py: 1,
+                    px: 3,
+                  }}
+                  onClick={handleNextPath}
+                  disabled={!isFinished || !isNextPathAvailable}
+                  >
+                  {t("roads.path.next_path")}
+                </Button>
             </CardContent>
           </Card>
           {output && output.output && (
@@ -322,6 +324,11 @@ const LanguageRoad = ({ language = "", pathId }) => {
                 : `${t("CODE_ALERT")
                     .replace("$$$", output.expectedOutput)
                     .replace("***", output.output)}`}
+              {(!isNextPathAvailable && output?.isCorrect) && (
+                <Typography variant="body1">
+                  {t("roads.path.no_next_path")}
+                </Typography>
+              )}
             </Alert>
           )}
           <Grid container spacing={2}>

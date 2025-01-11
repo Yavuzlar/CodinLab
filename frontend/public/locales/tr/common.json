@@ -119,6 +119,7 @@
   "userlist.edit.content": "Lütfen düzenlemek istediğiniz kullanıcının yeni bilgilerini girin.",
   "roads.path.restart.button": "Yolu baştan başlat",
   "roads.lab.restart.button": "Labı baştan başlat",
+  "roads.path.no_next_path": "Bu yol haritasının son aşamasını tamamladınız!",
   "codeEditor.output": "Çıktı",
   "codeEditor.output.display": "Çıktı burada görüntülenir",
   "home.development.title": "Geliştirme",
