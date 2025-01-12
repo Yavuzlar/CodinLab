@@ -7,8 +7,8 @@ import (
 )
 
 /*
-Uygun çalışma ortamına göre yapılandırma dosyalarında bulunan ayarlarının
-ve ortam değişkenlerinin dönüştürüldüğü fonksiyonlar bulunmaktadır.
+There are functions that convert the settings and environment variables
+found in the configuration files according to the appropriate working environment.
 */
 const (
 	defaultConfigDir              = "./config"

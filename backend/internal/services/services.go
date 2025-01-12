@@ -2,7 +2,7 @@ package services
 
 import "github.com/Yavuzlar/CodinLab/internal/domains"
 
-// Tüm servisler tek bir yapıda toplayarark tek endpoint üzerinden erişim sağlamak için oluşturulmuştur.
+// It was created to gather all services in a single structure and provide access through a single endpoint.
 
 type Services struct {
 	UtilService   IUtilService
@@ -16,14 +16,14 @@ type Services struct {
 	AdminService  domains.IAdminService
 	CodeService   domains.ICodeService
 	CommonService domains.ICommonService
-	// diğer servisler buraya eklenecek
+	// other services will be added here
 }
 
 func CreateNewServices(
 	userRepositories domains.IUserRepository,
 	logRepositories domains.ILogRepository,
 	validatorService IValidatorService,
-	// diğer servisler buraya eklenecek
+	// other services will be added here
 
 ) *Services {
 	utilsService := newUtilService(validatorService)
@@ -37,7 +37,7 @@ func CreateNewServices(
 	adminService := newAdminService(userRepositories, logService, parserService, levelService, utilsService)
 	commonService := newCommonService(parserService)
 	codeService := newCodeService(commonService, labService, roadService)
-	// diğer servisler buraya eklenecek
+	// other services will be added here
 
 	return &Services{
 		UtilService:   utilsService,
@@ -51,7 +51,7 @@ func CreateNewServices(
 		AdminService:  adminService,
 		CodeService:   codeService,
 		CommonService: commonService,
-		// diğer servisler buraya eklenecek
+		// other services will be added here
 
 	}
 }
@@ -64,8 +64,6 @@ func (s *Services) User() domains.IUserService {
 	return s.UserService
 }
 
-// diğer Servisler buraya eklenecek
-
 // ------------------ UTIL SERVICE ------------------
 type IUtilService interface {
 	Validator() IValidatorService
@@ -73,14 +71,14 @@ type IUtilService interface {
 }
 
 // ------------------ VALIDATOR SERVICE ------------------
-// ValidatorService interface'i struct'ın içindeki alanların doğruluğunu kontrol eder.
+// The ValidatorService interface checks the validity of the fields in the struct.
 
 type IValidatorService interface {
 	ValidateStruct(s any) error
 }
 
 // ------------------ UTIL SERVICE ------------------
-// UtilService struct'ı ValidatorService içerir.
+// The UtilService struct contains a ValidatorService.
 type utilService struct {
 	validatorService IValidatorService
 }

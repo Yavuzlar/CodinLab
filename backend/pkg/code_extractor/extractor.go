@@ -74,7 +74,7 @@ func ExtractFuncName(code, newFuncName string) string {
 	return newCode
 }
 
-// Golangdeki tekli ve çoklu şekilde yazılmış importsları extract eder
+// Extracts single and multi typed imports in Golang
 func ExtractImportsForGolang(importBlock string) []string {
 	re := regexp.MustCompile(`"([^"]+)"`)
 	matches := re.FindAllStringSubmatch(importBlock, -1)
@@ -86,7 +86,7 @@ func ExtractImportsForGolang(importBlock string) []string {
 	return imports
 }
 
-// Golang'de frontImports'a newImportsları uygun formatta ekler
+// Adds newImports to frontImports in Golang in proper format
 func CombineImportsForGolang(existingImports, newImports string) string {
 	existingImported := ExtractImportsForGolang(existingImports)
 	newImported := ExtractImportsForGolang(newImports)
@@ -100,7 +100,7 @@ func CombineImportsForGolang(existingImports, newImports string) string {
 	}
 
 	for _, imp := range newImported {
-		if !uniqueImports[imp] { //existingImports'da zaten var ise eklemez
+		if !uniqueImports[imp] { //Does not add if already exists in existingImports
 			finalList = append(finalList, imp)
 			uniqueImports[imp] = true
 		}

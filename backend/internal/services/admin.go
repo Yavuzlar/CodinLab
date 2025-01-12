@@ -1,7 +1,5 @@
 package services
 
-//author: yasir
-
 import (
 	"context"
 	"strconv"

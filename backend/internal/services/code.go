@@ -147,7 +147,7 @@ func (s *codeService) IsImageExists(ctx context.Context, imageReference string) 
 		err      error
 	})
 
-	// Asenkron olarak Docker image existence kontrolünü başlatın
+	// Start Docker image existence check asynchronously
 	go func() {
 		isExists, err := s.dockerSDK.Images().IsImageExists(ctx, imageReference)
 		resultChan <- struct {
@@ -244,7 +244,7 @@ func (s *codeService) CreateBashFile(cmd []string, tests []domains.Test, userID,
 }
 
 func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string, conn *websocket.Conn) (string, error) {
-	// Container çalıştırma işlemini başlatın
+	// Start the container run process
 	resp, err := s.createContainerWithCMD(ctx, image, cmd)
 	if err != nil {
 		return "", err
@@ -626,24 +626,24 @@ func (s *codeService) createCodeFile(userID string) (err error) {
 }
 
 func (s *codeService) readTemplate(templatePath string) (map[string]string, error) {
-	// Dosyayı oku
+	// Read the file
 	templateData, err := os.ReadFile(templatePath)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(404, domains.ErrTemplateNotFound)
 	}
 	content := string(templateData)
 
-	// Metni ## işaretlerine göre böl
+	// Split text by ## signs
 	sections := strings.Split(content, "##")
 
-	// Değişkenleri tanımla
+	// Define variables
 	template := make(map[string]string)
 
-	// Bölümleri tara ve ilgili anahtarlara ata
+	// Scan sections and assign them to relevant keys
 	for _, section := range sections {
 		trimmedSection := strings.TrimSpace(section)
 
-		// Eğer bölüm başlığı varsa bu başlığı anahtar olarak kullan ve içeriği map'e ata
+		// If there is a section title, use this title as a key and assign the content to the map.
 		if strings.HasPrefix(trimmedSection, "FRONTEND") {
 			template["frontend"] = strings.TrimSpace(strings.TrimPrefix(trimmedSection, "FRONTEND"))
 		} else if strings.HasPrefix(trimmedSection, "DOCKER") {
