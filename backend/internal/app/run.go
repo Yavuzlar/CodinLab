@@ -25,9 +25,9 @@ import (
 
 func Run(cfg *config.Config) {
 	//postgreClient
-	conn, err := dbadapters.NewSqlite("./data.db") // sqlite3 için database oluşturma
+	conn, err := dbadapters.NewSqlite("./data.db") // Creating database for sqlite3
 	if err != nil {
-		panic(err) // hata olursa programı durdur
+		panic(err) // If there is an error, stop the program.
 	}
 	// database migrate
 	err = databaseMigrate(cfg.Application.MigrationsPath, conn.DB)
@@ -74,7 +74,7 @@ func Run(cfg *config.Config) {
 	c := make(chan os.Signal, 1)                    // Create channel to signify a signal being sent
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM) // When an interrupt or termination signal is sent,the channel will be notified
 	<-c                                             // This blocks the main thread until an interruption is received
-	fmt.Println("Gracefully shutting down...")      // Daha iyi yapılabilir !!
+	fmt.Println("Gracefully shutting down...")      // Could be better
 	_ = fiberSrv.Shutdown(context.Background())
 	if err := conn.Close(); err != nil {
 		fmt.Println("Error while closing database connection: ", err.Error())

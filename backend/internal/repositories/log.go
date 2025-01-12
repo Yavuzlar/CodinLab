@@ -139,7 +139,7 @@ func NewLogRepository(db *sqlx.DB) domains.ILogRepository {
 	return &LogRepository{db: db}
 }
 
-// Devam
+// Continue
 func (r *LogRepository) Filter(ctx context.Context, filter domains.LogFilter) (logs []domains.Log, dataCount int64, err error) {
 	dbFilter := r.dbModelFromAppFilter(filter)
 	dbResult := []dbModelLogs{}

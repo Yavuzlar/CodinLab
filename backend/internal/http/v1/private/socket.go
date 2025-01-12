@@ -47,12 +47,12 @@ func (h *PrivateHandler) handleWebSocket(c *websocket.Conn) {
 		return
 	}
 
-	// Client'ı eklemek için mutex ile kilitleyip map'e ekliyoruz
+	// To add the client, we lock it with mutex and add it to the map.
 	h.mu.Lock()
 	h.clients[newClient] = true
 	h.mu.Unlock()
 
-	// Bağlantı kapandığında client'ı map'ten çıkarmak için defer ile tanımlıyoruz
+	// We define defer to remove the client from the map when the connection is closed.
 	defer func() {
 		h.mu.Lock()
 		delete(h.clients, newClient)

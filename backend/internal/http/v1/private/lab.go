@@ -146,45 +146,34 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	userSession := session_store.GetSessionData(c)
 
-	fmt.Println("1")
 	labID := c.Params("labID")
 	programmingID := c.Query("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
-
-	fmt.Println("2")
 
 	inventoryInformation, err := h.services.CommonService.GetInventoryInformation(programmingID, language)
 	if err != nil {
 		return err
 	}
-	fmt.Println("3")
 
 	isExists, err := h.services.CodeService.IsImageExists(c.Context(), inventoryInformation.GetDockerImage())
 	if err != nil {
 		fmt.Println(err, inventoryInformation.GetDockerImage())
 		return err
 	}
-	fmt.Println("4")
 
 	if !isExists {
 		return response.Response(400, fmt.Sprintf("%s image does not exist. Please visit the homepage to download it.", inventoryInformation.GetDockerImage()), nil)
 	}
-
-	fmt.Println("5")
 
 	labData, err := h.services.LabService.GetLabsFilter(userSession.UserID, programmingID, labID, nil, nil)
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("6")
-
 	frontendTemplate, err := h.services.CodeService.GetFrontendTemplate(userSession.UserID, programmingID, labID, domains.TypeLab, inventoryInformation.GetFileExtension(), true)
 	if err != nil {
 		return err
 	}
-
-	fmt.Println("7")
 
 	var labDTOList []dto.LabDTO
 	for _, labCollection := range labData {

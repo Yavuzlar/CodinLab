@@ -11,7 +11,7 @@ import (
 )
 
 func InitMiddlewares(cfg *config.Config) (mws []func(*fiber.Ctx) error) {
-	// Fiber storage bağlantısı yapacağım unutma
+	// Don't forget that I will make a fiber storage connection.
 	cors := cors.New(
 		cors.Config{
 			AllowOrigins:     strings.Join(cfg.HTTP.AllowedOrigins, ","),
@@ -22,7 +22,7 @@ func InitMiddlewares(cfg *config.Config) (mws []func(*fiber.Ctx) error) {
 		},
 	)
 
-	helmetMid := helmet.New(helmet.ConfigDefault) // helmet configleri yazılacak
+	helmetMid := helmet.New(helmet.ConfigDefault) // helmet configurations will be written
 
 	mws = append(mws, cors, helmetMid)
 

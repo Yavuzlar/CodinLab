@@ -11,8 +11,8 @@ type ServiceError struct {
 	err     error
 }
 
-func (e *ServiceError) Error() string { // Error() fonksiyonu error interface'ini implemente eder. Bu sayede error olarak döndürülebilir.
-	if e.err != nil { // Eğer err varsa err'i döndürür.
+func (e *ServiceError) Error() string { // Error() function implements the error interface. Thus, it can be returned as error.
+	if e.err != nil { // If err exists, returns err.
 		return e.err.Error()
 	}
 	return ""

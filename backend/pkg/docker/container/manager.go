@@ -112,11 +112,11 @@ func (m *Manager) ReadContainerLogs(ctx context.Context, containerID string) (st
 	return m.cleanLogLine(result.String()), nil
 }
 
-// Log temizleme fonksiyonu
+// Log clearing function
 func (m *Manager) cleanLogLine(line string) string {
-	// Tüm özel karakterleri temizle ve yeni satırları koru
+	// Strip all special characters and preserve new lines
 	rePointer := regexp.MustCompile(`\s*\|\s*\^+.*`)
-	reNonAscii := regexp.MustCompile(`[^\x20-\x7E\n]+`) // \n karakterini koru
+	reNonAscii := regexp.MustCompile(`[^\x20-\x7E\n]+`) // Preserve the \n character
 
 	line = rePointer.ReplaceAllString(line, "")
 	line = reNonAscii.ReplaceAllString(line, "")
