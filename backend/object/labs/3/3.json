@@ -5,15 +5,15 @@
 			"lang": "en",
 			"title": "Reverse a String",
 			"description": "Reverse the given string and return it",
-			"note": "Ensure that special characters and spaces stay in their original positions after reversing.",
-			"hint": "You can iterate through the string backwards or use built-in methods to reverse it."
+			"note": "Ensure that special characters and spaces remain in their original positions while the rest of the characters are reversed.",
+			"hint": "Think of the string as an array and assign its last element to a new variable as the first element. You can also create a custom reverse function if you prefer."
 		},
 		{
 			"lang": "tr",
 			"title": "Bir Stringi Ters Çevir",
 			"description": "Verilen stringi ters çevir ve geri döndür.",
 			"note": "Ters çevirirken özel karakterlerin ve boşlukların orijinal pozisyonlarını koruduğundan emin ol.",
-			"hint": "Stringi geriye doğru dolaşabilir veya yerleşik bir ters çevirme yöntemi kullanabilirsin."
+			"hint": "Stringi bir dizi gibi düşünüp son elemanını baka bir değişkende ilk eleman olarak atayabilirsiniz. Dilerseniz özel bir reverse fonksiyonu ile de ters çevirebilirsiniz."
 		}
 	],
 	"quest": {

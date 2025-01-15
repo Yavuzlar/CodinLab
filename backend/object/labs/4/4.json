@@ -5,15 +5,15 @@
 			"lang": "en",
 			"title": "Concatenate String Array",
 			"description": "Concatenate the given string array and return it as a single string",
-			"note": "Ensure that strings are concatenated in the order they appear in the array.",
-			"hint": "Use a loop or built-in methods to join all strings in the array."
+			"note": "Ensure that strings are concatenated in the order they appear in the array. Example: ['hello', 'world'] -> 'helloworld'. Do not add spaces between them.",
+			"hint": "You can iterate through the array and append each element to a variable."
 		},
 		{
 			"lang": "tr",
 			"title": "String Array'ini Birleştir",
 			"description": "Verilen string array'ini birleştir ve tek bir string olarak geri döndür.",
-			"note": "Stringlerin arraydeki sıraya göre birleştirildiğinden emin ol.",
-			"hint": "Tüm stringleri birleştirmek için döngü veya yerleşik yöntemleri kullanabilirsin."
+			"note": "Stringlerin arraydeki sıraya göre birleştirildiğinden emin ol. Örnek: ['hello', 'world'] -> 'helloworld'. Aralarına boşluk eklemeyiniz.",
+			"hint": "For döngüsü içerisinde diziyi gezerek her indexteki veriyi bir değişken içerisine ekleyebilirsiniz."
 		}
 	],
 	"quest": {

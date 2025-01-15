@@ -5,15 +5,15 @@
 			"lang": "en",
 			"title": "Find Two Largest Numbers",
 			"description": "Find the two largest numbers in the given array and return them as an array.",
-			"note": "Question Note",
-			"hint": "Iterate through the array while keeping track of the two largest numbers."
+			"note": "Keep in mind that negative numbers can also be present in the array.",
+			"hint": "Assign the first element of the array to max1 and the second element to max2. Then iterate through the array and check if the new element is greater than these values. Remember that max2 should not be equal to max1!"
 		},
 		{
 			"lang": "tr",
 			"title": "İki En Büyük Sayıyı Bul",
 			"description": "Verilen arraydeki iki en büyük sayıyı bul ve array olarak geri döndür.",
-			"note": "Sorunun Notu",
-			"hint": "Array'i gezerken iki en büyük sayıyı takip edin."
+			"note": "Negatif sayıların da dizi içerisinde yer alabileceğini unutmayın.",
+			"hint": "Array'in ilk elemanını max1, ikinci elemanını ise max2 olarak atayın. Daha sonrasında diziyi dolaşarak dizinin yeni elemanı bu değerlerden büyük mü kontrol edin. Burada max2 nin max1'e eşit olmaması gerektiğini unutmayın!"
 		}
 	],
 	"quest": {

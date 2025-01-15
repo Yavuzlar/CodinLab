@@ -5,14 +5,14 @@
 			"lang": "en",
 			"title": "Palindrome Checker",
 			"description": "Checks if the given string is a palindrome",
-			"note": "Questions Note",
+			"note": "Palindrome is a word or group of words that is the same when you read it forwards from the beginning or backwards from the end. Example: \"Refer\" and \"level\" are palindromes. Within this lab, you need to check if the given string is a palindrome.",
 			"hint": "Compare characters from the beginning and end of the string moving towards the center."
 		},
 		{
 			"lang": "tr",
 			"title": "Palindrom Kontrolü",
 			"description": "Verilen kelimenin palindrom olup olmadığına bak.",
-			"note": "Sorunun Notu",
+			"note": "Palindrom, baştan sona veya sondan başa okunduğunda aynı olan bir kelimelerdir.Örnek: \"Refer\" ve \"level\" palindrom kelimelerdir. Bu lab içerisinde, verilen kelimenin palindrom olup olmadığını kontrol etmeniz gerekmektedir.",
 			"hint": "Karakterleri dizinin başından ve sonundan merkeze doğru karşılaştır."
 		}
 	],

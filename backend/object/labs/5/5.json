@@ -4,16 +4,16 @@
 		{
 			"lang": "en",
 			"title": "Count True Values",
-			"description": "Return the count of true values as an integer from the given array of boolean values.",
+			"description": "The array given to the function contains boolean values. Example: [true, false, true, false]. You are expected to return the number of `true` values in this array as an integer.",
 			"note": "Ensure that all `true` values are counted correctly.",
-			"hint": "Iterate through the array and count the number of `true` values."
+			"hint": "You can iterate through the array using a for loop and compare the values with the desired value (is it true?) to reach the correct result."
 		},
 		{
 			"lang": "tr",
 			"title": "Doğru Değerleri Say",
-			"description": "Verilen boolean değerler array'inde `true` değerlerinin sayısını bir tam sayı olarak döndür.",
+			"description": "Bu lab'ta fonksiyona verilen dizi boolean değerler içermektedir. Örnek: [true, false, true, false]. Bu dizideki `true` değerlerinin sayısını bir tam sayı olarak geri döndürmeniz beklenmektedir.",
 			"note": "Tüm `true` değerlerinin doğru şekilde sayıldığından emin ol.",
-			"hint": "Array'i dolaşarak `true` değerlerini say."
+			"hint": "For döngüsü ile dizi içerisinde dolaşarak değerleri istenen değerle (true mu?) karşılaştırıp doğru sonuca ulaşabilirsiniz."
 		}
 	],
 	"quest": {
