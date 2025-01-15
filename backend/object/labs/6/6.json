@@ -5,15 +5,15 @@
 			"lang": "en",
 			"title": "Nth Fibonacci Number",
 			"description": "Assume that the function is given a parameter n and return the nth number in the Fibonacci sequence.",
-			"note": "The Fibonacci sequence is defined as follows: F(0) = 0, F(1) = 1, and F(n) = F(n-1) + F(n-2) for n > 1.",
-			"hint": "Use an iterative or recursive approach to compute the Fibonacci number."
+			"note": "The Fibonacci Sequence is a series of numbers that begins with 0 and 1. Each subsequent number is the sum of the two preceding ones. The sequence continues infinitely and starts as follows: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, and so on. The Fibonacci sequence is defined by the following formula:\n\n F(0) = 0, F(1) = 1, and for n > 1, F(n) = F(n-1) + F(n-2).\n\n In this lab, you are expected to calculate the Fibonacci number corresponding to the given n value.",
+			"hint": "Use an iterative or recursive approach to compute the Fibonacci number. If you choose to use a recursive approach, you can calculate the Fibonacci number by calling the function itself."
 		},
 		{
 			"lang": "tr",
 			"title": "Nth Fibonacci Sayısı",
 			"description": "Verilen fonksiyona n parametresi verildiğini varsay ve Fibonacci dizisindeki n'inci sayıyı döndür.",
-			"note": "Fibonacci dizisi şu şekilde tanımlanır: F(0) = 0, F(1) = 1 ve F(n) = F(n-1) + F(n-2) n > 1 için.",
-			"hint": "Fibonacci sayısını hesaplamak için iteratif veya rekürsif bir yaklaşım kullanabilirsiniz."
+			"note": "Fibonacci Dizisi, 0 ve 1 ile başlayan bir sayı dizisidir. Her bir sonraki sayı, önceki iki sayının toplamıdır. Dizi sonsuza kadar devam eder ve şu şekilde başlar: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 vs. Fibonacci dizisi aşağıdaki formül ile tanımlanır:\n\n F(0) = 0, F(1) = 1 ve n > 1 için F(n) = F(n-1) + F(n-2).\n\n Bu lab'ta ise verilen n değerine karşılık gelen Fibonacci sayısını hesaplamanız beklenmektedir.",
+			"hint": "Fibonacci sayısını hesaplamak için iteratif (for döngüsü) veya rekürsif bir yaklaşım kullanabilirsiniz. Rekürsif bir yaklaşım kullanacaksanız, fonksiyonun kendisini çağırarak Fibonacci sayısını hesaplayabilirsiniz."
 		}
 	],
 	"quest": {

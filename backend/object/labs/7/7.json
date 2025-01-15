@@ -11,9 +11,9 @@
 		{
             "lang": "tr",
             "title": "Ya bu DÖNGÜ Asla Bitmezse?",
-            "description": "Bu laboratuvarda dizinin sıralı olup olmadığını kontrol etmelisiniz. Eğer sıralı değilse, sıralayın!",
+            "description": "Bu laboratuvarda dizinin sıralı olup olmadığını kontrol etmelisiniz. Eğer sıralı değilse, sıralamalısınız!",
             "note": "Bu laboratuvarı while döngüsü kullanarak yapmalısınız. Çünkü bu döngünün kullanımını da öğrenmeniz lazım! Ama kullanırken laboratuvarın ismine de dikkat edin! :) Dizinin sıralı olup olmadığını kontrol etmelisiniz. Eğer sıralı değilse, sıralayın ve diziyi geri döndürün. Özel sıralama fonksiyonunu kullanmayın, sıralama algoritmasını kendiniz oluşturun.",
-            "hint": "Bubble sort algoritmasını kullanmayı düşünebilirsiniz. Diziyi sürekli döngüyle gezip, yan yana olan elemanları karşılaştırın ve eğer sırasızlarsa yer değiştirin. Bu işlemi dizi sıralanana kadar tekrarlayın."
+            "hint": "Bubble sort algoritmasını kullanmayı düşünebilirsiniz. Diziyi döngüyle gezip, yan yana olan elemanları karşılaştırın ve eğer sırasızlarsa yer değiştirin. Bu işlemi dizi sıralanana kadar tekrarlayın."
         }
         
 	],
