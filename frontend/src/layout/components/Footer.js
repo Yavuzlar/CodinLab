@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 
 // Styled components
 const StyledFooter = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[900],
+  backgroundColor: theme.palette.primary.dark,
   color: theme.palette.common.white,
   padding: theme.spacing(4, 0),
 }));
@@ -93,7 +93,7 @@ const Footer = () => {
         <Typography
           variant="body2"
           color="grey.400"
-          align="center"
+          textAlign={{ xs: "center", md: "left" }}
           sx={{ mt: 4 }}
         >
           © {new Date().getFullYear()} {t("footer.copyright")}
