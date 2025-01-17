@@ -64,11 +64,11 @@ const LanguageSelector = () => {
         onClick={handleClick}
       >
         {language === "turkish" && (
-          <Image src={Turkish} width={24} height={24} />
+          <Image src={Turkish} alt="Turkish" width={24} height={24} />
         )}
 
         {language === "english" && (
-          <Image src={English} width={24} height={24} />
+          <Image src={English} alt="English" width={24} height={24} />
         )}
 
         <Typography
