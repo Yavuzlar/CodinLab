@@ -33,6 +33,7 @@
   "roads.sort_the_labs": "Sort the roads",
   "roads.path.start_road": "Start Road",
   "roads.path.next_path": "Next Path",
+  "roads.path.error": "Error: Your code has not been executed successfully. See the output for more detail.",
   "userlist.order.name": "Order",
   "userlist.username.name": "Username",
   "userlist.level.name": "Level",

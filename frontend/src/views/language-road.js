@@ -290,26 +290,26 @@ const LanguageRoad = ({ language = "", pathId }) => {
                   </Button>
                 </Tooltip>
               )}
-                <Button
-                  variant="light"
-                  sx={{
-                    position: "absolute",
-                    right: "1rem",
-                    bottom: "1rem",
-                    fontWeight: 700,
-                    fontFamily: "Outfit",
-                    textTransform: "capitalize",
-                    py: 1,
-                    px: 3,
-                  }}
-                  onClick={handleNextPath}
-                  disabled={!isFinished || !isNextPathAvailable}
-                  >
-                  {t("roads.path.next_path")}
-                </Button>
+              <Button
+                variant="light"
+                sx={{
+                  position: "absolute",
+                  right: "1rem",
+                  bottom: "1rem",
+                  fontWeight: 700,
+                  fontFamily: "Outfit",
+                  textTransform: "capitalize",
+                  py: 1,
+                  px: 3,
+                }}
+                onClick={handleNextPath}
+                disabled={!isFinished || !isNextPathAvailable}
+              >
+                {t("roads.path.next_path")}
+              </Button>
             </CardContent>
           </Card>
-          {output && output.output && (
+          {output ? (
             <Alert
               severity={output?.isCorrect ? "success" : "error"}
               variant="filled"
@@ -319,18 +319,21 @@ const LanguageRoad = ({ language = "", pathId }) => {
                 borderRadius: "10px",
               }}
             >
-              {output?.isCorrect
-                ? t("CODE_SUCCESS")
-                : `${t("CODE_ALERT")
-                    .replace("$$$", output.expectedOutput)
-                    .replace("***", output.output)}`}
-              {(!isNextPathAvailable && output?.isCorrect) && (
+              {(output?.isCorrect && !output?.expectedOutput) && t("CODE_SUCCESS")}
+              {!output?.isCorrect &&
+                output?.output &&
+                `${t("CODE_ALERT")
+                  .replace("$$$", output.expectedOutput)
+                  .replace("***", output.output)}`}
+              {(!output?.isCorrect && output?.errorMessage !== "_\\n" && !output?.expectedOutput) && t("roads.path.error")}
+              {/* If there is no next path available and the output is correct, display the message */}
+              {!isNextPathAvailable && output?.isCorrect && (
                 <Typography variant="body1">
                   {t("roads.path.no_next_path")}
                 </Typography>
               )}
             </Alert>
-          )}
+          ) : null}
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <CodeEditor

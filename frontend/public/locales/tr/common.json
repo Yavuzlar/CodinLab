@@ -54,6 +54,7 @@
   "labs.sort_the_labs": "Labları sırala",
   "roads.search.placeholder": "Yol haritasında ara",
   "roads.path.next_path": "Sonraki Yol",
+  "roads.path.error": "Hata: Kodunuz başarılı bir şekilde çalıştırılamadı. Detayı için çıktıya bakın.",
   "roads.sort_the_labs": "Yol haritalarını sırala",
   "admin.time.title": "Harcanan Zaman & Diller",
   "admin.time.content": "Bu grafik, haftalık bazda hangi yazılım dillerinde ne kadar zaman harcandığını göstermektedir.",
