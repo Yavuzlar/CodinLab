@@ -5,9 +5,9 @@ const Output = ({ value, params }) => {
 
   const { t } = useTranslation();
 
-  value =
-    value ||
-    t("codeEditor.output.display");
+  value = value || t("codeEditor.output.display");
+
+  console.log("Output value: ", value);
 
   // const width = params.width ? params.width : "50%";
   // const height = params.height ? params.height : "50%";
@@ -93,7 +93,7 @@ const Output = ({ value, params }) => {
             whiteSpace: 'pre-line'
           }}
         >
-          {value?.output}
+          {value?.output || value.errorMessage}
         </Box>
       </Box>
     </Box>
