@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography, Tooltip } from "@mui/material";
 import LinearProgess from "../progress/LinearProgess";
 import { useTheme } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,7 @@ const Advancement = () => {
       sx={{
         width: "100%",
         height: "25rem",
+        overflow: "auto", // Add overflow to the parent Box
       }}
     >
       <Card
@@ -49,10 +50,17 @@ const Advancement = () => {
               height: "100%",
               overflow: "auto",
               "&::-webkit-scrollbar": {
-                width: "0rem",
+                width: "0.5rem", // Adjust scrollbar width
+              },
+              "&::-webkit-scrollbar-thumb:vertical:hover": {
+                background: theme.palette.primary.dark, // Adjust scrollbar track color
               },
               "&::-webkit-scrollbar-track": {
-                background: "transparent",
+                background: theme.palette.primary.light, // Adjust scrollbar track color
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: theme.palette.primary.dark, // Customize scrollbar thumb color
+                borderRadius: "0.25rem",
               },
             }}
           >
@@ -81,14 +89,22 @@ const Advancement = () => {
                 </Box>
                 <Box sx={{ width: "100%" }}>
                   <Typography sx={{}}>{languages.name}</Typography>
-                  <LinearProgess
-                    progress={languages.roadPercentage}
-                    backgroundColor={theme.palette.primary.dark}
-                  />
-                  <LinearProgess
-                    progress={languages.labPercentage}
-                    backgroundColor={theme.palette.primary.light}
-                  />
+                  <Tooltip title={t("home.roads.title")}>
+                    <Box>
+                      <LinearProgess
+                        progress={languages.roadPercentage}
+                        backgroundColor={theme.palette.primary.dark}
+                      />
+                    </Box>
+                  </Tooltip>
+                  <Tooltip title={t("home.labs.title")}>
+                    <Box>
+                      <LinearProgess
+                        progress={languages.labPercentage}
+                        backgroundColor={theme.palette.primary.light}
+                      />
+                    </Box>
+                  </Tooltip>
                 </Box>
               </Box>
             ))}
