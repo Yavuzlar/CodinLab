@@ -6,14 +6,14 @@
 			"title": "Functions",
 			"description": "Understand how to define and use functions in Go.",
 			"content": "In this task, you will explore the fundamentals of creating and using functions in Go. Functions are blocks of reusable code designed to perform a specific task. You will learn to define a function with a name, pass parameters to it, and return a value. Functions help to keep your code organized and improve its reusability.",
-			"note": "1. Define a function named `add` that accepts two integers as parameters and returns their sum. Use the syntax `func add(a int, b int) int` for the function.\n2. Call the `add` function from the `main` function by providing two integer arguments. Store the returned value in a variable and print the result using `fmt.Println`.\n3. Test the `add` function with different cases, including positive, negative, and zero values, to ensure its correctness and reliability."
+			"note": "1. Define a function named add that accepts two integers as parameters and returns their sum. Use the syntax func add(a int, b int) int for the function.\n\n2. In this path, you are expected to add the values passed as parameters (func add(a int, b int): a and b are parameters) to the add function and return the result.\n\n3. To return a value from a function, you use the return statement."
 		},
 		{
 			"lang": "tr",
 			"title": "Fonksiyonlar",
 			"description": "Go dilinde fonksiyonların nasıl tanımlandığını ve kullanıldığını öğrenin.",
 			"content": "Bu görevde, Go dilinde fonksiyon oluşturmanın ve kullanmanın temellerini keşfedeceksiniz. Fonksiyonlar, belirli bir görevi gerçekleştirmek için tasarlanmış, tekrar kullanılabilir kod bloklarıdır. Bir fonksiyonun nasıl bir isimle tanımlanacağını, parametreler alacağını ve bir değer döndüreceğini öğreneceksiniz. Fonksiyonlar kodunuzu düzenli tutar ve yeniden kullanılabilirliğini artırır.",
-			"note": "1. İki tam sayı parametresi alan ve bunların toplamını döndüren `add` adında bir fonksiyon tanımlayın. Fonksiyon için `func add(a int, b int) int` sözdizimini kullanın.\n2. `main` fonksiyonundan `add` fonksiyonunu çağırarak iki tam sayı argümanı geçirin. Döndürülen değeri bir değişkene kaydedin ve sonucu `fmt.Println` kullanarak yazdırın.\n3. `add` fonksiyonunu farklı durumlarla (pozitif, negatif ve sıfır değerler) test edin ve fonksiyonun doğru ve güvenilir çalıştığından emin olun."
+			"note": "1. İki tam sayı parametresi alan ve bunların toplamını döndüren add adında bir fonksiyon tanımlayın. Fonksiyon için func add(a int, b int) int sözdizimini kullanın.\n\n2. Bu yolda sizden add fonksiyonunun parametre (func add(a int, b int): buradaki a ve b parametredir) olarak aldığı değerleri toplayıp geri dönmesi beklenmektedir.\n\n3. Fonksiyondan geriye değer döndürmek içinse return ifadesi kullanılmaktadır."
 		}
 	],
 	"quest": {

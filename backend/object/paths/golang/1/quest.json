@@ -5,15 +5,15 @@
 			"lang": "en",
 			"title": "Basic Syntax",
 			"description": "Understanding the basic syntax of Go",
-			"content": "In this task, you will explore the foundational elements of a Go program. Every Go program begins with a `package main` declaration, which defines the main package. You will also learn how to include libraries using `import` statements and define a `main()` function, which serves as the entry point of the program. Additionally, you'll practice using the `fmt` package to print text to the console.",
-			"note": "1. Start by declaring the `main` package with `package main`.\n2. Use the `import` keyword to include the `fmt` package for formatted I/O operations.\n3. Define the `main` function using `func main()` as the entry point of the program.\n4. Inside the `main` function, write `fmt.Println(\"Hello, World!\")` to print a greeting to the console.\n5. Run the program to see the output. "
+			"content": "In this task, you will explore the foundational elements of a Go program. Every Go program begins with a package main declaration, which defines the main package. You will also learn how to include libraries using import statements and define a main() function, which serves as the entry point of the program. Additionally, you'll practice using the fmt package to print text to the console.",
+			"note": "1. Start by declaring the main package with package main.\n\n2. Use the import keyword to include the fmt package for formatted I/O operations.\n\n3. Define the main function using func main() as the entry point of the program.\n\n4. Inside the main function, write fmt.Println(\"Hello, World!\") to print a greeting to the console.\n\n5. Run the program to see the output. "
 		},
 		{
 			"lang": "tr",
 			"title": "Temel Sözdizimi",
 			"description": "Go dilinin temel sözdizimini öğrenin.",
-			"content": "Bu görevde, bir Go programının temel unsurlarını keşfedeceksiniz. Her Go programı `package main` bildirimiyle başlar ve bu ana paketi tanımlar. Ayrıca, kütüphaneleri `import` ifadeleriyle nasıl ekleyeceğinizi ve programın giriş noktası olan `main()` fonksiyonunu tanımlamayı öğreneceksiniz. Bunun yanında, konsola metin yazdırmak için `fmt` paketini kullanmayı uygulayacaksınız.",
-			"note": "1. `package main` ile `main` paketini tanımlayın.\n2. Formatlı giriş-çıkış işlemleri için `fmt` paketini eklemek üzere `import` anahtar kelimesini kullanın.\n3. Programın giriş noktası olan `main` fonksiyonunu `func main()` ile tanımlayın.\n4. `main` fonksiyonunun içine `fmt.Println(\"Hello, World!\")` yazarak konsola bir mesaj yazdırın.\n5. Programı çalıştırarak çıktıyı gözlemleyin. "
+			"content": "Bu görevde, bir Go programının temel unsurlarını keşfedeceksiniz. Her Go programı package main bildirimiyle başlar ve bu ana paketi tanımlar. Ayrıca, kütüphaneleri import ifadeleriyle nasıl ekleyeceğinizi ve programın giriş noktası olan main() fonksiyonunu tanımlamayı öğreneceksiniz. Bunun yanında, konsola metin yazdırmak için fmt paketini kullanmayı uygulayacaksınız.",
+			"note": "1. package main ile main paketini tanımlayın.\n\n2. Formatlı giriş-çıkış işlemleri için fmt paketini eklemek üzere import anahtar kelimesini kullanın.\n\n3. Programın giriş noktası olan main fonksiyonunu func main() ile tanımlayın.\n\n4. main fonksiyonunun içine fmt.Println(\"Hello, World!\") yazarak konsola bir mesaj yazdırın.\n\n5. Programı çalıştırarak çıktıyı gözlemleyin. "
 		}
 	],
 	"quest": {

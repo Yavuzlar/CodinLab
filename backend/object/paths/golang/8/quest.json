@@ -4,16 +4,16 @@
         {
             "lang": "en",
             "title": "Using For and If Together",
-            "description": "Learn how to use `for` loops and `if` conditions together, and how to use `continue` in the loop to skip certain iterations.",
-            "content": "Understand how to combine `for` loops with `if` statements to create conditions where specific iterations are skipped using `continue`.",
-            "note": "1. Write a `for` loop that iterates over an array of numbers.\n2. Inside the loop, use an `if` statement to check if a number is even.\n3. If the number is even, use the `continue` statement to skip the current iteration.\n4. Print all odd numbers in the array.\n\nExample: `for i := 0; i < len(arr); i++ { if arr[i] % 2 == 0 { continue } fmt.Println(arr[i]) }`\n\nExpected output format:\n`Array: [1 2 3 4 5 6], Odd numbers: [1 3 5]`"
+            "description": "Learn how to use for loops and if conditions together, and how to use continue in the loop to skip certain iterations.",
+            "content": "Understand how to combine for loops with if statements to create conditions where specific iterations are skipped using continue.",
+            "note": "1. Write a for loop that iterates over an array of numbers.\n\n2. Inside the loop, use an if statement to check if a number is even.\n\n3. If the number is even, use the continue statement to skip the current iteration.\n\n4. Print all odd numbers in the array.\n\nExample:\n for i := 0; i < len(arr); i++ {\n if arr[i] % 2 == 0 {\n continue \n} \nfmt.Println(arr[i]) }\n\n4. In this path, you are expected to return the array instead of printing it to the screen. After checking the array based on the specified condition, you can send the elements to a new array. Both the original array and the new array should be returned. \n\nExpected output format:\nArray: [1 2 3 4 5 6], Odd numbers: [1 3 5]"
         },
         {
             "lang": "tr",
             "title": "For ve If'i Birlikte Kullanma",
-            "description": "For döngüleri ve if koşullarını nasıl birleştirip, `continue` kullanarak bazı iterasyonları nasıl atlayacağınızı öğrenin.",
-            "content": "For döngülerini ve if ifadelerini birleştirerek, belirli koşullar altında `continue` kullanarak iterasyonları atlamayı öğrenin.",
-            "note": "1. Bir dizi üzerinde döngü çalıştırarak her bir sayıyı kontrol edin.\n2. İçeride, sayının çift olup olmadığını kontrol etmek için bir `if` ifadesi kullanın.\n3. Eğer sayı çiftse, `continue` ifadesiyle o iterasyonu atlayın.\n4. Dizideki tüm tek sayıları yazdırın.\n\nÖrnek: `for i := 0; i < len(arr); i++ { if arr[i] % 2 == 0 { continue } fmt.Println(arr[i]) }`\n\nBeklenen çıktı formatı:\n`Array: [1 2 3 4 5 6], Odd numbers: [1 3 5]`"
+            "description": "For döngüleri ve if koşullarını nasıl birleştirip, continue kullanarak bazı iterasyonları nasıl atlayacağınızı öğrenin.",
+            "content": "For döngülerini ve if ifadelerini birleştirerek, belirli koşullar altında continue kullanarak iterasyonları atlamayı öğrenin.",
+            "note": "1. Bir dizi üzerinde döngü çalıştırarak her bir sayıyı kontrol edin.\n\n2. İçeride, sayının çift olup olmadığını kontrol etmek için bir if ifadesi kullanın.\n\n3. Eğer sayı çiftse, continue ifadesiyle o iterasyonu atlayın.\n\n4. Dizideki tüm tek sayıları yazdırın.\n\nÖrnek:\n for i := 0; i < len(arr); i++ {\n if arr[i] % 2 == 0 {\n continue \n} \nfmt.Println(arr[i]) }\n\n4.Bu yolda diziyi ekrana basmanız değil geriye döndürmeniz beklenmektedir. Verilen diziyi belirtilen koşula göre kontrol ettikten sonra yeni bir diziye eleman olarak gönderebilirsiniz. Hem dizinin ilk hali hem de yeni dizi geri döndürülmelidir. \n\nBeklenen çıktı formatı:\nArray: [1 2 3 4 5 6], Odd numbers: [1 3 5]"
         }
     ],
     "quest": {
