@@ -125,7 +125,7 @@ func (s *homeService) GetUserAdvancement(ctx context.Context, userID string) (ad
 
 		labCompletedCount := len(labCompleted)
 		if labCompletedCount > 0 {
-			labByIdCount := len(allLabs) * len(inventoryP)
+			labByIdCount := s.countLabById(allLabs, item.ID)
 			if labByIdCount > 0 {
 				if labCompletedCount > labByIdCount {
 					labCompletedCount = labByIdCount
@@ -146,7 +146,7 @@ func (s *homeService) GetUserAdvancement(ctx context.Context, userID string) (ad
 				if roadCompletedCount > roadByIdCount {
 					roadCompletedCount = roadByIdCount
 				}
-				roadPercentage = int32((float32(labCompletedCount) / float32(roadByIdCount)) * 100)
+				roadPercentage = int32((float32(roadCompletedCount) / float32(roadByIdCount)) * 100)
 			}
 		}
 
@@ -177,6 +177,20 @@ func (s *homeService) countRoadById(roadsP []domains.RoadP, id int) int {
 	for _, roadGroup := range roadsP {
 		if roadGroup.ID == id {
 			count += len(roadGroup.Paths)
+		}
+	}
+
+	return count
+}
+
+func (s *homeService) countLabById(labsP []domains.LabP, id int) int {
+	count := 0
+
+	for _, labGroup := range labsP {
+		for _, lab := range labGroup.Quest.CodeTemplates {
+			if lab.ProgrammingID == id {
+				count++
+			}
 		}
 	}
 
