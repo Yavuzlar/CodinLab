@@ -5,14 +5,14 @@
             "lang": "en",
             "title": "Basic Arithmetic Operations",
             "description": "Practice using arithmetic operators in Python such as +, -, *, /, and %.",
-            "content": "Create two number variables with the values 20 and 5, and perform addition, subtraction, multiplication, division, and modulus operations. Output the results using print.",
+            "content": "Create two number variables with the values 20 and 5, and perform addition, subtraction, multiplication, division, and modulus operations. Output the results using print.\nOutput format: Sum: ? - Difference: ? - Multiplication: ? - Quotient: ? - Remainder: ?",
             "note": "Example for addition:\n\n\nx = 20\ny = 5\n\nprint('Sum:', x + y)  \n Sum: 25\n\n\nNow, try to implement subtraction, multiplication, division, and modulus operations on your own."
         },
         {
             "lang": "tr",
             "title": "Temel Aritmetik İşlemler",
             "description": "Python dilinde +, -, *, / ve % gibi aritmetik operatörleri kullanma pratiği yapın.",
-            "content": "20 ve 5 değerlerine sahip iki sayı değişkeni oluşturun ve toplama, çıkarma, çarpma, bölme ve mod işlemlerini gerçekleştirin. Sonuçları print kullanarak yazdırın.",
+            "content": "20 ve 5 değerlerine sahip iki sayı değişkeni oluşturun ve toplama, çıkarma, çarpma, bölme ve mod işlemlerini gerçekleştirin. Sonuçları print kullanarak yazdırın.\nÇıktı formatı: Sum: ? - Difference: ? - Multiplication: ? - Quotient: ? - Remainder: ?",
             "note": "Toplama işlemi örneği:\n\n\nx = 20\ny = 5\n\nprint('Toplam:', x + y)  \n Toplam: 25\n\n\nŞimdi, çıkarma, çarpma, bölme ve mod işlemlerini kendiniz yapmayı deneyin."
         }
     ],
@@ -23,7 +23,7 @@
             {
                 "input": [],
                 "output": [
-                    "Sum: 25\nDifference: 15\nProduct: 100\nQuotient: 4.0\nRemainder: 0"
+                    "Sum: 25 - Difference: 15 - Multiplication: 100 - Quotient: 4.0 - Remainder: 0"
                 ]
             }
         ],
