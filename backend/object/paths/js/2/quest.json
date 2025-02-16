@@ -5,15 +5,15 @@
             "lang": "en",
             "title": "Variables and Data Types",
             "description": "Learn about different data types in JavaScript, such as number, string, boolean, and character.",
-            "content": "Write a JavaScript program that defines variables with different data types and prints their values.",
-            "note": "1. Create variables with the following data types and values:\n - A number with value 10\n - A string with value 'Hello'\n - A boolean with value true\n - A character with value 'A'\n\n2. Output each variable in the format: 'number: 10', 'string: Hello', 'boolean: true', 'character: A'."
+            "content": "In JavaScript, you can define variables with different data types such as number, string, boolean, and character. To define a variable, use the `let` or `const` keyword followed by the variable name and value. For example, `let num = 10;` defines a number variable with value 10. Similarly, you can define a string, boolean, and character.",
+            "note": "Solution:\nlet num = 10;\nlet str = 'Hello';\nlet bool = true;\nlet char = 'A';\nconsole.log(`number: ${num} string: ${str} boolean: ${bool} character: ${char}`);"
         },
         {
             "lang": "tr",
             "title": "Değişkenler ve Veri Tipleri",
             "description": "JavaScript dilinde number, string, boolean ve character gibi farklı veri tiplerini öğrenin.",
-            "content": "Farklı veri türlerinde değişkenler tanımlayan ve değerlerini yazdıran bir JavaScript programı yazın.",
-            "note": "1. Aşağıdaki veri türlerine ve değerlere sahip değişkenler oluşturun:\n - Değeri 10 olan bir number\n - Değeri 'Hello' olan bir string\n - Değeri true olan bir boolean\n - Değeri 'A' olan bir character\n\n2. Her bir değişkeni şu formatta çıktılayın: 'number: 10', 'string: Hello', 'boolean: true', 'character: A'."
+            "content": "JavaScript'te number, string, boolean ve character gibi farklı veri tiplerine sahip değişkenler tanımlayabilirsiniz. Bir değişken tanımlamak için `let` veya `const` anahtar kelimesini, ardından değişken adını ve değerini kullanın. Örneğin, `let num = 10;` ifadesi, değeri 10 olan bir number değişkeni tanımlar. Benzer şekilde, string, boolean ve character tanımlayabilirsiniz.",
+            "note": "Çözüm:\nlet num = 10;\nlet str = 'Hello';\nlet bool = true;\nlet char = 'A';\nconsole.log(`number: ${num} string: ${str} boolean: ${bool} character: ${char}`);"
         }
     ],
     "quest": {

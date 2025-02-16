@@ -5,15 +5,15 @@
             "lang": "en",
             "title": "Adding Two Numbers in JavaScript",
             "description": "Learn how to create a JavaScript function that adds two numbers and returns the result.",
-            "content": "Write a JavaScript function named sumTwoNumbers that takes two parameters a and b, adds them together, and returns the result. Call the function with example values and log the output to the console.",
-            "note": "1. Functions in JavaScript are created using the function keyword.\n2. A function can take parameters, which are used as variables inside the function. For example:\n   javascript\n   function add(a, b) {\n       return a + b; // Returns the sum of a and b\n   }\n   \n3. To call the function and see the result, use console.log. Example:\n   javascript\n   console.log(add(5, 10)); // Outputs: 15\n   \n4. The return statement ends the function and returns a value. If no return statement is used, the function returns undefined."
+            "content": "Write a JavaScript function named sumTwoNumbers that takes two parameters a and b, adds them together, and returns the result. Call the function with example values and log the output to the console.\n\n1. Functions in JavaScript are created using the function keyword.\n2. A function can take parameters, which are used as variables inside the function. For example:\n   function add(a, b) {\n       return a + b; // Returns the sum of a and b\n   }\n3. To call the function and see the result, use console.log. Example:\n   console.log(add(5, 10)); // Outputs: 15\n4. The return statement ends the function and returns a value. If no return statement is used, the function returns undefined.",
+            "note": "Solution:\nfunction sumTwoNumbers(a, b) {\n  return a + b;\n}\nconsole.log(sumTwoNumbers(2, 6)); // Outputs: 8\nconsole.log(sumTwoNumbers(5, 9)); // Outputs: 14"
         },
         {
             "lang": "tr",
             "title": "JavaScript'te İki Sayıyı Toplama",
             "description": "İki sayıyı toplayan ve sonucu döndüren bir JavaScript fonksiyonunun nasıl oluşturulacağını öğrenin.",
-            "content": "İki parametre a ve b alan, bu sayıları toplayıp sonucu döndüren sumTwoNumbers adlı bir JavaScript fonksiyonu yazın. Fonksiyonu örnek değerlerle çağırın ve sonucu konsola yazdırın.",
-            "note": "1. JavaScript'te fonksiyonlar function anahtar kelimesi ile oluşturulur.\n2. Bir fonksiyon parametre alabilir ve bu parametreler, fonksiyon içinde değişken olarak kullanılır. Örneğin:\n   javascript\n   function topla(a, b) {\n       return a + b; // a ve b'nin toplamını döner\n   }\n   \n3. Fonksiyonu çağırmak ve sonucu görmek için console.log kullanın. Örnek:\n   javascript\n   console.log(topla(5, 10)); // Çıktı: 15\n   \n4. return ifadesi, fonksiyonu sonlandırır ve bir değer döndürür. Eğer return kullanılmazsa, fonksiyon undefined döner."
+            "content": "İki parametre a ve b alan, bu sayıları toplayıp sonucu döndüren sumTwoNumbers adlı bir JavaScript fonksiyonu yazın. Fonksiyonu örnek değerlerle çağırın ve sonucu konsola yazdırın.\n\n1. JavaScript'te fonksiyonlar function anahtar kelimesi ile oluşturulur.\n2. Bir fonksiyon parametre alabilir ve bu parametreler, fonksiyon içinde değişken olarak kullanılır. Örneğin:\n   function topla(a, b) {\n       return a + b; // a ve b'nin toplamını döner\n   }\n3. Fonksiyonu çağırmak ve sonucu görmek için console.log kullanın. Örnek:\n   console.log(topla(5, 10)); // Çıktı: 15\n4. return ifadesi, fonksiyonu sonlandırır ve bir değer döndürür. Eğer return kullanılmazsa, fonksiyon undefined döner.",
+            "note": "Çözüm:\nfunction sumTwoNumbers(a, b) {\n  return a + b;\n}\nconsole.log(sumTwoNumbers(2, 6)); // Çıktı: 8\nconsole.log(sumTwoNumbers(5, 9)); // Çıktı: 14"
         }
     ],
     "quest": {

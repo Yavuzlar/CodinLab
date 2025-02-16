@@ -5,15 +5,15 @@
             "lang": "en",
             "title": "Basic Arithmetic Operations",
             "description": "Practice using arithmetic operators in JavaScript such as +, -, *, /, and %.",
-            "content": "Create two number variables using `let` with the values 20 and 5, and perform addition, subtraction, multiplication, division, and modulus operations. Print the results using `console.log`.",
-            "note": "Example for addition:\n\n\nlet x = 20;\nlet y = 5;\n\nconsole.log('Sum: ' + (x + y)); // Sum: 25\n\n\nNow, try to implement subtraction, multiplication, division, and modulus operations on your own."
+            "content": "Create two number variables using `let` with the values 20 and 5. Perform addition, subtraction, multiplication, division, and modulus operations. Use `console.log` to print the results. For example, to add the two numbers, you can use `console.log('Sum: ' + (x + y));`.",
+            "note": "Solution:\nlet x = 20;\nlet y = 5;\nconsole.log('Sum: ' + (x + y)); // Sum: 25\nconsole.log('Difference: ' + (x - y)); // Difference: 15\nconsole.log('Product: ' + (x * y)); // Product: 100\nconsole.log('Quotient: ' + (x / y)); // Quotient: 4\nconsole.log('Remainder: ' + (x % y)); // Remainder: 0"
         },
         {
             "lang": "tr",
             "title": "Temel Aritmetik İşlemler",
             "description": "JavaScript dilinde +, -, *, / ve % gibi aritmetik operatörleri kullanma pratiği yapın.",
-            "content": "`let` kullanarak 20 ve 5 değerlerine sahip iki sayı değişkeni oluşturun ve toplama, çıkarma, çarpma, bölme ve mod işlemlerini gerçekleştirin. Sonuçları `console.log` kullanarak yazdırın.",
-            "note": "Toplama işlemi örneği:\n\n\nlet x = 20;\nlet y = 5;\n\nconsole.log('Toplam: ' + (x + y)); // Toplam: 25\n\n\nŞimdi, çıkarma, çarpma, bölme ve mod işlemlerini kendiniz yapmayı deneyin."
+            "content": "`let` kullanarak 20 ve 5 değerlerine sahip iki sayı değişkeni oluşturun. Toplama, çıkarma, çarpma, bölme ve mod işlemlerini gerçekleştirin. Sonuçları `console.log` kullanarak yazdırın. Örneğin, iki sayıyı toplamak için `console.log('Toplam: ' + (x + y));` ifadesini kullanabilirsiniz.",
+            "note": "Çözüm:\nlet x = 20;\nlet y = 5;\nconsole.log('Sum: ' + (x + y)); // Toplam: 25\nconsole.log('Difference: ' + (x - y)); // Fark: 15\nconsole.log('Product: ' + (x * y)); // Çarpım: 100\nconsole.log('Quotient: ' + (x / y)); // Bölüm: 4\nconsole.log('Remainder: ' + (x % y)); // Kalan: 0"
         }
     ],
     "quest": {
