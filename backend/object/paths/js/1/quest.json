@@ -5,15 +5,15 @@
             "lang": "en",
             "title": "Hello World Program",
             "description": "Learn how to create your first JavaScript program and print 'Hello, World!' to the console.",
-            "content": "Write a JavaScript program that prints 'Hello, World!' to the console.",
-            "note": "Use the `console.log` method to print 'Hello, World!' to the console."
+            "content": "To print 'Hello, World!' to the console in JavaScript, you need to use the console.log method. This method is used to output messages to the web console. Here is how you can use it:\n\nThe console.log method is a built-in function in JavaScript that outputs messages to the web console. It is commonly used for debugging purposes. When you pass a string to console.log, it will print that string to the console.",
+            "note": "Solution:\nconsole.log('Hello, World!');"
         },
         {
             "lang": "tr",
             "title": "Merhaba Dünya Programı",
             "description": "İlk JavaScript programınızı oluşturun ve konsola 'Hello, World!' yazdırın.",
-            "content": "Konsola 'Hello, World!' yazdıran bir JavaScript programı yazın.",
-            "note": "`console.log` metodunu kullanarak konsola 'Hello, World!' yazdırın."
+            "content": "JavaScript'te konsola 'Hello, World!' yazdırmak için console.log metodunu kullanmanız gerekmektedir. Bu metod, web konsoluna mesajlar yazdırmak için kullanılır. İşte nasıl kullanacağınız:\n\nconsole.log metodu, JavaScript'te yerleşik bir fonksiyondur ve web konsoluna mesajlar yazdırmak için kullanılır. Genellikle hata ayıklama amacıyla kullanılır. console.log'a bir string geçtiğinizde, bu stringi konsola yazdırır.",
+            "note": "Çözüm:\nconsole.log('Hello, World!');"
         }
     ],
     "quest": {
