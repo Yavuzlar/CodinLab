@@ -268,7 +268,6 @@ func (l *logService) CountSolutionsByProgrammingLast7Days(ctx context.Context) (
 	return solutions, err
 }
 func (s *logService) LanguageUsageRates(ctx context.Context) (languageUsageRates []domains.LanguageUsageRates, err error) {
-	var rate int
 	programmingLanguages, _ := s.parserService.GetInventory()
 
 	roadLogs, err := s.GetByType(ctx, domains.TypePath)
@@ -291,17 +290,9 @@ func (s *logService) LanguageUsageRates(ctx context.Context) (languageUsageRates
 		return nil, err
 	}
 
-	total := 0
-	for _, path := range roads {
-		total += len(path.Paths)
-	}
-	for _, labGroup := range labs {
-		total += len(labGroup.Quest.CodeTemplates)
-	}
-
 	var rates domains.LanguageUsageRates
 	for _, pl := range programmingLanguages {
-		rate = 0
+		rate := 0
 		rates.SetIconPath(pl.IconPath)
 		rates.SetName(pl.Name)
 		for _, path := range roadLogs {
@@ -315,6 +306,19 @@ func (s *logService) LanguageUsageRates(ctx context.Context) (languageUsageRates
 			if pl.ID == int(labs.ProgrammingID()) {
 				if labs.Content() == domains.ContentStarted {
 					rate++
+				}
+			}
+		}
+		total := 0
+		for _, path := range roads {
+			if int32(path.ID) == int32(pl.ID) {
+				total += len(path.Paths)
+			}
+		}
+		for _, labGroup := range labs {
+			for _, lab := range labGroup.Quest.CodeTemplates {
+				if int32(lab.ProgrammingID) == int32(pl.ID) {
+					total++
 				}
 			}
 		}
