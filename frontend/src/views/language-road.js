@@ -158,7 +158,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const handlePending = (isPending) => {
     setIsPending(isPending);
-  }
+  };
 
   const handleStop = (outputData) => {
     setOutput(outputData);
@@ -189,26 +189,27 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const getNextPath = async () => {
     if (programmingId && pathId) {
-    const pathIdInt = parseInt(pathId) + 1;
-    try {
-      const response = await axios({
-        method: "GET",
-        url: `/api/v1/private/road/path/${programmingId}/${pathIdInt}`,
-      });
-      if (response.status === 200) {
-        setIsNextPathAvailable(true);
-      } else {
+      const pathIdInt = parseInt(pathId) + 1;
+      try {
+        const response = await axios({
+          method: "GET",
+          url: `/api/v1/private/road/path/${programmingId}/${pathIdInt}`,
+        });
+        if (response.status === 200) {
+          setIsNextPathAvailable(true);
+        } else {
+          setIsNextPathAvailable(false);
+        }
+      } catch (error) {
         setIsNextPathAvailable(false);
+        console.log("Error getting next path:", error);
       }
-    } catch (error) {
-      setIsNextPathAvailable(false);
     }
-  }
   };
 
   useEffect(() => {
     getNextPath();
-  }, [path]);
+  }, [output]);
 
   const handleBeforeUnload = (event) => {
     const labPathType = "Road";
@@ -319,13 +320,18 @@ const LanguageRoad = ({ language = "", pathId }) => {
                 borderRadius: "10px",
               }}
             >
-              {(output?.isCorrect && !output?.expectedOutput) && t("CODE_SUCCESS")}
+              {output?.isCorrect &&
+                !output?.expectedOutput &&
+                t("CODE_SUCCESS")}
               {!output?.isCorrect &&
                 output?.output &&
                 `${t("CODE_ALERT")
                   .replace("$$$", output.expectedOutput)
                   .replace("***", output.output)}`}
-              {(!output?.isCorrect && output?.errorMessage !== "_\\n" && !output?.expectedOutput) && t("roads.path.error")}
+              {!output?.isCorrect &&
+                output?.errorMessage !== "_\\n" &&
+                !output?.expectedOutput &&
+                t("roads.path.error")}
               {/* If there is no next path available and the output is correct, display the message */}
               {!isNextPathAvailable && output?.isCorrect && (
                 <Typography variant="body1">
