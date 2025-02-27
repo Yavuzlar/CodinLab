@@ -291,7 +291,13 @@ func (s *logService) LanguageUsageRates(ctx context.Context) (languageUsageRates
 		return nil, err
 	}
 
-	total := len(roads) + len(labs)
+	total := 0
+	for _, path := range roads {
+		total += len(path.Paths)
+	}
+	for _, labGroup := range labs {
+		total += len(labGroup.Quest.CodeTemplates)
+	}
 
 	var rates domains.LanguageUsageRates
 	for _, pl := range programmingLanguages {
