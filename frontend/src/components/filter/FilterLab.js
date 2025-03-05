@@ -5,7 +5,7 @@ import {
   InputAdornment,
   TextField,
   Typography,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { hexToRGBA } from "src/utils/hex-to-rgba";
@@ -14,7 +14,6 @@ import TestTubeOrgane from "../../assets/icons/orange.png";
 import TestTubeGreen from "../../assets/icons/green.png";
 import Image from "next/image";
 import SortFilterLab from "./SortFilerLab";
-
 
 const FilterLab = ({
   filters = {
@@ -26,8 +25,6 @@ const FilterLab = ({
   },
   setFilters = () => {},
 }) => {
- 
-
   const { t } = useTranslation();
   const theme = useTheme();
 
@@ -162,12 +159,20 @@ const FilterLab = ({
         </FormControl>
       </Box>
 
-      <Box sx={{ flex: 1, height: '44px', display: 'flex', justifyContent: 'flex-end',marginLeft:'32px' }}>
+      <Box
+        sx={{
+          flex: 1,
+          height: "44px",
+          display: "flex",
+          justifyContent: "flex-end",
+          marginLeft: "32px",
+        }}
+      >
         <SortFilterLab
           filters={filters}
           setFilters={setFilters}
           textKey="labs.sort_the_labs"
-        />  
+        />
       </Box>
     </Box>
   );

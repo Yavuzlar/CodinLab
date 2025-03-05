@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 
 const initialState = {
   loading: false,
@@ -17,9 +17,9 @@ export const getLabByProgramingId = createAsyncThunk(
         method: "GET",
         url: `/api/v1/private/lab/${data.labID}?programmingID=${data.programmingID}`,
         headers: {
-          'accept': 'application/json',
-          'Language': data.language,
-        }
+          accept: "application/json",
+          Language: data.language,
+        },
       });
       if (response.status === 200) {
         return response.data.data;
@@ -41,9 +41,9 @@ export const getLabsById = createAsyncThunk(
         method: "GET",
         url: `/api/v1/private/labs/${data.programmingID}`,
         headers: {
-          'accept': 'application/json',
-          'Language': data.language,
-        }
+          accept: "application/json",
+          Language: data.language,
+        },
       });
       if (response.status === 200) {
         return response.data.data;
@@ -85,10 +85,8 @@ const labSlice = createSlice({
       .addCase(getLabsById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      }
-      );
-  }
+      });
+  },
 });
-
 
 export default labSlice.reducer;

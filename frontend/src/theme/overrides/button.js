@@ -26,7 +26,7 @@ const button = (theme) => {
 
           ...(ownerState.variant == "light" && {
             backgroundColor: theme.palette.divider,
-            color : theme.palette.common.black,
+            color: theme.palette.common.black,
             "&:hover": {
               boxShadow: `0px 2px 6px ${theme.palette.primary.dark}`,
               backgroundColor: theme.palette.divider,

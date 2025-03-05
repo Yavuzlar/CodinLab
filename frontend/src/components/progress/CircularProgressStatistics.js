@@ -180,7 +180,9 @@ export const CircularProgressStatistics = ({ progresses, flexDirection }) => {
               sx={{ color: progress.color ? progress.color : "#0A3B7A" }}
             />
             <Typography variant="body1">{progress.name}</Typography>
-            <Typography variant="body1">%{Math.floor(progress.value)}</Typography>
+            <Typography variant="body1">
+              %{Math.floor(progress.value)}
+            </Typography>
           </Box>
         ))}
       </Box>

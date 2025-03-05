@@ -1,5 +1,4 @@
-
-const listitem = theme => {
+const listitem = (theme) => {
   return {
     MuiListSubheader: {
       styleOverrides: {
@@ -27,7 +26,9 @@ const listitem = theme => {
         root: ({ ownerState }) => ({
           fontSize: "1rem",
           borderRadius: "1.25rem 0rem 1.25rem 0rem",
-          backgroundColor: ownerState.active ? theme.palette.action.active : "transparent",
+          backgroundColor: ownerState.active
+            ? theme.palette.action.active
+            : "transparent",
         }),
       },
     },
@@ -38,7 +39,7 @@ const listitem = theme => {
         },
       },
     },
-  }
-}
+  };
+};
 
-export default listitem
+export default listitem;

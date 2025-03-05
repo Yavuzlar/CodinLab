@@ -1,12 +1,11 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Router from "next/router";
 
 const initialState = {
   loading: false,
   data: [],
-  error: false,
+  error: null,
 };
 
 export const fetchPaths = createAsyncThunk(
@@ -25,7 +24,7 @@ export const fetchPaths = createAsyncThunk(
         return response.data.data;
       }
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -44,19 +43,19 @@ export const startRoad = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
 
 const pathsSlice = createSlice({
   name: "paths",
-  initialState: initialState,
+  initialState,
   extraReducers: (builder) => {
     builder
       .addCase(fetchPaths.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null;
       })
       .addCase(fetchPaths.fulfilled, (state, action) => {
         state.data = action.payload;
@@ -68,7 +67,7 @@ const pathsSlice = createSlice({
       }) // Start road
       .addCase(startRoad.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null;
       })
       .addCase(startRoad.fulfilled, (state, action) => {
         state.data = action.payload;

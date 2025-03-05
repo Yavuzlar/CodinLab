@@ -30,7 +30,7 @@ export const fetchActivityByYear = createAsyncThunk(
 );
 
 const adminActivitySlice = createSlice({
-  name: "activity",
+  name: "adminActivity",
   initialState: initialState,
   extraReducers: (builder) => {
     builder

@@ -5,13 +5,11 @@ import Timestatistic from "src/components/cards/Timestatistic";
 import Activity from "src/components/cards/Activity";
 import Image from "next/image";
 import userIcon from "../assets/icons/icons8-male-user-100.png";
-import settingsIcon from "../assets/icons/icons8-settings-128.png";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { getLanguageUsageRates, getSolitionWeek } from "src/store/log/logSlice";
 import { useEffect } from "react";
 import DonotProggresStatistic from "src/components/progress/DonotProggresStatistic";
-import CustomBreadcrumbs from "src/components/breadcrumbs";
 
 const Admin = () => {
   const theme = useTheme();
@@ -94,94 +92,93 @@ const Admin = () => {
               </Button>
             </Box>
 
-            <Card
+            {/* <Card
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <Typography
+              variant="title"
+              sx={{
+                fontWeight: "bold",
+                padding: "20px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Translations text="admin.language.rates" />
+            </Typography>
+            <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                width: "100%",
-                height: "100%",
+                gap: 0.25,
               }}
             >
-              <Typography
-                variant="title"
-                sx={{
-                  fontWeight: "bold",
-                  padding: "20px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
-              >
-                <Translations text="admin.language.rates" />
-              </Typography>
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 0.25,
+                  justifyContent: "center",
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  {/* <CircularProgressStatistics progresses={progresses} /> */}
-                  <DonotProggresStatistic data={progresses} />
-                </Box>
-                <Box
-                  sx={{
-                    mt: "0.5rem",
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "2rem",
-                  }}
-                >
-                  {logStatistics.data?.data?.map((item, index) => (
+                <DonotProggresStatistic data={progresses} />
+              </Box>
+              <Box
+                sx={{
+                  mt: "0.5rem",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "2rem",
+                }}
+              >
+                {logStatistics.data?.data?.map((item, index) => (
+                  <Box
+                    sx={{
+                      mt: "0.5rem",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                    }}
+                    key={index}
+                  >
                     <Box
                       sx={{
-                        mt: "0.5rem",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "1rem",
+                        width: "15px",
+                        height: "15px",
+                        backgroundColor: backgroundColors[index],
+                        borderRadius: "50%",
                       }}
-                      key={index}
+                    />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "0.5rem",
+                        alignItems: "center",
+                      }}
                     >
-                      <Box
-                        sx={{
-                          width: "15px",
-                          height: "15px",
-                          backgroundColor: backgroundColors[index],
-                          borderRadius: "50%",
-                        }}
+                      <img
+                        src={"/api/v1/" + item.iconPath}
+                        width={30}
+                        height={30}
                       />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: "0.5rem",
-                          alignItems: "center",
-                        }}
+                      <Typography
+                        sx={{ font: "normal normal normal 18px/23px Outfit" }}
                       >
-                        <img
-                          src={"/api/v1/" + item.iconPath}
-                          width={30}
-                          height={30}
-                        />
-                        <Typography
-                          sx={{ font: "normal normal normal 18px/23px Outfit" }}
-                        >
-                          %{Math.round(item.usagePercentage)}
-                        </Typography>
-                      </Box>
+                        %{Math.round(item.usagePercentage)}
+                      </Typography>
                     </Box>
-                  ))}
-                </Box>
+                  </Box>
+                ))}
               </Box>
-            </Card>
+            </Box>
+          </Card> */}
           </Box>
         </Grid>
       </Grid>

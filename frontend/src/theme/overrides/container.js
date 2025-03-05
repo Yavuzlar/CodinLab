@@ -1,6 +1,6 @@
-import { Padding } from "@mui/icons-material"
+import { Padding } from "@mui/icons-material";
 
-const container = theme => {
+const container = (theme) => {
   return {
     MuiContainer: {
       styleOverrides: {
@@ -9,8 +9,8 @@ const container = theme => {
           padding: "0 !important",
         },
       },
-    }
-  }
-}
+    },
+  };
+};
 
-export default container
+export default container;

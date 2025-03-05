@@ -5,7 +5,7 @@ import {
   InputAdornment,
   TextField,
   Typography,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { hexToRGBA } from "src/utils/hex-to-rgba";
@@ -18,7 +18,7 @@ const Filter = ({
     search: "",
     sort: "", // "", asc, desc
   },
-  setFilters = () => { },
+  setFilters = () => {},
 }) => {
   // const [filters, setFilters] = useState({
   //     status: "all", // all, in-progress, completed
@@ -52,17 +52,16 @@ const Filter = ({
         justifyContent: "space-between",
         minHeight: "44px",
         flexWrap: "wrap",
-        gap: '1rem',
-
+        gap: "1rem",
       }}
     >
-      <Box sx={{ display: "flex", gap: "1rem", width: 'auto' }}>
+      <Box sx={{ display: "flex", gap: "1rem", width: "auto" }}>
         {progressStatuses.map((item, index) => {
           return (
             <Typography
               key={index}
               sx={{
-                minWidth: 'fit-content',
+                minWidth: "fit-content",
                 cursor: "default",
                 color: (theme) =>
                   filters.status == item.status
@@ -83,15 +82,13 @@ const Filter = ({
         })}
       </Box>
 
-      <Box sx={{ height: "44px", minWidth: 'fit-content', }}>
+      <Box sx={{ height: "44px", minWidth: "fit-content" }}>
         <SortFilter
           filters={filters}
           setFilters={setFilters}
           textKey="labs.sort_the_labs"
         />
       </Box>
-
-
     </Box>
   );
 };

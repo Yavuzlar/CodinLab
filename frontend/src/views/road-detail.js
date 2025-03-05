@@ -41,16 +41,15 @@ const RoadDetails = ({ language = "" }) => {
 
   const [languageName, setLanguageName] = useState("");
   const [pathsDataContent, setPathsDataContent] = useState([]);
-  const [roadIsStarted, setRoadIsStarted] = useState(false)
-  const [totalPath, setTotalPath] = useState(0)
+  const [roadIsStarted, setRoadIsStarted] = useState(false);
+  const [totalPath, setTotalPath] = useState(0);
   const [amountOfInProgressPaths, setAmountOfInProgressPaths] = useState(0); // Amount of in progress paths
   const [amountOfCompletedPaths, setAmountOfCompletedPaths] = useState(0); // Amount of completed paths // Path icon path
   const [programmingIcon, setProgrammingIcon] = useState("images/c.png"); // Programming icon path
   const [title, setTitle] = useState(""); // Road title
   const [description, setDescription] = useState(""); // Road description
-  const [isImageExists, setIsImageExists] = useState(false)
-  const { containerLoading } = useContext(AuthContext)
-
+  const [isImageExists, setIsImageExists] = useState(false);
+  const { containerLoading } = useContext(AuthContext);
 
   const breadcrums = [
     {
@@ -67,10 +66,10 @@ const RoadDetails = ({ language = "" }) => {
 
   const progresses = [
     {
-      name: t("in_progress"),  // String
+      name: t("in_progress"), // String
       // value: stateStatistics.data?.data?.progress, // Number
       value: (amountOfInProgressPaths * 100) / totalPath,
-      color: theme.palette.primary.light,// String
+      color: theme.palette.primary.light, // String
     },
     {
       name: t("completed"), // String
@@ -103,7 +102,7 @@ const RoadDetails = ({ language = "" }) => {
 
         setTitle(paths.data.name);
         setDescription(paths.data.description);
-        setRoadIsStarted(paths.data.roadIsStarted)
+        setRoadIsStarted(paths.data.roadIsStarted);
 
         const pathsData = paths.data.paths;
 
@@ -115,7 +114,7 @@ const RoadDetails = ({ language = "" }) => {
           (path) => !path.pathIsFinished && path.pathIsFinished
         );
 
-        setTotalPath(pathsData.length)
+        setTotalPath(pathsData.length);
         setAmountOfInProgressPaths(inProgressPaths.length);
         setAmountOfCompletedPaths(completedPaths.length);
         setPathsDataContent(pathsData);
@@ -126,9 +125,9 @@ const RoadDetails = ({ language = "" }) => {
 
   useEffect(() => {
     if (paths.data?.isImageExists) {
-      setIsImageExists(true)
+      setIsImageExists(true);
     }
-  }, [paths.data?.isImageExists])
+  }, [paths.data?.isImageExists]);
 
   const renderPathIcon = (path) => {
     if (path.pathIsFinished) {
@@ -151,12 +150,12 @@ const RoadDetails = ({ language = "" }) => {
   };
 
   const handlePath = (path) => {
-    if (!(path.pathIsStarted && !path.pathIsFinished) && !(path.pathIsFinished)) {
-      return
+    if (!(path.pathIsStarted && !path.pathIsFinished) && !path.pathIsFinished) {
+      return;
     }
 
-    router.push(`/roads/${language}/${path.id}`)
-  }
+    router.push(`/roads/${language}/${path.id}`);
+  };
 
   return (
     <Box>
@@ -183,8 +182,7 @@ const RoadDetails = ({ language = "" }) => {
                   alt="Programming Language Icon"
                   width={80}
                   height={80}
-                  style={{
-                  }}
+                  style={{}}
                 />
                 {!roadIsStarted ? (
                   <>
@@ -193,7 +191,6 @@ const RoadDetails = ({ language = "" }) => {
                         display: "flex",
                         flexDirection: "column",
                         gap: 2,
-
                       }}
                     >
                       <Typography variant="h4" fontWeight={600}>
@@ -218,12 +215,14 @@ const RoadDetails = ({ language = "" }) => {
                         onClick={handleStartRoad}
                       >
                         {containerLoading ? (
-                          <CircularProgress size={24} sx={{ position: 'absolute' }} />
+                          <CircularProgress
+                            size={24}
+                            sx={{ position: "absolute" }}
+                          />
                         ) : (
                           <Translations text={"roads.path.start_road"} />
                         )}
                       </Button>
-
                     </Box>
                   </>
                 ) : (
@@ -235,11 +234,11 @@ const RoadDetails = ({ language = "" }) => {
                       gap: 3,
                     }}
                   >
-                    <Typography variant="h4">
-                      {title}
-                    </Typography>
+                    <Typography variant="h4">{title}</Typography>
                     <Typography variant="body1">{description}</Typography>
-                    <LinearProgess progress={(amountOfCompletedPaths * 100) / totalPath} />
+                    <LinearProgess
+                      progress={(amountOfCompletedPaths * 100) / totalPath}
+                    />
                     <Stack direction={"row"} spacing={1}>
                       <Image
                         src={PathIcon}
@@ -267,7 +266,8 @@ const RoadDetails = ({ language = "" }) => {
                   alignItems: "center",
                 }}
               >
-                <CircularProgressStatistics progresses={progresses}
+                <CircularProgressStatistics
+                  progresses={progresses}
                   flexDirection={"column"}
                 />
               </CardContent>
@@ -277,7 +277,7 @@ const RoadDetails = ({ language = "" }) => {
       </Box>
 
       {pathsDataContent.map((path, index) => (
-        <Box key={index} >
+        <Box key={index}>
           <Box
             sx={{
               borderWidth: 6,
@@ -305,11 +305,11 @@ const RoadDetails = ({ language = "" }) => {
                   : theme.palette.primary.dark,
                 p: 3,
                 cursor: path.pathIsStarted ? "pointer" : "not-allowed",
-                '&:hover': {
-                  boxShadow: 5
+                "&:hover": {
+                  boxShadow: 5,
                 },
               }}
-              >
+            >
               <Image
                 src={renderPathIcon(path)}
                 alt="Done Icon"

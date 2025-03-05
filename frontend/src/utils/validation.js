@@ -1,4 +1,3 @@
-
 export const validation = async (schema, values) => {
   let schemaErrors = null;
 
@@ -15,6 +14,3 @@ export const validation = async (schema, values) => {
 
   return { ...schemaErrors };
 };
-
-
-

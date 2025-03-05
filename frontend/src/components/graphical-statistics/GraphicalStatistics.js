@@ -4,13 +4,10 @@ import {
   LineChart,
   Line,
   XAxis,
-  YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import Translations from "../Translations";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 const GraphicalStatistics = ({ data }) => {
@@ -18,8 +15,6 @@ const GraphicalStatistics = ({ data }) => {
   const { i18n } = useTranslation();
   const language = i18n.language;
   const [hoursLang, setHoursLang] = useState({ language });
-
-
 
   useEffect(() => {
     let storedLang = localStorage.getItem("i18nextLng");
@@ -36,9 +31,6 @@ const GraphicalStatistics = ({ data }) => {
         break;
     }
   }, [language, i18n]);
-
-
-  
 
   return (
     <ResponsiveContainer width="100%" height={280}>

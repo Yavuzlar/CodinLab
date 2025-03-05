@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
 const LinearProgess = ({ progress = 0, backgroundColor }) => {
-
   return (
     <Box
       sx={{
@@ -33,7 +32,9 @@ const LinearProgess = ({ progress = 0, backgroundColor }) => {
         ></Box>
       </Box>
 
-      <Typography sx={{ width: "fit-content" }}>{Math.floor(progress)}%</Typography>
+      <Typography sx={{ width: "fit-content" }}>
+        {Math.floor(progress)}%
+      </Typography>
     </Box>
   );
 };

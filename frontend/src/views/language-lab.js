@@ -7,28 +7,19 @@ import {
   TextField,
   useMediaQuery,
 } from "@mui/material";
-import Image from "next/image";
-import C from "../assets/language/c.png";
-import Cpp from "../assets/language/cpp.png";
-import Go from "../assets/language/go.png";
-import Js from "../assets/language/javascript.png";
-import Python from "../assets/language/python.png";
 import LabInfo from "../components/cards/LabInfo";
 import SortFilter from "src/components/filter/SortFilter";
 import PrgoressStatutesLabs from "src/components/filter/PrgoressStatutesLabs";
 import { Search } from "@mui/icons-material";
 import { t } from "i18next";
 import { theme } from "src/configs/theme";
-import { useRouter } from "next/router";
 import { AuthContext } from "src/context/AuthContext";
-
-
 
 const LanguageLab = ({ language = "" }) => {
   const programingId = language;
 
   const lgmd_down = useMediaQuery((theme) => theme.breakpoints.down("lgmd"));
-  const { containerLoading } = useContext(AuthContext)
+  const { containerLoading } = useContext(AuthContext);
 
   const [iconPath, setIconPath] = useState("");
   const [filters, setFilters] = useState({
@@ -56,7 +47,7 @@ const LanguageLab = ({ language = "" }) => {
                 src={"/api/v1/" + iconPath}
                 height={65}
                 width={65}
-              // alt={selectedLanguage.title}
+                // alt={selectedLanguage.title}
               />
             </Box>
 
@@ -132,7 +123,12 @@ const LanguageLab = ({ language = "" }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <LabInfo containerLoading={containerLoading} setIconPath={setIconPath} filter={filters} programingId={programingId} />
+          <LabInfo
+            containerLoading={containerLoading}
+            setIconPath={setIconPath}
+            filter={filters}
+            programingId={programingId}
+          />
         </Grid>
       </Grid>
     </div>

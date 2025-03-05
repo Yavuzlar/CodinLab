@@ -1,11 +1,7 @@
-import { Fragment } from 'react'
+import { Fragment } from "react";
 
 const BlankLayout = ({ children }) => {
-    return (
-        <Fragment>
-            {children}
-        </Fragment>
-    )
-}
+  return <Fragment>{children}</Fragment>;
+};
 
-export default BlankLayout
+export default BlankLayout;

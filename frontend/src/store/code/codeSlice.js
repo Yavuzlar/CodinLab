@@ -8,7 +8,6 @@ const initialState = {
   error: false,
 };
 
-
 // this api for get stop code component (stop code component is the last component in the container)
 export const getStop = createAsyncThunk(
   "code/getStop",
@@ -19,12 +18,12 @@ export const getStop = createAsyncThunk(
         method: "GET",
         url: `/api/v1/private/common/stop/${item}`,
         headers: {
-          'accept': 'application/json',
-        }
+          accept: "application/json",
+        },
       });
 
       if (response.status === 200) {
-        localStorage.removeItem('containerId');
+        localStorage.removeItem("containerId");
         return response.data.data;
       }
     } catch (error) {
@@ -32,7 +31,6 @@ export const getStop = createAsyncThunk(
     }
   }
 );
-
 
 const codeSlice = createSlice({
   name: "code",
@@ -50,9 +48,8 @@ const codeSlice = createSlice({
       .addCase(getStop.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-  }
+      });
+  },
 });
-
 
 export default codeSlice.reducer;

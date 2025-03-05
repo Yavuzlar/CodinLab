@@ -1,13 +1,11 @@
-
-const grid = theme => {
+const grid = (theme) => {
   return {
     MuiGrid: {
       styleOverrides: {
-        root: {
-        },
+        root: {},
       },
-    }
-  }
-}
+    },
+  };
+};
 
-export default grid
+export default grid;

@@ -50,7 +50,6 @@ const renderDifficulty = (difficulty) => {
             sx={{ textTransform: "capitalize" }}
           >
             {t("labs.difficulty.easy")}
-
           </Typography>
         </Box>
       );
@@ -191,7 +190,7 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const handlePending = (isPending) => {
     setIsRunning(isPending);
-  }
+  };
 
   const handleStop = (outputData) => {
     // this api for get stop code component (stop code component is the last component in the container)
@@ -382,7 +381,9 @@ const LabQuestion = ({ language = "", questionId }) => {
               {/* Question Description */}
               <Typography variant="body1">{labData.description}</Typography>
 
-              {((isCorrect || isFailed) && (output.output && output.expectedOutput)) ? (
+              {(isCorrect || isFailed) &&
+              output.output &&
+              output.expectedOutput ? (
                 <Alert
                   severity={output.isCorrect ? "success" : "error"}
                   variant="filled"

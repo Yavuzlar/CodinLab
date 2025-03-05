@@ -20,9 +20,9 @@ const Labs = () => {
 
   const searchPlaceholder = t("labs.search.placeholder");
 
-  const { language: stateLanguage, statistics: stateStatistics } = useSelector(
-    (state) => state
-  );
+  const userLanguageLabStatsData = useSelector((state) => state.language.userLanguageLabStatsData);
+  const difficultyStatsData = useSelector((state) => state.statistics.difficultyStatsData);
+  const labsProgressStatsData = useSelector((state) => state.statistics.labsProgressStatsData);
 
   const [filters, setFilters] = useState({
     status: "all", // all, in-progress, completed
@@ -30,25 +30,25 @@ const Labs = () => {
     sort: "", // "", asc, desc
   });
 
-  const labsStatsData = stateLanguage.userLanguageLabStatsData?.data;
+  const labsStatsData = userLanguageLabStatsData?.data;
 
   const difficultyStats = [
     {
       id: 1,
       name: t("labs.difficulty.easy"),
-      value: stateStatistics.difficultyStatsData.data?.easyPercentage,
+      value: difficultyStatsData.data?.easyPercentage,
       color: theme.palette.difficulty.easy,
     },
     {
       id: 2,
       name: t("labs.difficulty.medium"),
-      value: stateStatistics.difficultyStatsData.data?.mediumPercentage,
+      value: difficultyStatsData.data?.mediumPercentage,
       color: theme.palette.difficulty.medium,
     },
     {
       id: 3,
       name: t("labs.difficulty.hard"),
-      value: stateStatistics.difficultyStatsData.data?.hardPercentage,
+      value: difficultyStatsData.data?.hardPercentage,
       color: theme.palette.difficulty.hard,
     },
   ];
@@ -57,13 +57,13 @@ const Labs = () => {
     {
       id: 1,
       name: t("labs.progress.stats.progress"),
-      value: stateStatistics.labsProgressStatsData.data?.progress,
+      value: labsProgressStatsData.data?.progress,
       color: theme.palette.primary.dark,
     },
     {
       id: 2,
       name: t("labs.progress.stats.completed"),
-      value: stateStatistics.labsProgressStatsData.data?.completed,
+      value: labsProgressStatsData.data?.completed,
       color: theme.palette.primary.light,
     },
   ];
@@ -74,13 +74,15 @@ const Labs = () => {
     dispatch(getLabsProgressStats());
   }, [dispatch]);
 
-  const { status, search, sort } = filters
+  const { status, search, sort } = filters;
   const filterLabs = () => {
     let filteredLabs = labsStatsData;
 
     switch (status) {
       case "completed":
-        filteredLabs = filteredLabs.filter((lab) => lab.completedLabs == lab.totalLabs);
+        filteredLabs = filteredLabs.filter(
+          (lab) => lab.completedLabs == lab.totalLabs
+        );
         break;
       case "in-progress":
         filteredLabs = filteredLabs.filter((lab) => lab.completedLabs > 0);
@@ -97,8 +99,9 @@ const Labs = () => {
     }
 
     if (search != "") {
-      filteredLabs = filteredLabs.filter((road) =>
-        road.name && road.name.toLowerCase().includes(search.toLowerCase())
+      filteredLabs = filteredLabs.filter(
+        (road) =>
+          road.name && road.name.toLowerCase().includes(search.toLowerCase())
       );
     }
     return filteredLabs;
@@ -173,13 +176,13 @@ const Labs = () => {
         item
         md={5}
         xs={12}
-        e sx={{
+        sx={{
           maxHeight: "calc(100vh - 143px)",
           overflow: "auto",
         }}
       >
         {filterLabs()?.map((language, index) => (
-          <Grid item mb={2} xs={12} key={index} >
+          <Grid item mb={2} xs={12} key={index}>
             <LanguageProgress language={language} type="lab" />
           </Grid>
         ))}

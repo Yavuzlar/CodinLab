@@ -15,9 +15,8 @@ const Roads = () => {
   const dispatch = useDispatch();
 
   const searchPlaceholder = t("roads.search.placeholder");
-  const { language: stateLanguage, statistics: stateStatistics } = useSelector(
-    (state) => state
-  );
+  const userLanguageRoadStatsData = useSelector((state) => state.language.userLanguageRoadStatsData);
+  const roadProgressStatsData = useSelector((state) => state.statistics.roadProgressStatsData);
 
   const [filters, setFilters] = useState({
     status: "all", // all, in-progress, completed
@@ -29,13 +28,13 @@ const Roads = () => {
     {
       id: 1,
       name: t("labs.progress.stats.progress"),
-      value: stateStatistics.roadProgressStatsData.data?.progress,
+      value: roadProgressStatsData.data?.progress,
       color: "#8FDDFD",
     },
     {
       id: 2,
       name: t("labs.progress.stats.completed"),
-      value: stateStatistics.roadProgressStatsData.data?.completed,
+      value: roadProgressStatsData.data?.completed,
       color: "#0A3B7A",
     },
   ];
@@ -45,16 +44,18 @@ const Roads = () => {
     dispatch(getRoadProgressStats());
   }, [dispatch]);
 
-  const { status, search, sort } = filters
+  const { status, search, sort } = filters;
   const filterRoads = () => {
-    let filteredRoads = stateLanguage?.userLanguageRoadStatsData?.data;
+    let filteredRoads = userLanguageRoadStatsData?.data;
 
     switch (status) {
       case "completed":
         filteredRoads = filteredRoads.filter((road) => road.percentage === 100);
         break;
       case "in-progress":
-        filteredRoads = filteredRoads.filter((road) => road.percentage > 0 && road.percentage < 100);
+        filteredRoads = filteredRoads.filter(
+          (road) => road.percentage > 0 && road.percentage < 100
+        );
         break;
     }
 
@@ -68,8 +69,9 @@ const Roads = () => {
     }
 
     if (search != "") {
-      filteredRoads = filteredRoads.filter((road) =>
-        road.name && road.name.toLowerCase().includes(search.toLowerCase())
+      filteredRoads = filteredRoads.filter(
+        (road) =>
+          road.name && road.name.toLowerCase().includes(search.toLowerCase())
       );
     }
     return filteredRoads;
@@ -128,13 +130,11 @@ const Roads = () => {
           spacing={2}
           sx={{ maxHeight: "calc(100vh - 143px)", pt: "0px !important" }}
         >
-          {filterRoads()?.map(
-            (language, index) => (
-              <Grid item xs={12} md={12} key={index}>
-                <LanguageProgress language={language} type="road" />
-              </Grid>
-            )
-          )}
+          {filterRoads()?.map((language, index) => (
+            <Grid item xs={12} md={12} key={index}>
+              <LanguageProgress language={language} type="road" />
+            </Grid>
+          ))}
           <Box sx={{ width: "100%", height: "2px" }}></Box>
         </Grid>
       </Grid>

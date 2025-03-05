@@ -54,6 +54,7 @@ const Footer = () => {
                   src="/images/yavuzlar-logo-white.png"
                   alt="Yavuzlar Logo"
                   fill
+                  sizes="(max-width: 600px) 100vw, 160px"
                   style={{ objectFit: "contain" }}
                   priority
                 />
@@ -65,6 +66,7 @@ const Footer = () => {
                   src="/images/sibervatanlogo.svg"
                   alt="Siber Vatan Logo"
                   fill
+                  sizes="(max-width: 600px) 100vw, 160px"
                   style={{ objectFit: "contain" }}
                   priority
                 />
