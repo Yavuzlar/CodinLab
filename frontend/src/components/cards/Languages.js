@@ -11,13 +11,10 @@ import roadsIcon from "../../assets/icons/icons8-path-100.png";
 import labsIcon from "../../assets/icons/icons8-test-tube-100.png";
 import { useRouter } from "next/router";
 
-
 const Languages = ({ language }) => {
-  const [hovered, setHovered] = useState(false);
   const _md = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const _xl = useMediaQuery((theme) => theme.breakpoints.down("xl"));
   const router = useRouter();
-
 
   const goToRoads = (id) => {
     router.push(`/roads/${id}`);
@@ -28,15 +25,7 @@ const Languages = ({ language }) => {
   };
 
   return (
-    //   {
-    //     "id": 1,
-    //     "name": "c++",
-    //     "iconPath": "object/icons/c++.png"
-    // }
-
     <Card
-      // onMouseEnter={() => setHovered(true)}
-      // onMouseLeave={() => setHovered(false)}
       sx={{
         display: "flex",
         flexDirection: "row",
@@ -112,7 +101,7 @@ const Languages = ({ language }) => {
         }}
       > */}
       <Button
-        onClick={()=> goToRoads(language.id)}
+        onClick={() => goToRoads(language.id)}
         className="RoadsButton"
         variant="dark"
         color="primary"
@@ -141,7 +130,7 @@ const Languages = ({ language }) => {
       </Button>
 
       <Button
-      onClick={()=> goToLabs(language.id)}
+        onClick={() => goToLabs(language.id)}
         className="LabsButton"
         variant="dark"
         sx={{

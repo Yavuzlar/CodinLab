@@ -1,13 +1,11 @@
-
-const divider = theme => {
+const divider = (theme) => {
   return {
     MuiDivider: {
       styleOverrides: {
-        root: {
-        },
+        root: {},
       },
-    }
-  }
-}
+    },
+  };
+};
 
-export default divider
+export default divider;

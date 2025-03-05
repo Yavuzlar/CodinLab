@@ -1,5 +1,4 @@
-
-const formhelpertext = theme => {
+const formhelpertext = (theme) => {
   return {
     MuiFormHelperText: {
       styleOverrides: {
@@ -9,8 +8,8 @@ const formhelpertext = theme => {
           // left: "0",
         },
       },
-    }
-  }
-}
+    },
+  };
+};
 
-export default formhelpertext
+export default formhelpertext;

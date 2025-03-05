@@ -3,7 +3,7 @@ import {
   Card,
   CardContent,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import Image from "next/image";
 
@@ -62,6 +62,7 @@ const Info = ({ title = "", description = "", image = null }) => {
             bottom: "1.5rem",
             opacity: _smd ? "0.25" : "1",
           }}
+          priority
           src={image}
           alt="Welcome"
           width={154}

@@ -1,5 +1,5 @@
 import { Editor } from "@monaco-editor/react";
-import { Button,Box, Typography, useMediaQuery } from "@mui/material";
+import { Button, Box, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -72,7 +72,6 @@ const CodeEditor = ({
     }
     setIsRunning(false);
     onPending(false);
-
   };
 
   // here we will add the stop api calls

@@ -21,7 +21,6 @@ import CodinLabLogo from "../assets/logo/main-vertical-square.png";
 import Image from "next/image";
 import manImg from "../assets/3d/3d-casual-life-young-man-sitting-with-laptop-and-waving.png";
 import { useTranslation } from "next-i18next";
-import themeConfig from "src/configs/themeConfig";
 import { useAuth } from "src/hooks/useAuth";
 import LanguageSelector from "src/layout/components/navigation/item/LanguageSelector";
 import { useRouter } from "next/router";

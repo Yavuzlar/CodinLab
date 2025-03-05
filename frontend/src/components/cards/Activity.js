@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   FormControl,
-  InputLabel,
   MenuItem,
   Select,
   Typography,

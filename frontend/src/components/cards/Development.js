@@ -1,10 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import { CircularProgressStatistics } from "../progress/CircularProgressStatistics";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -13,21 +7,8 @@ import { useTranslation } from "react-i18next";
 import { theme } from "src/configs/theme";
 
 const Development = () => {
-  // let Deneme = [
-  //   {
-  //     name: "In progress", // String
-  //     value: 90.6324, // Number
-  //     color: "#0A3B7A", // String
-  //   },
-  //   {
-  //     name: "afnanfkja", // String
-  //     value: 50, // Number
-  //     color: "red", // String
-  //   },
-  // ];
-
   const dispatch = useDispatch();
-  const { statistics: stateStatistics } = useSelector((state) => state);
+  const developmentData = useSelector((state) => state.statistics.developmentData);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -36,13 +17,13 @@ const Development = () => {
 
   const progresses = [
     {
-      name: t("home.development.roads"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.developmentData?.data?.roadPercentage,
+      name: t("home.development.roads"),
+      value: developmentData?.data?.roadPercentage,
       color: theme.palette.primary.dark,
     },
     {
-      name: t("home.development.labs"), //when de CicrularProgressStatistics.js is changed, this name should be changed too
-      value: stateStatistics.developmentData?.data?.labPercantage,
+      name: t("home.development.labs"),
+      value: developmentData?.data?.labPercantage,
       color: theme.palette.primary.light,
     },
   ];
@@ -76,7 +57,6 @@ const Development = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
               justifyContent: "center",
               flexGrow: 1,
             }}

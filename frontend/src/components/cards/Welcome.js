@@ -2,18 +2,15 @@ import {
   Box,
   Card,
   CardContent,
-  Grid,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import Image from "next/image";
 
 const Welcome = ({ title = "", description = "", image = null }) => {
-  const _lgPlus = useMediaQuery((theme) => theme.breakpoints.down("lgPlus"));
   const _mdlg = useMediaQuery((theme) => theme.breakpoints.down("mdlg"));
   const _smd = useMediaQuery((theme) => theme.breakpoints.down("smd"));
   const _lg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const _xxxl = useMediaQuery((theme) => theme.breakpoints.down("xxxl"));
 
   return (
     <Box sx={{ display: "flex", position: "relative", width: "100%" }}>
@@ -40,9 +37,7 @@ const Welcome = ({ title = "", description = "", image = null }) => {
 
                 ...(_mdlg
                   ? { maxWidth: "35ch" }
-                  :{ maxWidth: "calc(100% - 360px)" }
-                  
-                ),
+                  : { maxWidth: "calc(100% - 360px)" }),
               }}
             >
               {description}
@@ -58,6 +53,7 @@ const Welcome = ({ title = "", description = "", image = null }) => {
             opacity: _smd ? "0.25" : "1",
             bottom: "0",
           }}
+          priority
           src={image}
           alt="Welcome"
           width={338}
@@ -69,5 +65,3 @@ const Welcome = ({ title = "", description = "", image = null }) => {
 };
 
 export default Welcome;
-
-

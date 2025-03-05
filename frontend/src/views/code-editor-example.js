@@ -11,7 +11,7 @@ const CodeEditorExample = () => {
 
   const handleStop = (outputData) => {
     setOutput(outputData);
-  }
+  };
 
   const params = {
     height: "60vh",
@@ -24,7 +24,14 @@ const CodeEditorExample = () => {
         display: "flex",
       }}
     >
-      <CodeEditor params={params} onRun={handleRun} onStop={handleStop} leng={"javascript"} defValue={"//deneme"} title={"deneme.js"} />
+      <CodeEditor
+        params={params}
+        onRun={handleRun}
+        onStop={handleStop}
+        leng={"javascript"}
+        defValue={"//deneme"}
+        title={"deneme.js"}
+      />
       <Output value={output} params={params} />
     </div>
   );

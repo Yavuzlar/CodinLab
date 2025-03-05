@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 const Advancement = () => {
   const dispatch = useDispatch();
-  const { statistics: stateStatistics } = useSelector((state) => state);
+  const advancementData = useSelector((state) => state.statistics.advancementData);
 
   useEffect(() => {
     dispatch(fetchAdvancement());
@@ -64,7 +64,7 @@ const Advancement = () => {
               },
             }}
           >
-            {stateStatistics.advancementData?.data?.map((languages, index) => (
+            {advancementData?.data?.map((languages, index) => (
               <Box
                 sx={{
                   display: "flex",

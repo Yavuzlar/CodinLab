@@ -2,15 +2,9 @@ import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 const Output = ({ value, params }) => {
-
   const { t } = useTranslation();
 
   value = value || t("codeEditor.output.display");
-
-  console.log("Output value: ", value);
-
-  // const width = params.width ? params.width : "50%";
-  // const height = params.height ? params.height : "50%";
 
   return (
     <Box
@@ -25,7 +19,6 @@ const Output = ({ value, params }) => {
         color: "white",
         height: params.height || "auto",
         width: params.width || "auto",
-        
       }}
     >
       <Box
@@ -90,7 +83,7 @@ const Output = ({ value, params }) => {
             paddingBottom: "24px",
             paddingTop: "8px",
             fontWeight: "normal",
-            whiteSpace: 'pre-line'
+            whiteSpace: "pre-line",
           }}
         >
           {value?.output || value.errorMessage}

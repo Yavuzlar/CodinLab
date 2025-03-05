@@ -2,24 +2,16 @@ import {
   Box,
   Card,
   CardContent,
-  Stack,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import GraphicalStatistics from "../graphical-statistics/GraphicalStatistics";
-import cImg from "../../assets/icons/c.png";
-import cppImg from "../../assets/icons/cpp.png";
-import goImg from "../../assets/icons/go.png";
-import jsImg from "../../assets/icons/javascript.png";
-import pyImg from "../../assets/icons/python.png";
-import Image from "next/image";
 import { useTheme } from "@emotion/react";
 import Translations from "../Translations";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import { useDispatch, useSelector } from "react-redux";
 import { getSolitionWeek } from "src/store/log/logSlice";
 import { useEffect, useState } from "react";
-import { t } from "i18next";
 
 const Timestatistic = () => {
   const [startDate, setStartDate] = useState("");
@@ -40,7 +32,6 @@ const Timestatistic = () => {
     setEndDate(endOfWeekFormatted);
   }, [startOfWeekFormatted, endOfWeekFormatted]);
 
-
   const dispatch = useDispatch();
 
   const { log: logStatistics } = useSelector((state) => state);
@@ -51,7 +42,6 @@ const Timestatistic = () => {
 
   const _smd = useMediaQuery((theme) => theme.breakpoints.down("smd"));
   const theme = useTheme();
-
 
   return (
     <Box

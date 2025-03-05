@@ -4,7 +4,6 @@ import axios from "axios";
 import { showToast } from "src/utils/showToast";
 import { getAdminUser } from "../user/userSlice";
 
-
 const initialState = {
   loading: false,
   data: [],
@@ -22,8 +21,6 @@ export const fetchUserById = createAsyncThunk(
       if (response.status === 200) {
         return response.data.data;
       }
-
-
     } catch (error) {
       return rejectWithValue(error.response.data.message || error.message);
     }
@@ -90,7 +87,7 @@ const adminSlice = createSlice({
       })
       .addCase(updateUserById.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload
+        state.data = action.payload;
         showToast("dismiss");
         showToast("success", action.payload?.message);
       })

@@ -1,8 +1,4 @@
-import {
-  Box,
-  Typography,
-  useTheme
-} from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { hexToRGBA } from "src/utils/hex-to-rgba";
 import TestTubeRed from "../../assets/icons/red.png";
@@ -17,7 +13,7 @@ const ProgressStatusesLab = ({
     sort: "", // "", asc, desc
     difficulty: "all",
   },
-  setFilters = () => { },
+  setFilters = () => {},
 }) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -58,7 +54,7 @@ const ProgressStatusesLab = ({
     } else {
       setFilters({ ...filters, difficulty: item.difficulty });
     }
-  }
+  };
 
   return (
     <Box
@@ -102,7 +98,7 @@ const ProgressStatusesLab = ({
             cursor: "pointber",
           }}
           onClick={() => {
-            handleDiffSet(item)
+            handleDiffSet(item);
           }}
         >
           <Image

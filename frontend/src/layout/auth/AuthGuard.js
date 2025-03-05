@@ -17,7 +17,10 @@ const AuthGuard = (props) => {
         return;
       }
 
-      if (auth.user === null && !window.localStorage.getItem(authConfig.userDataName)) {
+      if (
+        auth.user === null &&
+        !window.localStorage.getItem(authConfig.userDataName)
+      ) {
         router.replace("/login");
       }
     },

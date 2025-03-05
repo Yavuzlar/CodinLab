@@ -70,9 +70,8 @@ const logSlice = createSlice({
       .addCase(getSolitionWeek.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-  }
-
-})
+      });
+  },
+});
 
 export default logSlice.reducer;

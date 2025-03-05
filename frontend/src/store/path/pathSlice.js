@@ -1,12 +1,10 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Router } from "next/router";
 
 const initialState = {
   loading: true,
   data: [],
-  error: false,
+  error: null,
 };
 
 export const fetchPathById = createAsyncThunk(
@@ -25,19 +23,19 @@ export const fetchPathById = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
 
 const pathSlice = createSlice({
   name: "path",
-  initialState: initialState,
+  initialState,
   extraReducers: (builder) => {
     builder
       .addCase(fetchPathById.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null;
       })
       .addCase(fetchPathById.fulfilled, (state, action) => {
         state.data = action.payload;

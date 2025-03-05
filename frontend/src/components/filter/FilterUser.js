@@ -4,13 +4,10 @@ import {
   FormControl,
   InputAdornment,
   TextField,
-  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { hexToRGBA } from "src/utils/hex-to-rgba";
-import SortFilterUser from "./SortFilterUser";
 import SortFilter from "./SortFilter";
 
 const FilterUser = ({

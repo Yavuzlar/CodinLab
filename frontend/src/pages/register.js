@@ -23,7 +23,6 @@ import { useState, useEffect } from "react";
 import { registerValidation } from "src/configs/validation/registerSchema";
 import CardImage from "src/assets/3d/3d-casual-life-windows-with-developer-code-symbols.png";
 import GirlImage from "src/assets/3d/3d-casual-life-girl-holding-laptop-and-having-an-idea.png";
-import themeConfig from "src/configs/themeConfig";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "src/hooks/useAuth";
 const { default: BlankLayout } = require("src/layout/BlankLayout");
@@ -57,7 +56,6 @@ const Register = () => {
     try {
       await register(formData);
     } catch (error) {}
-
   };
 
   addEventListener("keydown", (event) => {
@@ -148,33 +146,33 @@ const Register = () => {
         }}
       >
         <Box
-        sx={{
-          display: { xs: "none", md: "block" },
-          position: "absolute",
-          top: "-6.5%",
-          left: "-1rem",
-          zIndex: 1,
-        }}
-      >
-        <Image src={CardImage} width={368} height={226} alt="Cards" />
-      </Box>
-      <Box
-        sx={{
-          display: { xs: "none", md: "block" },
-          position: "absolute",
-          top: "3.4rem",
-          right: "-7.8rem",
-          zIndex: 1,
-        }}
-      >
-        <Image
-          src={GirlImage}
-          width={368}
-          height={803}
-          priority
-          alt="Girl holding laptop"
-        />
-      </Box>
+          sx={{
+            display: { xs: "none", md: "block" },
+            position: "absolute",
+            top: "-6.5%",
+            left: "-1rem",
+            zIndex: 1,
+          }}
+        >
+          <Image src={CardImage} width={368} height={226} alt="Cards" />
+        </Box>
+        <Box
+          sx={{
+            display: { xs: "none", md: "block" },
+            position: "absolute",
+            top: "3.4rem",
+            right: "-7.8rem",
+            zIndex: 1,
+          }}
+        >
+          <Image
+            src={GirlImage}
+            width={368}
+            height={803}
+            priority
+            alt="Girl holding laptop"
+          />
+        </Box>
         <Card
           sx={{
             width: { xs: "100%", sm: "auto" },

@@ -10,7 +10,7 @@ import { getLabsById } from "src/store/lab/labSlice";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { theme } from "src/configs/theme";
-import { status } from "nprogress";
+
 const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
   const dispatch = useDispatch();
   const { lab: stateLabs } = useSelector((state) => state);
@@ -29,15 +29,14 @@ const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
     );
   }, [dispatch, programingId, i18n.language]);
 
-
   useEffect(() => {
     if (stateLabs) {
-      setIconPath(stateLabs?.data?.iconPath)
+      setIconPath(stateLabs?.data?.iconPath);
     }
-  }, [stateLabs?.data])
+  }, [stateLabs?.data]);
 
-  const isImageExist = stateLabs.data?.isImageExists
-  const { status, difficulty, search, sort } = filter
+  const isImageExist = stateLabs.data?.isImageExists;
+  const { status, difficulty, search, sort } = filter;
 
   const filterLabs = () => {
     let filteredLabs = stateLabs.data?.labs;
@@ -50,14 +49,14 @@ const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
 
     switch (difficulty) {
       case "easy":
-        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 1)
-        break
+        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 1);
+        break;
       case "medium":
-        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 2)
-        break
+        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 2);
+        break;
       case "hard":
-        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 3)
-        break
+        filteredLabs = filteredLabs.filter((lab) => lab.difficulty === 3);
+        break;
     }
 
     switch (sort) {
@@ -70,8 +69,10 @@ const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
     }
 
     if (search != "") {
-      filteredLabs = filteredLabs.filter((lab) =>
-        lab.language.title && lab.language.title.toLowerCase().includes(search.toLowerCase())
+      filteredLabs = filteredLabs.filter(
+        (lab) =>
+          lab.language.title &&
+          lab.language.title.toLowerCase().includes(search.toLowerCase())
       );
     }
     return filteredLabs;
@@ -115,8 +116,8 @@ const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
                 lab.difficulty === 1
                   ? TestTubeGreen
                   : lab.difficulty === 2
-                    ? TestTubeOrange
-                    : TestTubeRed
+                  ? TestTubeOrange
+                  : TestTubeRed
               }
               alt="difficulty"
               width={40}
@@ -153,18 +154,15 @@ const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
               }}
               onClick={() => {
                 router.push(`/labs/${programingId}/${lab.id}`);
-              }
-              }
+              }}
             >
               {containerLoading ? (
-                <CircularProgress size={24} sx={{ position: 'absolute' }} />
+                <CircularProgress size={24} sx={{ position: "absolute" }} />
+              ) :
+              lab.isFinished ? (
+                <Translations text={"lab.button.review"} />
               ) : (
-                // Eğer xax false ise normal yazılar gösterilecek
-                lab.isFinished ? (
-                  <Translations text={"lab.button.review"} />
-                ) : (
-                  <Translations text={"lab.button.solve"} />
-                )
+                <Translations text={"lab.button.solve"} />
               )}
             </Button>
           </Box>
