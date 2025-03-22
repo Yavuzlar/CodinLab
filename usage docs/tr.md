@@ -71,7 +71,7 @@ Bunun için öncelikle `inventory.json` dosyasının yapısını incelememiz ger
 
 - **`pathDir`**: Burası dile göre değişmektedir. Eklediğiniz dile göre **object/paths/`eklenecek dil`** burası değişmektedir.
 
-- **`iconPath`**: Ekleyeceğiniz dil için **object/icons** altına dilin iconunu eklemeniz gerekmektedir. Daha sonrasına **images/`görselin adı`** yazarak doğru icona ulaşabilirsiniz.
+- **`iconPath`**: Ekleyeceğiniz dil için **object/icons** altına dilin iconunu eklemeniz gerekmektedir.
 
 - **`cmd`**: Cmd içersine, bu dili derlemek ve çalıştırmak için gereken komutu yazmanız gerekmektedir. Bu şekilde kullanıcının yazmış olduğu kod Docker'da çalışacaktır. Komutlar, önce "sh", ardından "-c" ile başlar.
 
