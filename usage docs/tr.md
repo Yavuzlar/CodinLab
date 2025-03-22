@@ -1,4 +1,4 @@
-# CodinLab Project Documentation
+# CodinLab Proje Dokümantasyonu
 
 Bu doküman, **CodinLab** projesine içerik eklemeye yardımcı olması için hazırlanmıştır.
 
