@@ -38,16 +38,9 @@ const Admin = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} sx={{ display: "flex", gap: 2 }}>
-        {/* left */}
-        <Grid item xs={12} md={7}>
-          {/* <Box sx={{ minHeight: "500px" }}> */}
-          <Timestatistic />
-          {/* </Box> */}
-        </Grid>
-
-        {/* right */}
-        <Grid item xs={12} md={5}>
+      <Grid item xs={12} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        {/* top */}
+        <Grid item xs={12} md={5} sx={{ alignSelf: "flex-start" }}>
           <Box
             sx={{
               display: "flex",
@@ -62,7 +55,6 @@ const Admin = () => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 flexDirection: "row",
-
                 gap: "16px",
               }}
             >
@@ -91,95 +83,14 @@ const Admin = () => {
                 </Typography>
               </Button>
             </Box>
-
-            {/* <Card
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            <Typography
-              variant="title"
-              sx={{
-                fontWeight: "bold",
-                padding: "20px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-              }}
-            >
-              <Translations text="admin.language.rates" />
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 0.25,
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <DonotProggresStatistic data={progresses} />
-              </Box>
-              <Box
-                sx={{
-                  mt: "0.5rem",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "2rem",
-                }}
-              >
-                {logStatistics.data?.data?.map((item, index) => (
-                  <Box
-                    sx={{
-                      mt: "0.5rem",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "1rem",
-                    }}
-                    key={index}
-                  >
-                    <Box
-                      sx={{
-                        width: "15px",
-                        height: "15px",
-                        backgroundColor: backgroundColors[index],
-                        borderRadius: "50%",
-                      }}
-                    />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "0.5rem",
-                        alignItems: "center",
-                      }}
-                    >
-                      <img
-                        src={"/api/v1/" + item.iconPath}
-                        width={30}
-                        height={30}
-                      />
-                      <Typography
-                        sx={{ font: "normal normal normal 18px/23px Outfit" }}
-                      >
-                        %{Math.round(item.usagePercentage)}
-                      </Typography>
-                    </Box>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          </Card> */}
           </Box>
+        </Grid>
+
+        {/* bottom */}
+        <Grid item xs={12} md={12}>
+          {/* <Box sx={{ minHeight: "500px" }}> */}
+          <Timestatistic />
+          {/* </Box> */}
         </Grid>
       </Grid>
       {/* Activity Card */}
