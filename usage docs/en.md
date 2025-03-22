@@ -2,7 +2,7 @@
 
 This document is created to help users add content to the **CodinLab** project.
 
-A default language file is included in the project. This file contains the existing languages (Go, JavaScript, Python, C++). If the language of the content you'll add does not exist, you must first add that language. If the language is already present, you can skip this step.
+A default language file is included in the project. This file contains the existing languages (Go, JavaScript, Python, C++). If the language of the content you are going to add does not exist, you must first add that language. If the language is already present, you can skip this step.
 
 There are two separate categories for content in the project:
 
@@ -64,10 +64,10 @@ First, let's examine the structure of the `inventory.json` file:
 - **`id`**: The ID of the added language, which distinguishes it from others. The ID for the newly added language should be one more than the ID of the last added language.
 - **`name`**: The name of the added language in uppercase. It is used as the title on the front end.
 - **`dockerImage`**: The **docker image** name and version for the language you want to add. To find the image name, you can check [dockerhub](https://hub.docker.com/). Adding `latest` indicates the latest version of the image. You can also specify a specific version.
-- **`labDir`**: This is fixed. You must always write **object/labs**. This is always the same as labs are separated only as templates by language.
+- **`labDir`**: This is constant. You must always write **object/labs**. Since the labs are only separated as templates by language, this part is always the same.
 - **`pathDir`**: This changes according to the language. It should be **object/paths/`<language_name>`**.
-- **`iconPath`**: You need to add the language icon under **object/icons**. You can access the correct icon later by writing **images/`icon name`** on api.
-- **`cmd`**: In this field, you need to write the command to compile and run the code in this language. This will allow the code written by the user to run in Docker. Commands start with "sh" followed by "-c".
+- **`iconPath`**: You need to add the language icon under **object/icons**.
+- **`cmd`**: In this field, you need to write the command to compile and run the code in this language. This will allow the user's code to run in Docker. Commands start with "sh" followed by "-c".
    - **sh**: Runs the shell (command line).
    - **-c**: Indicates the command will be executed inside the shell.
    After this, the necessary compile & run command is written. For C++, it is **g++ -o main main.cpp && ./main**. It should be adjusted according to the added language.
