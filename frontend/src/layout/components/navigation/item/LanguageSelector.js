@@ -14,7 +14,15 @@ const LanguageSelector = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [language, setLanguage] = useState("turkish");
+  const [language, setLanguage] = useState(() => {
+    const browserLanguage = navigator.language.toLowerCase();
+    if (browserLanguage.startsWith("tr")) {
+      return "turkish";
+    } else if (browserLanguage.startsWith("en")) {
+      return "english";
+    }
+    return "english"; // Default language
+  });
 
   const { i18n } = useTranslation();
 

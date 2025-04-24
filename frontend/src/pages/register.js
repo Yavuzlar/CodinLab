@@ -133,7 +133,14 @@ const Register = () => {
         {md_down ? (
           ""
         ) : (
-          <Button sx={{ top: 0, right: 0, position: "absolute" }}>
+          <Button
+            sx={{
+              top: 0,
+              right: 0,
+              position: "absolute",
+              zIndex: 9999,
+            }}
+          >
             <LanguageSelector />
           </Button>
         )}
@@ -198,7 +205,14 @@ const Register = () => {
               }}
             >
               {md_down ? (
-                <Button sx={{ top: 0, right: 0, position: "absolute" }}>
+                <Button
+                  sx={{
+                    top: 0,
+                    right: 0,
+                    position: "absolute",
+                    zIndex: 9999,
+                  }}
+                >
                   <LanguageSelector />
                 </Button>
               ) : (

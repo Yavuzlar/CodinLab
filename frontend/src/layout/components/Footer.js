@@ -4,6 +4,7 @@ import { Box, Container, Stack, IconButton, Typography } from '@mui/material';
 import { GitHub, X, Instagram, LinkedIn, MenuBook } from '@mui/icons-material';
 import { useTranslation } from "react-i18next";
 import { styled } from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
 
 // Styled components
 const StyledFooter = styled(Box)(({ theme }) => ({
@@ -48,10 +49,10 @@ const Footer = () => {
         >
           {/* Logos */}
           <Stack direction="row" spacing={4} alignItems="center">
-            <Link href="https://yavuzlar.org/" passHref>
+            <Link href="https://yavuzlar.org/" passHref target="_blank" rel="noopener noreferrer">
               <LogoWrapper>
                 <Image
-                  src="/images/yavuzlar-logo-white.png"
+                  src="/images/yavuzlar-logo-text-team-white.png"
                   alt="Yavuzlar Logo"
                   fill
                   sizes="(max-width: 600px) 100vw, 160px"
@@ -60,7 +61,7 @@ const Footer = () => {
                 />
               </LogoWrapper>
             </Link>
-            <Link href="https://www.sibervatan.org/" passHref>
+            <Link href="https://www.sibervatan.org/" passHref target="_blank" rel="noopener noreferrer">
               <LogoWrapper>
                 <Image
                   src="/images/sibervatanlogo.svg"
@@ -77,16 +78,17 @@ const Footer = () => {
           {/* Social Links */}
           <Stack direction="row" spacing={2}>
             {socialLinks.map((link) => (
-              <SocialButton
-                key={link.label}
-                component="a"
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-              >
-                {link.icon}
-              </SocialButton>
+              <Tooltip title={link.label} key={link.label}>
+                <SocialButton
+                  component="a"
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                >
+                  {link.icon}
+                </SocialButton>
+              </Tooltip>
             ))}
           </Stack>
         </Stack>

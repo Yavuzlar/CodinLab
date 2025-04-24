@@ -174,8 +174,9 @@ const AuthProvider = ({ children }) => {
       })
       .catch((error) => {
         setLoading(false);
-        showToast("dismiss");
-        showToast("error", t(error?.response?.data?.message ?? ""));
+        if (error.response?.status === 401) {
+          
+        }
         handleLogout();
       });
   };
