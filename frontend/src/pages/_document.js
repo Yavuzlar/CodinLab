@@ -15,7 +15,7 @@ class CustomDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap&subset=latin-ext"
           />
-          <link rel="shortcut icon" href="/images/favicon.png" />
+          <link rel="shortcut icon" href="/images/codinlab-logo-main.png" />
         </Head>
         <body>
           <Main />
