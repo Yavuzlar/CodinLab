@@ -43,7 +43,7 @@ const AuthProvider = ({ children }) => {
     }
     ws.current = new WebSocket("ws://localhost/api/v1/private/socket/ws");
 
-    ws.current.onopen = () => {};
+    ws.current.onopen = () => { };
 
     ws.current.onmessage = (e) => {
       const data = JSON.parse(e.data);
@@ -144,6 +144,10 @@ const AuthProvider = ({ children }) => {
   };
 
   const initAuth = () => {
+    if (["/login", "/register"].includes(router.pathname)) {
+      return;
+    }
+
     setLoading(true);
     setIsInitialized(false);
 

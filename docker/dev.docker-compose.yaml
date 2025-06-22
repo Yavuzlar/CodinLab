@@ -8,7 +8,7 @@ services:
       - 8080:8080
     volumes:
       - ../backend:/app
-      - /var/run/docker.sock:/var/run/docker.sock  # Docker.sock ekleniyor
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - codinlab
 
