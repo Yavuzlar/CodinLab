@@ -123,7 +123,7 @@ const LabQuestion = ({ language = "", questionId }) => {
     questionNote: "",
     hint: "",
     template: "",
-    fileExtention: "",
+    fileExtension: "",
     monacoEditor: "",
   });
   const [userCode, setUserCode] = useState("");
@@ -259,7 +259,7 @@ const LabQuestion = ({ language = "", questionId }) => {
         questionNote: labSlice.data[0]?.language?.note,
         hint: labSlice.data[0]?.language?.hint,
         template: labSlice.data[0]?.template,
-        fileExtention: labSlice.data[0]?.fileExtention,
+        fileExtension: labSlice.data[0]?.fileExtension,
         monacoEditor: labSlice.data[0]?.monacoEditor,
       });
       setUserCode(labSlice.data[0]?.template);
