@@ -280,7 +280,7 @@ func (s *codeService) RunContainerWithTar(ctx context.Context, image, tmpCodePat
 	return logs, nil
 }
 
-func (s *codeService) UploadUserCode(userID, programmingID, labPathID, codeType, fileExtention, content string) (string, string, error) {
+func (s *codeService) UploadUserCode(userID, programmingID, labPathID, codeType, fileExtension, content string) (string, string, error) {
 	if err := s.createCodeFile(userID); err != nil {
 		return "", "", err
 	}
@@ -295,8 +295,8 @@ func (s *codeService) UploadUserCode(userID, programmingID, labPathID, codeType,
 		return "", "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabID)
 	}
 
-	codePath := s.generateUserCodePath(userID, codeType, intProgrammingID, intLabPathID, fileExtention)
-	codeTmpPath := s.generateUserCodeTmpPath(userID, codeType, intProgrammingID, intLabPathID, fileExtention)
+	codePath := s.generateUserCodePath(userID, codeType, intProgrammingID, intLabPathID, fileExtension)
+	codeTmpPath := s.generateUserCodeTmpPath(userID, codeType, intProgrammingID, intLabPathID, fileExtension)
 
 	if codeType == domains.TypeLab {
 		if err := s.CreateFileAndWrite(codePath, content); err != nil {
@@ -386,7 +386,7 @@ func (s *codeService) CodeFrontendTemplateGenerator(templatePath, funcName strin
 	return frontend, nil
 }
 
-func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string, checkHistory bool) (string, error) {
+func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtension string, checkHistory bool) (string, error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return "", service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
@@ -400,7 +400,7 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 	var frontendTemplate string
 	if labRoadType == domains.TypeLab {
 		if checkHistory {
-			history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtention)
+			history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtension)
 			if len(history) > 0 {
 				return history, nil
 			}
@@ -424,7 +424,7 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 
 	} else if labRoadType == domains.TypePath {
 		if checkHistory {
-			history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtention)
+			history := s.readFrontendTemplateHistory(userID, intProgrammingID, intLabPathID, labRoadType, fileExtension)
 			if len(history) > 0 {
 				return history, nil
 			}
@@ -454,7 +454,7 @@ func (s *codeService) GetFrontendTemplate(userID, programmingID, labPathID, labR
 	return frontendTemplate, nil
 }
 
-func (s *codeService) DeleteFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention string) (err error) {
+func (s *codeService) DeleteFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtension string) (err error) {
 	intProgrammingID, err := strconv.Atoi(programmingID)
 	if err != nil {
 		return service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidProgrammingID)
@@ -465,7 +465,7 @@ func (s *codeService) DeleteFrontendTemplateHistory(userID, programmingID, labPa
 		return service_errors.NewServiceErrorWithMessage(400, domains.ErrInvalidLabID)
 	}
 
-	codePath := s.generateUserCodePath(userID, labRoadType, intProgrammingID, intLabPathID, fileExtention)
+	codePath := s.generateUserCodePath(userID, labRoadType, intProgrammingID, intLabPathID, fileExtension)
 	if _, err := os.Stat(codePath); err == nil {
 		err := os.Remove(codePath)
 		if err != nil {
@@ -473,7 +473,7 @@ func (s *codeService) DeleteFrontendTemplateHistory(userID, programmingID, labPa
 		}
 	}
 
-	codeTmpPath := s.generateUserCodeTmpPath(userID, labRoadType, intProgrammingID, intLabPathID, fileExtention)
+	codeTmpPath := s.generateUserCodeTmpPath(userID, labRoadType, intProgrammingID, intLabPathID, fileExtension)
 	if _, err := os.Stat(codeTmpPath); err == nil {
 		err := os.Remove(codeTmpPath)
 		if err != nil {
@@ -655,12 +655,12 @@ func (s *codeService) readTemplate(templatePath string) (map[string]string, erro
 	return template, nil
 }
 
-func (s *codeService) readFrontendTemplateHistory(userID string, programmingLanguageID, PathLabID int, codeType, fileExtention string) string {
+func (s *codeService) readFrontendTemplateHistory(userID string, programmingLanguageID, PathLabID int, codeType, fileExtension string) string {
 	mainDir := "usercodes"
 	userDir := mainDir + "/" + userID
 	labDir := fmt.Sprintf("%v/labs/", userDir)
 	pathDir := fmt.Sprintf("%v/paths/", userDir)
-	fileName := fmt.Sprintf("%v-%v.%v", programmingLanguageID, PathLabID, fileExtention)
+	fileName := fmt.Sprintf("%v-%v.%v", programmingLanguageID, PathLabID, fileExtension)
 
 	var codePath string
 
@@ -679,12 +679,12 @@ func (s *codeService) readFrontendTemplateHistory(userID string, programmingLang
 	return content
 }
 
-func (s *codeService) generateUserCodePath(userID, labRoadType string, programmingID, labPathID int, fileExtention string) string {
+func (s *codeService) generateUserCodePath(userID, labRoadType string, programmingID, labPathID int, fileExtension string) string {
 	mainDir := "usercodes"
 	userDir := mainDir + "/" + userID
 	labDir := fmt.Sprintf("%v/labs/", userDir)
 	pathDir := fmt.Sprintf("%v/paths/", userDir)
-	fileName := fmt.Sprintf("%v-%v.%v", programmingID, labPathID, fileExtention)
+	fileName := fmt.Sprintf("%v-%v.%v", programmingID, labPathID, fileExtension)
 
 	var codePath string
 
@@ -697,12 +697,12 @@ func (s *codeService) generateUserCodePath(userID, labRoadType string, programmi
 	return codePath
 }
 
-func (s *codeService) generateUserCodeTmpPath(userID, labRoadType string, programmingID, labPathID int, fileExtention string) string {
+func (s *codeService) generateUserCodeTmpPath(userID, labRoadType string, programmingID, labPathID int, fileExtension string) string {
 	mainDir := "usercodes"
 	userDir := mainDir + "/" + userID
 	labDir := fmt.Sprintf("%v/labs/", userDir)
 	pathDir := fmt.Sprintf("%v/paths/", userDir)
-	fileName := fmt.Sprintf("%v-%v.%v", programmingID, labPathID, fileExtention)
+	fileName := fmt.Sprintf("%v-%v.%v", programmingID, labPathID, fileExtension)
 
 	var codeTmpPath string
 

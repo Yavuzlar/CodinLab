@@ -9,14 +9,14 @@ import (
 type ICodeService interface {
 	Pull(ctx context.Context, imageReference, programmingLanguage string, conn *websocket.Conn) (err error)
 	IsImageExists(ctx context.Context, imageReference string) (isExists bool, err error)
-	UploadUserCode(userID, programmingID, labPathID, codeType, fileExtention, content string) (string, string, error)
+	UploadUserCode(userID, programmingID, labPathID, codeType, fileExtension, content string) (string, string, error)
 	RunContainerWithTar(ctx context.Context, image, tmpCodePath, fileName string, cmd []string, conn *websocket.Conn) (string, error)
 	CreateBashFile(cmd []string, tests []Test, userID, pathDir string) error
 	CreateFileAndWrite(filePath, content string) (err error)
 	CodeDockerTemplateGenerator(templatePath, funcName, userCode string, tests []Test, inventoryName string) (string, error)
 	CodeFrontendTemplateGenerator(templatePath, funcName string) (string, error)
-	GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtention string, checkHistory bool) (string, error)
-	DeleteFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtention string) (err error)
+	GetFrontendTemplate(userID, programmingID, labPathID, labRoadType string, fileExtension string, checkHistory bool) (string, error)
+	DeleteFrontendTemplateHistory(userID, programmingID, labPathID, labRoadType, fileExtension string) (err error)
 	StopContainer(ctx context.Context, containerID string) error
 	SaveUserHistory(conn *websocket.Conn, messages []byte, userID string) error
 	ParseCodeLog(log string) (*UserLog, error)
