@@ -14,10 +14,10 @@ fi
 for i in "${!test[@]}"; do
     expected_result="${test[$i]}"
     
-    # JavaScript dosyasını çalıştır
-    result=$(node main.js)
+    # JavaScript dosyasını çalıştırır
+    result=$(node main.js 2>&1)
     
-    # Sonucu beklenen sonuç ile karşılaştır
+    # Sonucu beklenen sonuç ile karşılaştırır
     if [[ "$result" == "$expected_result" ]]; then
         echo "Test Passed|||$result|||_|||_"
     else
