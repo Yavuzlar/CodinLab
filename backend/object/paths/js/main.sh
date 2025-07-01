@@ -1,23 +1,23 @@
 #!/bin/bash
-test=(-tests-)  # test dizisi tanımlandı
+test=(-tests-)  # test array is defined
 
-export TERM=xterm  # TERM değişkeni ayarlandı
+export TERM=xterm  # TERM variable is set
 
-# Eğer test dizisi boşsa, bir kere çalıştır. Cevap gerekmeyen öğrenmek için olan bir pathdir.
+# If test array is empty, it runs once. This is a path used for learning and doesn't require validation.
 if [ ${#test[@]} -eq 0 ]; then
     result=$(node main.js)
     echo "Test Passed|||$result|||_|||_"
     exit 0
 fi
 
-# Test döngüsü
+# Test loop
 for i in "${!test[@]}"; do
     expected_result="${test[$i]}"
     
-    # JavaScript dosyasını çalıştırır
+    # Runs the JavaScript file
     result=$(node main.js 2>&1)
     
-    # Sonucu beklenen sonuç ile karşılaştırır
+    # Compares the actual result with the expected result
     if [[ "$result" == "$expected_result" ]]; then
         echo "Test Passed|||$result|||_|||_"
     else
