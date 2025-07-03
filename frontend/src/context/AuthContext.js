@@ -144,7 +144,31 @@ const AuthProvider = ({ children }) => {
   };
 
   const initAuth = () => {
+    const storedUserData = localStorage.getItem(authConfig.userDataName);
+    
     if (["/login", "/register"].includes(router.pathname)) {
+      if (storedUserData) {
+        try {
+          const userData = JSON.parse(storedUserData);
+          setUser(userData);
+          setLoading(false);
+          setIsInitialized(true);
+          router.push("/");
+        } catch (error) {
+          localStorage.removeItem(authConfig.userDataName);
+          setLoading(false);
+          setIsInitialized(true);
+        }
+      } else {
+        setLoading(false);
+        setIsInitialized(true);
+      }
+      return;
+    }
+
+    if (!storedUserData) {
+      setLoading(false);
+      setIsInitialized(true);
       return;
     }
 
@@ -234,7 +258,7 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     initAuth();
-  }, []);
+  }, [router.pathname]);
 
   const values = {
     user,
