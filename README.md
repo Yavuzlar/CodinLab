@@ -53,7 +53,7 @@ To run CodinLab locally, follow these steps:
 1. Use Docker Run to launch the application:
 
    ```bash
-   docker run -p "80:80" -v "/var/run/docker.sock:/var/run/docker.sock" ghcr.io/yavuzlar/codinlab:latest
+   docker run -d -p "80:80" -v "/var/run/docker.sock:/var/run/docker.sock" ghcr.io/yavuzlar/codinlab:latest
    ```
 
 2. Once the application is up, open your browser and go to <a href="http://localhost/" target="_blank">`http://localhost`</a> or <a href="http://localhost/" target="_blank">`http://127.0.0.1`</a> to start using CodinLab.
