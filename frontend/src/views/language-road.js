@@ -202,7 +202,7 @@ const LanguageRoad = ({ language = "", pathId }) => {
         }
       } catch (error) {
         setIsNextPathAvailable(false);
-        console.log("Error getting next path:", error);
+        // console.log("Error getting next path:", error);
       }
     }
   };

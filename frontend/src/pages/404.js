@@ -59,7 +59,7 @@ const Error404 = () => {
           if (window.history.length > 2) {
             router.back();
             setTimeout(() => {
-              if (window.location.pathname.includes("404")) {
+              if (router.push?.pathname?.includes("404")) {
                 window.history.go(-2);
               }
             }, 100);

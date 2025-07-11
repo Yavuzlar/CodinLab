@@ -15,10 +15,10 @@ const SingleItem = (props) => {
 
   const router = useRouter();
 
-  // Sayfaya gitmek için kullanılacak fonksiyon
   const handleLocate = (p) => {
     if (p) {
-      router.replace(p);
+      // router.replace(p);
+      router.push(p);
     }
     ChangePage();
   };
@@ -41,7 +41,6 @@ const SingleItem = (props) => {
       sx={style}
       onKeyDown={handleKeyPress}
       variant="text"
-      active={router.pathname == path}
       onClick={() => handleLocate(path)}
     >
       <Typography

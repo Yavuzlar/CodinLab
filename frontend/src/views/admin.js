@@ -16,7 +16,8 @@ const Admin = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const { log: logStatistics } = useSelector((state) => state);
+  // const { log: logStatistics } = useSelector((state) => state);
+  const logStatistics = useSelector((state) => state.log);
 
   const progresses = {
     values: logStatistics.data?.data?.map((item) => item.usagePercentage),
@@ -38,7 +39,11 @@ const Admin = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <Grid
+        item
+        xs={12}
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
         {/* top */}
         <Grid item xs={12} md={5} sx={{ alignSelf: "flex-start" }}>
           <Box

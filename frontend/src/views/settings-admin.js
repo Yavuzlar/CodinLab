@@ -34,7 +34,8 @@ import CustomBreadcrumbs from "src/components/breadcrumbs";
 const Settings = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { user: stateUser } = useSelector((state) => state);
+  // const { user: stateUser } = useSelector((state) => state);
+  const stateUser = useSelector((state) => state.user);
 
   const [passwordSettingsData, setPasswordSettingsData] = useState();
   const [infoSettingsData, setInfoSettingsData] = useState({});

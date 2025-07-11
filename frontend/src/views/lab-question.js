@@ -103,7 +103,8 @@ const renderDifficulty = (difficulty) => {
 };
 
 const LabQuestion = ({ language = "", questionId }) => {
-  const { lab: labSlice } = useSelector((state) => state);
+  // const { lab: labSlice } = useSelector((state) => state);
+  const labSlice = useSelector((state) => state.lab);
 
   const { t, i18n } = useTranslation();
   const theme = useTheme();
@@ -180,7 +181,7 @@ const LabQuestion = ({ language = "", questionId }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("Output:", output);
+    // console.log("Output:", output);
   }, [output]);
 
   const handleRun = (outputData) => {
