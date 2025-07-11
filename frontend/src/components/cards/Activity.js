@@ -27,7 +27,8 @@ const CustomSelect = styled(Select)({
 
 const Activity = () => {
   const dispatch = useDispatch();
-  const { activity: activityData } = useSelector((state) => state);
+  // const { activity: activityData } = useSelector((state) => state);
+  const activityData = useSelector((state) => state.activity);
 
   const data = activityData.data.data;
 

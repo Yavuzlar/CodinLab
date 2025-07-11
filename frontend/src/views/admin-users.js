@@ -48,7 +48,8 @@ import CustomBreadcrumbs from "src/components/breadcrumbs";
 const UsersList = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { user: stateUser } = useSelector((state) => state);
+  // const { user: stateUser } = useSelector((state) => state);
+  const stateUser = useSelector((state) => state.user);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);

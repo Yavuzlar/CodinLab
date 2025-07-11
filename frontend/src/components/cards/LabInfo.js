@@ -13,7 +13,8 @@ import { theme } from "src/configs/theme";
 
 const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
   const dispatch = useDispatch();
-  const { lab: stateLabs } = useSelector((state) => state);
+  // const { lab: stateLabs } = useSelector((state) => state);
+  const stateLabs = useSelector((state) => state.lab);
 
   const router = useRouter();
 
@@ -158,8 +159,7 @@ const LabInfo = ({ programingId, filter, setIconPath, containerLoading }) => {
             >
               {containerLoading ? (
                 <CircularProgress size={24} sx={{ position: "absolute" }} />
-              ) :
-              lab.isFinished ? (
+              ) : lab.isFinished ? (
                 <Translations text={"lab.button.review"} />
               ) : (
                 <Translations text={"lab.button.solve"} />

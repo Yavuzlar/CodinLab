@@ -34,7 +34,8 @@ const Timestatistic = () => {
 
   const dispatch = useDispatch();
 
-  const { log: logStatistics } = useSelector((state) => state);
+  // const { log: logStatistics } = useSelector((state) => state);
+  const logStatistics = useSelector((state) => state.log);
 
   useEffect(() => {
     dispatch(getSolitionWeek());

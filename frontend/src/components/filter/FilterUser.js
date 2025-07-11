@@ -44,7 +44,7 @@ const FilterUser = ({
             onChange={(e) => setFilters({ ...filters, search: e.target.value })}
             InputProps={{
               startAdornment: (
-                <InputAdornment sx={{ zIndex: 10, mr: 1 }}>
+                <InputAdornment position="start" sx={{ zIndex: 10, mr: 1 }}>
                   <Search />
                 </InputAdornment>
               ),

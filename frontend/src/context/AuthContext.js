@@ -43,7 +43,7 @@ const AuthProvider = ({ children }) => {
     }
     ws.current = new WebSocket("ws://localhost/api/v1/private/socket/ws");
 
-    ws.current.onopen = () => { };
+    ws.current.onopen = () => {};
 
     ws.current.onmessage = (e) => {
       const data = JSON.parse(e.data);
@@ -145,8 +145,8 @@ const AuthProvider = ({ children }) => {
 
   const initAuth = () => {
     const storedUserData = localStorage.getItem(authConfig.userDataName);
-    
-    if (["/login", "/register"].includes(router.pathname)) {
+
+    if (["/login", "/register"]?.includes(router.pathname)) {
       if (storedUserData) {
         try {
           const userData = JSON.parse(storedUserData);
@@ -256,9 +256,34 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  // useEffect(() => {
+  //   initAuth();
+  // }, [router.pathname]);
+
+  // useEffect(() => {
+  //   initAuth();
+  // }, []);
+
   useEffect(() => {
     initAuth();
-  }, [router.pathname]);
+
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          handleLogout();
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(responseInterceptor);
+    };
+  }, []);
 
   const values = {
     user,
